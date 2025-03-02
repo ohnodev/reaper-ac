@@ -813,6 +813,8 @@ public class CheckManagerListener extends PacketListenerAbstract {
         if (!player.packetStateData.lastPacketWasTeleport) {
             player.packetStateData.didSendMovementBeforeTickEnd = true;
         }
+
+        player.packetStateData.horseInteractCausedForcedRotation = false;
     }
 
     private static void placeLilypad(GrimPlayer player, InteractionHand hand) {
