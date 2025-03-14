@@ -35,12 +35,12 @@ public class PacketPlayerDigging extends PacketListenerAbstract {
             return;
         }
 
-        final ItemType material = item.getType();
-
-        if (player.checkManager.getCompensatedCooldown().hasMaterial(material)) {
+        if (player.checkManager.getCompensatedCooldown().hasItem(item)) {
             player.packetStateData.setSlowedByUsingItem(false); // resync, not required
             return; // The player has a cooldown, and therefore cannot use this item!
         }
+
+        final ItemType material = item.getType();
 
         // Check for data component stuff on 1.20.5+
         final FoodProperties foodComponent = item.getComponentOr(ComponentTypes.FOOD, null);
