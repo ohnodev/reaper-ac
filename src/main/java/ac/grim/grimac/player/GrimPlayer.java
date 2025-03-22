@@ -836,6 +836,7 @@ public class GrimPlayer implements GrimUser {
     @Getter @Setter private boolean exemptElytra = false;
     @Getter private boolean resetItemUsageOnAttack;
     @Getter private boolean resetItemUsageOnItemUpdate;
+    @Getter private boolean resetItemUsageOnSlotChange;
 
     @Override
     public void reload(ConfigManager config) {
@@ -847,6 +848,7 @@ public class GrimPlayer implements GrimUser {
         cancelDuplicatePacket = config.getBooleanElse("cancel-duplicate-packet", true);
         resetItemUsageOnAttack = config.getBooleanElse("reset-item-usage-on-attack", true);
         resetItemUsageOnItemUpdate = config.getBooleanElse("reset-item-usage-on-item-update", true);
+        resetItemUsageOnSlotChange = config.getBooleanElse("reset-item-usage-on-slot-change", true);
         // reload all checks
         for (AbstractCheck value : checkManager.allChecks.values()) value.reload();
         // reload punishment manager
