@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+// Works from 1.14 - latest (1.21.5)
 @Mixin(ServerPlayer.class)
 abstract class ServerPlayerMixin {
     @Inject(method = "restoreFrom", at = @At("TAIL"))
