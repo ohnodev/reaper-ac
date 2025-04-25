@@ -40,6 +40,7 @@ allprojects {
         maven("https://repo.grim.ac/snapshots") { // Grim API
             content {
                 includeGroup("ac.grim.grimac")
+                includeGroup("com.github.retrooper")
             }
         }
         maven("https://jitpack.io/") // Conditional Mixin
