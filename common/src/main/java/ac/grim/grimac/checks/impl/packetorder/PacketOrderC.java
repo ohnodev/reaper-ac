@@ -1,4 +1,4 @@
-package ac.grim.grimac.checks.impl.badpackets;
+package ac.grim.grimac.checks.impl.packetorder;
 
 import ac.grim.grimac.checks.Check;
 import ac.grim.grimac.checks.CheckData;
@@ -11,13 +11,13 @@ import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientInteractEntity;
 
-@CheckData(name = "BadPacketsM")
-public class BadPacketsM extends Check implements PacketCheck {
+@CheckData(name = "PacketOrderC")
+public class PacketOrderC extends Check implements PacketCheck {
     // 1.7 players do not send INTERACT_AT, so we cannot check them
     private final boolean exempt = player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_7_10);
     private boolean sentInteractAt = false;
 
-    public BadPacketsM(final GrimPlayer player) {
+    public PacketOrderC(final GrimPlayer player) {
         super(player);
     }
 
