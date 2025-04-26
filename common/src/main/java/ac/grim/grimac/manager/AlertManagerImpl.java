@@ -5,12 +5,13 @@ import ac.grim.grimac.api.GrimUser;
 import ac.grim.grimac.api.alerts.AlertManager;
 import ac.grim.grimac.api.config.ConfigManager;
 import ac.grim.grimac.api.config.ConfigReloadable;
+import ac.grim.grimac.manager.init.start.StartableInitable;
 import ac.grim.grimac.platform.api.PlatformServer;
 import ac.grim.grimac.platform.api.player.PlatformPlayer;
 import ac.grim.grimac.platform.api.sender.Sender;
 import ac.grim.grimac.player.GrimPlayer;
 import ac.grim.grimac.utils.anticheat.MessageUtil;
-import lombok.Getter;
+import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 
@@ -22,15 +23,15 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * Efficient implementation of AlertManager, handling state changes and notifications.
  * Caches toggle messages for performance.
  */
-public final class AlertManagerImpl implements AlertManager, ConfigReloadable {
+public final class AlertManagerImpl implements AlertManager, ConfigReloadable, StartableInitable {
 
-    private final @Getter Set<PlatformPlayer> enabledAlerts = new CopyOnWriteArraySet<>();
-    private final @Getter Set<PlatformPlayer> enabledVerbose = new CopyOnWriteArraySet<>();
-    private final @Getter Set<PlatformPlayer> enabledBrands = new CopyOnWriteArraySet<>();
+    private final Set<PlatformPlayer> enabledAlerts = new CopyOnWriteArraySet<>();
+    private final Set<PlatformPlayer> enabledVerbose = new CopyOnWriteArraySet<>();
+    private final Set<PlatformPlayer> enabledBrands = new CopyOnWriteArraySet<>();
 
-    private boolean runtimeConsoleAlertsEnabled;
-    private boolean runtimeConsoleVerboseEnabled;
-    private boolean runtimeConsoleBrandsEnabled;
+    private boolean consoleAlertsEnabled;
+    private boolean consoleVerboseEnabled;
+    private boolean consoleBrandsEnabled;
 
     private String alertsEnabledMsg = "";
     private String alertsDisabledMsg = "";
@@ -39,17 +40,19 @@ public final class AlertManagerImpl implements AlertManager, ConfigReloadable {
     private String brandsEnabledMsg = "";
     private String brandsDisabledMsg = "";
 
-    private final PlatformServer platformServer;
+    private @NonNull PlatformServer platformServer;
 
-    public AlertManagerImpl() {
+    @Override
+    public void start() {
         this.platformServer = GrimAPI.INSTANCE.getPlatformServer();
+        reload(GrimAPI.INSTANCE.getConfigManager().getConfig());
     }
 
     @Override
     public void reload(ConfigManager config) {
-        this.runtimeConsoleAlertsEnabled = config.getBooleanElse("alerts.print-to-console", true);
-        this.runtimeConsoleVerboseEnabled = config.getBooleanElse("verbose.print-to-console", false);
-        this.runtimeConsoleBrandsEnabled = false;
+        this.consoleAlertsEnabled = config.getBooleanElse("alerts.print-to-console", true);
+        this.consoleVerboseEnabled = config.getBooleanElse("verbose.print-to-console", false);
+        this.consoleBrandsEnabled = false;
 
         alertsEnabledMsg = config.getStringElse("alerts-enabled", "%prefix% &fAlerts enabled");
         alertsDisabledMsg = config.getStringElse("alerts-disabled", "%prefix% &fAlerts disabled");
@@ -201,41 +204,28 @@ public final class AlertManagerImpl implements AlertManager, ConfigReloadable {
         enabledBrands.remove(platformPlayer);
     }
 
-    public boolean isConsoleAlertsEnabled() {
-        return this.runtimeConsoleAlertsEnabled;
-    }
-
-    public boolean isConsoleVerboseEnabled() {
-        return this.runtimeConsoleVerboseEnabled;
-    }
-
-
-    public boolean isConsoleBrandsEnabled() {
-        return this.runtimeConsoleBrandsEnabled;
-    }
-
     public boolean toggleConsoleAlerts() {
-        boolean newState = !this.runtimeConsoleAlertsEnabled;
-        this.runtimeConsoleAlertsEnabled = newState;
+        boolean newState = !this.consoleAlertsEnabled;
+        this.consoleAlertsEnabled = newState;
         sendToggleMessage(platformServer.getConsoleSender(), newState, "Alerts");
         return newState;
     }
 
     public boolean toggleConsoleVerbose() {
-        boolean newState = !this.runtimeConsoleVerboseEnabled;
-        this.runtimeConsoleVerboseEnabled = newState;
+        boolean newState = !this.consoleVerboseEnabled;
+        this.consoleVerboseEnabled = newState;
         sendToggleMessage(platformServer.getConsoleSender(), newState, "Verbose");
         return newState;
     }
 
     public boolean toggleConsoleBrands() {
-        boolean newState = !this.runtimeConsoleBrandsEnabled;
-        this.runtimeConsoleBrandsEnabled = newState;
+        boolean newState = !this.consoleBrandsEnabled;
+        this.consoleBrandsEnabled = newState;
         sendToggleMessage(platformServer.getConsoleSender(), newState, "Brands");
         return newState;
     }
 
-    // All inernal code, will replace later
+    // All internal code, will replace later
     private void setPlayerStateAndNotify(@NonNull PlatformPlayer platformPlayer, boolean enabled, boolean silent,
                                          @NonNull Set<PlatformPlayer> targetSet, @NonNull String type) {
         Objects.requireNonNull(platformPlayer, "platformPlayer cannot be null");
@@ -273,5 +263,43 @@ public final class AlertManagerImpl implements AlertManager, ConfigReloadable {
 
     public boolean toggleAlerts(@NonNull PlatformPlayer platformPlayer, boolean silent) {
         return togglePlayerStateAndNotify(platformPlayer, silent, enabledAlerts, "Alerts");
+    }
+
+    public void sendBrand(Component component) {
+        for (PlatformPlayer platformPlayer : enabledBrands) {
+            platformPlayer.sendMessage(component);
+        }
+
+        if (consoleBrandsEnabled) {
+            platformServer.getConsoleSender().sendMessage(component);
+        }
+    }
+
+    public void sendVerbose(Component component) {
+        for (PlatformPlayer platformPlayer : enabledVerbose) {
+            platformPlayer.sendMessage(component);
+        }
+
+        if (consoleVerboseEnabled) {
+            platformServer.getConsoleSender().sendMessage(component);
+        }
+    }
+
+    public void sendAlert(Component component) {
+        for (PlatformPlayer platformPlayer : enabledAlerts) {
+            platformPlayer.sendMessage(component);
+        }
+
+        if (consoleAlertsEnabled) {
+            platformServer.getConsoleSender().sendMessage(component);
+        }
+    }
+
+    public boolean hasVerboseListeners() {
+        return !enabledVerbose.isEmpty() || consoleVerboseEnabled;
+    }
+
+    public boolean hasAlertListeners() {
+        return !enabledAlerts.isEmpty() || consoleAlertsEnabled;
     }
 }
