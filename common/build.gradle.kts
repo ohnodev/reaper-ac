@@ -40,7 +40,7 @@ dependencies {
     api(libs.adventure.text.minimessage)
     api(libs.jetbrains.annotations)
 
-    api("ac.grim.grimac:GrimAPI:1.0.0-33f7e2b")
+    api("ac.grim.grimac:GrimAPI:1.1.0.0")
 
     compileOnly(libs.floodgate.api)
     compileOnly(libs.via.version.api)
