@@ -1,15 +1,15 @@
-package ac.grim.grimac.platform.fabric.mc1170;
+package ac.grim.grimac.platform.fabric.mc1171;
 
 import ac.grim.grimac.platform.api.PlatformServer;
 import ac.grim.grimac.platform.api.manager.ParserDescriptorFactory;
 import ac.grim.grimac.platform.fabric.GrimACFabricLoaderPlugin;
 import ac.grim.grimac.platform.fabric.command.FabricPlayerSelectorParser;
 import ac.grim.grimac.platform.fabric.manager.FabricParserDescriptorFactory;
+import ac.grim.grimac.platform.fabric.mc1171.player.Fabric1700PlatformPlayer;
 import ac.grim.grimac.platform.fabric.mc1611.Fabric1140PlatformServer;
 import ac.grim.grimac.platform.fabric.mc1611.command.Fabric1161PlayerSelectorAdapter;
 import ac.grim.grimac.platform.fabric.mc1611.player.Fabric1161PlatformInventory;
-import ac.grim.grimac.platform.fabric.mc1611.player.Fabric1161PlatformPlayer;
-import ac.grim.grimac.platform.fabric.mc1170.entity.Fabric1170GrimEntity;
+import ac.grim.grimac.platform.fabric.mc1171.entity.Fabric1170GrimEntity;
 import ac.grim.grimac.platform.fabric.mc1611.util.convert.Fabric1140ConversionUtil;
 import ac.grim.grimac.platform.fabric.mc1611.util.convert.Fabric1161MessageUtil;
 import ac.grim.grimac.platform.fabric.player.FabricPlatformPlayerFactory;
@@ -24,7 +24,7 @@ public class GrimACFabric1170LoaderPlugin extends GrimACFabricLoaderPlugin {
                         new FabricPlayerSelectorParser<>(Fabric1161PlayerSelectorAdapter::new)
                 ),
                 new FabricPlatformPlayerFactory(
-                        Fabric1161PlatformPlayer::new,
+                        Fabric1700PlatformPlayer::new,
                         Fabric1170GrimEntity::new,
                         Fabric1161PlatformInventory::new
                 ),

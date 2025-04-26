@@ -5,7 +5,7 @@ import ac.grim.grimac.platform.api.manager.ParserDescriptorFactory;
 import ac.grim.grimac.platform.fabric.mc1611.command.Fabric1161PlayerSelectorAdapter;
 import ac.grim.grimac.platform.fabric.command.FabricPlayerSelectorParser;
 import ac.grim.grimac.platform.fabric.manager.FabricParserDescriptorFactory;
-import ac.grim.grimac.platform.fabric.mc1170.GrimACFabric1170LoaderPlugin;
+import ac.grim.grimac.platform.fabric.mc1171.GrimACFabric1170LoaderPlugin;
 import ac.grim.grimac.platform.fabric.mc1194.convert.Fabric1190MessageUtil;
 import ac.grim.grimac.platform.fabric.mc1194.entity.Fabric1194GrimEntity;
 import ac.grim.grimac.platform.fabric.mc1194.player.Fabric1193PlatformInventory;
