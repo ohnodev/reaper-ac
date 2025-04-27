@@ -142,7 +142,7 @@ TimerVehicle:
     setbackvl: 10
 
 PacketOrderI:
-    # enable if players are getting flagged for using 1.7 animations mods
+    # Oyuncular 1.7 animasyon modlarını kullandıkları için işaretleniyorsa etkinleştirin
     exempt-placing-while-digging: false
 
 Reach:

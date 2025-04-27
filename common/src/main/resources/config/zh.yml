@@ -147,7 +147,7 @@ TimerVehicle:
     setbackvl: 10
 
 PacketOrderI:
-    # enable if players are getting flagged for using 1.7 animations mods
+    # 如果玩家因使用 1.7 动画模组而被标记，则启用此项
     exempt-placing-while-digging: false
 
 Reach:

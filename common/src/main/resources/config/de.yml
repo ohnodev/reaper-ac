@@ -145,7 +145,7 @@ VehicleC:
     setbackvl: 25
 
 PacketOrderI:
-    # enable if players are getting flagged for using 1.7 animations mods
+    # Aktivieren, wenn Spieler markiert werden, weil sie 1.7-Animationsmods verwenden
     exempt-placing-while-digging: false
 
 Reach:
