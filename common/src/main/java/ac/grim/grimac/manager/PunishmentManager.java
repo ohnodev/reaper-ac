@@ -142,21 +142,19 @@ public class PunishmentManager implements ConfigReloadable {
                                 case "[proxy]" -> ProxyAlertMessenger.sendPluginMessage(cmd);
                                 case "[alert]" -> {
                                     sentDebug = true;
-                                    if (testMode) { // secret test mode // Why does this exist? -Axionize
-                                        player.user.sendMessage(MessageUtil.miniMessage(cmd));
+                                    Component message = MessageUtil.miniMessage(cmd);
+                                    if (testMode) { // secret test mode
+                                        player.user.sendMessage(message);
                                         continue;
                                     }
-                                    Component message = MessageUtil.miniMessage(cmd);
                                     GrimAPI.INSTANCE.getAlertManager().sendAlert(message);
                                 }
-                                default -> {
-                                    GrimAPI.INSTANCE.getScheduler().getGlobalRegionScheduler().run(GrimAPI.INSTANCE.getGrimPlugin(), () ->
-                                            GrimAPI.INSTANCE.getPlatformServer().dispatchCommand(
-                                                    GrimAPI.INSTANCE.getPlatformServer().getConsoleSender(),
-                                                    cmd
-                                            )
-                                    );
-                                }
+                                default -> GrimAPI.INSTANCE.getScheduler().getGlobalRegionScheduler().run(GrimAPI.INSTANCE.getGrimPlugin(), () ->
+                                        GrimAPI.INSTANCE.getPlatformServer().dispatchCommand(
+                                                GrimAPI.INSTANCE.getPlatformServer().getConsoleSender(),
+                                                cmd
+                                        )
+                                );
                             }
                         }
 
