@@ -97,10 +97,10 @@ public class PunishmentManager implements ConfigReloadable {
         }
     }
 
-    private String replaceAlertPlaceholders(String original, int vl, Check check, String alertString, String verbose) {
+    private String replaceAlertPlaceholders(String original, int vl, Check check, String verbose) {
         return MessageUtil.replacePlaceholders(player, original
                 .replace("[alert]", alertString)
-                .replace("[proxy]", alertString)
+                .replace("[proxy]", proxyAlertString)
                 .replace("%check_name%", check.getDisplayName())
                 .replace("%experimental%", check.isExperimental() ? experimentalSymbol : "")
                 .replace("%vl%", Integer.toString(vl))
@@ -118,7 +118,7 @@ public class PunishmentManager implements ConfigReloadable {
                 final int vl = getViolations(group, check);
                 final int violationCount = group.violations.size();
                 for (ParsedCommand command : group.commands) {
-                    String cmd = replaceAlertPlaceholders(command.command, vl, check, alertString, verbose);
+                    String cmd = replaceAlertPlaceholders(command.command, vl, check, verbose);
 
                     // Verbose that prints all flags
                     if (GrimAPI.INSTANCE.getAlertManager().hasVerboseListeners() && command.command.equals("[alert]")) {
@@ -138,7 +138,7 @@ public class PunishmentManager implements ConfigReloadable {
 
                             switch (command.command) {
                                 case "[webhook]" -> GrimAPI.INSTANCE.getDiscordManager().sendAlert(player, verbose, check.getDisplayName(), vl);
-                                case "[proxy]" -> ProxyAlertMessenger.sendPluginMessage(replaceAlertPlaceholders(command.command, vl, check, proxyAlertString, verbose));
+                                case "[proxy]" -> ProxyAlertMessenger.sendPluginMessage(cmd);
                                 case "[alert]" -> {
                                     sentDebug = true;
                                     if (testMode) { // secret test mode // Why does this exist? -Axionize
