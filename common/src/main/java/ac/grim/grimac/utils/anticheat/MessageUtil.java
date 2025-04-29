@@ -23,7 +23,6 @@ import java.util.regex.Pattern;
 
 @UtilityClass
 public class MessageUtil {
-    public static final boolean hasPlaceholderAPI = Reflection.getClassByNameWithoutException("me.clip.placeholderapi.PlaceholderAPI") != null;
     private final Pattern HEX_PATTERN = Pattern.compile("([&§]#[A-Fa-f0-9]{6})|([&§]x([&§][A-Fa-f0-9]){6})");
 
     public @NotNull String toUnlabledString(@Nullable Vector3i vec) {
