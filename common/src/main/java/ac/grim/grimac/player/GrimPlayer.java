@@ -246,6 +246,8 @@ public class GrimPlayer implements GrimUser {
     public Queue<BlockBreak> queuedBreaks = new LinkedBlockingQueue<>();
     public PlayerBlockHistory blockHistory = new PlayerBlockHistory();
     public final ArrayDeque<RotationData> pendingRotations = new ArrayDeque<>();
+    @Getter
+    @Setter
     private ResyncHandler resyncHandler = new DefaultResyncHandler(this);
     // This variable is for support with test servers that want to be able to disable grim
     // Grim disabler 2022 still working!
@@ -909,16 +911,6 @@ public class GrimPlayer implements GrimUser {
 
     public void sendMessage(Component message) {
         if (platformPlayer != null) platformPlayer.sendMessage(message);
-    }
-
-    @Override
-    public ResyncHandler getResyncHandler() {
-        return resyncHandler;
-    }
-
-    @Override
-    public void setResyncHandler(ResyncHandler resyncHandler) {
-        this.resyncHandler = resyncHandler;
     }
 
     public void resyncPosition(Vector3i pos) {
