@@ -280,9 +280,6 @@ public class GrimPlayer implements GrimUser {
 
         packetStateData = new PacketStateData();
 
-        uncertaintyHandler.riptideEntities.add(0);
-        uncertaintyHandler.collidingEntities.add(0);
-
         if (getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_14)) {
             final float scale = (float) compensatedEntities.self.getAttributeValue(Attributes.SCALE);
             possibleEyeHeights[2] = new double[]{0.4 * scale, 1.62 * scale, 1.27 * scale}; // Elytra, standing, sneaking (1.14)
