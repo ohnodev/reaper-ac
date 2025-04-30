@@ -193,16 +193,3 @@ jobs:
 
           dependencies: |
               fabric-api
-
-        #------------------------------------------------------------------
-        #  Publish version to the API
-        #------------------------------------------------------------------
-    - name: Publish to API
-      if: ${{ env.IS_PUBLISH_BRANCH == 'true' }}
-      run: |
-          curl -X POST \
-            -H "Content-Type: application/json" \
-            -H "User-Agent: GrimACBuilder/v1" \
-            -H "Authorization: Bearer ${{ secrets.BUILD_UPDATE_TOKEN }}" \
-            -d '{"org": "${{ github.repository_owner }}", "repository": "${{ github.event.repository.name }}", "branch": "${{ github.ref_name }}", "version": "${{ env.MAIN_VERSION }}"}' \
-            "${{ secrets.BUILD_UPDATE_URL }}"
