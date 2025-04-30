@@ -589,9 +589,8 @@ public class GrimPlayer implements GrimUser {
     }
 
     public ClientVersion getClientVersion() {
-        ClientVersion ver = user.getClientVersion();
         // If temporarily null, assume server version...
-        return Objects.requireNonNullElseGet(ver, () -> ClientVersion.getById(PacketEvents.getAPI().getServerManager().getVersion().getProtocolVersion()));
+        return Objects.requireNonNullElseGet(user.getClientVersion(), () -> ClientVersion.getById(PacketEvents.getAPI().getServerManager().getVersion().getProtocolVersion()));
     }
 
     // Alright, someone at mojang decided to not send a flying packet every tick with 1.9
