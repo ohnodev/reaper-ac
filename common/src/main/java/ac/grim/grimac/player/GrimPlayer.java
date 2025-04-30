@@ -103,29 +103,28 @@ import java.util.concurrent.atomic.AtomicInteger;
 // Variables that need lag compensation should have their own class
 // Soon there will be a generic class for lag compensation
 public class GrimPlayer implements GrimUser {
-    public UUID uuid;
+    public final UUID uuid;
     public final User user;
     public int entityID;
-    @Nullable
-    public PlatformPlayer platformPlayer;
+    public @Nullable PlatformPlayer platformPlayer;
     // Start transaction handling stuff
     // Determining player ping
     // The difference between keepalive and transactions is that keepalive is async while transactions are sync
     public final Queue<Pair<Short, Long>> transactionsSent = new ConcurrentLinkedQueue<>();
     public final Set<Short> didWeSendThatTrans = ConcurrentHashMap.newKeySet();
     private final AtomicInteger transactionIDCounter = new AtomicInteger(0);
-    public AtomicInteger lastTransactionSent = new AtomicInteger(0);
-    public AtomicInteger lastTransactionReceived = new AtomicInteger(0);
+    public final AtomicInteger lastTransactionSent = new AtomicInteger(0);
+    public final AtomicInteger lastTransactionReceived = new AtomicInteger(0);
     // End transaction handling stuff
     // Manager like classes
-    public CheckManager checkManager;
-    public ActionManager actionManager;
-    public PunishmentManager punishmentManager;
-    public MovementCheckRunner movementCheckRunner;
-    public SyncedTags tagManager;
+    public final CheckManager checkManager;
+    public final ActionManager actionManager;
+    public final PunishmentManager punishmentManager;
+    public final MovementCheckRunner movementCheckRunner;
+    public final SyncedTags tagManager = new SyncedTags(this);
     // End manager like classes
     public Vector3dm clientVelocity = new Vector3dm();
-    PacketTracker viaPacketTracker;
+    private PacketTracker viaPacketTracker;
     public final PacketOrderProcessor packetOrderProcessor = new PacketOrderProcessor(this);
     private long transactionPing = 0;
     public long lastTransSent = 0;
@@ -176,7 +175,7 @@ public class GrimPlayer implements GrimUser {
     public boolean wasGliding;
     public boolean isRiptidePose = false;
     public double fallDistance;
-    public SimpleCollisionBox boundingBox;
+    public SimpleCollisionBox boundingBox = GetBoundingBox.getBoundingBoxFromPosAndSizeRaw(x, y, z, 0.6f, 1.8f);;
     public Pose pose = Pose.STANDING;
     public Pose lastPose = Pose.STANDING;
     // Determining slow movement has to be done before pose is updated
@@ -187,7 +186,7 @@ public class GrimPlayer implements GrimUser {
     public float depthStriderLevel;
     public float sneakingSpeedMultiplier = 0.3f;
     public float flySpeed;
-    public VehicleData vehicleData = new VehicleData();
+    public final VehicleData vehicleData = new VehicleData();
     // The client claims this
     public boolean clientClaimsLastOnGround;
     // Set from base tick
@@ -212,14 +211,14 @@ public class GrimPlayer implements GrimUser {
     // This determines if the
     public boolean skippedTickInActualMovement = false;
     // You cannot initialize everything here for some reason
-    public LastInstanceManager lastInstanceManager;
+    public final LastInstanceManager lastInstanceManager;
     public final CompensatedFireworks fireworks;
     public final CompensatedWorld compensatedWorld;
     public final CompensatedEntities compensatedEntities;
-    public LatencyUtils latencyUtils;
-    public PointThreeEstimator pointThreeEstimator;
-    public TrigHandler trigHandler;
-    public PacketStateData packetStateData;
+    public final LatencyUtils latencyUtils = new LatencyUtils(this);
+    public final PointThreeEstimator pointThreeEstimator;
+    public final TrigHandler trigHandler = new TrigHandler(this);
+    public final PacketStateData packetStateData = new PacketStateData();
     // Keep track of basetick stuff
     public Vector3dm baseTickAddition = new Vector3dm();
     public Vector3dm baseTickWaterPushing = new Vector3dm();
@@ -237,14 +236,14 @@ public class GrimPlayer implements GrimUser {
     public Vector3d bedPosition;
     public long lastBlockPlaceUseItem = 0;
     public long lastBlockBreak = 0;
-    public AtomicInteger cancelledPackets = new AtomicInteger(0);
+    public final AtomicInteger cancelledPackets = new AtomicInteger(0);
     public MainSupportingBlockData mainSupportingBlockData = new MainSupportingBlockData(null, false);
     // possibleEyeHeights[0] = Standing eye heights, [1] = Sneaking. [2] = Elytra, Swimming, and Riptide Trident which only exists in 1.9+
-    public double[][] possibleEyeHeights = new double[3][];
+    public final double[][] possibleEyeHeights = new double[3][];
     public int totalFlyingPacketsSent;
-    public Queue<BlockPlaceSnapshot> placeUseItemPackets = new LinkedBlockingQueue<>();
-    public Queue<BlockBreak> queuedBreaks = new LinkedBlockingQueue<>();
-    public PlayerBlockHistory blockHistory = new PlayerBlockHistory();
+    public final Queue<BlockPlaceSnapshot> placeUseItemPackets = new LinkedBlockingQueue<>();
+    public final Queue<BlockBreak> queuedBreaks = new LinkedBlockingQueue<>();
+    public final PlayerBlockHistory blockHistory = new PlayerBlockHistory();
     public final ArrayDeque<RotationData> pendingRotations = new ArrayDeque<>();
     @Getter
     @Setter
@@ -262,25 +261,18 @@ public class GrimPlayer implements GrimUser {
         this.user = user;
         this.uuid = user.getUUID();
 
-        boundingBox = GetBoundingBox.getBoundingBoxFromPosAndSizeRaw(x, y, z, 0.6f, 1.8f);
-
         fireworks = new CompensatedFireworks(this); // Must be before checkmanager
 
         lastInstanceManager = new LastInstanceManager(this);
         actionManager = new ActionManager(this);
         checkManager = new CheckManager(this);
         punishmentManager = new PunishmentManager(this);
-        tagManager = new SyncedTags(this);
         movementCheckRunner = new MovementCheckRunner(this);
 
         compensatedWorld = new CompensatedWorld(this);
         compensatedEntities = new CompensatedEntities(this);
-        latencyUtils = new LatencyUtils(this);
-        trigHandler = new TrigHandler(this);
         uncertaintyHandler = new UncertaintyHandler(this); // must be after checkmanager
         pointThreeEstimator = new PointThreeEstimator(this);
-
-        packetStateData = new PacketStateData();
 
         if (getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_14)) {
             final float scale = (float) compensatedEntities.self.getAttributeValue(Attributes.SCALE);
