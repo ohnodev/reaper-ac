@@ -917,6 +917,10 @@ public class GrimPlayer implements GrimUser {
     }
 
     public int getViaTranslatedClientBlockID(int blockStateId) {
+        if (this.viaUserConnection == null) {
+            return blockStateId;
+        }
+
         final ProtocolVersion clientVersion = this.viaUserConnection.getProtocolInfo().protocolVersion();
         final ProtocolVersion serverVersion = this.viaUserConnection.getProtocolInfo().serverProtocolVersion();
 
