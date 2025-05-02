@@ -34,25 +34,29 @@ public class MessageUtil {
     }
 
     public @NotNull String replacePlaceholders(@Nullable GrimPlayer player, @NotNull String string) {
+        return replacePlaceholders(player, player == null ? null : player.platformPlayer, string);
+    }
+
+    public @NotNull String replacePlaceholders(@Nullable Sender sender, @NotNull String string) {
+        return replacePlaceholders(sender != null ? sender.getPlatformPlayer() : null, string);
+    }
+
+    public @NotNull String replacePlaceholders(@Nullable PlatformPlayer player, @NotNull String string) {
+        return replacePlaceholders(player == null ? null : GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(player.getUniqueId()), player, string);
+    }
+
+    private @NotNull String replacePlaceholders(@Nullable GrimPlayer grimPlayer, @Nullable PlatformPlayer platformPlayer, @NotNull String string) {
         for (Map.Entry<String, String> entry : GrimAPI.INSTANCE.getExternalAPI().getStaticReplacements().entrySet()) {
             string = string.replace(entry.getKey(), entry.getValue());
         }
 
-        if (player != null) {
+        if (grimPlayer != null) {
             for (Map.Entry<String, Function<GrimUser, String>> entry : GrimAPI.INSTANCE.getExternalAPI().getVariableReplacements().entrySet()) {
-                string = string.replace(entry.getKey(), entry.getValue().apply(player).replace('%', PLACEHOLDER_ESCAPE_CHAR));
+                string = string.replace(entry.getKey(), entry.getValue().apply(grimPlayer).replace('%', PLACEHOLDER_ESCAPE_CHAR));
             }
         }
 
-        return replacePlaceholders(player == null ? null : player.platformPlayer, string).replace(PLACEHOLDER_ESCAPE_CHAR, '%');
-    }
-
-    public @NotNull String replacePlaceholders(@Nullable Sender object, @NotNull String string) {
-        return GrimAPI.INSTANCE.getMessagePlaceHolderManager().replacePlaceholders(object, string);
-    }
-
-    public @NotNull String replacePlaceholders(@Nullable PlatformPlayer object, @NotNull String string) {
-        return GrimAPI.INSTANCE.getMessagePlaceHolderManager().replacePlaceholders(object, string);
+        return GrimAPI.INSTANCE.getMessagePlaceHolderManager().replacePlaceholders(platformPlayer, string).replace(PLACEHOLDER_ESCAPE_CHAR, '%');
     }
 
     public @NotNull Component replacePlaceholders(@NotNull GrimPlayer player, @NotNull Component component) {
