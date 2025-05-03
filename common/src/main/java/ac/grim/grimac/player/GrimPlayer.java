@@ -211,7 +211,7 @@ public class GrimPlayer implements GrimUser {
     public final CompensatedWorld compensatedWorld;
     public final CompensatedEntities compensatedEntities;
     public final CompensatedInventory inventory;
-    public final LatencyUtils latencyUtils = new LatencyUtils(this);
+    public final ILatencyUtils latencyUtils = new LatencyUtils(this);
     public final PointThreeEstimator pointThreeEstimator;
     public final TrigHandler trigHandler = new TrigHandler(this);
     public final PacketStateData packetStateData = new PacketStateData();
