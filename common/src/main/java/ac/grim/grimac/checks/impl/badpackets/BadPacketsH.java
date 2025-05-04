@@ -34,7 +34,8 @@ public class BadPacketsH extends Check implements PacketCheck {
                 WrapperPlayClientPlayerDigging packet = new WrapperPlayClientPlayerDigging(event);
                 if (packet.getAction() == DiggingAction.START_DIGGING || packet.getAction() == DiggingAction.FINISHED_DIGGING) {
                     handleSequenceId(packet.getSequence(), event);
-                } else if (packet.getSequence() != 0 && packet.getAction() == DiggingAction.CANCELLED_DIGGING && flagAndAlert("expected=0, id=" + packet.getSequence())) {
+                } else if (packet.getSequence() != 0 && packet.getAction() == DiggingAction.CANCELLED_DIGGING
+                        && flagAndAlert("expected=0, id=" + packet.getSequence()) && shouldModifyPackets()) {
                     event.setCancelled(true);
                     player.onPacketCancel();
                 }
@@ -48,7 +49,7 @@ public class BadPacketsH extends Check implements PacketCheck {
 
     public void handleSequenceId(int sequence, PacketReceiveEvent event) {
         if (sequence != lastSequence + 1) {
-            if (flagAndAlert("expected=" + (lastSequence + 1) + ", id=" + sequence)) {
+            if (flagAndAlert("expected=" + (lastSequence + 1) + ", id=" + sequence) && shouldModifyPackets()) {
                 event.setCancelled(true);
                 player.onPacketCancel();
             }
