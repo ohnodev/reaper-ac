@@ -473,6 +473,13 @@ public enum HitboxData implements HitBoxFactory {
 
     HANGING_ROOTS(new HexCollisionBox(2.0D, 10.0D, 2.0D, 14.0D, 16.0D, 14.0D), StateTypes.HANGING_ROOTS),
 
+    HANGING_MOSS((player, item, version, data, isTargetBlock, x, y, z) -> {
+        if (version.isOlderThan(ClientVersion.V_1_21_2)) {
+            return HANGING_ROOTS.fetch(player, item, version, data, isTargetBlock, x, y, z);
+        }
+        return new HexCollisionBox(1, data.isTip() ? 2 : 0, 1, 15, 16, 15);
+    }, StateTypes.PALE_HANGING_MOSS),
+
     GRASS_FERN((player, item, version, data, isTargetBlock, x, y, z) -> {
         if (version.isOlderThan(ClientVersion.V_1_13)) {
             return new SimpleCollisionBox(0.1F, 0.0F, 0.1F, 0.9F, 0.8F, 0.9F);
