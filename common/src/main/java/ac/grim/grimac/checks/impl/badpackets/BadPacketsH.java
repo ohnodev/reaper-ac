@@ -26,26 +26,10 @@ public class BadPacketsH extends BlockPlaceCheck {
 
     @Override
     public void onPacketReceive(PacketReceiveEvent event) {
-        if (isSupportedVersion) {
-            if (event.getPacketType() == PacketType.Play.Client.PLAYER_DIGGING) {
-                WrapperPlayClientPlayerDigging packet = new WrapperPlayClientPlayerDigging(event);
-                if (packet.getAction() == DiggingAction.START_DIGGING || packet.getAction() == DiggingAction.FINISHED_DIGGING) {
-                    if (shouldCancel(packet.getSequence())) {
-                        event.setCancelled(true);
-                        player.onPacketCancel();
-                    }
-                } else if (packet.getSequence() != 0 && packet.getAction() == DiggingAction.CANCELLED_DIGGING
-                        && flagAndAlert("expected=0, id=" + packet.getSequence()) && shouldModifyPackets()) {
-                    event.setCancelled(true);
-                    player.onPacketCancel();
-                }
-            }
-
-            if (event.getPacketType() == PacketType.Play.Client.USE_ITEM
-                    && shouldCancel(new WrapperPlayClientUseItem(event).getSequence())) {
-                event.setCancelled(true);
-                player.onPacketCancel();
-            }
+        if (event.getPacketType() == PacketType.Play.Client.USE_ITEM
+                && shouldCancel(new WrapperPlayClientUseItem(event).getSequence())) {
+            event.setCancelled(true);
+            player.onPacketCancel();
         }
     }
 
@@ -73,7 +57,7 @@ public class BadPacketsH extends BlockPlaceCheck {
     }
 
     public boolean shouldCancel(int sequence) {
-        if (sequence != lastSequence + 1) {
+        if (isSupportedVersion && sequence != lastSequence + 1) {
             if (flagAndAlert("expected=" + (lastSequence + 1) + ", id=" + sequence) && shouldModifyPackets()) {
                 return true;
             }
