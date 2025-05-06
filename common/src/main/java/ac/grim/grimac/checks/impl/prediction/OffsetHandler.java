@@ -51,8 +51,6 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
                 player.getSetbackTeleportUtil().executeViolationSetback();
             }
 
-            violations++;
-
             synchronized (flags) {
                 int flagId = (flags.get() & 255) + 1; // 1-256 as possible values
 
