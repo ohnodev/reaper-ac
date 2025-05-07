@@ -616,7 +616,8 @@ public enum HitboxData implements HitBoxFactory {
         if (version.isNewerThan(ClientVersion.V_1_21_4)) {
             return getFlowerBedHitBox(data.getFlowerAmount(), data.getFacing().getHorizontalId());
         } else {
-            return GLOW_LICHEN_SCULK_VEIN.fetch(player, item, version, data, isTargetBlock, x, y, z);
+            // GLOW_LICHEN Facing Upwards
+            return new HexCollisionBox(0.0D, 15.0D, 0.0D, 16.0D, 16.0D, 16.0D);
         }
     }, StateTypes.LEAF_LITTER, StateTypes.WILDFLOWERS),
 
