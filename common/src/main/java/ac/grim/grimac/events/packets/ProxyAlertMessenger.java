@@ -111,6 +111,6 @@ public class ProxyAlertMessenger extends PacketListenerAbstract {
             return;
         }
         Component message = MessageUtil.miniMessage(alert);
-        GrimAPI.INSTANCE.getAlertManager().sendAlert(message);
+        GrimAPI.INSTANCE.getAlertManager().sendAlert(message, null);
     }
 }
