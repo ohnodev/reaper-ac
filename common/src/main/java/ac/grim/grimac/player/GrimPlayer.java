@@ -511,9 +511,8 @@ public class GrimPlayer implements GrimUser {
         }
         user.closeConnection();
         if (platformPlayer != null) {
-            GrimAPI.INSTANCE.getScheduler().getEntityScheduler().execute(platformPlayer, GrimAPI.INSTANCE.getGrimPlugin(), () -> {
-                platformPlayer.kickPlayer(textReason);
-            }, null, 1);
+            GrimAPI.INSTANCE.getScheduler().getEntityScheduler().execute(platformPlayer, GrimAPI.INSTANCE.getGrimPlugin(),
+                    () -> platformPlayer.kickPlayer(textReason), null, 1);
         }
     }
 

@@ -31,11 +31,7 @@ public class FabricPlatformScheduler implements PlatformScheduler {
 
     // Shared method to handle synchronous tasks
     // Add this to FabricPlatformScheduler.java
-    public static final ThreadLocal<Boolean> EXECUTING_TASK = new ThreadLocal<Boolean>() {
-        @Override protected Boolean initialValue() {
-            return false;
-        }
-    };
+    public static final ThreadLocal<Boolean> EXECUTING_TASK = ThreadLocal.withInitial(() -> false);
 
     protected static void handleSyncTasks(Map<ScheduledTask, Runnable> taskMap, MinecraftServer server, GrimPlugin plugin) {
         Iterator<ScheduledTask> iterator = taskMap.keySet().iterator();

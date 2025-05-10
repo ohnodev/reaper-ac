@@ -36,6 +36,7 @@ import java.util.Map;
 public final class GrimAPI {
     public static final GrimAPI INSTANCE = new GrimAPI();
 
+    @Getter
     private final Platform platform = detectPlatform();
     private final BaseConfigManager configManager;
     private final AlertManagerImpl alertManager;
@@ -46,6 +47,7 @@ public final class GrimAPI {
     private final EventBus eventBus;
     private final GrimExternalAPI externalAPI;
     private PlatformLoader loader;
+    @Getter
     private InitManager initManager;
     private boolean initialized = false;
 
@@ -61,11 +63,11 @@ public final class GrimAPI {
     }
 
     private static Platform detectPlatform() {
-        final Map<String, Platform> platforms = Collections.unmodifiableMap(new HashMap<>() {{
-            put("io.papermc.paper.threadedregions.RegionizedServer", Platform.FOLIA);
-            put("org.bukkit.Bukkit", Platform.BUKKIT);
-            put("net.fabricmc.loader.api.FabricLoader", Platform.FABRIC);
-        }});
+        final Map<String, Platform> platforms = Map.of(
+                "io.papermc.paper.threadedregions.RegionizedServer", Platform.FOLIA,
+                "org.bukkit.Bukkit", Platform.BUKKIT,
+                "net.fabricmc.loader.api.FabricLoader", Platform.FABRIC
+        );
 
         return platforms.entrySet().stream()
                 .filter(entry -> ReflectionUtils.hasClass(entry.getKey()))
@@ -101,10 +103,6 @@ public final class GrimAPI {
 
     public ParserDescriptorFactory getParserDescriptors() {
         return loader.getParserDescriptorFactory();
-    }
-
-    public InitManager getInitManager() {
-        return initManager;
     }
 
     public GrimPlugin getGrimPlugin() {
@@ -143,9 +141,5 @@ public final class GrimAPI {
 
     public PermissionRegistrationManager getPermissionManager() {
         return loader.getPermissionManager();
-    }
-
-    public Platform getPlatform() {
-        return platform;
     }
 }
