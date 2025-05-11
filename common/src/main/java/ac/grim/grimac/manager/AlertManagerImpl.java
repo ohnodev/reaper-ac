@@ -156,16 +156,9 @@ public final class AlertManagerImpl implements AlertManager, ConfigReloadable, S
         setPlayerStateAndNotify(requirePlatformPlayerFromUser(player), enabled, silent, AlertType.BRAND);
     }
 
-    public void handlePlayerQuit(@NonNull GrimUser user) {
-        Objects.requireNonNull(user, "user cannot be null");
-        // We need to get PlatformPlayer *without* throwing an error on quit
-        if (user instanceof GrimPlayer grimPlayer && grimPlayer.platformPlayer != null) {
-            handlePlayerQuit(grimPlayer.platformPlayer);
-        }
-    }
+    public void handlePlayerQuit(@Nullable PlatformPlayer platformPlayer) {
+        if (platformPlayer == null) return;
 
-    public void handlePlayerQuit(@NonNull PlatformPlayer platformPlayer) {
-        // Null check for platformPlayer should be done by the caller if necessary
         AlertType.NORMAL.players.remove(platformPlayer);
         AlertType.VERBOSE.players.remove(platformPlayer);
         AlertType.BRAND.players.remove(platformPlayer);
