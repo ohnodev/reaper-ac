@@ -73,7 +73,6 @@ public class PacketOrderB extends Check implements PacketCheck {
         if (event.getPacketType() != PacketType.Play.Client.KEEP_ALIVE) {
             if (sentAttack && is1_9) {
                 flagAndAlert("post-attack");
-                sentAnimationSinceLastAttack = true; // don't flag twice
             }
 
             sentAttack = sentAnimation = sentSlotSwitch = false;
