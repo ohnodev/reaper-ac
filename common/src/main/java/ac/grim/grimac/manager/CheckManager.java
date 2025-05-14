@@ -66,6 +66,7 @@ import ac.grim.grimac.checks.impl.sprint.SprintF;
 import ac.grim.grimac.checks.impl.timer.NegativeTimer;
 import ac.grim.grimac.checks.impl.timer.TickTimer;
 import ac.grim.grimac.checks.impl.timer.Timer;
+import ac.grim.grimac.checks.impl.timer.TimerLimit;
 import ac.grim.grimac.checks.impl.timer.VehicleTimer;
 import ac.grim.grimac.checks.impl.vehicle.VehicleA;
 import ac.grim.grimac.checks.impl.vehicle.VehicleB;
@@ -249,6 +250,7 @@ public class CheckManager {
         prePredictionChecks = new ImmutableClassToInstanceMap.Builder<PacketCheck>()
                 .put(Timer.class, new Timer(player))
                 .put(TickTimer.class, new TickTimer(player))
+                .put(TimerLimit.class, new TimerLimit(player))
                 .put(CrashA.class, new CrashA(player))
                 .put(CrashB.class, new CrashB(player))
                 .put(CrashC.class, new CrashC(player))
