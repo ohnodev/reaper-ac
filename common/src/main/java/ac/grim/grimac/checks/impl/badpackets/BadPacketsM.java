@@ -5,8 +5,11 @@ import ac.grim.grimac.checks.CheckData;
 import ac.grim.grimac.checks.type.PacketCheck;
 import ac.grim.grimac.player.GrimPlayer;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
+import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
+import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientClientStatus;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerChangeGameState;
 
 @CheckData(name = "BadPacketsM", description = "Tried to respawn while alive", experimental = true)
 public class BadPacketsM extends Check implements PacketCheck {
@@ -14,15 +17,30 @@ public class BadPacketsM extends Check implements PacketCheck {
         super(player);
     }
 
+    private boolean wonGame;
+
     @Override
     public void onPacketReceive(PacketReceiveEvent event) {
-        if (event.getPacketType() == PacketType.Play.Client.CLIENT_STATUS) {
-            if (!player.compensatedEntities.self.isDead && new WrapperPlayClientClientStatus(event).getAction() == WrapperPlayClientClientStatus.Action.PERFORM_RESPAWN) {
+        if (event.getPacketType() == PacketType.Play.Client.CLIENT_STATUS && new WrapperPlayClientClientStatus(event).getAction() == WrapperPlayClientClientStatus.Action.PERFORM_RESPAWN) {
+            if (wonGame) {
+                wonGame = false;
+                return;
+            }
+
+            if (!player.compensatedEntities.self.isDead) {
                 if (flagAndAlert() && shouldModifyPackets()) {
                     event.setCancelled(true);
                     player.onPacketCancel();
                 }
             }
+        }
+    }
+
+    @Override
+    public void onPacketSend(PacketSendEvent event) {
+        if (event.getPacketType() == PacketType.Play.Server.CHANGE_GAME_STATE && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)
+                && new WrapperPlayServerChangeGameState(event).getReason() == WrapperPlayServerChangeGameState.Reason.WIN_GAME) {
+            player.addRealTimeTaskNow(() -> wonGame = true);
         }
     }
 }
