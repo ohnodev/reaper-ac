@@ -18,7 +18,7 @@ public class ViaVersionUtil {
                 LogUtil.error("Using unsupported ViaVersion 4.0 API, update ViaVersion to 5.0");
                 temp = false;
             } catch (ClassNotFoundException ex) {
-                temp = false; // unnecessary code, but it makes the purpose of load() more clear
+                temp = false;
             }
         }
         isViaLoaded = temp;
