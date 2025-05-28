@@ -9,7 +9,7 @@ import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 
 import java.util.StringJoiner;
 
-@CheckData(name = "MultiActionsC", description = "Clicked in inventory while sprinting", experimental = true)
+@CheckData(name = "MultiActionsC", description = "Clicked in inventory while moving", experimental = true)
 public class MultiActionsC extends Check implements PacketCheck {
     public MultiActionsC(GrimPlayer player) {
         super(player);
