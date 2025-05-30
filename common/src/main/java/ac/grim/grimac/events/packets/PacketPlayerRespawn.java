@@ -5,6 +5,7 @@ import ac.grim.grimac.checks.impl.badpackets.BadPacketsE;
 import ac.grim.grimac.checks.impl.badpackets.BadPacketsF;
 import ac.grim.grimac.checks.impl.badpackets.BadPacketsG;
 import ac.grim.grimac.checks.impl.badpackets.BadPacketsH;
+import ac.grim.grimac.checks.impl.elytra.ElytraC;
 import ac.grim.grimac.player.GrimPlayer;
 import ac.grim.grimac.utils.data.KnownInput;
 import ac.grim.grimac.utils.data.TrackerData;
@@ -164,10 +165,8 @@ public class PacketPlayerRespawn extends PacketListenerAbstract {
                     player.powderSnowFrozenTicks = 0;
                     player.compensatedEntities.self.hasGravity = true;
                     player.playerEntityHasGravity = true;
-                }
-
-                if (!keepTrackedData) {
                     player.packetStateData.knownInput = new KnownInput(false, false, false, false, false, false, false);
+                    player.checkManager.getPostPredictionCheck(ElytraC.class).exempt = true;
 
                     // 1.19.4 uses current sprinting, older versions use last sprinting
                     if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_19_4)) {
