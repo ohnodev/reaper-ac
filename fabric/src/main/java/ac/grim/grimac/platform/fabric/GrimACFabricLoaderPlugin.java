@@ -64,11 +64,11 @@ public abstract class GrimACFabricLoaderPlugin implements PlatformLoader {
     protected final IFabricMessageUtil fabricMessageUtil;
 
     public GrimACFabricLoaderPlugin(
-                                    ParserDescriptorFactory parserDescriptorFactory,
-                                    FabricPlatformPlayerFactory playerFactory,
-                                    PlatformServer platformServer,
-                                    IFabricMessageUtil fabricMessageUtil,
-                                    IFabricConversionUtil fabricConversionUtil
+            ParserDescriptorFactory parserDescriptorFactory,
+            FabricPlatformPlayerFactory playerFactory,
+            PlatformServer platformServer,
+            IFabricMessageUtil fabricMessageUtil,
+            IFabricConversionUtil fabricConversionUtil
     ) {
         this.parserFactory = parserDescriptorFactory;
         this.playerFactory = playerFactory;
