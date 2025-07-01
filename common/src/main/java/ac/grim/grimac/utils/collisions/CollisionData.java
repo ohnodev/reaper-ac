@@ -1035,7 +1035,7 @@ public enum CollisionData implements CollisionFactory {
         // ViaVersion replacement block - chorus plant (down: true, up: false, east: false, south: false, west: false)
         } else if (player.getClientVersion().isNewerThan(ClientVersion.V_1_12_2)) {
             // While the 2nd SimpleCollisionBox clearly encompasses the first, it's unclear if Mojang's collision code on any version
-            // May give a different result if the vanilla boxes aren't replicated perfectly, even the inefficinies like the code below
+            // May give a different result if the vanilla boxes aren't replicated perfectly, even the inefficiencies like the code below
             return new ComplexCollisionBox(2,
                     new SimpleCollisionBox(0.1875, 0.1875, 0.1875, 0.8125, 0.8125, 0.8125),
                     new SimpleCollisionBox(0.1875, 0, 0.1875, 0.8125, 0.8125, 0.8125)
