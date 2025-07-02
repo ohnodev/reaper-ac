@@ -1,0 +1,46 @@
+package ac.grim.grimac.predictionengine.predictions.rideable;
+
+import ac.grim.grimac.player.GrimPlayer;
+import ac.grim.grimac.predictionengine.predictions.PredictionEngineNormal;
+import ac.grim.grimac.utils.data.VectorData;
+import ac.grim.grimac.utils.math.Vector3dm;
+
+import java.util.List;
+import java.util.Set;
+
+public class HappyGhastPredictionEngine extends PredictionEngineNormal {
+
+    final Vector3dm movementVector;
+    final double multiplier;
+
+    public HappyGhastPredictionEngine(Vector3dm movementVector, double multiplier) {
+        this.movementVector = movementVector;
+        this.multiplier = multiplier;
+    }
+
+    @Override
+    public void endOfTick(GrimPlayer player, double delta) {
+        for (VectorData vector : player.getPossibleVelocitiesMinusKnockback()) {
+            vector.vector.setX(vector.vector.getX() * multiplier);
+            vector.vector.setY(vector.vector.getY() * multiplier);
+            vector.vector.setZ(vector.vector.getZ() * multiplier);
+        }
+    }
+
+    @Override
+    public List<VectorData> applyInputsToVelocityPossibilities(GrimPlayer player, Set<VectorData> possibleVectors, float speed) {
+        return PredictionEngineRideableUtils.applyInputsToVelocityPossibilities(this, movementVector, player, possibleVectors, speed);
+    }
+
+    @Override
+    public Vector3dm getMovementResultFromInput(GrimPlayer player, Vector3dm inputVector, float flyingSpeed, float yRot) {
+        float sin = player.trigHandler.sin(yRot * 0.017453292f);
+        float cos = player.trigHandler.cos(yRot * 0.017453292f);
+
+        double xResult = inputVector.getX() * cos - inputVector.getZ() * sin;
+        double zResult = inputVector.getZ() * cos + inputVector.getX() * sin;
+
+        return new Vector3dm(xResult * flyingSpeed, inputVector.getY() * flyingSpeed, zResult * flyingSpeed);
+    }
+
+}
