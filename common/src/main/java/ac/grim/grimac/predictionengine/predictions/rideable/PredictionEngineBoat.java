@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class BoatPredictionEngine extends PredictionEngine {
-    public BoatPredictionEngine(GrimPlayer player) {
+public class PredictionEngineBoat extends PredictionEngine {
+    public PredictionEngineBoat(GrimPlayer player) {
         player.uncertaintyHandler.collidingEntities.add(0); // We don't do collisions like living entities
         player.vehicleData.midTickY = 0;
 
