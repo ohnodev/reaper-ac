@@ -143,6 +143,9 @@ public class BoatPredictionEngine extends PredictionEngine {
         List<VectorData> vectors = new ArrayList<>();
 
         for (VectorData data : possibleVectors) {
+            // TODO: is this correct?
+            data.input = new Vector3dm(player.vehicleData.vehicleForward, 0, player.vehicleData.vehicleHorizontal);
+
             // Boats ignore forward steering, using raw inputs instead,
             // so if a player tries to move in both directions, a packet will
             // show that the player is staying, but the boat will move anyway
