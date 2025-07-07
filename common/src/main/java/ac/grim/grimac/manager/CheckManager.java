@@ -10,6 +10,7 @@ import ac.grim.grimac.checks.impl.breaking.*;
 import ac.grim.grimac.checks.impl.chat.ChatA;
 import ac.grim.grimac.checks.impl.chat.ChatB;
 import ac.grim.grimac.checks.impl.chat.ChatC;
+import ac.grim.grimac.checks.impl.chat.ChatD;
 import ac.grim.grimac.checks.impl.combat.Hitboxes;
 import ac.grim.grimac.checks.impl.combat.MultiInteractA;
 import ac.grim.grimac.checks.impl.combat.MultiInteractB;
@@ -95,6 +96,7 @@ public class CheckManager {
                 .put(ChatA.class, new ChatA(player))
                 .put(ChatB.class, new ChatB(player))
                 .put(ChatC.class, new ChatC(player))
+                .put(ChatD.class, new ChatD(player))
                 .put(ExploitB.class, new ExploitB(player))
                 .put(BadPacketsA.class, new BadPacketsA(player))
                 .put(BadPacketsB.class, new BadPacketsB(player))
