@@ -475,6 +475,11 @@ public class CheckManager {
         return (T) postPredictionCheck.get(check);
     }
 
+    @SuppressWarnings("unchecked")
+    public <T extends PostPredictionCheck> T getPreViaPostPredictionCheck(Class<T> check) {
+        return (T) preViaPostPredictionChecks.get(check);
+    }
+
     private void init() {
         if (inited || initedAtomic.getAndSet(true)) return;
         inited = true;
