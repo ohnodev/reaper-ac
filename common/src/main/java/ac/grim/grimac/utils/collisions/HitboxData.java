@@ -263,7 +263,9 @@ public enum HitboxData implements HitBoxFactory {
             BlockTags.STANDING_SIGNS.getStates().toArray(new StateType[0])),
 
     SAPLING(new HexCollisionBox(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D),
-            BlockTags.SAPLINGS.getStates().toArray(new StateType[0])),
+            BlockTags.SAPLINGS.getStates().stream()
+                    .filter(s -> s != StateTypes.AZALEA || s != StateTypes.FLOWERING_AZALEA)
+                    .toArray(StateType[]::new)),
 
     ROOTS(new HexCollisionBox(2.0D, 0.0D, 2.0D, 14.0D, 13.0D, 14.0D),
             StateTypes.WARPED_ROOTS, StateTypes.CRIMSON_ROOTS),
