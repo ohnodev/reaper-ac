@@ -1,10 +1,3 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-# This workflow will build a package using Gradle and then publish it to GitHub packages when a release is created
-# For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#Publishing-using-gradle
-
 name: Gradle Package
 
 on: [push, workflow_dispatch]
@@ -42,7 +35,7 @@ jobs:
         key: loom-cache-${{ runner.os }}-${{ hashFiles('**/libs.versions.toml', 'fabric/**/build.gradle.kts') }}
         restore-keys: |
           loom-cache-${{ runner.os }}
-            
+
     - name: Compute MAIN version (default build)
       id: ver_main
       run: |
@@ -102,11 +95,21 @@ jobs:
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Debug Changelog Output
+      if: github.event_name == 'push'
+      run: |
+        echo "File output path: ${{ steps.git-cliff.outputs.changelog }}"
+        echo "Content output: ${{ steps.git-cliff.outputs.content }}"
+        if [[ -f "${{ steps.git-cliff.outputs.changelog }}" ]]; then
+          echo "File content:"
+            cat "${{ steps.git-cliff.outputs.changelog }}"
+        fi
+
     - name: Prepare Final Changelog for Modrinth
       if: github.event_name == 'push'
       id: changelog
       run: |
-          NOTES='${{ steps.cliff.outputs.changelog_content }}'
+          NOTES='${{ steps.git-cliff.outputs.content }}'
           if [ -z "$NOTES" ]; then
             NOTES="* No new code changes in this build."
           fi
@@ -115,7 +118,7 @@ jobs:
             echo "$NOTES"
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
-        
+
     #------------------------------------------------------------------
     #  Publish Bukkit to Modrinth
     #------------------------------------------------------------------
@@ -155,7 +158,7 @@ jobs:
       if: github.event_name == 'push' && github.ref_name == '2.0'
       uses: Kir-Antipov/mc-publish@v3.3
       with:
-          modrinth-id:    ${{ secrets.MODRINTH_ID }}
+          modrinth-id:    ${{ vars.MODRINTH_ID }}
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           modrinth-featured: true
 
