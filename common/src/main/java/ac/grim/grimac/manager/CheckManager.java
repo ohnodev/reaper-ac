@@ -37,10 +37,7 @@ import ac.grim.grimac.checks.impl.prediction.Phase;
 import ac.grim.grimac.checks.impl.scaffolding.*;
 import ac.grim.grimac.checks.impl.sprint.*;
 import ac.grim.grimac.checks.impl.timer.*;
-import ac.grim.grimac.checks.impl.vehicle.VehicleA;
-import ac.grim.grimac.checks.impl.vehicle.VehicleB;
-import ac.grim.grimac.checks.impl.vehicle.VehicleC;
-import ac.grim.grimac.checks.impl.vehicle.VehicleD;
+import ac.grim.grimac.checks.impl.vehicle.*;
 import ac.grim.grimac.checks.impl.velocity.ExplosionHandler;
 import ac.grim.grimac.checks.impl.velocity.KnockbackHandler;
 import ac.grim.grimac.checks.type.*;
@@ -121,6 +118,7 @@ public class CheckManager {
                 .put(VehicleA.class, new VehicleA(player))
                 .put(VehicleB.class, new VehicleB(player))
                 .put(VehicleD.class, new VehicleD(player))
+                .put(VehicleE.class, new VehicleE(player))
                 .put(TickTimer.class, new TickTimer(player))
                 .put(SprintA.class, new SprintA(player))
                 .put(CrashB.class, new CrashB(player))
