@@ -56,6 +56,7 @@ import com.github.retrooper.packetevents.protocol.ConnectionState;
 import com.github.retrooper.packetevents.protocol.attribute.Attributes;
 import com.github.retrooper.packetevents.protocol.component.ComponentTypes;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemEquippable;
+import com.github.retrooper.packetevents.protocol.entity.type.EntityType;
 import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
 import com.github.retrooper.packetevents.protocol.item.ItemStack;
 import com.github.retrooper.packetevents.protocol.item.type.ItemTypes;
@@ -635,6 +636,14 @@ public class GrimPlayer implements GrimUser {
 
     public boolean inVehicle() {
         return compensatedEntities.self.inVehicle();
+    }
+
+    public PacketEntity getVehicle() {
+        return compensatedEntities.self.riding;
+    }
+
+    public EntityType getVehicleType() {
+        return inVehicle() ? getVehicle().type : null;
     }
 
     public CompensatedInventory getInventory() {
