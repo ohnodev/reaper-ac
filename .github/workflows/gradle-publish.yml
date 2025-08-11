@@ -154,7 +154,7 @@ jobs:
               purpur
 
           game-versions: |
-              >=1.16.1 <=1.21.8
+              >=1.7 <=1.21.8
 
     #------------------------------------------------------------------
     #  Publish Fabric to Modrinth
@@ -181,3 +181,6 @@ jobs:
 
           game-versions: |
               >=1.16.1 <=1.21.8
+
+          dependencies: |
+              fabric-api
