@@ -119,6 +119,7 @@ public class CheckManager {
                 .put(VehicleB.class, new VehicleB(player))
                 .put(VehicleD.class, new VehicleD(player))
                 .put(VehicleE.class, new VehicleE(player))
+                .put(VehicleF.class, new VehicleF(player))
                 .put(TickTimer.class, new TickTimer(player))
                 .put(SprintA.class, new SprintA(player))
                 .put(CrashB.class, new CrashB(player))
