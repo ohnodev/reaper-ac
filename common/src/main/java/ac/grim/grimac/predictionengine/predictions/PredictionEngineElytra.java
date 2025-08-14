@@ -60,18 +60,13 @@ public class PredictionEngineElytra extends PredictionEngine {
         Vector3dm currentLook = ReachUtils.getLook(player, player.xRot, player.yRot);
 
         for (VectorData data : possibleVectors) {
-            Vector3dm elytraResult = getElytraMovement(player, data.vector.clone(), currentLook).multiply(player.stuckSpeedMultiplier).multiply(new Vector3dm(0.99F, 0.98F, 0.99F));
-            VectorData modified = data.returnNewModified(elytraResult, VectorData.VectorType.InputResult);
-            modified.input = new Vector3dm(0, 0, 0);
-            results.add(modified);
-
             // We must bruteforce Optifine ShitMath
-            player.trigHandler.toggleShitMath();
-            elytraResult = getElytraMovement(player, data.vector.clone(), ReachUtils.getLook(player, player.xRot, player.yRot)).multiply(player.stuckSpeedMultiplier).multiply(new Vector3dm(0.99F, 0.98F, 0.99F));
-            player.trigHandler.toggleShitMath();
-            modified = data.returnNewModified(elytraResult, VectorData.VectorType.InputResult);
-            modified.input = new Vector3dm(0, 0, 0);
-            results.add(modified);
+            for (int shitmath = 0; shitmath <= 1; shitmath++, player.trigHandler.toggleShitMath()) {
+                Vector3dm elytraResult = getElytraMovement(player, data.vector.clone(), currentLook).multiply(player.stuckSpeedMultiplier).multiply(new Vector3dm(0.99F, 0.98F, 0.99F));
+                VectorData modified = data.returnNewModified(elytraResult, VectorData.VectorType.InputResult);
+                modified.input = new Vector3dm(0, 0, 0);
+                results.add(modified);
+            }
         }
 
         return results;
