@@ -62,10 +62,17 @@ public class PredictionEngineElytra extends PredictionEngine {
         for (VectorData data : possibleVectors) {
             // We must bruteforce Optifine ShitMath
             for (int shitmath = 0; shitmath <= 1; shitmath++, player.trigHandler.toggleShitMath()) {
-                Vector3dm elytraResult = getElytraMovement(player, data.vector.clone(), currentLook).multiply(player.stuckSpeedMultiplier).multiply(new Vector3dm(0.99F, 0.98F, 0.99F));
-                VectorData modified = data.returnNewModified(elytraResult, VectorData.VectorType.InputResult);
-                modified.input = new Vector3dm(0, 0, 0);
-                results.add(modified);
+                for (int applyStuckSpeed = 1; applyStuckSpeed >= 0; applyStuckSpeed--) {
+                    if (applyStuckSpeed == 0 && player.isForceStuckSpeed()) break;
+                    Vector3dm elytraResult = getElytraMovement(player, data.vector.clone(), currentLook);
+                    if (applyStuckSpeed != 0) {
+                        elytraResult.multiply(new Vector3dm(0.99F, 0.98F, 0.99F));
+                    }
+                    elytraResult.multiply(new Vector3dm(0.99F, 0.98F, 0.99F));
+                    VectorData modified = data.returnNewModified(elytraResult, VectorData.VectorType.InputResult);
+                    modified.input = new Vector3dm(0, 0, 0);
+                    results.add(modified);
+                }
             }
         }
 

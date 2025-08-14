@@ -261,6 +261,8 @@ public class GrimPlayer implements GrimUser {
     @Getter @Setter private boolean experimentalChecks = false;
     @Getter private boolean cancelDuplicatePacket = true;
     @Getter @Setter private boolean exemptElytra = false;
+    @Getter @Setter private boolean forceStuckSpeed = true;
+    @Getter @Setter private boolean forceSlowMovement = true;
     @Getter private boolean resetItemUsageOnAttack;
     @Getter private boolean resetItemUsageOnItemUpdate;
     @Getter private boolean resetItemUsageOnSlotChange;
