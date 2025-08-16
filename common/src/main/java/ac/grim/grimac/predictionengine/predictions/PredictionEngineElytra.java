@@ -68,9 +68,7 @@ public class PredictionEngineElytra extends PredictionEngine {
                 for (int applyStuckSpeed = 1; applyStuckSpeed >= 0; applyStuckSpeed--) {
                     if (applyStuckSpeed == 0 && player.isForceStuckSpeed()) break;
                     Vector3dm elytraResult = getElytraMovement(player, data.vector.clone(), shitmath == 1 ? shitmathLook : currentLook);
-                    if (applyStuckSpeed != 0) {
-                        elytraResult.multiply(new Vector3dm(0.99F, 0.98F, 0.99F));
-                    }
+                    if (applyStuckSpeed != 0) elytraResult.multiply(player.stuckSpeedMultiplier);
                     elytraResult.multiply(new Vector3dm(0.99F, 0.98F, 0.99F));
                     VectorData modified = data.returnNewModified(elytraResult, VectorData.VectorType.InputResult);
                     modified.input = new Vector3dm(0, 0, 0);
