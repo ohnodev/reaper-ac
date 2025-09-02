@@ -42,6 +42,8 @@ public class PacketPlayerDigging extends PacketListenerAbstract {
     }
 
     private static final boolean RELIABLE_COMPONENT_SYSTEM = PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_21_4);
+    private static final boolean SERVER_HAS_OFFHAND = PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_9);
+
     public static void handleUseItem(GrimPlayer player, ItemStack item, InteractionHand hand) {
         if (item == null) {
             player.packetStateData.setSlowedByUsingItem(false);
@@ -248,7 +250,7 @@ public class PacketPlayerDigging extends PacketListenerAbstract {
             final GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
             if (player == null) return;
 
-            final InteractionHand hand = event.getPacketType() == PacketType.Play.Client.USE_ITEM
+            final InteractionHand hand = SERVER_HAS_OFFHAND && event.getPacketType() == PacketType.Play.Client.USE_ITEM
                     ? new WrapperPlayClientUseItem(event).getHand()
                     : InteractionHand.MAIN_HAND;
 
