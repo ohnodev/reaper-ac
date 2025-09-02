@@ -199,7 +199,7 @@ public class PacketPlayerDigging extends PacketListenerAbstract {
                 player.packetStateData.slowedByUsingItemTransaction = player.lastTransactionReceived.get();
 
                 if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13)) {
-                    ItemStack hand = player.packetStateData.eatingHand == InteractionHand.OFF_HAND ? player.getInventory().getOffHand() : player.getInventory().getHeldItem();
+                    ItemStack hand = player.getInventory().getItemInHand(player.packetStateData.eatingHand);
 
                     if (hand.getType() == ItemTypes.TRIDENT
                             && hand.getEnchantmentLevel(EnchantmentTypes.RIPTIDE) > 0) {
