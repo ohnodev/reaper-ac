@@ -28,6 +28,6 @@ public class EquipmentSlot extends Slot {
 
     public boolean mayPickup(GrimPlayer player) {
         ItemStack itemstack = this.getItem();
-        return (itemstack.isEmpty() || player.gamemode == GameMode.CREATIVE || itemstack.getEnchantmentLevel(EnchantmentTypes.BINDING_CURSE, PacketEvents.getAPI().getServerManager().getVersion().toClientVersion()) == 0) && super.mayPickup(player);
+        return (itemstack.isEmpty() || player.gamemode == GameMode.CREATIVE || itemstack.getEnchantmentLevel(EnchantmentTypes.BINDING_CURSE) == 0) && super.mayPickup(player);
     }
 }
