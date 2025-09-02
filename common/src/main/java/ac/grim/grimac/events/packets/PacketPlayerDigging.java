@@ -201,8 +201,7 @@ public class PacketPlayerDigging extends PacketListenerAbstract {
                 if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13)) {
                     ItemStack hand = player.getInventory().getItemInHand(player.packetStateData.eatingHand);
 
-                    if (hand.getType() == ItemTypes.TRIDENT
-                            && hand.getEnchantmentLevel(EnchantmentTypes.RIPTIDE) > 0) {
+                    if (hand.getType() == ItemTypes.TRIDENT && hand.getEnchantmentLevel(EnchantmentTypes.RIPTIDE) > 0) {
                         player.packetStateData.tryingToRiptide = true;
                     }
                 }
@@ -214,11 +213,11 @@ public class PacketPlayerDigging extends PacketListenerAbstract {
             if (player != null && player.packetStateData.isSlowedByUsingItem()
                     && !player.packetStateData.lastPacketWasTeleport
                     && !player.packetStateData.lastPacketWasOnePointSeventeenDuplicate) {
-                if (player.packetStateData.eatingHand != InteractionHand.OFF_HAND
-                        && player.packetStateData.getSlowedByUsingItemSlot() != player.packetStateData.lastSlotSelected
-                        || player.getInventory().getItemInHand(player.packetStateData.eatingHand).isEmpty()) {
+                boolean slotChanged = player.packetStateData.eatingHand != InteractionHand.OFF_HAND
+                        && player.packetStateData.getSlowedByUsingItemSlot() != player.packetStateData.lastSlotSelected;
+                if (slotChanged || player.getInventory().getItemInHand(player.packetStateData.eatingHand).isEmpty()) {
                     player.packetStateData.setSlowedByUsingItem(false);
-                    player.checkManager.getPostPredictionCheck(NoSlow.class).didSlotChangeLastTick = true;
+                    if (slotChanged) player.checkManager.getPostPredictionCheck(NoSlow.class).didSlotChangeLastTick = true;
                 }
             }
         }
