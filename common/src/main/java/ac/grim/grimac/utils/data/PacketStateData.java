@@ -28,15 +28,16 @@ public class PacketStateData {
     public int lastFood;
     public boolean lastServerTransWasValid = false;
     @Getter
-    private boolean slowedByUsingItem;
-    @Getter
     private int slowedByUsingItemSlot = Integer.MIN_VALUE;
 
     // If true, the player's rotation was forced to the horse's rotation only on 1.13-
     public boolean horseInteractCausedForcedRotation = false;
 
     public void setSlowedByUsingItem(boolean slowedByUsingItem) {
-        this.slowedByUsingItem = slowedByUsingItem;
         slowedByUsingItemSlot = slowedByUsingItem ? lastSlotSelected : Integer.MIN_VALUE;
+    }
+
+    public boolean isSlowedByUsingItem() {
+        return slowedByUsingItemSlot != Integer.MIN_VALUE;
     }
 }
