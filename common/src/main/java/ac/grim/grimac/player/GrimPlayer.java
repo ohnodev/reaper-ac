@@ -492,10 +492,6 @@ public class GrimPlayer implements GrimUser {
         didWeSendThatTrans.add(id);
     }
 
-    public boolean isEyeInFluid(FluidTag tag) {
-        return this.fluidOnEyes == tag;
-    }
-
     public double getEyeHeight() {
         return getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9) ? pose.eyeHeight
                 : isSneaking ? 1.54f : 1.62f;
