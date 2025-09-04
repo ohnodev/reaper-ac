@@ -153,17 +153,15 @@ public class PacketServerTeleport extends PacketListenerAbstract {
         }
 
         if (event.getPacketType() == PacketType.Play.Server.VEHICLE_MOVE) {
-            WrapperPlayServerVehicleMove vehicleMove = new WrapperPlayServerVehicleMove(event);
-
             GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
             if (player == null) return;
 
             player.sendTransaction();
-            int lastTransactionSent = player.lastTransactionSent.get();
-            Vector3d finalPos = vehicleMove.getPosition();
-
             event.getTasksAfterSend().add(player::sendTransaction);
-            player.vehicleData.vehicleTeleports.add(new Pair<>(lastTransactionSent, finalPos));
+            player.vehicleData.vehicleTeleports.add(new Pair<>(
+                    player.lastTransactionSent.get(),
+                    new WrapperPlayServerVehicleMove(event).getPosition()
+            ));
         }
     }
 }
