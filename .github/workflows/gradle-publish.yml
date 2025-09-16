@@ -1,6 +1,21 @@
 name: Gradle Package
 
-on: [push, workflow_dispatch]
+on:
+    # Only apply for branches we care about and if logic actually changes
+    push:
+        branches:
+            - '2.0'
+            - 'dev'
+            - 'release/**'
+        paths:
+            - '**.java'
+            - '**.kt'
+            - '**.kts'
+            - '**.gradle'
+            - '**.properties'
+            - '**.yml'
+            - '**.toml'
+    workflow_dispatch:
 
 jobs:
   build:
@@ -27,6 +42,9 @@ jobs:
 
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v4 # Handles Gradle wrapper validation and basic caching
+      with:
+          # Allow cache writes on main and dev branch
+          cache-read-only: ${{ github.ref != 'refs/heads/2.0' && github.ref != 'refs/heads/dev' }}
 
     - name: Cache Gradle Loom Cache
       uses: actions/cache@v4
@@ -184,3 +202,16 @@ jobs:
 
           dependencies: |
               fabric-api
+
+        #------------------------------------------------------------------
+        #  Publish version to the API
+        #------------------------------------------------------------------
+    - name: Publish to API
+      if: github.event_name == 'push' && (github.ref_name == '2.0' || github.ref_name == 'dev' || startsWith(github.ref_name, 'release/')) && secrets.BUILD_UPDATE_URL != ''
+      uses: fjogeleit/http-request-action@v1
+      with:
+          url: ${{ secrets.BUILD_UPDATE_URL }}
+          method: 'POST'
+          bearerToken: ${{ secrets.BUILD_UPDATE_TOKEN }}
+          customHeaders: '{"Content-Type": "application/json", "User-Agent": "GrimACBuilder/v1"}'
+          data: '{"org": "${{ github.repository_owner }}", "repository": "${{ github.event.repository.name }}", "branch": "${{ github.ref_name }}", "version": "${{ env.MAIN_VERSION }}"}'
