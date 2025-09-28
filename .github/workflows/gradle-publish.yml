@@ -65,7 +65,7 @@ jobs:
 
     -   name: Set Git Environment Variables
         run: |
-            echo "GRIM_GIT_REPO=${{ github.repository }}" >> $GITHUB_ENV
+            echo "GRIM_GIT_REPO=${{ github.event.repository.name }}" >> $GITHUB_ENV
             echo "GRIM_GIT_ORG=${{ github.repository_owner }}" >> $GITHUB_ENV
     
     - name: Compute MAIN version and Build with Gradle
