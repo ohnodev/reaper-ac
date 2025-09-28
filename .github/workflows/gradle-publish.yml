@@ -58,12 +58,10 @@ jobs:
     - name: Compute MAIN version and Build with Gradle
       id: build_with_version
       run: |
-          ./gradlew -q printVersion build | tee gradle_output.txt
-          VERSION=$(grep '^VERSION=' gradle_output.txt | tail -n1 | cut -d'=' -f2)
+          VERSION=$(./gradlew -q printVersion build | grep '^VERSION=' | tail -n1 | cut -d'=' -f2)
           echo "main_version=$VERSION" >> $GITHUB_OUTPUT
           echo "MAIN_VERSION=$VERSION" >> $GITHUB_ENV
           echo "Main version: $VERSION"
-          rm gradle_output.txt
 
     - name: Upload Bukkit Artifact
       uses: actions/upload-artifact@v4
@@ -85,7 +83,7 @@ jobs:
         #  Generate Changelog
         #------------------------------------------------------------------
     - name: Generate Changelog with git-cliff
-      if: github.event_name == 'push'
+      if: github.event_name == 'push' && (github.ref_name == '2.0' || github.ref_name == 'dev' || github.ref_name == 'release' || startsWith(github.ref_name, 'release/'))
       id: git-cliff
       uses: orhun/git-cliff-action@v4
       with:
@@ -95,7 +93,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Debug Changelog Output
-      if: github.event_name == 'push'
+      if: github.event_name == 'push' && (github.ref_name == '2.0' || github.ref_name == 'dev' || github.ref_name == 'release' || startsWith(github.ref_name, 'release/'))
       run: |
         echo "File output path: ${{ steps.git-cliff.outputs.changelog }}"
         echo "Content output: ${{ steps.git-cliff.outputs.content }}"
@@ -105,7 +103,7 @@ jobs:
         fi
 
     - name: Prepare Final Changelog for Modrinth
-      if: github.event_name == 'push'
+      if: github.event_name == 'push' && (github.ref_name == '2.0' || github.ref_name == 'dev' || github.ref_name == 'release' || startsWith(github.ref_name, 'release/'))
       id: changelog
       env:
           CHANGELOG_CONTENT: ${{ steps.git-cliff.outputs.content }}
