@@ -96,7 +96,7 @@ jobs:
         #  Generate Changelog
         #------------------------------------------------------------------
     - name: Generate Changelog with git-cliff
-      if: ${{ env.IS_PUBLISH_BRANCH == true }}
+      if: ${{ env.IS_PUBLISH_BRANCH == 'true' }}
       id: git-cliff
       uses: orhun/git-cliff-action@v4
       with:
@@ -106,7 +106,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Debug Changelog Output
-      if: ${{ env.IS_PUBLISH_BRANCH == true }}
+      if: ${{ env.IS_PUBLISH_BRANCH == 'true' }}
       run: |
         echo "File output path: ${{ steps.git-cliff.outputs.changelog }}"
         echo "Content output: ${{ steps.git-cliff.outputs.content }}"
@@ -116,7 +116,7 @@ jobs:
         fi
 
     - name: Prepare Final Changelog for Modrinth
-      if: ${{ env.IS_PUBLISH_BRANCH == true }}
+      if: ${{ env.IS_PUBLISH_BRANCH == 'true' }}
       id: changelog
       env:
           CHANGELOG_CONTENT: ${{ steps.git-cliff.outputs.content }}
@@ -138,7 +138,7 @@ jobs:
     #  Publish Bukkit to Modrinth
     #------------------------------------------------------------------
     - name: Publish Bukkit to Modrinth
-      if: ${{ env.IS_PUBLISH_BRANCH == true }}
+      if: ${{ env.IS_PUBLISH_BRANCH == 'true' }}
       uses: Kir-Antipov/mc-publish@v3.3
       with:
           modrinth-id:    ${{ secrets.MODRINTH_ID }}
@@ -169,7 +169,7 @@ jobs:
     #  Publish Fabric to Modrinth
     #------------------------------------------------------------------
     - name: Publish Fabric to Modrinth
-      if: ${{ env.IS_PUBLISH_BRANCH == true }}
+      if: ${{ env.IS_PUBLISH_BRANCH == 'true' }}
       uses: Kir-Antipov/mc-publish@v3.3
       with:
           modrinth-id:    ${{ vars.MODRINTH_ID }}
@@ -198,7 +198,7 @@ jobs:
         #  Publish version to the API
         #------------------------------------------------------------------
     - name: Publish to API
-      if: ${{ env.IS_PUBLISH_BRANCH == true }}
+      if: ${{ env.IS_PUBLISH_BRANCH == 'true' }}
       run: |
           curl -X POST \
             -H "Content-Type: application/json" \
