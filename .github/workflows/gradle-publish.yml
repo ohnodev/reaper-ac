@@ -58,10 +58,12 @@ jobs:
     - name: Compute MAIN version and Build with Gradle
       id: build_with_version
       run: |
-          VERSION=$(./gradlew -q printVersion build | grep '^VERSION=' | cut -d'=' -f2)
+          ./gradlew -q printVersion build | tee gradle_output.txt
+          VERSION=$(grep '^VERSION=' gradle_output.txt | tail -n1 | cut -d'=' -f2)
           echo "main_version=$VERSION" >> $GITHUB_OUTPUT
-          echo "MAIN_VERSION=$VERSION"  >> $GITHUB_ENV
+          echo "MAIN_VERSION=$VERSION" >> $GITHUB_ENV
           echo "Main version: $VERSION"
+          rm gradle_output.txt
 
     - name: Upload Bukkit Artifact
       uses: actions/upload-artifact@v4
