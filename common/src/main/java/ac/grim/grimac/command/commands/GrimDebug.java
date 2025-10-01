@@ -96,7 +96,7 @@ public class GrimDebug implements BuildableCommand {
         sender.sendMessage(message);
     }
 
-    private void handleHitboxDebug(@NonNull CommandContext<Sender> context) {
+    private void handleHitboxDebug(@NotNull CommandContext<Sender> context) {
         Sender sender = context.sender();
         PlayerSelector playerSelector = context.getOrDefault("target", null);
 
