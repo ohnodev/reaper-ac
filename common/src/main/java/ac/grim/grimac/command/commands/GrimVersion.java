@@ -4,6 +4,7 @@ import ac.grim.grimac.GrimAPI;
 import ac.grim.grimac.command.BuildableCommand;
 import ac.grim.grimac.platform.api.sender.Sender;
 import ac.grim.grimac.utils.anticheat.LogUtil;
+import ac.grim.grimac.utils.anticheat.MessageUtil;
 import ac.grim.grimac.utils.common.GrimArguments;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -63,12 +64,17 @@ public class GrimVersion implements BuildableCommand {
                     .build();
 
             HttpResponse<String> response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() != 200) {
+            final int statusCode = response.statusCode();
+            if (statusCode != 200) {
                 Component msg = updateMessage.get();
                 sender.sendMessage(Objects.requireNonNullElseGet(msg, () -> Component.text()
-                        .append(Component.text("Failed to check latest version.").color(NamedTextColor.RED))
+                        .append(MessageUtil.miniMessage("%prefix%"))
+                        .append(Component.text(" Failed to check latest GrimAC version. Update server responded with code: ")
+                                .color(NamedTextColor.YELLOW))
+                        .append(Component.text(statusCode)
+                                .color(getColorForStatusCode(statusCode))
+                                .decorate(TextDecoration.BOLD))
                         .build()));
-                LogUtil.error("Failed to check latest GrimAC version. Response code: " + response.statusCode());
                 return;
             }
             // Using old JsonParser method, as old versions of Gson don't include the static one
@@ -114,6 +120,19 @@ public class GrimVersion implements BuildableCommand {
 
     private static String getJsonString(JsonObject object, String key, String defaultValue) {
         return object.has(key) ? object.get(key).getAsString() : defaultValue;
+    }
+
+    private static NamedTextColor getColorForStatusCode(int code) {
+        if (code >= 500) { // Server Errors (e.g., 500, 503)
+            return NamedTextColor.RED;
+        } else if (code >= 400) { // Client Errors (e.g., 403, 404)
+            return NamedTextColor.RED;
+        } else if (code >= 300) { // Redirection (e.g., 301, 302)
+            return NamedTextColor.YELLOW;
+        } else if (code >= 200) { // Success (e.g., 200, 201)
+            return NamedTextColor.GREEN;
+        }
+        return NamedTextColor.GRAY; // Default for 1xx codes or others
     }
 
     @Override
