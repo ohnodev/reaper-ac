@@ -143,18 +143,25 @@ jobs:
 
             - name: Prepare Final Changelog
               id: changelog
+                # Pass the multi-line content safely via an environment variable
+              env:
+                  CHANGELOG_CONTENT: ${{ steps.git-cliff.outputs.content }}
               run: |
                   NOTES=""
                   if [[ "${{ inputs.is-release-build }}" == "true" ]]; then
+                    # Use the release changelog if this is a release build
                     NOTES="${{ inputs.release-changelog }}"
                   else
-                    NOTES="${{ steps.git-cliff.outputs.content }}"
+                    # Otherwise, use the content from the environment variable.
+                    # It's crucial to quote it to preserve newlines.
+                    NOTES="$CHANGELOG_CONTENT"
                   fi
                   
                   if [ -z "$NOTES" ]; then
                     NOTES="* No new code changes in this build."
                   fi
                   
+                  # This is the correct way to set a multi-line output variable in Actions
                   {
                     echo "notes<<EOF"
                     echo "$NOTES"
