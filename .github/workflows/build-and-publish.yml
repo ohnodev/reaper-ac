@@ -87,10 +87,10 @@ jobs:
                     BUILD_ARGS="$BUILD_ARGS --scan"
                   fi
                   
-                  echo "Running: ./gradlew -q printVersion $BUILD_ARGS"
+                  echo "Running: ./gradlew printVersion $BUILD_ARGS"
                   
                   # Use 'tee' to both display the output live and save it to a file for parsing
-                  VERSION=$(./gradlew -q printVersion $BUILD_ARGS | tee build-output.log | grep '^VERSION=' | tail -n1 | cut -d'=' -f2)
+                  VERSION=$(./gradlew printVersion $BUILD_ARGS | tee build-output.log | grep '^VERSION=' | tail -n1 | cut -d'=' -f2)
                   
                   echo "build_version=$VERSION" >> $GITHUB_OUTPUT
                   echo "BUILD_VERSION=$VERSION" >> $GITHUB_ENV
