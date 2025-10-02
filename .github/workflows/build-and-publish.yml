@@ -175,7 +175,7 @@ jobs:
               if: ${{ inputs.publish-artifacts == true }}
               uses: Kir-Antipov/mc-publish@v3.3
               with:
-                  modrinth-id:    ${{ vars.MODRINTH_ID }}
+                  modrinth-id:    ${{ secrets.MODRINTH_ID }}
                   modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
                   modrinth-featured: ${{ inputs.is-release-build }} # Only feature release builds
 
@@ -191,7 +191,7 @@ jobs:
               if: ${{ inputs.publish-artifacts == true }}
               uses: Kir-Antipov/mc-publish@v3.3
               with:
-                  modrinth-id:    ${{ vars.MODRINTH_ID }}
+                  modrinth-id:    ${{ secrets.MODRINTH_ID }}
                   modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
                   modrinth-featured: ${{ inputs.is-release-build }} # Only feature release builds
 
