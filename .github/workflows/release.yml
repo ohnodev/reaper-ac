@@ -12,6 +12,8 @@ jobs:
             release-version-type: release # Official releases are 'release'
             # Use the body of the GitHub Release as the changelog
             release-changelog: ${{ github.event.release.body }}
+            run-build-scan: false
+            publish-artifacts: true
         secrets:
             MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
             BUILD_UPDATE_TOKEN: ${{ secrets.BUILD_UPDATE_TOKEN }}
