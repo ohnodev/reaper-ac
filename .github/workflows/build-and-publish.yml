@@ -145,18 +145,19 @@ jobs:
 
             - name: Prepare Final Changelog
               id: changelog
-                # Pass the multi-line content safely via an environment variable
+                # Add this 'env' block to safely load the changelogs as environment variables
               env:
-                  CHANGELOG_CONTENT: ${{ steps.git-cliff.outputs.content }}
+                  RELEASE_NOTES: ${{ inputs.release-changelog }}
+                  DEV_NOTES: ${{ steps.git-cliff.outputs.content }}
               run: |
                   NOTES=""
                   if [[ "${{ inputs.is-release-build }}" == "true" ]]; then
-                    # Use the release changelog if this is a release build
-                    NOTES="${{ inputs.release-changelog }}"
+                    # Use the environment variable for the release changelog.
+                    # The double quotes are critical to preserve newlines!
+                    NOTES="$RELEASE_NOTES"
                   else
-                    # Otherwise, use the content from the environment variable.
-                    # It's crucial to quote it to preserve newlines.
-                    NOTES="$CHANGELOG_CONTENT"
+                    # Use the environment variable for the dev changelog.
+                    NOTES="$DEV_NOTES"
                   fi
                   
                   if [ -z "$NOTES" ]; then
@@ -169,7 +170,6 @@ jobs:
                     echo "$NOTES"
                     echo "EOF"
                   } >> "$GITHUB_OUTPUT"
-
             #------------------------------------------------------------------
             #  Publish to Modrinth & API
             #------------------------------------------------------------------
