@@ -29,7 +29,7 @@ import java.util.LinkedList;
 
 @CheckData(name = "AntiExplosion", configName = "Explosion", setback = 10)
 public class ExplosionHandler extends Check implements PostPredictionCheck {
-    final Deque<VelocityData> firstBreadMap = new LinkedList<>();
+    private final Deque<VelocityData> firstBreadMap = new LinkedList<>();
 
     private VelocityData lastExplosionsKnownTaken = null;
     private VelocityData firstBreadAddedExplosion = null;
