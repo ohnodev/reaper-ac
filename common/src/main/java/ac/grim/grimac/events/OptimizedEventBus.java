@@ -6,6 +6,7 @@ import ac.grim.grimac.api.event.GrimEventHandler;
 import ac.grim.grimac.api.event.GrimEventListener;
 import ac.grim.grimac.api.event.events.*;
 import ac.grim.grimac.api.plugin.GrimPlugin;
+import ac.grim.grimac.utils.anticheat.LogUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -101,8 +102,7 @@ public class OptimizedEventBus implements EventBus {
 
                         addListener((Class<? extends GrimEvent>) eventType, optimizedListener);
                     } catch (IllegalAccessException e) {
-                        System.err.println("Failed to register listener for " + eventType.getName() + ": " + e.getMessage());
-                        e.printStackTrace();
+                        LogUtil.error("Failed to register listener for " + eventType.getName(), e);
                     }
                 }
             }
@@ -289,8 +289,7 @@ public class OptimizedEventBus implements EventBus {
                         }
                         listener.listener.handle(event);
                     } catch (Throwable throwable) {
-                        System.err.println("Error handling event " + event.getEventName() + ": " + throwable.getMessage());
-                        throwable.printStackTrace();
+                        LogUtil.error("Error handling event " + event.getEventName(), throwable);
                     }
                 }
             }
