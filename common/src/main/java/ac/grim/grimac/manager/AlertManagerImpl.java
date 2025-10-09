@@ -119,27 +119,27 @@ public final class AlertManagerImpl implements AlertManager, ConfigReloadable, S
     }
 
     @Override
-    public boolean hasAlertsEnabled(@NonNull GrimUser player) {
+    public boolean hasAlertsEnabled(@NotNull GrimUser player) {
         return hasAlertsEnabled(requirePlatformPlayerFromUser(player));
     }
 
     @Override
-    public void setAlertsEnabled(@NonNull GrimUser player, boolean enabled, boolean silent) {
+    public void setAlertsEnabled(@NotNull GrimUser player, boolean enabled, boolean silent) {
         setAlertsEnabled(requirePlatformPlayerFromUser(player), enabled, silent);
     }
 
     @Override
-    public boolean hasVerboseEnabled(@NonNull GrimUser player) {
+    public boolean hasVerboseEnabled(@NotNull GrimUser player) {
         return hasVerboseEnabled(requirePlatformPlayerFromUser(player));
     }
 
     @Override
-    public void setVerboseEnabled(@NonNull GrimUser player, boolean enabled, boolean silent) {
+    public void setVerboseEnabled(@NotNull GrimUser player, boolean enabled, boolean silent) {
         setVerboseEnabled(requirePlatformPlayerFromUser(player), enabled, silent);
     }
 
     @Override
-    public boolean hasBrandsEnabled(@NonNull GrimUser player) {
+    public boolean hasBrandsEnabled(@NotNull GrimUser player) {
         GrimPlayer grimPlayer = (GrimPlayer) player;
         // Some proxies break packet order in sending brand and send the data too early for performance
         // which causes us to iterate over all players with this method
@@ -151,7 +151,7 @@ public final class AlertManagerImpl implements AlertManager, ConfigReloadable, S
     }
 
     @Override
-    public void setBrandsEnabled(@NonNull GrimUser player, boolean enabled, boolean silent) {
+    public void setBrandsEnabled(@NotNull GrimUser player, boolean enabled, boolean silent) {
         setPlayerStateAndNotify(requirePlatformPlayerFromUser(player), enabled, silent, AlertType.BRAND);
     }
 
@@ -236,7 +236,7 @@ public final class AlertManagerImpl implements AlertManager, ConfigReloadable, S
     }
 
     @Contract("_, _, _ -> param2")
-    private boolean setConsoleStateAndNotify(@NonNull AlertType type, boolean enabled, boolean silent) {
+    private boolean setConsoleStateAndNotify(@NotNull AlertType type, boolean enabled, boolean silent) {
         if (type.console != enabled && !silent) {
             String rawMessage = type.getToggleMessage(enabled);
             if (!rawMessage.isEmpty()) {
@@ -249,7 +249,7 @@ public final class AlertManagerImpl implements AlertManager, ConfigReloadable, S
     }
 
     // All internal code, will replace later
-    private void setPlayerStateAndNotify(@NonNull PlatformPlayer platformPlayer, boolean enabled, boolean silent, @NonNull AlertType type) {
+    private void setPlayerStateAndNotify(@NotNull PlatformPlayer platformPlayer, boolean enabled, boolean silent, @NotNull AlertType type) {
         Objects.requireNonNull(platformPlayer, "platformPlayer cannot be null");
         boolean changed = enabled ? type.players.add(platformPlayer) : type.players.remove(platformPlayer);
 
@@ -258,77 +258,77 @@ public final class AlertManagerImpl implements AlertManager, ConfigReloadable, S
         }
     }
 
-    public boolean toggleBrands(@NonNull PlatformPlayer player) {
+    public boolean toggleBrands(@NotNull PlatformPlayer player) {
         return toggleBrands(player, false);
     }
 
-    public boolean toggleBrands(@NonNull PlatformPlayer player, boolean silent) {
+    public boolean toggleBrands(@NotNull PlatformPlayer player, boolean silent) {
         return setBrandsEnabled(player, !hasBrandsEnabled(player), silent);
     }
 
     @Contract("_, _ -> param2")
-    public boolean setBrandsEnabled(@NonNull PlatformPlayer player, boolean enabled) {
+    public boolean setBrandsEnabled(@NotNull PlatformPlayer player, boolean enabled) {
         return setBrandsEnabled(player, enabled, false);
     }
 
     @Contract("_, _, _ -> param2")
-    public boolean setBrandsEnabled(@NonNull PlatformPlayer player, boolean enabled, boolean silent) {
+    public boolean setBrandsEnabled(@NotNull PlatformPlayer player, boolean enabled, boolean silent) {
         setPlayerStateAndNotify(player, enabled, silent, AlertType.BRAND);
         return enabled;
     }
 
     @Contract(pure = true)
-    public boolean hasBrandsEnabled(@NonNull PlatformPlayer player) {
+    public boolean hasBrandsEnabled(@NotNull PlatformPlayer player) {
         return AlertType.BRAND.players.contains(player);
     }
 
-    public boolean toggleVerbose(@NonNull PlatformPlayer player) {
+    public boolean toggleVerbose(@NotNull PlatformPlayer player) {
         return toggleVerbose(player, false);
     }
 
-    public boolean toggleVerbose(@NonNull PlatformPlayer player, boolean silent) {
+    public boolean toggleVerbose(@NotNull PlatformPlayer player, boolean silent) {
         return setVerboseEnabled(player, !hasVerboseEnabled(player), silent);
     }
 
     @Contract("_, _ -> param2")
-    public boolean setVerboseEnabled(@NonNull PlatformPlayer player, boolean enabled) {
+    public boolean setVerboseEnabled(@NotNull PlatformPlayer player, boolean enabled) {
         return setVerboseEnabled(player, enabled, false);
     }
 
     @Contract("_, _, _ -> param2")
-    public boolean setVerboseEnabled(@NonNull PlatformPlayer player, boolean enabled, boolean silent) {
+    public boolean setVerboseEnabled(@NotNull PlatformPlayer player, boolean enabled, boolean silent) {
         if (enabled) setAlertsEnabled(player, true, silent);
         setPlayerStateAndNotify(player, enabled, silent, AlertType.VERBOSE);
         return enabled;
     }
 
     @Contract(pure = true)
-    public boolean hasVerboseEnabled(@NonNull PlatformPlayer player) {
+    public boolean hasVerboseEnabled(@NotNull PlatformPlayer player) {
         return AlertType.VERBOSE.players.contains(player);
     }
 
-    public boolean toggleAlerts(@NonNull PlatformPlayer player) {
+    public boolean toggleAlerts(@NotNull PlatformPlayer player) {
         return toggleAlerts(player, false);
     }
 
-    public boolean toggleAlerts(@NonNull PlatformPlayer player, boolean silent) {
+    public boolean toggleAlerts(@NotNull PlatformPlayer player, boolean silent) {
         return setAlertsEnabled(player, !hasAlertsEnabled(player), silent);
     }
 
     @Contract("_, _ -> param2")
-    public boolean setAlertsEnabled(@NonNull PlatformPlayer player, boolean enabled) {
+    public boolean setAlertsEnabled(@NotNull PlatformPlayer player, boolean enabled) {
         return setAlertsEnabled(player, enabled, false);
     }
 
     @Contract("_, _, _ -> param2")
-    public boolean setAlertsEnabled(@NonNull PlatformPlayer player, boolean enabled, boolean silent) {
+    public boolean setAlertsEnabled(@NotNull PlatformPlayer player, boolean enabled, boolean silent) {
         setPlayerStateAndNotify(player, enabled, silent, AlertType.NORMAL);
         if (!enabled) setVerboseEnabled(player, false, silent);
         return enabled;
     }
 
     @Contract(pure = true)
-    public boolean hasAlertsEnabled(@NonNull PlatformPlayer player) {
+    public boolean hasAlertsEnabled(@NotNull PlatformPlayer player) {
         return AlertType.NORMAL.players.contains(player);
     }
 
