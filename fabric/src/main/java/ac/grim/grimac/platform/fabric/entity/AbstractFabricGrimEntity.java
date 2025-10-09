@@ -3,10 +3,10 @@ package ac.grim.grimac.platform.fabric.entity;
 import ac.grim.grimac.platform.api.entity.GrimEntity;
 import ac.grim.grimac.platform.api.world.PlatformWorld;
 import ac.grim.grimac.utils.math.Location;
-import com.google.common.base.Preconditions;
 import net.minecraft.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public abstract class AbstractFabricGrimEntity implements GrimEntity {
@@ -14,8 +14,7 @@ public abstract class AbstractFabricGrimEntity implements GrimEntity {
     protected final Entity entity;
 
     public AbstractFabricGrimEntity(Entity entity) {
-        Preconditions.checkArgument(entity != null);
-        this.entity = entity;
+        this.entity = Objects.requireNonNull(entity);
     }
 
     @Override
