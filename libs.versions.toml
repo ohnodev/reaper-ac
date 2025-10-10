@@ -77,7 +77,6 @@ shadow = { "group" = "com.gradleup.shadow", name = "shadow-gradle-plugin", versi
 [bundles]
 # Bundles group common dependencies together for cleaner build scripts
 cloud-api = ["cloud-core", "cloud-processors-requirements"]
-packetevents-platforms = ["packetevents-spigot", "packetevents-fabric"]
 
 [plugins]
 fabric-loom = { id = "fabric-loom", version.ref = "fabric-loom" }
