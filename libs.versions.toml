@@ -9,7 +9,6 @@ cloud-fabric = "2.0.0-beta.12"
 cloud-processors-requirements = "1.0.0-rc.1"
 
 # --- Minecraft-Specific APIs ---
-configuralize = "1.4.1" # :slim classifier is applied in build.gradle.kts
 floodgate-api = "2.0-SNAPSHOT"
 geyser-base-api = "1.0.2"
 grim-api = "1.2.0.0"
@@ -23,6 +22,7 @@ hikaricp = "7.0.2"
 jetbrains-annotations = "24.1.0"
 netty = "4.1.85.Final"
 snakeyaml = "2.2"
+configuralize = "1.4.1" # :slim classifier is applied in build.gradle.kts
 
 # --- Build & Tooling ---
 fabric-loader = "0.16.14"
