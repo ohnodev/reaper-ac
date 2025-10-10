@@ -144,7 +144,7 @@ jobs:
               uses: orhun/git-cliff-action@v4
               with:
                   config: cliff.toml
-                  args: --verbose
+                  args: --verbose ${{ github.event.before }}..${{ github.event.after }}
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # git-cliff needs a token
 
