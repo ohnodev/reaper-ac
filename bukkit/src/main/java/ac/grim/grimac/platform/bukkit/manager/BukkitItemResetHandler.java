@@ -108,6 +108,7 @@ public class BukkitItemResetHandler implements ItemResetHandler {
             case "v1_21_R1" -> "fx";
             case "v1_21_R2", "v1_21_R3", "v1_21_R4" -> "fF";
             case "v1_21_R5" -> "fM";
+            case "v1_21_R6" -> "fU";
             default -> throw new IllegalStateException("You are using an unsupported server version! (" + version.getReleaseName() + ")");
         });
 
@@ -163,6 +164,7 @@ public class BukkitItemResetHandler implements ItemResetHandler {
             case "v1_21_R1" -> "fr";
             case "v1_21_R2", "v1_21_R3", "v1_21_R4" -> "fz";
             case "v1_21_R5" -> "fG";
+            case "v1_21_R6" -> "fO";
             default -> throw new IllegalStateException("You are using an unsupported server version! (" + version.getReleaseName() + ")");
         });
         Method getUsingItemHand = getHandle.getReturnType().getMethod(switch (nmsPackage) {
@@ -185,6 +187,7 @@ public class BukkitItemResetHandler implements ItemResetHandler {
             case "v1_21_R1" -> "fs";
             case "v1_21_R2", "v1_21_R3", "v1_21_R4" -> "fA";
             case "v1_21_R5" -> "fH";
+            case "v1_21_R6" -> "fP";
             default -> throw new IllegalStateException("You are using an unsupported server version! (" + version.getReleaseName() + ")");
         });
 
