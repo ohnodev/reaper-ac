@@ -12,29 +12,6 @@ repositories {
 
     exclusiveContent {
         forRepository {
-            maven {
-                name = "papermc"
-                url = uri("https://repo.papermc.io/repository/maven-public/")
-            }
-        }
-        filter {
-            includeGroup("io.papermc.paper")
-        }
-    }
-
-    exclusiveContent {
-        forRepository {
-            maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/") { // Spigot
-                mavenContent { snapshotsOnly() }
-            }
-        }
-        filter {
-            includeGroup("org.spigotmc")
-        }
-    }
-
-    exclusiveContent {
-        forRepository {
             maven("https://repo.grim.ac/snapshots") // Grim API
         }
         filter {
@@ -89,28 +66,7 @@ repositories {
         }
     }
 
-    exclusiveContent {
-        forRepository {
-            mavenCentral()
-        }
-        filter {
-            includeGroup("com.zaxxer")
-            includeGroupByRegex("com.google.*") // Required by spotless
-            includeGroup("org.checkerframework")
-            includeGroup("org.projectlombok")
-            includeGroup("org.incendo") // Cloud
-            includeGroup("org.apiguardian") // Required by Cloud
-            includeGroup("io.leangen.geantyref") // Required by Cloud
-            includeGroup("org.yaml")
-            includeGroup("it.unimi.dsi") // FastUtil
-            includeGroup("net.kyori")
-            includeGroup("org.jetbrains")
-            includeGroup("com.github.spotbugs")
-            includeGroup("io.netty")
-            includeGroup("org.slf4j")
-            includeGroup("com.github.alexheretic") // Required by configuralize
-        }
-    }
+    mavenCentral()
 }
 
 dependencies {

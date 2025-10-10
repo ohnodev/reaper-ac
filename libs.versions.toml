@@ -70,6 +70,10 @@ gradle-lombok = { group = "io.freefair.gradle", name = "lombok-plugin", version.
 gradle-shadow = { group = "com.gradleup.shadow", name = "shadow-gradle-plugin", version.ref = "shadow"}
 gradle-spotless = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "spotless" }
 
+spotless = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "spotless" }
+lombok = { group = "io.freefair.gradle", name = "lombok-plugin", version.ref = "lombok" }
+shadow = { "group" = "com.gradleup.shadow", name = "shadow-gradle-plugin", version.ref = "shadow"}
+
 [bundles]
 # Bundles group common dependencies together for cleaner build scripts
 cloud-api = ["cloud-core", "cloud-processors-requirements"]
