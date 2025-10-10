@@ -63,6 +63,7 @@ repositories {
             includeGroup("org.geysermc.floodgate")
             includeGroup("org.geysermc.cumulus")
             includeModule("org.geysermc", "common")
+            includeModule("org.geysermc", "geyser-parent")
         }
     }
 
