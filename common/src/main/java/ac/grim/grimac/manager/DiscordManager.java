@@ -22,12 +22,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 public class DiscordManager implements StartableInitable, ReloadableInitable {
-    public static final Predicate<String> WEBHOOK_REGEX = Pattern.compile("https://discord.com/api/webhooks/\\d+/[\\w-]+").asMatchPredicate();
-    public static final Duration timeout = Duration.ofSeconds(15);
+    private static final Predicate<String> WEBHOOK_REGEX = Pattern.compile("https://discord.com/api/webhooks/\\d+/[\\w-]+").asMatchPredicate();
+    private static final Duration timeout = Duration.ofSeconds(15);
     private static final HttpClient client = HttpClient.newBuilder().connectTimeout(timeout).build();
     private static final ConcurrentLinkedDeque<HttpRequest> requests = new ConcurrentLinkedDeque<>();
     private static final AtomicBoolean taskStarted = new AtomicBoolean();
@@ -38,6 +39,24 @@ public class DiscordManager implements StartableInitable, ReloadableInitable {
     private String staticContent = "";
     private String embedTitle = "";
     private boolean includeTimestamp;
+    //
+    private String embedImageUrl = "";
+    private String embedThumbnailUrl = "";
+    private String embedFooterUrl = "";
+
+
+    private static final Pattern URL_PATTERN = Pattern.compile("^https?://(?:www\\.)?[-a-z0-9@:%._+~#=]{1,256}\\.[a-z0-9()]{1,6}\\b[-a-z0-9()@:%_+.~#?&/=]*$", Pattern.CASE_INSENSITIVE);
+
+    private static String validatedConfigURL(String configPath, String defaultURL) {
+        String url = GrimAPI.INSTANCE.getConfigManager().getConfig().getStringElse("embed-image-url", defaultURL);
+        if (url.isBlank()) return "";
+        if (URL_PATTERN.matcher(url).matches()) {
+            return url;
+        } else {
+            LogUtil.warn("Invalid embed url for config path " + configPath + ": " + configPath);
+            return defaultURL;
+        }
+    }
 
     @Override
     public void start() {
@@ -60,6 +79,11 @@ public class DiscordManager implements StartableInitable, ReloadableInitable {
             } else {
                 url = new URI(webhook);
             }
+            // not adding these to the config since they may change in the future
+            // mainly for just for allowing more customization
+            embedImageUrl = validatedConfigURL("embed-image-url", "");
+            embedThumbnailUrl = validatedConfigURL("embed-thumbnail-url", "https://crafthead.net/helm/%uuid%");
+            embedFooterUrl = validatedConfigURL("embed-footer-url", "https://grim.ac/images/grim.png");
 
             embedTitle = GrimAPI.INSTANCE.getConfigManager().getConfig().getStringElse("embed-title", "**Grim Alert**");
 
@@ -92,6 +116,11 @@ public class DiscordManager implements StartableInitable, ReloadableInitable {
         return list;
     }
 
+    private void editEmbed(GrimPlayer player, String url, Embed embed, BiConsumer<Embed, String> consumer) {
+        if (!url.isBlank())
+            consumer.accept(embed, MessageUtil.replacePlaceholders(player, url, false));
+    }
+
     public void sendAlert(GrimPlayer player, String verbose, String checkName, int violations) {
         if (url == null) {
             return;
@@ -102,16 +131,14 @@ public class DiscordManager implements StartableInitable, ReloadableInitable {
         content = content.replace("%violations%", Integer.toString(violations));
         content = MessageUtil.replacePlaceholders(player, content, true);
 
-        Embed embed = new Embed(content)
-                .imageURL("https://i.stack.imgur.com/Fzh0w.png")
-                .thumbnailURL("https://crafthead.net/helm/" + player.user.getProfile().getUUID())
-                .color(embedColor)
-                .title(embedTitle)
-                .footer(new EmbedFooter("", "https://grim.ac/images/grim.png"));
+        Embed embed = new Embed(content);
+        editEmbed(player, embedImageUrl, embed, Embed::imageURL);
+        editEmbed(player, embedThumbnailUrl, embed, Embed::thumbnailURL);
+        embed.color(embedColor);
+        embed.title(embedTitle);
+        editEmbed(player, embedFooterUrl, embed, (e, url) -> e.footer(new EmbedFooter("v" + GrimAPI.INSTANCE.getExternalAPI().getGrimVersion(), url)));
 
-        if (includeTimestamp) {
-            embed.timestamp(Instant.now());
-        }
+        if (includeTimestamp) embed.timestamp(Instant.now());
 
         if (!verbose.isEmpty()) {
             embed.addFields(new EmbedField("Verbose", MessageUtil.filterDiscordText(verbose), true));
