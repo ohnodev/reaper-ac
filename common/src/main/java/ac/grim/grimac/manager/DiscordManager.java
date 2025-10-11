@@ -1,15 +1,17 @@
 package ac.grim.grimac.manager;
 
 import ac.grim.grimac.GrimAPI;
+import ac.grim.grimac.api.config.ConfigManager;
 import ac.grim.grimac.manager.init.ReloadableInitable;
 import ac.grim.grimac.manager.init.start.StartableInitable;
 import ac.grim.grimac.player.GrimPlayer;
 import ac.grim.grimac.utils.anticheat.LogUtil;
 import ac.grim.grimac.utils.anticheat.MessageUtil;
-import ac.grim.grimac.utils.webhook.Embed;
-import ac.grim.grimac.utils.webhook.EmbedField;
-import ac.grim.grimac.utils.webhook.EmbedFooter;
-import ac.grim.grimac.utils.webhook.WebhookMessage;
+import ac.grim.grimac.utils.webhook.*;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.awt.*;
 import java.net.URI;
@@ -39,17 +41,17 @@ public class DiscordManager implements StartableInitable, ReloadableInitable {
     private String staticContent = "";
     private String embedTitle = "";
     private boolean includeTimestamp;
-    //
-    private String embedImageUrl = "";
-    private String embedThumbnailUrl = "";
-    private String embedFooterUrl = "";
-
+    private boolean includeVerbose;
+    private @Nullable String embedImageUrl;
+    private @Nullable String embedThumbnailUrl;
+    private @Nullable String embedFooterUrl;
+    private String embedFooterText = "";
 
     private static final Pattern URL_PATTERN = Pattern.compile("^https?://(?:www\\.)?[-a-z0-9@:%._+~#=]{1,256}\\.[a-z0-9()]{1,6}\\b[-a-z0-9()@:%_+.~#?&/=]*$", Pattern.CASE_INSENSITIVE);
 
     private static String validatedConfigURL(String configPath, String defaultURL) {
         String url = GrimAPI.INSTANCE.getConfigManager().getConfig().getStringElse("embed-image-url", defaultURL);
-        if (url.isBlank()) return "";
+        if (url == null || url.isBlank()) return null;
         if (URL_PATTERN.matcher(url).matches()) {
             return url;
         } else {
@@ -66,12 +68,13 @@ public class DiscordManager implements StartableInitable, ReloadableInitable {
     @Override
     public void reload() {
         try {
-            if (!GrimAPI.INSTANCE.getConfigManager().getConfig().getBooleanElse("enabled", false)) {
+            ConfigManager config = GrimAPI.INSTANCE.getConfigManager().getConfig();
+            if (!config.getBooleanElse("enabled", false)) {
                 url = null;
                 return;
             }
 
-            String webhook = GrimAPI.INSTANCE.getConfigManager().getConfig().getStringElse("webhook", "");
+            String webhook = config.getStringElse("webhook", "");
 
             if (!WEBHOOK_REGEX.test(webhook)) {
                 LogUtil.error("Discord webhook url does not follow expected format (https://discord.com/api/webhooks/<id>/<token>): " + webhook);
@@ -81,44 +84,41 @@ public class DiscordManager implements StartableInitable, ReloadableInitable {
             }
             // not adding these to the config since they may change in the future
             // mainly for just for allowing more customization
-            embedImageUrl = validatedConfigURL("embed-image-url", "");
+            embedImageUrl = validatedConfigURL("embed-image-url", null);
             embedThumbnailUrl = validatedConfigURL("embed-thumbnail-url", "https://crafthead.net/helm/%uuid%");
             embedFooterUrl = validatedConfigURL("embed-footer-url", "https://grim.ac/images/grim.png");
-
-            embedTitle = GrimAPI.INSTANCE.getConfigManager().getConfig().getStringElse("embed-title", "**Grim Alert**");
+            embedFooterText = config.getStringElse("embed-footer-text", "v%grim_version%");
+            embedTitle = config.getStringElse("embed-title", "**Grim Alert**");
 
             try {
-                embedColor = Color.decode(GrimAPI.INSTANCE.getConfigManager().getConfig().getStringElse("embed-color", "#00FFFF")).getRGB();
+                embedColor = Color.decode(config.getStringElse("embed-color", "#00FFFF")).getRGB();
             } catch (NumberFormatException e) {
                 LogUtil.warn("Discord embed color is invalid");
             }
 
             StringBuilder sb = new StringBuilder();
-            for (String string : GrimAPI.INSTANCE.getConfigManager().getConfig().getStringListElse("violation-content", getDefaultContents())) {
+            for (String string : config.getStringListElse("violation-content", getDefaultContents())) {
                 sb.append(string).append("\n");
             }
             staticContent = sb.toString();
-            includeTimestamp = GrimAPI.INSTANCE.getConfigManager().getConfig().getBooleanElse("include-timestamp", true);
+            includeTimestamp = config.getBooleanElse("include-timestamp", true);
+            includeVerbose = config.getBooleanElse("include-verbose", true);
         } catch (Exception e) {
             LogUtil.error("Failed to load Discord webhook configuration", e);
         }
     }
 
-    private List<String> getDefaultContents() {
-        List<String> list = new ArrayList<>();
-        list.add("**Player**: %player%");
-        list.add("**Check**: %check%");
-        list.add("**Violations**: %violations%");
-        list.add("**Client Version**: %version%");
-        list.add("**Brand**: %brand%");
-        list.add("**Ping**: %ping%");
-        list.add("**TPS**: %tps%");
-        return list;
-    }
-
-    private void editEmbed(GrimPlayer player, String url, Embed embed, BiConsumer<Embed, String> consumer) {
-        if (!url.isBlank())
-            consumer.accept(embed, MessageUtil.replacePlaceholders(player, url, false));
+    @Contract(value = " -> new", pure = true)
+    private @NotNull @Unmodifiable List<@NotNull String> getDefaultContents() {
+        return List.of(
+                "**Player**: %player%",
+                "**Check**: %check%",
+                "**Violations**: %violations%",
+                "**Client Version**: %version%",
+                "**Brand**: %brand%",
+                "**Ping**: %ping%",
+                "**TPS**: %tps%"
+        );
     }
 
     public void sendAlert(GrimPlayer player, String verbose, String checkName, int violations) {
@@ -131,16 +131,19 @@ public class DiscordManager implements StartableInitable, ReloadableInitable {
         content = content.replace("%violations%", Integer.toString(violations));
         content = MessageUtil.replacePlaceholders(player, content, true);
 
-        Embed embed = new Embed(content);
-        editEmbed(player, embedImageUrl, embed, Embed::imageURL);
-        editEmbed(player, embedThumbnailUrl, embed, Embed::thumbnailURL);
-        embed.color(embedColor);
-        embed.title(embedTitle);
-        editEmbed(player, embedFooterUrl, embed, (e, url) -> e.footer(new EmbedFooter("v" + GrimAPI.INSTANCE.getExternalAPI().getGrimVersion(), url)));
+        Embed embed = new Embed(content)
+                .color(embedColor)
+                .title(embedTitle)
+                .imageURL(MessageUtil.replacePlaceholders(player, embedImageUrl, false))
+                .thumbnailURL(MessageUtil.replacePlaceholders(player, embedThumbnailUrl, false))
+                .footer(new EmbedFooter(
+                        MessageUtil.replacePlaceholders(player, embedFooterText, true),
+                        MessageUtil.replacePlaceholders(player, embedFooterUrl, false)
+                ));
 
         if (includeTimestamp) embed.timestamp(Instant.now());
 
-        if (!verbose.isEmpty()) {
+        if (!verbose.isEmpty() && includeVerbose) {
             embed.addFields(new EmbedField("Verbose", MessageUtil.filterDiscordText(verbose), true));
         }
 
