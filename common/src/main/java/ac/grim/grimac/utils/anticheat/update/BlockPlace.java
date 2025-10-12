@@ -555,6 +555,7 @@ public class BlockPlace {
             // 1.8 clients will simply not send the place when it fails, thanks mojang.
             if (player.getClientVersion().isNewerThan(ClientVersion.V_1_8)) {
                 for (PacketEntity entity : player.compensatedEntities.entityMap.values()) {
+                    if (!entity.canHit()) continue;
                     SimpleCollisionBox interpBox = entity.getPossibleCollisionBoxes();
 
                     final double scale = entity.getAttributeValue(Attributes.SCALE);
