@@ -34,15 +34,21 @@ public class PacketOrderP extends Check implements PacketCheck {
 
     public void onPacketSend(PacketSendEvent event) {
         if (event.getPacketType() == PacketType.Play.Server.CHUNK_BATCH_END) {
-            player.user.sendPacket(new WrapperPlayServerBundle());
+            boolean sendingBundlePacket = player.packetStateData.sendingBundlePacket;
+            if (!sendingBundlePacket) player.user.sendPacket(new WrapperPlayServerBundle());
+
             player.sendTransaction();
             int transaction = player.getLastTransactionSent();
             transactions.add(transaction);
             if (++trimTimer == 0) transactions.trim();
             player.addRealTimeTaskNext(() -> {
-                if (transactions.rem(transaction)) flagAndAlert("skipped response, type=TRANSACTION");
+                if (transactions.rem(transaction))
+                    flagAndAlert("skipped response, type=TRANSACTION");
             });
-            event.getTasksAfterSend().add(() -> player.user.sendPacket(new WrapperPlayServerBundle()));
+
+            if (!sendingBundlePacket) {
+                event.getTasksAfterSend().add(() -> player.user.sendPacket(new WrapperPlayServerBundle()));
+            }
         }
     }
 }
