@@ -20,7 +20,7 @@ public class PredictionEngineWater extends PredictionEngine {
     private float swimmingFriction;
 
     public static void staticVectorEndOfTick(GrimPlayer player, Vector3dm vector, float swimmingFriction, double playerGravity, boolean isFalling) {
-        vector.multiply(new Vector3dm(swimmingFriction, 0.8F, swimmingFriction));
+        vector.multiply(swimmingFriction, 0.8F, swimmingFriction);
         Vector3dm fluidVector = FluidFallingAdjustedMovement.getFluidFallingAdjustedMovement(player, playerGravity, isFalling, vector);
         vector.setX(fluidVector.getX());
         vector.setY(fluidVector.getY());

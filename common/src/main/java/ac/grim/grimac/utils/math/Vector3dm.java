@@ -77,16 +77,24 @@ public class Vector3dm implements Cloneable, Serializable {
     }
 
     public @NotNull Vector3dm subtract(@NotNull Vector3dm vec) {
-        this.x -= vec.x;
-        this.y -= vec.y;
-        this.z -= vec.z;
+        return subtract(vec.x, vec.y, vec.z);
+    }
+
+    public @NotNull Vector3dm subtract(double x, double y, double z) {
+        this.x -= x;
+        this.y -= y;
+        this.z -= z;
         return this;
     }
 
     public @NotNull Vector3dm multiply(@NotNull Vector3dm vec) {
-        this.x *= vec.x;
-        this.y *= vec.y;
-        this.z *= vec.z;
+        return multiply(vec.x, vec.y, vec.z);
+    }
+
+    public @NotNull Vector3dm multiply(double x, double y, double z) {
+        this.x *= x;
+        this.y *= y;
+        this.z *= z;
         return this;
     }
 

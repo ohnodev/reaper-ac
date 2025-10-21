@@ -67,7 +67,7 @@ public class PredictionEngineElytra extends PredictionEngine {
                 for (VectorData data : possibleVectors) {
                     Vector3dm elytraResult = getElytraMovement(player, data.vector.clone(), currentLook);
                     if (applyStuckSpeed != 0) elytraResult.multiply(player.stuckSpeedMultiplier);
-                    elytraResult.multiply(new Vector3dm(0.99F, 0.98F, 0.99F));
+                    elytraResult.multiply(0.99F, 0.98F, 0.99F);
                     VectorData modified = data.returnNewModified(elytraResult, VectorData.VectorType.InputResult);
                     modified.input = new Vector3dm(0, 0, 0);
                     results.add(modified);
