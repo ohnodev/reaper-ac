@@ -1,28 +1,41 @@
 package ac.grim.grimac.platform.fabric.player;
 
+import ac.grim.grimac.GrimAPI;
 import ac.grim.grimac.platform.api.entity.GrimEntity;
 import ac.grim.grimac.platform.api.player.PlatformInventory;
 import ac.grim.grimac.platform.api.player.PlatformPlayer;
 import ac.grim.grimac.platform.fabric.GrimACFabricLoaderPlugin;
 import ac.grim.grimac.platform.fabric.entity.AbstractFabricGrimEntity;
 import ac.grim.grimac.platform.fabric.utils.convert.FabricConversionUtil;
+import ac.grim.grimac.utils.common.arguments.CommonGrimArguments;
+import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.protocol.player.GameMode;
+import com.github.retrooper.packetevents.protocol.player.User;
 import com.github.retrooper.packetevents.util.Vector3d;
 import net.kyori.adventure.text.Component;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public abstract class AbstractFabricPlatformPlayer extends AbstractFabricGrimEntity implements PlatformPlayer {
     protected ServerPlayerEntity fabricPlayer;
     protected final AbstractFabricPlatformInventory inventory;
+    private final @Nullable User user;
 
     public AbstractFabricPlatformPlayer(ServerPlayerEntity player) {
         super(player);
         this.fabricPlayer = player;
         this.inventory = GrimACFabricLoaderPlugin.LOADER.getPlatformPlayerFactory().getPlatformInventory(player);
+        if (CommonGrimArguments.USE_CHAT_FAST_BYPASS.value()) {
+            Object channel = PacketEvents.getAPI().getProtocolManager().getChannel(fabricPlayer.getUuid());
+            this.user = PacketEvents.getAPI().getProtocolManager().getUser(channel);
+        } else {
+            this.user = null;
+        }
     }
 
     @Override
@@ -42,12 +55,20 @@ public abstract class AbstractFabricPlatformPlayer extends AbstractFabricGrimEnt
 
     @Override
     public void sendMessage(String message) {
-        fabricPlayer.sendMessage(GrimACFabricLoaderPlugin.LOADER.getFabricMessageUtils().textLiteral(message), false);
+        if (CommonGrimArguments.USE_CHAT_FAST_BYPASS.value() && user != null) {
+            user.sendMessage(message);
+        } else {
+            fabricPlayer.sendMessage(GrimACFabricLoaderPlugin.LOADER.getFabricMessageUtils().textLiteral(message), false);
+        }
     }
 
     @Override
     public void sendMessage(Component message) {
-        fabricPlayer.sendMessage(GrimACFabricLoaderPlugin.LOADER.getFabricConversionUtil().toNativeText(message), false);
+        if (CommonGrimArguments.USE_CHAT_FAST_BYPASS.value() && user != null) {
+            user.sendMessage(message);
+        } else {
+            fabricPlayer.sendMessage(GrimACFabricLoaderPlugin.LOADER.getFabricConversionUtil().toNativeText(message), false);
+        }
     }
 
     @Override
