@@ -31,24 +31,24 @@ public class PredictionEngineElytra extends PredictionEngine {
             recalculatedGravity = player.getClientVersion().isOlderThan(ClientVersion.V_1_20_5) ? 0.01 : Math.min(recalculatedGravity, 0.01);
         }
 
-        vector.add(new Vector3dm(0.0D, recalculatedGravity * (-1.0D + vertCosRotation * 0.75D), 0.0D));
+        vector.add((0.0D, recalculatedGravity * (-1.0D + vertCosRotation * 0.75D), 0.0D);
         double d5;
 
         // Handle slowing the player down when falling
         if (vector.getY() < 0.0D && horizontalSqrt > 0.0D) {
             d5 = vector.getY() * -0.1D * vertCosRotation;
-            vector.add(new Vector3dm(lookVector.getX() * d5 / horizontalSqrt, d5, lookVector.getZ() * d5 / horizontalSqrt));
+            vector.add(lookVector.getX() * d5 / horizontalSqrt, d5, lookVector.getZ() * d5 / horizontalSqrt);
         }
 
         // Handle accelerating the player when they are looking down
         if (pitchRadians < 0.0F && horizontalSqrt > 0.0D) {
             d5 = horizontalLength * (double) (-player.trigHandler.sin(pitchRadians)) * 0.04D;
-            vector.add(new Vector3dm(-lookVector.getX() * d5 / horizontalSqrt, d5 * 3.2D, -lookVector.getZ() * d5 / horizontalSqrt));
+            vector.add(-lookVector.getX() * d5 / horizontalSqrt, d5 * 3.2D, -lookVector.getZ() * d5 / horizontalSqrt);
         }
 
         // Handle accelerating the player sideways
         if (horizontalSqrt > 0) {
-            vector.add(new Vector3dm((lookVector.getX() / horizontalSqrt * horizontalLength - vector.getX()) * 0.1D, 0.0D, (lookVector.getZ() / horizontalSqrt * horizontalLength - vector.getZ()) * 0.1D));
+            vector.add((lookVector.getX() / horizontalSqrt * horizontalLength - vector.getX()) * 0.1D, 0.0D, (lookVector.getZ() / horizontalSqrt * horizontalLength - vector.getZ()) * 0.1D);
         }
 
         return vector;

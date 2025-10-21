@@ -453,7 +453,7 @@ public class MovementTicker {
                 }
 
                 if (player.hasGravity)
-                    player.clientVelocity.add(new Vector3dm(0.0D, -playerGravity / 4.0D, 0.0D));
+                    player.clientVelocity.add(0.0D, -playerGravity / 4.0D, 0.0D);
 
             } else if (player.isGliding) {
                 if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21_5) && Collisions.onClimbable(player, player.lastX, player.lastY, player.lastZ)) {
