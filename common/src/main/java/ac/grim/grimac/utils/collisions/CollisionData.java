@@ -1018,6 +1018,21 @@ public enum CollisionData implements CollisionFactory {
         }
     }, StateTypes.DRIED_GHAST),
 
+    SHELF((player, version, data, x, y, z) -> {
+        if (version.isOlderThan(ClientVersion.V_1_21_9)) {
+            // ViaVersion replacement block (planks)
+            return new SimpleCollisionBox(0, 0, 0, 1, 1, 1, true);
+        }
+
+        return switch (data.getFacing()) {
+            case NORTH -> new ComplexCollisionBox(3, new HexCollisionBox(0, 12, 11, 16, 16, 13), new HexCollisionBox(0, 0, 13, 16, 16, 16), new HexCollisionBox(0, 0, 11, 16, 4, 13));
+            case SOUTH -> new ComplexCollisionBox(3, new HexCollisionBox(0, 12, 3, 16, 16, 5), new HexCollisionBox(0, 0, 0, 16, 16, 3), new HexCollisionBox(0, 0, 3, 16, 4, 5));
+            case WEST -> new ComplexCollisionBox(3, new HexCollisionBox(11, 12, 0, 13, 16, 16), new HexCollisionBox(13, 0, 0, 16, 16, 16), new HexCollisionBox(11, 0, 0, 13, 4, 16));
+            case EAST -> new ComplexCollisionBox(3, new HexCollisionBox(3, 12, 0, 5, 16, 16), new HexCollisionBox(0, 0, 0, 3, 16, 16), new HexCollisionBox(3, 0, 0, 5, 4, 16));
+            default -> throw new IllegalStateException("Unexpected value: " + data.getFacing());
+        };
+    }, BlockTags.WOODEN_SHELVES.getStates().toArray(new StateType[0])),
+
     DEFAULT(new SimpleCollisionBox(0, 0, 0, 1, 1, 1, true), StateTypes.STONE);
 
     // This should be an array... but a hashmap will do for now...
@@ -1049,7 +1064,7 @@ public enum CollisionData implements CollisionFactory {
         this.materials = mList.toArray(new StateType[0]);
     }
 
-    private static CollisionBox getAmethystBox(ClientVersion version, com.github.retrooper.packetevents.protocol.world.BlockFace facing, int param_0, int param_1) {
+    private static CollisionBox getAmethystBox(ClientVersion version, BlockFace facing, int param_0, int param_1) {
         if (version.isOlderThanOrEquals(ClientVersion.V_1_16_4))
             return NoCollisionBox.INSTANCE;
 
