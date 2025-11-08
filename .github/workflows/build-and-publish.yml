@@ -179,7 +179,7 @@ jobs:
                   } >> "$GITHUB_OUTPUT"
 
             - name: Generate build number
-              if: contains(fromJSON('["merge","release","main","lightning"]'), github.ref_name)
+              if: contains(fromJSON('["merge","release","main","lightning"]'), github.ref_name) && inputs.publish-artifacts == true && env.MODRINTH_ID != '' && env.MODRINTH_TOKEN != ''
               id: buildnumber
               uses: onyxmueller/build-tag-number@v1
               with:
