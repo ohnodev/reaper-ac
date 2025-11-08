@@ -38,7 +38,8 @@ jobs:
     build:
         runs-on: ubuntu-latest
         permissions:
-            contents: read
+            # Grant permission to write contents (for creating tags/refs)
+            contents: write
             packages: write
 
         env:
