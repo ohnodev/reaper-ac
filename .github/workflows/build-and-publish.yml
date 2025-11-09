@@ -198,7 +198,7 @@ jobs:
 
                   files: bukkit/build/libs/grimac-bukkit-${{ env.BUILD_VERSION }}.jar
                   name: LightningGrim Anticheat (Bukkit) ${{ env.BUILD_VERSION }}-b${{ steps.buildnumber.outputs.build_number }}
-                  version: ${{ env.BUILD_VERSION }}
+                  version: ${{ env.BUILD_VERSION }}-b${{ steps.buildnumber.outputs.build_number }}
                   version-type: ${{ inputs.release-version-type }}
                   changelog: ${{ steps.changelog.outputs.notes }}
                   loaders: |
@@ -219,7 +219,7 @@ jobs:
 
                   files: fabric/build/libs/grimac-fabric-${{ env.BUILD_VERSION }}.jar
                   name: LightningGrim Anticheat (Fabric) ${{ env.BUILD_VERSION }}-b${{ steps.buildnumber.outputs.build_number }}
-                  version: ${{ env.BUILD_VERSION }}
+                  version: ${{ env.BUILD_VERSION }}-b${{ steps.buildnumber.outputs.build_number }}
                   version-type: ${{ inputs.release-version-type }}
                   changelog: ${{ steps.changelog.outputs.notes }}
                   loaders: |
