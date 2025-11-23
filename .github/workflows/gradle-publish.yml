@@ -21,8 +21,6 @@ on:
             - 'release/**'
             - 'lightning'
         paths:
-            - '.github/workflows/**'
-            - 'buildSrc/**'
             - 'bukkit/**'
             - 'common/**'
             - 'fabric/**'
