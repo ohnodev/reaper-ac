@@ -6,6 +6,8 @@ import io.github.retrooper.packetevents.util.SpigotReflectionUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
+import java.lang.reflect.InvocationTargetException;
+
 
 public class BukkitPlatformServer implements PlatformServer {
 
@@ -32,6 +34,12 @@ public class BukkitPlatformServer implements PlatformServer {
 
     @Override
     public double getTPS() {
-        return SpigotReflectionUtil.getTPS();
+        try {
+            return SpigotReflectionUtil.getTPS();
+        } catch (Throwable e) { // Catch RuntimeException (which wraps the underlying error)
+            // Folia throws UnsupportedOperationException -> Wrapped in ITE -> Wrapped in RuntimeException
+            // Or simple reflection failures
+            return Double.NaN;
+        }
     }
 }
