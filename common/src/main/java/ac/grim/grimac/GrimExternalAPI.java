@@ -14,6 +14,7 @@ import ac.grim.grimac.utils.anticheat.LogUtil;
 import ac.grim.grimac.utils.anticheat.MessageUtil;
 import ac.grim.grimac.utils.common.ConfigReloadObserver;
 import lombok.Getter;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,6 +45,11 @@ public class GrimExternalAPI implements GrimAbstractAPI, ConfigReloadObserver, S
     @Override
     public @NotNull EventBus getEventBus() {
         return api.getEventBus();
+    }
+
+    @Override
+    public @Nullable GrimUser getGrimUser(Player player) {
+        return getGrimUser(player.getUniqueId());
     }
 
     @Override
