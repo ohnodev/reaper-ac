@@ -156,6 +156,30 @@ public final class AlertManagerImpl implements AlertManager, ConfigReloadable, S
         setPlayerStateAndNotify(requirePlatformPlayerFromUser(player), enabled, silent, AlertType.BRAND);
     }
 
+    @Override
+    public boolean hasAlertsEnabled(Player player) {
+        if (player == null) return false;
+        return hasAlertsEnabled(GrimAPI.INSTANCE.getPlatformPlayerFactory().getFromNativePlayerType(player));
+    }
+
+    @Override
+    public void toggleAlerts(Player player) {
+        if (player == null) return;
+        toggleAlerts(GrimAPI.INSTANCE.getPlatformPlayerFactory().getFromNativePlayerType(player));
+    }
+
+    @Override
+    public boolean hasVerboseEnabled(Player player) {
+        if (player == null) return false;
+        return hasVerboseEnabled(GrimAPI.INSTANCE.getPlatformPlayerFactory().getFromNativePlayerType(player));
+    }
+
+    @Override
+    public void toggleVerbose(Player player) {
+        if (player == null) return;
+        toggleVerbose(GrimAPI.INSTANCE.getPlatformPlayerFactory().getFromNativePlayerType(player));
+    }
+
     public void handlePlayerQuit(@Nullable PlatformPlayer platformPlayer) {
         if (platformPlayer == null) return;
 
@@ -368,33 +392,5 @@ public final class AlertManagerImpl implements AlertManager, ConfigReloadable, S
     @Contract(pure = true)
     public boolean hasAlertListeners() {
         return AlertType.NORMAL.hasListeners();
-    }
-
-    @Override
-    public boolean hasAlertsEnabled(Player player) {
-        if (player == null) return false;
-        GrimUser user = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(player.getUniqueId());
-        return hasAlertsEnabled(user);
-    }
-
-    @Override
-    public void toggleAlerts(Player player) {
-        if (player == null) return;
-        GrimUser user = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(player.getUniqueId());
-        toggleAlerts(user);
-    }
-
-    @Override
-    public boolean hasVerboseEnabled(Player player) {
-        if (player == null) return false;
-        GrimUser user = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(player.getUniqueId());
-        return hasVerboseEnabled(user);
-    }
-
-    @Override
-    public void toggleVerbose(Player player) {
-        if (player == null) return;
-        GrimUser user = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(player.getUniqueId());
-        toggleVerbose(user);
     }
 }
