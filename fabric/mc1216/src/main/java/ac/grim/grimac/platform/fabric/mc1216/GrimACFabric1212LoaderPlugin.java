@@ -13,16 +13,18 @@ import ac.grim.grimac.platform.fabric.mc1216.convert.Fabric1216ConversionUtil;
 import ac.grim.grimac.platform.fabric.mc1216.player.Fabric1212PlatformPlayer;
 import ac.grim.grimac.platform.fabric.mc1216.player.Fabric1215PlatformInventory;
 import ac.grim.grimac.platform.fabric.player.FabricPlatformPlayerFactory;
+import ac.grim.grimac.utils.lazy.LazyHolder;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
+import me.lucko.fabric.api.permissions.v0.Permissions;
 
 public class GrimACFabric1212LoaderPlugin extends GrimACFabric1190LoaderPlugin {
 
     public GrimACFabric1212LoaderPlugin() {
         super(
-                new FabricParserDescriptorFactory(
+                LazyHolder.simple(() -> new FabricParserDescriptorFactory(
                         new FabricPlayerSelectorParser<>(Fabric1212PlayerSelectorAdapter::new)
-                ),
+                )),
                 new FabricPlatformPlayerFactory(
                         Fabric1212PlatformPlayer::new,
                         Fabric1194GrimEntity::new,

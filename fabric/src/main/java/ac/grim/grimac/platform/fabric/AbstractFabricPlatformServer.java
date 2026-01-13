@@ -18,7 +18,7 @@ public abstract class AbstractFabricPlatformServer implements PlatformServer {
     @Override
     public Sender getConsoleSender() {
         CommandSourceStack consoleSource = GrimACFabricLoaderPlugin.FABRIC_SERVER.createCommandSourceStack();
-        return GrimACFabricLoaderPlugin.LOADER.getFabricSenderFactory().map(consoleSource);
+        return GrimACFabricLoaderPlugin.LOADER.getFabricSenderFactory().wrap(consoleSource);
     }
 
     @Override

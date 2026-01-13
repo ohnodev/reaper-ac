@@ -18,8 +18,8 @@ import ac.grim.grimac.platform.api.PlatformServer;
 import ac.grim.grimac.platform.api.command.CommandService;
 import ac.grim.grimac.platform.api.manager.ItemResetHandler;
 import ac.grim.grimac.platform.api.manager.MessagePlaceHolderManager;
-import ac.grim.grimac.platform.api.manager.CommandAdapter;
 import ac.grim.grimac.platform.api.manager.PlatformPluginManager;
+import ac.grim.grimac.platform.api.manager.cloud.CloudCommandAdapter;
 import ac.grim.grimac.platform.api.player.PlatformPlayerFactory;
 import ac.grim.grimac.platform.api.scheduler.PlatformScheduler;
 import ac.grim.grimac.platform.api.sender.Sender;
@@ -65,7 +65,7 @@ public final class GrimACBukkitLoaderPlugin extends JavaPlugin implements Platfo
     private final LazyHolder<CommandService> commandService = LazyHolder.simple(this::createCommandService);
 
     @Getter private final PlatformPlayerFactory platformPlayerFactory = new BukkitPlatformPlayerFactory();
-    @Getter private final CommandAdapter commandAdapter = new BukkitParserDescriptorFactory();
+    @Getter private final CloudCommandAdapter commandAdapter = new BukkitParserDescriptorFactory();
     @Getter private final PlatformPluginManager pluginManager = new BukkitPlatformPluginManager();
     @Getter private final GrimPlugin plugin;
     @Getter private final PlatformServer platformServer = new BukkitPlatformServer();
@@ -219,7 +219,7 @@ public final class GrimACBukkitLoaderPlugin extends JavaPlugin implements Platfo
 
     private CommandService createCommandService() {
         try {
-            return new CloudCommandService(createCloudCommandManager());
+            return new CloudCommandService(createCloudCommandManager(), commandAdapter);
         } catch (Throwable t) {
             LogUtil.warn("CRITICAL: Failed to initialize Command Framework. " +
                     "Grim will continue to run with no commands.", t);

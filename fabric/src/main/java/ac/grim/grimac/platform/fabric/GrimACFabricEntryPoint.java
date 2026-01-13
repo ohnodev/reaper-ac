@@ -1,12 +1,8 @@
 package ac.grim.grimac.platform.fabric;
 
 import ac.grim.grimac.GrimAPI;
-import ac.grim.grimac.manager.init.start.CommandRegister;
-import ac.grim.grimac.platform.api.command.CommandService;
 import ac.grim.grimac.platform.fabric.initables.FabricBStats;
 import ac.grim.grimac.platform.fabric.initables.FabricTickEndEvent;
-import ac.grim.grimac.utils.anticheat.LogUtil;
-import ac.grim.grimac.utils.reflection.ReflectionUtils;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;

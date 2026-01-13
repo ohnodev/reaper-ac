@@ -3,6 +3,8 @@ package ac.grim.grimac.command;
 import ac.grim.grimac.command.commands.*;
 import ac.grim.grimac.command.handler.GrimCommandFailureHandler;
 import ac.grim.grimac.platform.api.command.CommandService;
+import ac.grim.grimac.platform.api.manager.CommandAdapter;
+import ac.grim.grimac.platform.api.manager.cloud.CloudCommandAdapter;
 import ac.grim.grimac.platform.api.sender.Sender;
 import ac.grim.grimac.utils.anticheat.MessageUtil;
 import io.leangen.geantyref.TypeToken;
@@ -29,30 +31,32 @@ public class CloudCommandService implements CommandService {
     private boolean commandsRegistered = false;
 
     private final CommandManager<Sender> commandManager;
+    private final CloudCommandAdapter commandAdapter;
 
-    public CloudCommandService(CommandManager<Sender> commandManager) {
+    public CloudCommandService(CommandManager<Sender> commandManager, CloudCommandAdapter commandAdapter) {
         this.commandManager = commandManager;
+        this.commandAdapter = commandAdapter;
     }
 
     // Public static method that can be called on platforms where command must be registered earlier than InitManager.load()
     public void registerCommands() {
         if (commandsRegistered) return;
-        new GrimPerf().register(commandManager);
-        new GrimDebug().register(commandManager);
-        new GrimAlerts().register(commandManager);
-        new GrimProfile().register(commandManager);
-        new GrimSendAlert().register(commandManager);
-        new GrimHelp().register(commandManager);
-        new GrimHistory().register(commandManager);
-        new GrimReload().register(commandManager);
-        new GrimSpectate().register(commandManager);
-        new GrimStopSpectating().register(commandManager);
-        new GrimLog().register(commandManager);
-        new GrimVerbose().register(commandManager);
-        new GrimVersion().register(commandManager);
-        new GrimDump().register(commandManager);
-        new GrimBrands().register(commandManager);
-        new GrimList().register(commandManager);
+        new GrimPerf().register(commandManager, commandAdapter);
+        new GrimDebug().register(commandManager, commandAdapter);
+        new GrimAlerts().register(commandManager, commandAdapter);
+        new GrimProfile().register(commandManager, commandAdapter);
+        new GrimSendAlert().register(commandManager, commandAdapter);
+        new GrimHelp().register(commandManager, commandAdapter);
+        new GrimHistory().register(commandManager, commandAdapter);
+        new GrimReload().register(commandManager, commandAdapter);
+        new GrimSpectate().register(commandManager, commandAdapter);
+        new GrimStopSpectating().register(commandManager, commandAdapter);
+        new GrimLog().register(commandManager, commandAdapter);
+        new GrimVerbose().register(commandManager, commandAdapter);
+        new GrimVersion().register(commandManager, commandAdapter);
+        new GrimDump().register(commandManager, commandAdapter);
+        new GrimBrands().register(commandManager, commandAdapter);
+        new GrimList().register(commandManager, commandAdapter);
 
         final RequirementPostprocessor<Sender, SenderRequirement>
                 senderRequirementPostprocessor = RequirementPostprocessor.of(
