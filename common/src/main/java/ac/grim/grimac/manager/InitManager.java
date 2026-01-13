@@ -30,7 +30,7 @@ public class InitManager {
     @Getter
     private boolean stopped = false;
 
-    public InitManager(PacketEventsAPI<?> packetEventsAPI, Supplier<CommandManager<Sender>> commandManager, Initable... platformSpecificInitables) {
+    public InitManager(PacketEventsAPI<?> packetEventsAPI, Initable... platformSpecificInitables) {
         ArrayList<LoadableInitable> extraLoadableInitables = new ArrayList<>();
         ArrayList<StartableInitable> extraStartableInitables = new ArrayList<>();
         ArrayList<StoppableInitable> extraStoppableInitables = new ArrayList<>();
@@ -51,7 +51,8 @@ public class InitManager {
                 .add(new PacketManager())
                 .add(new ViaBackwardsManager())
                 .add(new TickRunner())
-                .add(new CommandRegister(commandManager))
+                .add(new CommandRegister(GrimAPI.INSTANCE.getCommandService()))
+                .add(new UpdateChecker())
                 .add(new PacketLimiter())
                 .add(GrimAPI.INSTANCE.getAlertManager())
                 .add(GrimAPI.INSTANCE.getDiscordManager())

@@ -1,6 +1,7 @@
 package ac.grim.grimac.platform.api;
 
 import ac.grim.grimac.api.plugin.GrimPlugin;
+import ac.grim.grimac.platform.api.command.CommandService;
 import ac.grim.grimac.platform.api.manager.ItemResetHandler;
 import ac.grim.grimac.platform.api.manager.MessagePlaceHolderManager;
 import ac.grim.grimac.platform.api.manager.CommandAdapter;
@@ -23,9 +24,9 @@ public interface PlatformLoader {
 
     PacketEventsAPI<?> getPacketEvents();
 
-    CommandManager<Sender> getCommandManager();
-
     ItemResetHandler getItemResetHandler();
+
+    CommandService getCommandService();
 
     SenderFactory<?> getSenderFactory();
 

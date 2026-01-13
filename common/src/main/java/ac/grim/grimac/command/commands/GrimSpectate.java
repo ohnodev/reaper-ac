@@ -2,6 +2,7 @@ package ac.grim.grimac.command.commands;
 
 import ac.grim.grimac.GrimAPI;
 import ac.grim.grimac.command.BuildableCommand;
+import ac.grim.grimac.command.CloudCommandService;
 import ac.grim.grimac.command.requirements.PlayerSenderRequirement;
 import ac.grim.grimac.manager.init.start.CommandRegister;
 import ac.grim.grimac.platform.api.command.PlayerSelector;
@@ -24,7 +25,7 @@ public class GrimSpectate implements BuildableCommand {
                         .permission("grim.spectate")
                         .required("target", GrimAPI.INSTANCE.getCommandAdapter().singlePlayerSelectorParser())
                         .handler(this::handleSpectate)
-                        .apply(CommandRegister.REQUIREMENT_FACTORY.create(PlayerSenderRequirement.PLAYER_SENDER_REQUIREMENT))
+                        .apply(CloudCommandService.REQUIREMENT_FACTORY.create(PlayerSenderRequirement.PLAYER_SENDER_REQUIREMENT))
         );
     }
 
