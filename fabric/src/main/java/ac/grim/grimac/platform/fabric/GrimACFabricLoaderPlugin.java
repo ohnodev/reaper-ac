@@ -146,7 +146,7 @@ public abstract class GrimACFabricLoaderPlugin implements PlatformLoader {
                     mapper
             );
             CloudCommandAdapter adapter = (CloudCommandAdapter) commandAdapter;
-            return new CloudCommandService(manager, adapter);
+            return new CloudCommandService(() -> manager, adapter);
         }
     }
 

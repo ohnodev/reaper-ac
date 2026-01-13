@@ -18,6 +18,7 @@ import org.incendo.cloud.processors.requirements.RequirementPostprocessor;
 import org.incendo.cloud.processors.requirements.Requirements;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class CloudCommandService implements CommandService {
 
@@ -29,17 +30,17 @@ public class CloudCommandService implements CommandService {
 
     private boolean commandsRegistered = false;
 
-    private final CommandManager<Sender> commandManager;
+    private final Supplier<CommandManager<Sender>> commandManagerSupplier;
     private final CloudCommandAdapter commandAdapter;
 
-    public CloudCommandService(CommandManager<Sender> commandManager, CloudCommandAdapter commandAdapter) {
-        this.commandManager = commandManager;
+    public CloudCommandService(Supplier<CommandManager<Sender>> commandManagerSupplier, CloudCommandAdapter commandAdapter) {
+        this.commandManagerSupplier = commandManagerSupplier;
         this.commandAdapter = commandAdapter;
     }
 
-    // Public static method that can be called on platforms where command must be registered earlier than InitManager.load()
     public void registerCommands() {
         if (commandsRegistered) return;
+        CommandManager<Sender> commandManager = commandManagerSupplier.get();
         new GrimPerf().register(commandManager, commandAdapter);
         new GrimDebug().register(commandManager, commandAdapter);
         new GrimAlerts().register(commandManager, commandAdapter);
@@ -63,11 +64,11 @@ public class CloudCommandService implements CommandService {
                 new GrimCommandFailureHandler()
         );
         commandManager.registerCommandPostProcessor(senderRequirementPostprocessor);
-        registerExceptionHandler(InvalidSyntaxException.class, e -> MessageUtil.miniMessage(e.correctSyntax()));
+        registerExceptionHandler(commandManager, InvalidSyntaxException.class, e -> MessageUtil.miniMessage(e.correctSyntax()));
         commandsRegistered = true;
     }
 
-    protected <E extends Exception> void registerExceptionHandler(Class<E> ex, Function<E, ComponentLike> toComponent) {
+    protected <E extends Exception> void registerExceptionHandler(CommandManager<Sender> commandManager, Class<E> ex, Function<E, ComponentLike> toComponent) {
         commandManager.exceptionController().registerHandler(ex,
                 (c) -> c.context().sender().sendMessage(toComponent.apply(c.exception()).asComponent().colorIfAbsent(NamedTextColor.RED))
         );
