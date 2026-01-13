@@ -7,15 +7,12 @@ import ac.grim.grimac.manager.init.load.PacketEventsInit;
 import ac.grim.grimac.manager.init.start.*;
 import ac.grim.grimac.manager.init.stop.StoppableInitable;
 import ac.grim.grimac.manager.init.stop.TerminatePacketEvents;
-import ac.grim.grimac.platform.api.sender.Sender;
 import ac.grim.grimac.utils.anticheat.LogUtil;
 import com.github.retrooper.packetevents.PacketEventsAPI;
 import com.google.common.collect.ImmutableList;
 import lombok.Getter;
-import org.incendo.cloud.CommandManager;
 
 import java.util.ArrayList;
-import java.util.function.Supplier;
 
 public class InitManager {
 

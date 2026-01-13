@@ -3,7 +3,6 @@ package ac.grim.grimac.command;
 import ac.grim.grimac.command.commands.*;
 import ac.grim.grimac.command.handler.GrimCommandFailureHandler;
 import ac.grim.grimac.platform.api.command.CommandService;
-import ac.grim.grimac.platform.api.manager.CommandAdapter;
 import ac.grim.grimac.platform.api.manager.cloud.CloudCommandAdapter;
 import ac.grim.grimac.platform.api.sender.Sender;
 import ac.grim.grimac.utils.anticheat.MessageUtil;

@@ -3,6 +3,7 @@ package ac.grim.grimac.platform.fabric.sender;
 import ac.grim.grimac.platform.api.permissions.PermissionDefaultValue;
 import ac.grim.grimac.platform.api.sender.Sender;
 import ac.grim.grimac.platform.api.sender.SenderFactory;
+import ac.grim.grimac.platform.fabric.AbstractFabricPlatformServer;
 import ac.grim.grimac.platform.fabric.GrimACFabricLoaderPlugin;
 import ac.grim.grimac.platform.fabric.utils.message.IFabricMessageUtil;
 import me.lucko.fabric.api.permissions.v0.Permissions;
@@ -20,10 +21,11 @@ import java.util.UUID;
 
 public class FabricSenderFactory extends SenderFactory<CommandSourceStack> {
 
-    private static final boolean HAS_PERMISSIONS_API = FabricLoader.getInstance().isModLoaded("fabric-permissions-api-v0");
+    public static final boolean HAS_PERMISSIONS_API = FabricLoader.getInstance().isModLoaded("fabric-permissions-api-v0");
 
     private final Map<String, PermissionDefaultValue> permissionDefaults = new HashMap<>();
-    private static final IFabricMessageUtil fabricMessageUtils = GrimACFabricLoaderPlugin.LOADER.getFabricMessageUtils();
+    private final AbstractFabricPlatformServer platformServer = GrimACFabricLoaderPlugin.LOADER.getPlatformServer();
+    private final IFabricMessageUtil fabricMessageUtils = GrimACFabricLoaderPlugin.LOADER.getFabricMessageUtils();
 
     @Override
     protected UUID getUniqueId(CommandSourceStack commandSource) {
@@ -65,14 +67,14 @@ public class FabricSenderFactory extends SenderFactory<CommandSourceStack> {
         // Check registered default value
         PermissionDefaultValue defaultValue = permissionDefaults.get(node);
         if (defaultValue == null) {
-            return commandSource.hasPermission(GrimACFabricLoaderPlugin.FABRIC_SERVER.getOperatorUserPermissionLevel());
+            return platformServer.hasPermission(commandSource, platformServer.getOperatorPermissionLevel());
         }
 
         return switch (defaultValue) {
             case TRUE -> true;
             case FALSE -> false;
-            case OP -> commandSource.hasPermission(GrimACFabricLoaderPlugin.FABRIC_SERVER.getOperatorUserPermissionLevel());
-            case NOT_OP -> !commandSource.hasPermission(GrimACFabricLoaderPlugin.FABRIC_SERVER.getOperatorUserPermissionLevel());
+            case OP -> platformServer.hasPermission(commandSource, platformServer.getOperatorPermissionLevel());
+            case NOT_OP -> !platformServer.hasPermission(commandSource, platformServer.getOperatorPermissionLevel());
         };
     }
 
@@ -89,8 +91,8 @@ public class FabricSenderFactory extends SenderFactory<CommandSourceStack> {
             return switch (defaultValue) {
                 case TRUE -> true;
                 case FALSE -> false;
-                case OP -> commandSource.hasPermission(GrimACFabricLoaderPlugin.FABRIC_SERVER.getOperatorUserPermissionLevel());
-                case NOT_OP -> !commandSource.hasPermission(GrimACFabricLoaderPlugin.FABRIC_SERVER.getOperatorUserPermissionLevel());
+                case OP -> platformServer.hasPermission(commandSource, platformServer.getOperatorPermissionLevel());
+                case NOT_OP -> !platformServer.hasPermission(commandSource, platformServer.getOperatorPermissionLevel());
             };
         }
     }

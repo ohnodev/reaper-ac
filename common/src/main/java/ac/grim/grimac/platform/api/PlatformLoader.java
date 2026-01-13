@@ -9,10 +9,8 @@ import ac.grim.grimac.platform.api.manager.PermissionRegistrationManager;
 import ac.grim.grimac.platform.api.manager.PlatformPluginManager;
 import ac.grim.grimac.platform.api.player.PlatformPlayerFactory;
 import ac.grim.grimac.platform.api.scheduler.PlatformScheduler;
-import ac.grim.grimac.platform.api.sender.Sender;
 import ac.grim.grimac.platform.api.sender.SenderFactory;
 import com.github.retrooper.packetevents.PacketEventsAPI;
-import org.incendo.cloud.CommandManager;
 import org.jetbrains.annotations.NotNull;
 
 public interface PlatformLoader {

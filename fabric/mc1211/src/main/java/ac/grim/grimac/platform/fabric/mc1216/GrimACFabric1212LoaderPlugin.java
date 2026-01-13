@@ -16,7 +16,6 @@ import ac.grim.grimac.platform.fabric.player.FabricPlatformPlayerFactory;
 import ac.grim.grimac.utils.lazy.LazyHolder;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
-import me.lucko.fabric.api.permissions.v0.Permissions;
 
 public class GrimACFabric1212LoaderPlugin extends GrimACFabric1190LoaderPlugin {
 
@@ -31,7 +30,8 @@ public class GrimACFabric1212LoaderPlugin extends GrimACFabric1190LoaderPlugin {
                         PacketEvents.getAPI().getServerManager().getVersion().isNewerThan(ServerVersion.V_1_21_4)
                             ? Fabric1215PlatformInventory::new : Fabric1193PlatformInventory::new
                 ),
-                new Fabric1203PlatformServer(),
+                PacketEvents.getAPI().getServerManager().getVersion().isNewerThan(ServerVersion.V_1_21_10) ?
+                        new Fabric1211PlatformServer() : new Fabric1203PlatformServer(),
                 new Fabric1200MessageUtil(),
                 PacketEvents.getAPI().getServerManager().getVersion().isNewerThan(ServerVersion.V_1_21_5)
                         ? new Fabric1216ConversionUtil() : new Fabric1205ConversionUtil()
@@ -40,6 +40,6 @@ public class GrimACFabric1212LoaderPlugin extends GrimACFabric1190LoaderPlugin {
 
     @Override
     public ServerVersion getNativeVersion() {
-        return ServerVersion.V_1_21_6;
+        return ServerVersion.V_1_21_11;
     }
 }

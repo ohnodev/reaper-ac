@@ -19,7 +19,6 @@ import ac.grim.grimac.utils.lazy.LazyHolder;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
 
-import java.util.function.Supplier;
 
 public class GrimACFabric1190LoaderPlugin extends GrimACFabric1170LoaderPlugin {
 

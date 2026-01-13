@@ -9,6 +9,14 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractFabricPlatformServer implements PlatformServer {
 
+    public int getOperatorPermissionLevel() {
+        return GrimACFabricLoaderPlugin.FABRIC_SERVER.getOperatorUserPermissionLevel();
+    }
+
+    public boolean hasPermission(CommandSourceStack stack, int level) {
+        return stack.hasPermission(level);
+    }
+
     @Override
     public String getPlatformImplementationString() {
         // Return the Fabric server version

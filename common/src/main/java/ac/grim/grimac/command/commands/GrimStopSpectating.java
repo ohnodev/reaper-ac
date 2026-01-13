@@ -4,7 +4,6 @@ import ac.grim.grimac.GrimAPI;
 import ac.grim.grimac.command.BuildableCommand;
 import ac.grim.grimac.command.CloudCommandService;
 import ac.grim.grimac.command.requirements.PlayerSenderRequirement;
-import ac.grim.grimac.manager.init.start.CommandRegister;
 import ac.grim.grimac.platform.api.manager.cloud.CloudCommandAdapter;
 import ac.grim.grimac.platform.api.sender.Sender;
 import ac.grim.grimac.utils.anticheat.MessageUtil;

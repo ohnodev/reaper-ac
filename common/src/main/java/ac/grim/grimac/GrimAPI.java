@@ -23,13 +23,11 @@ import ac.grim.grimac.platform.api.manager.PermissionRegistrationManager;
 import ac.grim.grimac.platform.api.manager.PlatformPluginManager;
 import ac.grim.grimac.platform.api.player.PlatformPlayerFactory;
 import ac.grim.grimac.platform.api.scheduler.PlatformScheduler;
-import ac.grim.grimac.platform.api.sender.Sender;
 import ac.grim.grimac.platform.api.sender.SenderFactory;
 import ac.grim.grimac.utils.anticheat.PlayerDataManager;
 import ac.grim.grimac.utils.common.arguments.CommonGrimArguments;
 import ac.grim.grimac.utils.reflection.ReflectionUtils;
 import lombok.Getter;
-import org.incendo.cloud.CommandManager;
 import org.jetbrains.annotations.NotNull;
 
 
