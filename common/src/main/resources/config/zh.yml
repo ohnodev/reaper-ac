@@ -49,7 +49,7 @@ max-transaction-time: 60
 # This may improve compatibility with other anticheats. It may cause issues with packet limiters.
 # Do not enable this if you are not sure what you are doing.
 # 启用此选项可禁止Grim取消接收到的Pong包。
-# 可能会优化和其他反作弊的兼容性，但可能会鱼数据包限制器冲突
+# 可能会优化和其他反作弊的兼容性，但可能会与数据包限制器冲突
 # 在你不知道你在干什么的情况下，不要启用。
 disable-pong-cancelling: false
 
@@ -64,7 +64,7 @@ ignore-duplicate-packet-rotation: false
 Simulation:
     # 这个检查通过仿真玩家的移动，并与玩家的实际移动进行比较
     # 仿真出的位置（玩家理应到达的位置）和玩家实际位置的偏差（距离）即为移动优势。
-    
+
     # 当玩家合法时，我们应该将总移动优势乘以多少
     # 这是默认配置的样子（x 轴 = seconds ，y 轴 = 1/1000 方块）: https://www.desmos.com/calculator/d4ufgxrxer
     setback-decay-multiplier: 0.999
@@ -83,8 +83,7 @@ Simulation:
     max-advantage: 1
     # 在默认配置的50秒后，玩家的总优势将从4个方块变为1个方块
     # 这是默认配置的样子（x 轴 = seconds ，y 轴 = 1/1000 方块）: https://www.desmos.com/calculator/4lovswdarj
-    # 我不知道上面内容的意义何在（英语原版Grim配置）。
-    
+
     # 若玩家的总移动优势大于此项，则会被重置为此项
     # 例如：总移动优势为4.2，会被强制重置到4
     # 这是为了防止玩家的总移动优势过大，并且永远无法清除总移动优势
@@ -118,7 +117,7 @@ RotationPlace:
 # 比其他反作弊更稳定，但请报告任何错误......我在这里修复了大量的代码问题。
 NoSlow:
     # 最大允许玩家在使用物品时的移动优势（单位：方块）
-    # 启用 NoSlow 后，标记量持续为 0.03-0.2（不知道意义何在）
+    # 启用 NoSlow 后，标记量持续为 0.03-0.2
     threshold: 0.001
     # 到达多少VL时回弹
     setbackvl: 5
@@ -251,6 +250,5 @@ history:
         database: grim
         username: root
         password: ""
-
 # 不要调整这个
 config-version: 9
