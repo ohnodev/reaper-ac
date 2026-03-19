@@ -11,10 +11,7 @@ import ac.grim.grimac.checks.impl.chat.ChatA;
 import ac.grim.grimac.checks.impl.chat.ChatB;
 import ac.grim.grimac.checks.impl.chat.ChatC;
 import ac.grim.grimac.checks.impl.chat.ChatD;
-import ac.grim.grimac.checks.impl.combat.Hitboxes;
-import ac.grim.grimac.checks.impl.combat.MultiInteractA;
-import ac.grim.grimac.checks.impl.combat.MultiInteractB;
-import ac.grim.grimac.checks.impl.combat.Reach;
+import ac.grim.grimac.checks.impl.combat.*;
 import ac.grim.grimac.checks.impl.crash.*;
 import ac.grim.grimac.checks.impl.elytra.*;
 import ac.grim.grimac.checks.impl.exploit.ExploitA;
@@ -110,7 +107,6 @@ public class CheckManager {
                 .put(ExploitB.class, new ExploitB(player))
                 .put(BadPacketsA.class, new BadPacketsA(player))
                 .put(BadPacketsB.class, new BadPacketsB(player))
-                .put(BadPacketsC.class, new BadPacketsC(player))
                 .put(BadPacketsD.class, new BadPacketsD(player))
                 .put(BadPacketsE.class, new BadPacketsE(player))
                 .put(BadPacketsF.class, new BadPacketsF(player))
@@ -130,6 +126,7 @@ public class CheckManager {
                 .put(BadPacketsV.class, new BadPacketsV(player))
                 .put(BadPacketsY.class, new BadPacketsY(player))
                 .put(BadPacketsZ.class, new BadPacketsZ(player))
+                .put(SelfInteract.class, new SelfInteract(player))
                 .put(MultiActionsA.class, new MultiActionsA(player))
                 .put(MultiActionsC.class, new MultiActionsC(player))
                 .put(MultiActionsD.class, new MultiActionsD(player))
