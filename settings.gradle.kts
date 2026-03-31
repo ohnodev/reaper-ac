@@ -22,6 +22,7 @@ pluginManagement {
             }
             filter {
                 includeModule("fabric-loom", "fabric-loom.gradle.plugin")
+                includeModule("net.fabricmc.fabric-loom", "net.fabricmc.fabric-loom.gradle.plugin")
                 includeGroupByRegex("net.fabricmc.*")
             }
         }
@@ -64,8 +65,3 @@ rootProject.name = "grimac"
 include("common")
 include("bukkit")
 include("fabric")
-include(":fabric:mc1161")
-include(":fabric:mc1171")
-include(":fabric:mc1194")
-include(":fabric:mc1205")
-include(":fabric:mc12111")

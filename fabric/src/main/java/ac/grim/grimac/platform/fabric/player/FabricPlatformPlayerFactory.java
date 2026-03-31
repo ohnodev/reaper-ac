@@ -110,8 +110,8 @@ public class FabricPlatformPlayerFactory extends AbstractPlatformPlayerFactory<S
     }
 
     public OfflinePlatformPlayer getOfflinePlayer(GameProfile profile) {
-        OfflinePlatformPlayer player = new FabricOfflinePlatformPlayer(profile.getId(), profile.getName());
-        this.offlinePlatformPlayerCache.put(profile.getId(), player);
+        OfflinePlatformPlayer player = new FabricOfflinePlatformPlayer(profile.id(), profile.name());
+        this.offlinePlatformPlayerCache.put(profile.id(), player);
         return player;
     }
 

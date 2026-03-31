@@ -5,16 +5,18 @@ import ac.grim.grimac.platform.api.sender.Sender;
 import com.mojang.authlib.GameProfile;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.permissions.Permission;
+import net.minecraft.server.permissions.PermissionLevel;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractFabricPlatformServer implements PlatformServer {
 
-    public int getOperatorPermissionLevel() {
-        return GrimACFabricLoaderPlugin.FABRIC_SERVER.getOperatorUserPermissionLevel();
+    public PermissionLevel getOperatorPermissionLevel() {
+        return GrimACFabricLoaderPlugin.FABRIC_SERVER.operatorUserPermissions().level();
     }
 
-    public boolean hasPermission(CommandSourceStack stack, int level) {
-        return stack.hasPermission(level);
+    public boolean hasPermission(CommandSourceStack stack, PermissionLevel level) {
+        return stack.permissions().hasPermission(new Permission.HasCommandLevel(level));
     }
 
     @Override
@@ -36,6 +38,6 @@ public abstract class AbstractFabricPlatformServer implements PlatformServer {
 
     @Nullable
     public GameProfile getProfileByName(String name) {
-        return GrimACFabricLoaderPlugin.FABRIC_SERVER.getProfileCache().get(name);
+        return GrimACFabricLoaderPlugin.FABRIC_SERVER.services().profileResolver().fetchByName(name).orElse(null);
     }
 }

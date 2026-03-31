@@ -1,7 +1,6 @@
 import versioning.BuildConfig
 
 val minecraft_version: String by project
-val yarn_mappings: String by project
 val fabric_version: String by project
 
 plugins {
@@ -13,129 +12,107 @@ plugins {
 
 dependencies {
     minecraft("com.mojang:minecraft:$minecraft_version")
-    mappings(loom.officialMojangMappings())
-    modImplementation(fabricApi.module("fabric-lifecycle-events-v1", fabric_version))
+    implementation("net.fabricmc.fabric-api:fabric-api:$fabric_version")
 
-    modCompileOnly("me.lucko:fabric-permissions-api:0.3.1")
+    compileOnly("me.lucko:fabric-permissions-api:0.7.0")
 
-    modImplementation(libs.cloud.fabric)
-    modImplementation(libs.fabric.loader)
-    if (BuildConfig.shadePE) {
-        modImplementation(libs.packetevents.fabric)
-    } else {
-        compileOnly(libs.packetevents.fabric)
+    // cloud-fabric is catalog-managed and pinned for reproducible builds.
+    implementation(libs.cloud.fabric) {
+        exclude(group = "net.fabricmc.fabric-api")
+        exclude(group = "net.fabricmc", module = "fabric-loader")
     }
+
+    implementation(libs.fabric.loader)
+
+    // Keep default builds reproducible and mapping-agnostic: compile against PE API.
+    compileOnly(libs.packetevents.api)
+
     compileOnly("org.slf4j:slf4j-api:2.0.17")
     compileOnly("org.apache.logging.log4j:log4j-api:2.24.3")
 
-    modApi(libs.packetevents.fabric)
+    implementation(project(":common"))
 }
 
-// The configurations below will only apply to :fabric and its submodules, not its siblings or the root project
-allprojects {
-    apply(plugin = "fabric-loom")
-    apply(plugin = "grim.base-conventions")
-    apply(plugin = "maven-publish")
+// Remote-first resolution; mavenLocal last (or only when MAVEN_LOCAL_OVERRIDE) so CI/dev machines
+// don’t silently pick stale local artifacts. PacketEvents/cloud snapshot sources: README-26.1-dependencies.md
+repositories {
+    exclusive("https://maven.fabricmc.net/") {
+        includeGroup("net.fabricmc")
+        includeGroup("net.fabricmc.fabric-api")
+    }
 
-
-    repositories {
-        // 1. Fallback for non-exclusive deps
-        if (BuildConfig.mavenLocalOverride) mavenLocal()
-
-        // 2. Exclusive Repositories
-        exclusive("https://maven.fabricmc.net/") {
-            includeGroup("net.fabricmc")
-            includeGroup("net.fabricmc.fabric-api")
-        }
-
-        exclusive("https://repo.grim.ac/snapshots") {
-            includeGroup("ac.grim.grimac")
+    exclusive("https://repo.grim.ac/snapshots") {
+        includeGroup("ac.grim.grimac")
+    }
+    maven("https://repo.grim.ac/snapshots") {
+        mavenContent { snapshotsOnly() }
+        content {
             includeGroup("com.github.retrooper")
         }
-
-        exclusive("https://jitpack.io", { mavenContent { releasesOnly() } }) {
-            includeGroup("com.github.Fallen-Breath.conditional-mixin")
-        }
-
-        exclusive("https://repo.viaversion.com", { mavenContent { releasesOnly() } }) {
-            includeGroup("com.viaversion")
-        }
-
-        exclusive("https://nexus.scarsz.me/content/repositories/releases", { mavenContent { releasesOnly() } }) {
-            includeGroup("github.scarsz")
-        }
-
-        exclusive("https://repo.opencollab.dev/maven-releases/", { mavenContent { releasesOnly() } }) {
-            includeGroup("org.geysermc.api")
-        }
-
-        exclusive("https://repo.opencollab.dev/maven-snapshots/", { mavenContent { snapshotsOnly() } }) {
-            includeGroup("org.geysermc.floodgate")
-            includeGroup("org.geysermc.cumulus")
-            includeModule("org.geysermc", "common")
-            includeModule("org.geysermc", "geyser-parent")
-        }
-
-        // Special logic for LuckPerms
-        if (project.name == "mc1161") {
-            exclusive("https://repo.grim.ac/snapshots") { includeGroup("me.lucko") }
-        } else {
-            // Enforce Central for LuckPerms so we don't accidentally check other snapshot repos
-            exclusive(mavenCentral()) { includeGroup("me.lucko") }
-        }
-
-        mavenCentral()
     }
 
-    loom {
-        accessWidenerPath = file("src/main/resources/grimac.accesswidener")
+    exclusive("https://jitpack.io", { mavenContent { releasesOnly() } }) {
+        includeGroup("com.github.Fallen-Breath.conditional-mixin")
     }
 
-    dependencies {
-        // I hate this syntax, is there an alternative to make modCompileOnly(libs.package.name) work?
-        val libsx = rootProject.extensions.getByType<VersionCatalogsExtension>().named("libs")
-        // Use the libs extension from the root project
-        modImplementation(libsx.findLibrary("cloud-fabric").get()) {
-            exclude(group = "net.fabricmc.fabric-api")
-        }
-        modImplementation(libsx.findLibrary("fabric-loader").get())
-
-        implementation(project(":common"))
+    exclusive("https://repo.viaversion.com", { mavenContent { releasesOnly() } }) {
+        includeGroup("com.viaversion")
     }
 
-    publishing.publications.create<MavenPublication>("maven") {
-        artifact(tasks["remapJar"])
+    exclusive("https://nexus.scarsz.me/content/repositories/releases", { mavenContent { releasesOnly() } }) {
+        includeGroup("github.scarsz")
     }
 
-    tasks {
-        remapJar {
-            archiveBaseName = "${rootProject.name}-fabric${if (project.name != "fabric") "-${project.name}" else ""}"
-            archiveVersion = rootProject.version as String
-        }
+    exclusive("https://repo.opencollab.dev/maven-releases/", { mavenContent { releasesOnly() } }) {
+        includeGroup("org.geysermc.api")
+    }
 
-        remapSourcesJar {
-            archiveVersion = rootProject.version as String
+    exclusive("https://repo.opencollab.dev/maven-snapshots/", { mavenContent { snapshotsOnly() } }) {
+        includeGroup("org.geysermc.floodgate")
+        includeGroup("org.geysermc.cumulus")
+        includeModule("org.geysermc", "common")
+        includeModule("org.geysermc", "geyser-parent")
+    }
+
+    exclusive(mavenCentral()) { includeGroup("me.lucko") }
+
+    mavenCentral()
+
+    // Non-exclusive snapshot repo so pinned releases can still resolve from Maven Central.
+    maven("https://central.sonatype.com/repository/maven-snapshots/") {
+        mavenContent { snapshotsOnly() }
+        content {
+            includeGroup("org.incendo")
         }
+    }
+
+    // Optional local publish fallback when explicitly enabled via MAVEN_LOCAL_OVERRIDE.
+    if (BuildConfig.mavenLocalOverride) {
+        mavenLocal()
     }
 }
 
-subprojects {
-    dependencies {
-        // configuration = "namedElements" required when depending on another loom project
-        implementation(project(":fabric", configuration = "namedElements"))
-    }
+java {
+    // Base conventions keep a lower default for cross-platform compatibility.
+    // Fabric 26.1 runs on Java 25, so this module explicitly targets 25.
+    toolchain.languageVersion.set(JavaLanguageVersion.of(25))
 }
 
-subprojects.forEach {
-    tasks.named("remapJar").configure {
-        dependsOn("${it.path}:remapJar")
-    }
+tasks.withType<JavaCompile>().configureEach {
+    options.release.set(25)
 }
 
-tasks.remapJar.configure {
-    subprojects.forEach { subproject ->
-        subproject.tasks.matching { it.name == "remapJar" }.configureEach {
-            nestedJars.from(this)
-        }
+loom {
+    accessWidenerPath = file("src/main/resources/grimac.accesswidener")
+}
+
+publishing.publications.create<MavenPublication>("maven") {
+    from(components["java"])
+}
+
+tasks {
+    jar {
+        archiveBaseName.set("${rootProject.name}-fabric")
+        archiveVersion.set(rootProject.version as String)
     }
 }

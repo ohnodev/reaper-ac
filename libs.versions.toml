@@ -5,14 +5,15 @@ adventure-platform-bukkit = "4.4.0"
 paper-api = "1.20.6-R0.1-SNAPSHOT"
 cloud = "2.0.0"
 cloud-paper = "2.0.0-beta.14"
-cloud-fabric = "2.0.0-beta.15"
+cloud-fabric = "2.0.0-SNAPSHOT"
 cloud-processors-requirements = "1.0.0-rc.1"
 
 # --- Minecraft-Specific APIs ---
 floodgate-api = "2.0-SNAPSHOT"
 geyser-base-api = "1.0.2"
 grim-api = "1.2.4.0"
-packetevents = "2.12.0+70a2380-SNAPSHOT"
+# Pin PE to an exact snapshot build for reproducibility.
+packetevents = "2.12.0+7d7c846-SNAPSHOT"
 placeholderapi = "2.11.6"
 viaversion = "5.7.1"
 
@@ -25,8 +26,9 @@ snakeyaml = "2.2"
 configuralize = "1.4.1" # :slim classifier is applied in build.gradle.kts
 
 # --- Build & Tooling ---
-fabric-loader = "0.16.14"
-fabric-loom = "1.15.5"
+fabric-loader = "0.18.5"
+# Loom snapshot is intentional for MC 26.1 support until a stable equivalent is validated.
+fabric-loom = "1.15-SNAPSHOT"
 lombok = "9.0.0"
 shadow = "9.3.0"
 spotless = "6.25.0"
@@ -55,6 +57,8 @@ grim-bukkit-internal = { group = "ac.grim.grimac", name = "grim-bukkit-internal"
 grim-fabric-internal = { group = "ac.grim.grimac", name = "grim-fabric-internal", version.ref = "grim-api" }
 packetevents-api = { group = "com.github.retrooper", name = "packetevents-api", version.ref = "packetevents" }
 packetevents-fabric = { group  = "com.github.retrooper", name = "packetevents-fabric", version.ref = "packetevents" }
+packetevents-fabric-common = { group  = "com.github.retrooper", name = "packetevents-fabric-common", version.ref = "packetevents" }
+packetevents-fabric-official = { group  = "com.github.retrooper", name = "packetevents-fabric-official", version.ref = "packetevents" }
 packetevents-spigot = { group = "com.github.retrooper", name = "packetevents-spigot", version.ref = "packetevents"}
 viaversion = { group = "com.viaversion", name = "viaversion", version.ref = "viaversion" }
 
@@ -83,7 +87,7 @@ shadow = { "group" = "com.gradleup.shadow", name = "shadow-gradle-plugin", versi
 cloud-api = ["cloud-core", "cloud-processors-requirements"]
 
 [plugins]
-fabric-loom = { id = "fabric-loom", version.ref = "fabric-loom" }
+fabric-loom = { id = "net.fabricmc.fabric-loom", version.ref = "fabric-loom" }
 lombok = { id = "io.freefair.lombok", version.ref = "lombok" }
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
