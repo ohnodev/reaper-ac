@@ -16,6 +16,10 @@ public class Fabric1140PlatformServer extends AbstractFabricPlatformServer {
     // TODO (Cross-platform) implement proper bukkit equivalent for getting TPS over time
     @Override
     public double getTPS() {
-        return Math.min(1000.0 / (GrimACFabricLoaderPlugin.FABRIC_SERVER.getAverageTickTimeNanos() / 1_000_000.0), 20.0);
+        long nanos = GrimACFabricLoaderPlugin.FABRIC_SERVER.getAverageTickTimeNanos();
+        if (nanos <= 0) {
+            return 20.0;
+        }
+        return Math.min(1000.0 / (nanos / 1_000_000.0), 20.0);
     }
 }

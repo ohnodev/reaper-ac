@@ -47,15 +47,20 @@ public class Fabric1212PlatformPlayer extends Fabric1202PlatformPlayer {
                     return false;
                 }
                 double epsilon = 1e-3;
+                float yawDelta = wrappedAngleDelta(fabricPlayer.getYRot(), location.getYaw());
                 return Math.abs(fabricPlayer.getX() - location.getX()) <= epsilon
                         && Math.abs(fabricPlayer.getY() - location.getY()) <= epsilon
                         && Math.abs(fabricPlayer.getZ() - location.getZ()) <= epsilon
-                        && Math.abs(fabricPlayer.getYRot() - location.getYaw()) <= 0.01f
+                        && yawDelta <= 0.01f
                         && Math.abs(fabricPlayer.getXRot() - location.getPitch()) <= 0.01f;
             } catch (Exception e) {
                 LogUtil.warn("teleportAsync failed for " + fabricPlayer.getScoreboardName(), e);
                 return false;
             }
         });
+    }
+
+    private static float wrappedAngleDelta(float a, float b) {
+        return Math.abs(((a - b + 540.0f) % 360.0f) - 180.0f);
     }
 }

@@ -42,8 +42,10 @@ repositories {
 
     mavenCentral()
 
-    // After all remotes: local fallback for PacketEvents 2.12+ until repo.grim.ac hosts matching snapshots
-    mavenLocal()
+    // Optional local fallback: only when explicitly enabled via MAVEN_LOCAL_OVERRIDE.
+    if (BuildConfig.mavenLocalOverride) {
+        mavenLocal()
+    }
 }
 
 

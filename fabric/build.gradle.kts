@@ -1,3 +1,5 @@
+import versioning.BuildConfig
+
 val minecraft_version: String by project
 val fabric_version: String by project
 
@@ -91,8 +93,10 @@ repositories {
         includeGroup("org.incendo")
     }
 
-    // Last: local publish (e.g. ./gradlew publishToMavenLocal in packetevents) when remotes lack the jar
-    mavenLocal()
+    // Optional local publish fallback when explicitly enabled via MAVEN_LOCAL_OVERRIDE.
+    if (BuildConfig.mavenLocalOverride) {
+        mavenLocal()
+    }
 }
 
 java {
@@ -110,7 +114,7 @@ loom {
 }
 
 publishing.publications.create<MavenPublication>("maven") {
-    artifact(tasks["jar"])
+    from(components["java"])
 }
 
 tasks {

@@ -20,7 +20,7 @@ public class Fabric1216ConversionUtil extends ac.grim.grimac.platform.fabric.mc1
             LogUtil.error(
                     "Failed to decode Adventure Component with server registry context: " + String.valueOf(component),
                     e);
-            return net.minecraft.network.chat.Component.literal("");
+            return super.toNativeText(component);
         }
     }
 }

@@ -25,7 +25,7 @@ public class Fabric1194GrimEntity extends Fabric1170GrimEntity {
             }
             PlatformWorld world = location.getWorld();
             if (world == null || !(world instanceof ServerLevel targetLevel)) {
-                LogUtil.warn("teleportAsync: location world missing or not a ServerLevel");
+                LogUtil.info("teleportAsync skipped: location world missing or not a ServerLevel");
                 return false;
             }
             entity.teleportTo(

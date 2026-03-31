@@ -35,15 +35,16 @@ public class Fabric1161PlatformInventory extends AbstractFabricPlatformInventory
             return normalizeFallbackKey(handler);
         }
 
-        // should we handle crafters here also??
         // CRAFTING -> CRAFTING
         if (type == MenuType.CRAFTING) {
             return "CRAFTING";
-            // PLAYER -> PLAYER
-        } else if (type == MenuType.GENERIC_9x4) {
-            return "PLAYER";
-            // CHEST, ENDER_CHEST, or BARREL -> CHEST
-        } else if (type == MenuType.GENERIC_9x3) {
+            // Generic chest menus (all row counts) -> CHEST
+        } else if (type == MenuType.GENERIC_9x1
+                || type == MenuType.GENERIC_9x2
+                || type == MenuType.GENERIC_9x3
+                || type == MenuType.GENERIC_9x4
+                || type == MenuType.GENERIC_9x5
+                || type == MenuType.GENERIC_9x6) {
             return "CHEST";
             // DISPENSER, DROPPER -> DISPENSER
         } else if (type == MenuType.GENERIC_3x3) {
