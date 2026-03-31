@@ -12,7 +12,7 @@ cloud-processors-requirements = "1.0.0-rc.1"
 floodgate-api = "2.0-SNAPSHOT"
 geyser-base-api = "1.0.2"
 grim-api = "1.2.4.0"
-packetevents = "2.12.0+70a2380-SNAPSHOT"
+packetevents = "2.12.0-SNAPSHOT"
 placeholderapi = "2.11.6"
 viaversion = "5.7.1"
 
@@ -25,8 +25,8 @@ snakeyaml = "2.2"
 configuralize = "1.4.1" # :slim classifier is applied in build.gradle.kts
 
 # --- Build & Tooling ---
-fabric-loader = "0.16.14"
-fabric-loom = "1.15.5"
+fabric-loader = "0.18.4"
+fabric-loom = "1.15-SNAPSHOT"
 lombok = "9.0.0"
 shadow = "9.3.0"
 spotless = "6.25.0"
@@ -83,7 +83,7 @@ shadow = { "group" = "com.gradleup.shadow", name = "shadow-gradle-plugin", versi
 cloud-api = ["cloud-core", "cloud-processors-requirements"]
 
 [plugins]
-fabric-loom = { id = "fabric-loom", version.ref = "fabric-loom" }
+fabric-loom = { id = "net.fabricmc.fabric-loom", version.ref = "fabric-loom" }
 lombok = { id = "io.freefair.lombok", version.ref = "lombok" }
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }

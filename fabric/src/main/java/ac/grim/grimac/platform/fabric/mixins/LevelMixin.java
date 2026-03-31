@@ -32,7 +32,7 @@ abstract class LevelMixin implements LevelAccessor {
     }
 
     public String grimac$getName() {
-        return this.dimension().location().toString();
+        return this.dimension().identifier().toString();
     }
 
     public @Nullable UUID grimac$getUID() {

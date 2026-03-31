@@ -6,13 +6,11 @@ plugins {
 }
 
 repositories {
-    // We still call mavenLocal() conditionally at the top for non-exclusive deps (general fallback)
-    if (BuildConfig.mavenLocalOverride) mavenLocal()
+    mavenLocal()
 
     // Grim API & PacketEvents
     exclusive("https://repo.grim.ac/snapshots") {
         includeGroup("ac.grim.grimac")
-        includeGroup("com.github.retrooper")
     }
 
     // ViaVersion

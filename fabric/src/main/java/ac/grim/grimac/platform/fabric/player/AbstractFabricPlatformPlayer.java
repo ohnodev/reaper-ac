@@ -72,7 +72,7 @@ public abstract class AbstractFabricPlatformPlayer extends AbstractFabricGrimEnt
         if (CommonGrimArguments.USE_CHAT_FAST_BYPASS.value() && user != null) {
             user.sendMessage(message);
         } else {
-            fabricPlayer.displayClientMessage(GrimACFabricLoaderPlugin.LOADER.getFabricMessageUtils().textLiteral(message), false);
+            fabricPlayer.sendSystemMessage(GrimACFabricLoaderPlugin.LOADER.getFabricMessageUtils().textLiteral(message), false);
         }
     }
 
@@ -81,7 +81,7 @@ public abstract class AbstractFabricPlatformPlayer extends AbstractFabricGrimEnt
         if (CommonGrimArguments.USE_CHAT_FAST_BYPASS.value() && user != null) {
             user.sendMessage(message);
         } else {
-            fabricPlayer.displayClientMessage(GrimACFabricLoaderPlugin.LOADER.getFabricConversionUtil().toNativeText(message), false);
+            fabricPlayer.sendSystemMessage(GrimACFabricLoaderPlugin.LOADER.getFabricConversionUtil().toNativeText(message), false);
         }
     }
 

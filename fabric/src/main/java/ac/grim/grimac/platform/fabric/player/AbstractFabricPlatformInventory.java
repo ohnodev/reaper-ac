@@ -17,7 +17,7 @@ public abstract class AbstractFabricPlatformInventory implements PlatformInvento
 
     @Override
     public ItemStack getItemInHand() {
-        return fabricConversionUtil.fromFabricItemStack(fabricPlatformPlayer.fabricPlayer.inventory.getSelected());
+        return fabricConversionUtil.fromFabricItemStack(fabricPlatformPlayer.fabricPlayer.inventory.getSelectedItem());
     }
 
     @Override
