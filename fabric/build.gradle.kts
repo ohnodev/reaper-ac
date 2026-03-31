@@ -78,9 +78,8 @@ repositories {
 
     mavenCentral()
 
-    // Non-exclusive snapshot repo so pinned releases can still resolve from Maven Central.
+    // Non-exclusive Sonatype snapshots repo for exact cloud-fabric snapshot coordinates.
     maven("https://central.sonatype.com/repository/maven-snapshots/") {
-        mavenContent { snapshotsOnly() }
         content {
             includeGroup("org.incendo")
         }
