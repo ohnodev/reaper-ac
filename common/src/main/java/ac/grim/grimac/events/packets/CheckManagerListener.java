@@ -2,7 +2,6 @@ package ac.grim.grimac.events.packets;
 
 import ac.grim.grimac.GrimAPI;
 import ac.grim.grimac.player.GrimPlayer;
-import ac.grim.grimac.utils.anticheat.LogUtil;
 import ac.grim.grimac.utils.anticheat.update.*;
 import ac.grim.grimac.utils.blockplace.BlockPlaceResult;
 import ac.grim.grimac.utils.blockplace.ConsumesBlockPlace;
@@ -48,9 +47,6 @@ import java.util.List;
 import java.util.function.Function;
 
 public class CheckManagerListener extends PacketListenerAbstract {
-    private static final long PACKET_DECODE_WARN_INTERVAL_MS = 10_000L;
-    private static volatile long lastPacketDecodeWarnAt = 0L;
-
     // Manual filter on FINISH_DIGGING to prevent clients setting non-breakable blocks to air
     private static final Function<StateType, Boolean> BREAKABLE = type -> !type.isAir() && type.getHardness() != -1.0f && type != StateTypes.WATER && type != StateTypes.LAVA;
 
@@ -573,16 +569,10 @@ public class CheckManagerListener extends PacketListenerAbstract {
         try {
             player.checkManager.onPacketReceive(event);
         } catch (RuntimeException ex) {
-            if (!isPacketDecodeDesync(ex)) {
+            if (!PacketDecodeUtils.isPacketDecodeDesync(ex)) {
                 throw ex;
             }
-            final long now = System.currentTimeMillis();
-            if (now - lastPacketDecodeWarnAt >= PACKET_DECODE_WARN_INTERVAL_MS) {
-                lastPacketDecodeWarnAt = now;
-                LogUtil.warn("Suppressed PacketEvents decode exception on receive for " + player.user.getName()
-                        + " packet=" + event.getPacketType() + " cause=" + ex.getClass().getSimpleName()
-                        + ": " + ex.getMessage());
-            }
+            PacketDecodeUtils.logSuppressedDecode("CheckManagerListener(receive)", event.getPacketType(), ex);
             event.setCancelled(true);
         }
 
@@ -628,58 +618,11 @@ public class CheckManagerListener extends PacketListenerAbstract {
         try {
             player.checkManager.onPacketSend(event);
         } catch (RuntimeException ex) {
-            if (!isPacketDecodeDesync(ex)) {
+            if (!PacketDecodeUtils.isPacketDecodeDesync(ex)) {
                 throw ex;
             }
-
-            // PacketEvents can desync when protocol translation changes packet shape unexpectedly.
-            // Suppress per-packet stack spam and keep the pipeline alive.
-            final long now = System.currentTimeMillis();
-            if (now - lastPacketDecodeWarnAt >= PACKET_DECODE_WARN_INTERVAL_MS) {
-                lastPacketDecodeWarnAt = now;
-                LogUtil.warn("Suppressed PacketEvents decode exception for " + player.user.getName()
-                        + " packet=" + event.getPacketType() + " cause=" + ex.getClass().getSimpleName()
-                        + ": " + ex.getMessage());
-            }
+            PacketDecodeUtils.logSuppressedDecode("CheckManagerListener(send)", event.getPacketType(), ex);
         }
-    }
-
-    private static boolean isPacketDecodeDesync(Throwable throwable) {
-        if (!(throwable instanceof IllegalStateException
-                || throwable instanceof IllegalArgumentException
-                || throwable instanceof IndexOutOfBoundsException
-                || throwable instanceof ArrayIndexOutOfBoundsException)) {
-            return false;
-        }
-
-        final String message = String.valueOf(throwable.getMessage());
-        if (message.contains("Unknown entity metadata type id")
-                || message.contains("readerIndex(")
-                || message.contains("writerIndex(")
-                || message.contains("index:")
-                || message.contains("expected: range(")
-                || message.contains("Can't find mapped entity")
-                || message.contains("Can't resolve #")
-                || message.contains("Unknown nbt type id")
-                || message.contains("out of bounds for length")
-                || message.contains("dimensionType")
-                || message.contains("is null")) {
-            return true;
-        }
-
-        for (StackTraceElement element : throwable.getStackTrace()) {
-            final String className = element.getClassName();
-            if (className.startsWith("com.github.retrooper.packetevents.wrapper.")
-                    || className.startsWith("com.github.retrooper.packetevents.protocol.entity.")
-                    || className.startsWith("com.github.retrooper.packetevents.netty.buffer.")
-                    || className.startsWith("com.github.retrooper.packetevents.util.mappings.")
-                    || className.startsWith("com.github.retrooper.packetevents.protocol.nbt.")
-                    || className.startsWith("ac.grim.grimac.predictionengine.")
-                    || className.startsWith("io.github.retrooper.packetevents.impl.netty.buffer.")) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private static boolean isMojangStupid(GrimPlayer player, PacketReceiveEvent event, WrapperPlayClientPlayerFlying flying) {

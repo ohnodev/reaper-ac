@@ -3,7 +3,6 @@ package ac.grim.grimac.events.packets;
 import ac.grim.grimac.GrimAPI;
 import ac.grim.grimac.checks.impl.elytra.ElytraA;
 import ac.grim.grimac.player.GrimPlayer;
-import ac.grim.grimac.utils.anticheat.LogUtil;
 import ac.grim.grimac.utils.data.Pair;
 import ac.grim.grimac.utils.data.packetentity.JumpableEntity;
 import ac.grim.grimac.utils.data.packetentity.PacketEntity;
@@ -17,9 +16,6 @@ import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientEntityAction;
 
 public class PacketEntityAction extends PacketListenerAbstract {
-    private static final long PACKET_DECODE_WARN_INTERVAL_MS = 10_000L;
-    private static volatile long lastPacketDecodeWarnAt = 0L;
-
     public PacketEntityAction() {
         super(PacketListenerPriority.LOW);
     }
@@ -91,30 +87,11 @@ public class PacketEntityAction extends PacketListenerAbstract {
             }
         }
         } catch (RuntimeException ex) {
-            if (!isPacketDecodeDesync(ex)) {
+            if (!PacketDecodeUtils.isPacketDecodeDesync(ex)) {
                 throw ex;
             }
-            final long now = System.currentTimeMillis();
-            if (now - lastPacketDecodeWarnAt >= PACKET_DECODE_WARN_INTERVAL_MS) {
-                lastPacketDecodeWarnAt = now;
-                LogUtil.warn("Suppressed PacketEvents decode exception in PacketEntityAction"
-                        + " packet=" + event.getPacketType() + " cause=" + ex.getClass().getSimpleName()
-                        + ": " + ex.getMessage());
-            }
+            PacketDecodeUtils.logSuppressedDecode("PacketEntityAction", event.getPacketType(), ex);
             event.setCancelled(true);
         }
-    }
-
-    private static boolean isPacketDecodeDesync(Throwable throwable) {
-        if (!(throwable instanceof IllegalArgumentException
-                || throwable instanceof IndexOutOfBoundsException
-                || throwable instanceof ArrayIndexOutOfBoundsException)) {
-            return false;
-        }
-        final String message = String.valueOf(throwable.getMessage());
-        return message.contains("readerIndex(")
-                || message.contains("writerIndex(")
-                || message.contains("expected: range(")
-                || message.contains("out of bounds for length");
     }
 }
