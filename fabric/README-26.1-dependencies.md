@@ -4,7 +4,7 @@ The Fabric module targets **Minecraft 26.1** with **official** mappings. Some ar
 
 ## PacketEvents (`com.github.retrooper:packetevents-api:2.12.0+7d7c846-SNAPSHOT`)
 
-- Gradle tries **`https://repo.reaper.ac/snapshots`**, then **`mavenLocal()`** last so unpublished versions can be resolved after `publishToMavenLocal` in the PacketEvents tree.
+- Gradle tries **`https://repo.grim.ac/snapshots`**, then **`mavenLocal()`** last so unpublished versions can be resolved after `publishToMavenLocal` in the PacketEvents tree.
 - Optional: **`./gradlew -PMAVEN_LOCAL_OVERRIDE=true`** also prepends `mavenLocal()` inside `exclusive()` helpers (see `buildSrc/exclusive.kt`) for other modules.
 - Default builds pin exact snapshot coordinates for reproducibility; override behavior is opt-in via local properties/`MAVEN_LOCAL_OVERRIDE`.
 - The Fabric module compiles against `packetevents-api` by default.

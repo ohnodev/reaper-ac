@@ -27,7 +27,7 @@ repositories {
         includeGroup("me.clip")
     }
 
-    exclusive("https://repo.reaper.ac/snapshots") {
+    exclusive("https://repo.grim.ac/snapshots") {
         includeGroup("ac.reaper")
         includeGroup("com.github.retrooper")
     }

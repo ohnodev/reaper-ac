@@ -41,10 +41,10 @@ repositories {
         includeGroup("net.fabricmc.fabric-api")
     }
 
-    exclusive("https://repo.reaper.ac/snapshots") {
+    exclusive("https://repo.grim.ac/snapshots") {
         includeGroup("ac.reaper")
     }
-    maven("https://repo.reaper.ac/snapshots") {
+    maven("https://repo.grim.ac/snapshots") {
         mavenContent { snapshotsOnly() }
         content {
             includeGroup("com.github.retrooper")

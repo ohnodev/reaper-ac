@@ -6,11 +6,11 @@ plugins {
 }
 
 repositories {
-    exclusive("https://repo.reaper.ac/snapshots") {
+    exclusive("https://repo.grim.ac/snapshots") {
         includeGroup("ac.reaper")
     }
     // PacketEvents snapshots: same host but not exclusiveContent-locked so mavenLocal() can still resolve
-    maven("https://repo.reaper.ac/snapshots") {
+    maven("https://repo.grim.ac/snapshots") {
         mavenContent { snapshotsOnly() }
         content {
             includeGroup("com.github.retrooper")
