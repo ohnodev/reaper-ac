@@ -1,0 +1,20 @@
+[package]
+name = "anticheat-core"
+version = "0.1.0"
+edition = "2024"
+description = "Rust scoring engine for ReaperAC"
+
+[dependencies]
+tokio = { version = "1", features = ["rt-multi-thread", "net", "io-util", "macros", "signal"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+[[bench]]
+name = "scoring_bench"
+harness = false
+
+[profile.release]
+lto = true
+codegen-units = 1
+opt-level = 3
+strip = true

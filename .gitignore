@@ -75,3 +75,8 @@ run/
 fabric/run/
 
 .ignored/
+
+##############################
+## Rust
+##############################
+anticheat-core/target/

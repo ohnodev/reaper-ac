@@ -1,29 +1,58 @@
-# Reaper AC
+# ReaperAC
 
-Reaper AC is our custom Reaper-based anticheat repository for Fabric 26.1 only (single native protocol target, no Via translation support).
+Low-overhead Minecraft anticheat for Fabric, powered by a Rust scoring engine.
 
-## Goals
+## Architecture
 
-- Keep a clean, controllable codebase for our own server requirements
-- Prioritize stability and performance on a single native protocol path
-- Iterate quickly on packet decode resiliency and production diagnostics
-
-## Upstream Base
-
-This repository is derived from Reaper (2.0 branch) and remains GPL-3.0 licensed.
-
-- Upstream Reaper repository: https://github.com/ReaperAnticheat/Reaper
-- Original project license: see `LICENSE`
-
-## Build
-
-```bash
-./gradlew build
+```
+FabricHooks (Java) → TickSnapshotBuffer → RustEngine (anticheat-core) → EnforcementPipeline (Java)
 ```
 
-Artifacts are produced in each platform module's `build/libs` directory.
+- **Fabric capture layer** collects per-player state from server tick events with constant-time field copies.
+- **Bounded ring buffer** batches snapshots for the Rust engine with backpressure and drop policy.
+- **Rust scoring engine** (`anticheat-core/`) evaluates movement, combat, and interaction heuristics.
+- **Enforcement pipeline** applies flag/setback/kick actions on the server thread.
+- **Unix domain socket** connects Java and Rust with graceful degradation if the engine is unavailable.
 
-## Notes
+## Building
 
-- This repository starts with a fresh git history for our internal customization workflow.
-- Core package names and module structure are initially preserved to minimize migration risk.
+### Java (Fabric mod)
+
+```bash
+./gradlew :fabric:build
+```
+
+Output: `fabric/build/libs/reaperac-fabric-*.jar`
+
+### Rust (scoring engine)
+
+```bash
+cd anticheat-core
+cargo build --release
+```
+
+Output: `anticheat-core/target/release/anticheat-core`
+
+## Running
+
+1. Start the Rust engine: `REAPER_SOCKET=/tmp/reaper-anticheat.sock ./anticheat-core`
+2. Place the Fabric jar in your server's `mods/` directory.
+3. Start the Minecraft server.
+
+The mod connects to the engine automatically. If the engine is unavailable, the mod degrades to observe-only mode.
+
+## Configuration
+
+Feature flags and thresholds are in `ac.reaper.config.ReaperConfig`. Key settings:
+
+| Setting | Default | Description |
+|---|---|---|
+| `rustEngineRequired` | `false` | If true, server enforces even without engine |
+| `bridgeSocketPath` | `/tmp/reaper-anticheat.sock` | Unix domain socket path |
+| `BRIDGE_TIMEOUT_NS` | `5ms` | Max bridge round-trip before degradation |
+| `SETBACK_THRESHOLD` | `0.70` | Risk score for setback action |
+| `KICK_THRESHOLD` | `0.95` | Risk score for kick action |
+
+## License
+
+GPL-3.0
