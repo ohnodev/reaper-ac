@@ -47,7 +47,6 @@ import java.util.List;
 import java.util.function.Function;
 
 public class CheckManagerListener extends PacketListenerAbstract {
-
     // Manual filter on FINISH_DIGGING to prevent clients setting non-breakable blocks to air
     private static final Function<StateType, Boolean> BREAKABLE = type -> !type.isAir() && type.getHardness() != -1.0f && type != StateTypes.WATER && type != StateTypes.LAVA;
 
@@ -567,7 +566,15 @@ public class CheckManagerListener extends PacketListenerAbstract {
 
         // Call the packet checks last as they can modify the contents of the packet
         // Such as the NoFall check setting the player to not be on the ground
-        player.checkManager.onPacketReceive(event);
+        try {
+            player.checkManager.onPacketReceive(event);
+        } catch (RuntimeException ex) {
+            if (!PacketDecodeUtils.isPacketDecodeDesync(ex)) {
+                throw ex;
+            }
+            PacketDecodeUtils.logSuppressedDecode("CheckManagerListener(receive)", event.getPacketType(), ex);
+            event.setCancelled(true);
+        }
 
         if (player.packetStateData.cancelDuplicatePacket) {
             event.setCancelled(true);
@@ -608,7 +615,14 @@ public class CheckManagerListener extends PacketListenerAbstract {
             player.packetStateData.sendingBundlePacket = !player.packetStateData.sendingBundlePacket;
         }
 
-        player.checkManager.onPacketSend(event);
+        try {
+            player.checkManager.onPacketSend(event);
+        } catch (RuntimeException ex) {
+            if (!PacketDecodeUtils.isPacketDecodeDesync(ex)) {
+                throw ex;
+            }
+            PacketDecodeUtils.logSuppressedDecode("CheckManagerListener(send)", event.getPacketType(), ex);
+        }
     }
 
     private static boolean isMojangStupid(GrimPlayer player, PacketReceiveEvent event, WrapperPlayClientPlayerFlying flying) {
@@ -749,6 +763,11 @@ public class CheckManagerListener extends PacketListenerAbstract {
                 player.y = clampVector.getY();
                 player.z = clampVector.getZ();
 
+                // During Via/Fabric transition windows, dimension may be unset briefly.
+                // Skip this movement evaluation instead of crashing the packet pipeline.
+                if (player.dimensionType == null) {
+                    return;
+                }
                 player.checkManager.onPositionUpdate(update);
             } else if (update.isTeleport()) { // Mojang doesn't use their own exit vehicle field to leave vehicles, manually call the setback handler
                 player.getSetbackTeleportUtil().onPredictionComplete(new PredictionComplete(0, update, true));

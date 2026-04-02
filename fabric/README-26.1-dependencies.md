@@ -16,9 +16,9 @@ The Fabric module targets **Minecraft 26.1** with **official** mappings. Some ar
   cd packetevents && ./gradlew publishToMavenLocal
   ```
 
-## cloud-fabric (`org.incendo:cloud-fabric:2.0.0-SNAPSHOT`)
+## cloud-fabric (`org.incendo:cloud-fabric:2.0.0-20260329.011531-42`)
 
-- Resolved from Sonatype snapshots and/or local publish.
+- Resolved from Sonatype snapshots using an exact unique snapshot coordinate.
 - For deterministic local validation, publish your own cloud-fabric build and enable **`-PMAVEN_LOCAL_OVERRIDE=true`**.
 
 ## Loader

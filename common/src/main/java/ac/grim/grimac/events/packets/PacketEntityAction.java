@@ -16,13 +16,13 @@ import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientEntityAction;
 
 public class PacketEntityAction extends PacketListenerAbstract {
-
     public PacketEntityAction() {
         super(PacketListenerPriority.LOW);
     }
 
     @Override
     public void onPacketReceive(PacketReceiveEvent event) {
+        try {
         if (event.getPacketType() == PacketType.Play.Client.ENTITY_ACTION) {
             WrapperPlayClientEntityAction action = new WrapperPlayClientEntityAction(event);
             GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
@@ -85,6 +85,13 @@ public class PacketEntityAction extends PacketListenerAbstract {
                     }
                     break;
             }
+        }
+        } catch (RuntimeException ex) {
+            if (!PacketDecodeUtils.isPacketDecodeDesync(ex)) {
+                throw ex;
+            }
+            PacketDecodeUtils.logSuppressedDecode("PacketEntityAction", event.getPacketType(), ex);
+            event.setCancelled(true);
         }
     }
 }

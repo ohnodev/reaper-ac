@@ -56,7 +56,6 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PacketEntityReplication extends Check implements PacketCheck {
-
     private final AtomicBoolean hasSentPreWavePacket = new AtomicBoolean(true);
 
     // Let's imagine the player is on a boat.
@@ -106,6 +105,7 @@ public class PacketEntityReplication extends Check implements PacketCheck {
 
     @Override
     public void onPacketSend(PacketSendEvent event) {
+        try {
         // ensure grim is the one that sent the transaction
         if ((event.getPacketType() == PacketType.Play.Server.PING || event.getPacketType() == PacketType.Play.Server.WINDOW_CONFIRMATION) && player.packetStateData.lastServerTransWasValid) {
             despawnedEntitiesThisTransaction.clear();
@@ -402,6 +402,12 @@ public class PacketEntityReplication extends Check implements PacketCheck {
                     }
                 }, maxFireworkBoostPing);
             }
+        }
+        } catch (RuntimeException ex) {
+            if (!PacketDecodeUtils.isPacketDecodeDesync(ex)) {
+                throw ex;
+            }
+            PacketDecodeUtils.logSuppressedDecode("PacketEntityReplication", event.getPacketType(), ex);
         }
     }
 

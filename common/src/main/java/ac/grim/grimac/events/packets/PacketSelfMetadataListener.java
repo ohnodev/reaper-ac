@@ -22,13 +22,13 @@ import java.util.List;
 import java.util.Optional;
 
 public class PacketSelfMetadataListener extends PacketListenerAbstract {
-
     public PacketSelfMetadataListener() {
         super(PacketListenerPriority.HIGH);
     }
 
     @Override
     public void onPacketSend(PacketSendEvent event) {
+        try {
         if (event.getPacketType() == PacketType.Play.Server.ENTITY_METADATA) {
             WrapperPlayServerEntityMetadata entityMetadata = new WrapperPlayServerEntityMetadata(event);
 
@@ -240,6 +240,12 @@ public class PacketSelfMetadataListener extends PacketListenerAbstract {
                 player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get() + 1, () -> player.isInBed = false);
                 event.getTasksAfterSend().add(player::sendTransaction);
             }
+        }
+        } catch (RuntimeException ex) {
+            if (!PacketDecodeUtils.isPacketDecodeDesync(ex)) {
+                throw ex;
+            }
+            PacketDecodeUtils.logSuppressedDecode("PacketSelfMetadataListener", event.getPacketType(), ex);
         }
     }
 }
