@@ -11,7 +11,6 @@ import ac.grim.grimac.utils.data.packetentity.DashableEntity;
 import ac.grim.grimac.utils.data.packetentity.PacketEntity;
 import ac.grim.grimac.utils.data.packetentity.PacketEntityHook;
 import ac.grim.grimac.utils.data.packetentity.PacketEntityTrackXRot;
-import ac.grim.grimac.utils.viaversion.ViaVersionUtil;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
@@ -182,23 +181,6 @@ public class PacketEntityReplication extends Check implements PacketCheck {
             WrapperPlayServerEntityEffect effect = new WrapperPlayServerEntityEffect(event);
 
             PotionType type = effect.getPotionType();
-
-            // ViaVersion tries faking levitation effects and fails badly lol, flagging the anticheat
-            // Block other effects just in case ViaVersion gets any ideas
-            //
-            // Set to 24 so ViaVersion blocks it
-            // 24 is the levitation effect
-            if (player.getClientVersion().isOlderThan(ClientVersion.V_1_9) && ViaVersionUtil.isAvailable && type.getId(player.getClientVersion()) > 23) {
-                event.setCancelled(true);
-                return;
-            }
-
-            // ViaVersion dolphin's grace also messes us up, set it to a potion effect that doesn't exist on 1.12
-            // Effect 31 is bad omen
-            if (player.getClientVersion().isOlderThan(ClientVersion.V_1_13) && ViaVersionUtil.isAvailable && type.getId(player.getClientVersion()) == 30) {
-                event.setCancelled(true);
-                return;
-            }
 
             if (isDirectlyAffectingPlayer(player, effect.getEntityId())) player.sendTransaction();
 

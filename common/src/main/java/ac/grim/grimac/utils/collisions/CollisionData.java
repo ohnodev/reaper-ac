@@ -22,7 +22,6 @@ import ac.grim.grimac.utils.collisions.datatypes.NoCollisionBox;
 import ac.grim.grimac.utils.collisions.datatypes.SimpleCollisionBox;
 import ac.grim.grimac.utils.data.packetentity.PacketEntityStrider;
 import ac.grim.grimac.utils.nmsutil.Materials;
-import ac.grim.grimac.utils.viaversion.ViaVersionUtil;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.item.ItemStack;
@@ -42,7 +41,6 @@ import com.github.retrooper.packetevents.protocol.world.states.enums.Type;
 import com.github.retrooper.packetevents.protocol.world.states.enums.VerticalDirection;
 import com.github.retrooper.packetevents.protocol.world.states.type.StateType;
 import com.github.retrooper.packetevents.protocol.world.states.type.StateTypes;
-import com.viaversion.viaversion.api.Via;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -540,12 +538,7 @@ public enum CollisionData implements CollisionFactory {
     SNOW((player, version, data, x, y, z) -> {
         int layers = data.getLayers();
         if (layers == 1 && version.isNewerThanOrEquals(ClientVersion.V_1_13)) {
-            if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13)
-                    || !ViaVersionUtil.isAvailable || !Via.getConfig().isSnowCollisionFix()) {
-                return NoCollisionBox.INSTANCE;
-            }
-
-            layers++;
+            return NoCollisionBox.INSTANCE;
         }
 
         return new SimpleCollisionBox(0, 0, 0, 1, (layers - 1) * 0.125, 1);

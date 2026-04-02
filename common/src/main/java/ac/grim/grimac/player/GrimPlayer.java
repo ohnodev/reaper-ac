@@ -42,7 +42,6 @@ import ac.grim.grimac.utils.nmsutil.BlockProperties;
 import ac.grim.grimac.utils.nmsutil.Collisions;
 import ac.grim.grimac.utils.nmsutil.GetBoundingBox;
 import ac.grim.grimac.utils.nmsutil.Materials;
-import ac.grim.grimac.utils.viaversion.ViaVersionUtil;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
@@ -65,12 +64,6 @@ import com.github.retrooper.packetevents.util.Vector3d;
 import com.github.retrooper.packetevents.util.Vector3i;
 import com.github.retrooper.packetevents.wrapper.PacketWrapper;
 import com.github.retrooper.packetevents.wrapper.play.server.*;
-import com.viaversion.viaversion.api.Via;
-import com.viaversion.viaversion.api.connection.UserConnection;
-import com.viaversion.viaversion.api.protocol.Protocol;
-import com.viaversion.viaversion.api.protocol.ProtocolPathEntry;
-import com.viaversion.viaversion.api.protocol.packet.PacketTracker;
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import io.github.retrooper.packetevents.adventure.serializer.legacy.LegacyComponentSerializer;
 import io.netty.channel.Channel;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
@@ -120,7 +113,6 @@ public class GrimPlayer implements GrimUser {
     public final SyncedTags tagManager;
     // End manager like classes
     public Vector3dm clientVelocity = new Vector3dm();
-    private PacketTracker viaPacketTracker;
     public final PacketOrderProcessor packetOrderProcessor = new PacketOrderProcessor(this);
     private long transactionPing = 0;
     public long lastTransSent = 0;
@@ -274,7 +266,6 @@ public class GrimPlayer implements GrimUser {
     public final ArrayDeque<Movement> movementThisTick = new ArrayDeque<>(8);
     public final List<Movement> finalMovementsThisTick = new ObjectArrayList<>();
     public final LongSet visitedBlocks = new LongOpenHashSet();
-    private @Nullable UserConnection viaUserConnection;
     public boolean wasLastPredictionCompleteChecked;
     public boolean isJumping;
     public boolean lastJumping;
@@ -405,9 +396,6 @@ public class GrimPlayer implements GrimUser {
         }
 
         if (hasID) {
-            // Transactions that we send don't count towards total limit
-            if (viaPacketTracker != null) viaPacketTracker.setIntervalPackets(viaPacketTracker.getIntervalPackets() - 1);
-
             if (skipped > 0 && System.currentTimeMillis() - joinTime > 5000)
                 checkManager.getCheck(TransactionOrder.class).flagAndAlert("skipped=" + skipped);
 
@@ -555,12 +543,6 @@ public class GrimPlayer implements GrimUser {
 
         if (!GrimAPI.INSTANCE.getPlayerDataManager().shouldCheck(user)) {
             GrimAPI.INSTANCE.getPlayerDataManager().remove(user);
-        }
-
-        if (viaPacketTracker == null && ViaVersionUtil.isAvailable && uuid != null) {
-            UserConnection connection = Via.getManager().getConnectionManager().getConnectedClient(uuid);
-            viaPacketTracker = connection != null ? connection.getPacketTracker() : null;
-            this.viaUserConnection = connection;
         }
 
         if (uuid != null && this.platformPlayer == null) {
@@ -1016,25 +998,6 @@ public class GrimPlayer implements GrimUser {
     }
 
     public int getViaTranslatedClientBlockID(int blockStateId) {
-        if (this.viaUserConnection == null) {
-            return blockStateId;
-        }
-
-        final ProtocolVersion clientVersion = this.viaUserConnection.getProtocolInfo().protocolVersion();
-        final ProtocolVersion serverVersion = this.viaUserConnection.getProtocolInfo().serverProtocolVersion();
-
-        final List<ProtocolPathEntry> protocolPath = Via.getManager().getProtocolManager().getProtocolPath(clientVersion, serverVersion);
-        if (protocolPath == null) {
-            return blockStateId;
-        }
-
-        for (int i = protocolPath.size() - 1; i >= 0; i--) {
-            final Protocol<?, ?, ?, ?> protocol = protocolPath.get(i).protocol();
-            if (protocol.getMappingData() != null && protocol.getMappingData().getBlockStateMappings() != null) {
-                blockStateId = protocol.getMappingData().getNewBlockStateId(blockStateId);
-            }
-        }
-
         return blockStateId;
     }
 }

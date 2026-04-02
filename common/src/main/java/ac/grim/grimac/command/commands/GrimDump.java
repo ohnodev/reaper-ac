@@ -8,7 +8,6 @@ import ac.grim.grimac.platform.api.sender.Sender;
 import ac.grim.grimac.utils.anticheat.MessageUtil;
 import ac.grim.grimac.utils.common.PropertiesUtil;
 import ac.grim.grimac.utils.reflection.ReflectionUtils;
-import ac.grim.grimac.utils.viaversion.ViaVersionUtil;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -67,7 +66,6 @@ public class GrimDump implements BuildableCommand {
         JsonObject states = new JsonObject();
         base.add("states", states);
         if (GrimAPI.INSTANCE.isInitialized()) states.addProperty("platform", GrimAPI.INSTANCE.getPlatform().toString());
-        if (ViaVersionUtil.isAvailable) states.addProperty("has_viaversion", true);
         if (PAPER) states.addProperty("has_paper", true);
         // include some relevant settings if not default
         JsonObject settings = new JsonObject();

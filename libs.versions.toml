@@ -16,7 +16,6 @@ grim-api = "1.2.4.0"
 # Pin PE to an exact snapshot build for reproducibility.
 packetevents = "2.12.0+7d7c846-SNAPSHOT"
 placeholderapi = "2.11.6"
-viaversion = "5.7.1"
 
 # --- General Java Utilities ---
 fastutil = "8.5.15"
@@ -61,7 +60,6 @@ packetevents-fabric = { group  = "com.github.retrooper", name = "packetevents-fa
 packetevents-fabric-common = { group  = "com.github.retrooper", name = "packetevents-fabric-common", version.ref = "packetevents" }
 packetevents-fabric-official = { group  = "com.github.retrooper", name = "packetevents-fabric-official", version.ref = "packetevents" }
 packetevents-spigot = { group = "com.github.retrooper", name = "packetevents-spigot", version.ref = "packetevents"}
-viaversion = { group = "com.viaversion", name = "viaversion", version.ref = "viaversion" }
 
 # --- General Java Utilities ---
 fastutil = { group = "it.unimi.dsi", name = "fastutil", version.ref = "fastutil"}

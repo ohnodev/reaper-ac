@@ -26,7 +26,6 @@ import ac.grim.grimac.utils.data.packetentity.PacketEntitySizeable;
 import ac.grim.grimac.utils.data.packetentity.dragon.PacketEntityEnderDragonPart;
 import ac.grim.grimac.utils.math.Vector3dm;
 import ac.grim.grimac.utils.nmsutil.ReachUtils;
-import ac.grim.grimac.utils.viaversion.ViaVersionUtil;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
@@ -41,7 +40,6 @@ import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.player.GameMode;
 import com.github.retrooper.packetevents.protocol.player.InteractionHand;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientInteractEntity;
-import com.viaversion.viaversion.api.Via;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import org.jetbrains.annotations.NotNull;
@@ -124,25 +122,9 @@ public class Reach extends Check implements PacketCheck {
             boolean clientAttackRangeExists = player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21_11);
             boolean clientAndServerAgrees = clientAttackRangeExists && ATTACK_RANGE_COMPONENT_EXISTS;
 
-            boolean viaVersionAvailable = false;
-            if (USE_1_8_HITBOX_MARGIN && ViaVersionUtil.isAvailable) {
-                viaVersionAvailable = Via.getConfig().getValues().containsKey("use-1_8-hitbox-margin") && Via.getConfig().use1_8HitboxMargin();
-            }
-
-            boolean clientAndViaVersion = clientAttackRangeExists && viaVersionAvailable;
-            if (clientAndServerAgrees || clientAndViaVersion) {
+            if (clientAndServerAgrees) {
                 ItemAttackRange startRange = startStack.getComponentOr(ComponentTypes.ATTACK_RANGE, null);
                 ItemAttackRange currentRange = currentStack.getComponentOr(ComponentTypes.ATTACK_RANGE, null);
-
-                if (clientAndViaVersion) {
-                    if (startStack != ItemStack.EMPTY) {
-                        startRange = new ItemAttackRange(0F, 3F, 0F, 4F, 0.1F, 1F);
-                    }
-
-                    if (currentStack != ItemStack.EMPTY) {
-                        currentRange = new ItemAttackRange(0F, 3F, 0F, 4F, 0.1F, 1F);
-                    }
-                }
 
                 // If the start stack has no range component, the client defaults to vanilla reach behavior,
                 // regardless of what the current stack is (No Range -> X = No Range used).
@@ -314,7 +296,6 @@ public class Reach extends Check implements PacketCheck {
     }
 
     private static final boolean ATTACK_RANGE_COMPONENT_EXISTS = PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_21_11);
-    private static final boolean USE_1_8_HITBOX_MARGIN = PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_8_8);
 
     private double applyReachModifiers(SimpleCollisionBox targetBox, boolean hasAttackRange, float itemMaxReach, float itemHitboxMargin, boolean giveMovementThreshold) {
         double maxReach;
