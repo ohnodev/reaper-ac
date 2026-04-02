@@ -422,6 +422,7 @@ public class PacketEntityReplication extends Check implements PacketCheck {
 
     private static boolean isPacketDecodeDesync(Throwable throwable) {
         if (!(throwable instanceof IllegalStateException
+                || throwable instanceof IllegalArgumentException
                 || throwable instanceof IndexOutOfBoundsException
                 || throwable instanceof ArrayIndexOutOfBoundsException)) {
             return false;
@@ -430,7 +431,10 @@ public class PacketEntityReplication extends Check implements PacketCheck {
         return message.contains("Unknown entity metadata type id")
                 || message.contains("readerIndex(")
                 || message.contains("writerIndex(")
-                || message.contains("Can't find mapped entity");
+                || message.contains("Can't find mapped entity")
+                || message.contains("Can't resolve #")
+                || message.contains("Unknown nbt type id")
+                || message.contains("expected: range(");
     }
 
     private void handleMountVehicle(PacketSendEvent event, int vehicleID, int[] passengers) {
