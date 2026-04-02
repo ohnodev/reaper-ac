@@ -26,10 +26,7 @@ public class PacketManager implements StartableInitable {
         PacketEvents.getAPI().getEventManager().registerListener(new PacketPlayerTick());
         PacketEvents.getAPI().getEventManager().registerListener(new CheckManagerListener());
         PacketEvents.getAPI().getEventManager().registerListener(new PacketPlayerSteer());
-        // Packet payload capture listeners are intentionally disabled for production stability.
-        if (PacketDecodeAuditListener.isEnabled()) {
-            PacketEvents.getAPI().getEventManager().registerListener(new PacketDecodeAuditListener());
-        }
+        // Packet payload capture/audit listeners are intentionally disabled in production.
 
         if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13)) {
             PacketEvents.getAPI().getEventManager().registerListener(new PacketServerTags());

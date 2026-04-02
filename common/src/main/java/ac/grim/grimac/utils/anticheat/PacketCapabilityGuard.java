@@ -74,6 +74,7 @@ public final class PacketCapabilityGuard {
      * observing it decode cleanly).  Removes it from the unconfirmed set.
      */
     public static void markConfirmed(PacketTypeCommon packetType) {
+        if (packetType == null) return;
         UNCONFIRMED.remove(packetType);
     }
 
