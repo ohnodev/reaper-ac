@@ -13,6 +13,7 @@ import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientCl
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerChangeGameState;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerCombatEvent;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerDeathCombatEvent;
+import ac.grim.grimac.utils.anticheat.PacketCapabilityGuard;
 
 @CheckData(name = "BadPacketsM", description = "Tried to respawn while alive", experimental = true)
 public class BadPacketsM extends Check implements PacketCheck {
@@ -54,7 +55,8 @@ public class BadPacketsM extends Check implements PacketCheck {
             }
         }
 
-        if (event.getPacketType() == PacketType.Play.Server.COMBAT_EVENT && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) {
+        if (event.getPacketType() == PacketType.Play.Server.COMBAT_EVENT && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)
+                && PacketCapabilityGuard.isSafe(PacketType.Play.Server.COMBAT_EVENT)) {
             WrapperPlayServerCombatEvent packet = new WrapperPlayServerCombatEvent(event);
             if (packet.getCombat() == Combat.ENTITY_DEAD && packet.getPlayerId() == player.entityID) {
                 player.addRealTimeTaskNow(() -> exempt++);

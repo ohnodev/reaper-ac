@@ -18,6 +18,7 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerCh
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerChunkDataBulk;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerMultiBlockChange;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerUnloadChunk;
+import ac.grim.grimac.utils.anticheat.PacketCapabilityGuard;
 
 public class BasePacketWorldReader extends PacketListenerAbstract {
 
@@ -37,6 +38,7 @@ public class BasePacketWorldReader extends PacketListenerAbstract {
 
         // 1.7 and 1.8 only
         if (event.getPacketType() == PacketType.Play.Server.MAP_CHUNK_BULK) {
+            if (!PacketCapabilityGuard.isSafe(PacketType.Play.Server.MAP_CHUNK_BULK)) return;
             GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
             if (player == null) return;
 
@@ -73,6 +75,7 @@ public class BasePacketWorldReader extends PacketListenerAbstract {
         }
 
         if (event.getPacketType() == PacketType.Play.Server.ACKNOWLEDGE_PLAYER_DIGGING) {
+            if (!PacketCapabilityGuard.isSafe(PacketType.Play.Server.ACKNOWLEDGE_PLAYER_DIGGING)) return;
             GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
             if (player == null) return;
 

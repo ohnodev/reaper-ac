@@ -17,6 +17,7 @@ import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerInput;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientSteerVehicle;
+import ac.grim.grimac.utils.anticheat.PacketCapabilityGuard;
 
 public class PacketPlayerSteer extends PacketListenerAbstract {
 
@@ -27,6 +28,7 @@ public class PacketPlayerSteer extends PacketListenerAbstract {
     @Override
     public void onPacketReceive(PacketReceiveEvent event) {
         if (event.getPacketType() == PacketType.Play.Client.STEER_VEHICLE) {
+            if (!PacketCapabilityGuard.isSafe(PacketType.Play.Client.STEER_VEHICLE)) return;
             GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
             if (player == null) return;
 

@@ -7,6 +7,7 @@ import ac.grim.grimac.utils.data.packetentity.PacketEntity;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerCamera;
+import ac.grim.grimac.utils.anticheat.PacketCapabilityGuard;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -23,7 +24,14 @@ public class CompensatedCameraEntity extends Check implements PacketCheck {
     @Override
     public void onPacketSend(PacketSendEvent event) {
         if (event.getPacketType() != PacketType.Play.Server.CAMERA) return;
-        int camera = new WrapperPlayServerCamera(event).getCameraId();
+        if (!PacketCapabilityGuard.isSafe(PacketType.Play.Server.CAMERA)) return;
+        int camera;
+        try {
+            camera = new WrapperPlayServerCamera(event).getCameraId();
+        } catch (Exception e) {
+            PacketCapabilityGuard.logParseFailure(PacketType.Play.Server.CAMERA, e);
+            return;
+        }
         player.sendTransaction();
 
         player.addRealTimeTaskNow(() -> {

@@ -7,6 +7,7 @@ import ac.grim.grimac.player.GrimPlayer;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientWindowConfirmation;
+import ac.grim.grimac.utils.anticheat.PacketCapabilityGuard;
 
 @CheckData(name = "BadPacketsS")
 public class BadPacketsS extends Check implements PacketCheck {
@@ -17,6 +18,7 @@ public class BadPacketsS extends Check implements PacketCheck {
     @Override
     public void onPacketReceive(PacketReceiveEvent event) {
         if (event.getPacketType() == PacketType.Play.Client.WINDOW_CONFIRMATION
+                && PacketCapabilityGuard.isSafe(PacketType.Play.Client.WINDOW_CONFIRMATION)
                 && !new WrapperPlayClientWindowConfirmation(event).isAccepted()
                 && flagAndAlert() && shouldModifyPackets()) {
             event.setCancelled(true);

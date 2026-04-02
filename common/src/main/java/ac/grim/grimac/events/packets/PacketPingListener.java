@@ -12,6 +12,7 @@ import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPo
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientWindowConfirmation;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPing;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerWindowConfirmation;
+import ac.grim.grimac.utils.anticheat.PacketCapabilityGuard;
 
 public class PacketPingListener extends PacketListenerAbstract {
 
@@ -24,6 +25,7 @@ public class PacketPingListener extends PacketListenerAbstract {
     @Override
     public void onPacketReceive(PacketReceiveEvent event) {
         if (event.getPacketType() == PacketType.Play.Client.WINDOW_CONFIRMATION) {
+            if (!PacketCapabilityGuard.isSafe(PacketType.Play.Client.WINDOW_CONFIRMATION)) return;
             WrapperPlayClientWindowConfirmation transaction = new WrapperPlayClientWindowConfirmation(event);
             short id = transaction.getActionId();
 
@@ -62,6 +64,7 @@ public class PacketPingListener extends PacketListenerAbstract {
     @Override
     public void onPacketSend(PacketSendEvent event) {
         if (event.getPacketType() == PacketType.Play.Server.WINDOW_CONFIRMATION) {
+            if (!PacketCapabilityGuard.isSafe(PacketType.Play.Server.WINDOW_CONFIRMATION)) return;
             WrapperPlayServerWindowConfirmation confirmation = new WrapperPlayServerWindowConfirmation(event);
             short id = confirmation.getActionId();
             //

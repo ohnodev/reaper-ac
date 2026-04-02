@@ -18,6 +18,7 @@ import com.github.retrooper.packetevents.util.Vector3d;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPlayerPositionAndLook;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPlayerRotation;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerVehicleMove;
+import ac.grim.grimac.utils.anticheat.PacketCapabilityGuard;
 
 public class PacketServerTeleport extends PacketListenerAbstract {
 
@@ -136,10 +137,17 @@ public class PacketServerTeleport extends PacketListenerAbstract {
         }
 
         if (event.getPacketType() == PacketType.Play.Server.PLAYER_ROTATION) {
+            if (!PacketCapabilityGuard.isSafe(PacketType.Play.Server.PLAYER_ROTATION)) return;
             GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
             if (player == null) return;
 
-            WrapperPlayServerPlayerRotation packet = new WrapperPlayServerPlayerRotation(event);
+            WrapperPlayServerPlayerRotation packet;
+            try {
+                packet = new WrapperPlayServerPlayerRotation(event);
+            } catch (Exception e) {
+                PacketCapabilityGuard.logParseFailure(PacketType.Play.Server.PLAYER_ROTATION, e);
+                return;
+            }
 
             // I don't want to deal with this, so we'll prevent it
             if (!Float.isFinite(packet.getPitch())) {
