@@ -64,12 +64,9 @@ public class MovementTicker {
 
                 if (!entity.isPushable()) continue;
 
-                // Filters out entities that can't be pushed/collided because of team collision rules
-                // Also handles 1.9+ player on 1.8- server with ViaVersion prevent-collision disabled.
-                if (serverSupported) {
-                    final EntityTeam entityTeam = teamHandler != null ? teamHandler.getEntityTeam(entity) : null;
-                    if (!EntityPredicates.canBePushedBy(entityTeam, playerTeam)) continue;
-                }
+                // Filters out entities that can't be pushed/collided because of team collision rules.
+                final EntityTeam entityTeam = teamHandler != null ? teamHandler.getEntityTeam(entity) : null;
+                if (!EntityPredicates.canBePushedBy(entityTeam, playerTeam)) continue;
 
                 possibleCollidingEntities++;
             }
