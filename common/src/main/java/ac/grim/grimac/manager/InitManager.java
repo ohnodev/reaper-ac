@@ -46,7 +46,6 @@ public class InitManager {
         initializersOnStart = ImmutableList.<StartableInitable>builder()
                 .add(GrimAPI.INSTANCE.getExternalAPI())
                 .add(new PacketManager())
-                .add(new ViaBackwardsManager())
                 .add(new TickRunner())
                 .add(new CommandRegister(GrimAPI.INSTANCE.getCommandService()))
                 .add(new UpdateChecker())
@@ -56,7 +55,6 @@ public class InitManager {
                 .add(GrimAPI.INSTANCE.getSpectateManager())
                 .add(GrimAPI.INSTANCE.getViolationDatabaseManager())
                 .add(new JavaVersion())
-                .add(new ViaVersion())
                 .add(new TAB())
                 .addAll(extraStartableInitables)
                 .build();

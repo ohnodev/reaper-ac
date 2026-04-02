@@ -1,11 +1,11 @@
 # Reaper AC
 
-Reaper AC is our custom Grim-based anticheat repository for Fabric 26.1 and Via-translation-heavy environments.
+Reaper AC is our custom Grim-based anticheat repository for Fabric 26.1 only (single native protocol target, no Via translation support).
 
 ## Goals
 
 - Keep a clean, controllable codebase for our own server requirements
-- Prioritize stability and performance under mixed protocol traffic
+- Prioritize stability and performance on a single native protocol path
 - Iterate quickly on packet decode resiliency and production diagnostics
 
 ## Upstream Base
