@@ -65,3 +65,4 @@ rootProject.name = "reaperac"
 include("common")
 include("bukkit")
 include("fabric")
+includeBuild("reaperapi")

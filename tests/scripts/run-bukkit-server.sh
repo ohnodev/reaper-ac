@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SERVER_DIR="tests/runs/grim-pe-paper-1.20.6"
+SERVER_DIR="tests/runs/reaper-pe-paper-1.20.6"
 JAVA_BIN="java"
 
 while [[ $# -gt 0 ]]; do
@@ -16,7 +16,7 @@ while [[ $# -gt 0 ]]; do
       ;;
     *)
       echo "Unknown arg: $1"
-      echo "Usage: $0 [--server-dir tests/runs/grim-pe-paper-1.20.6] [--java-bin /path/to/java]"
+      echo "Usage: $0 [--server-dir tests/runs/reaper-pe-paper-1.20.6] [--java-bin /path/to/java]"
       exit 1
       ;;
   esac

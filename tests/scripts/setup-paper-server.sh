@@ -2,7 +2,7 @@
 set -euo pipefail
 
 MC_VERSION="1.20.6"
-SERVER_DIR="tests/runs/grim-pe-paper-1.20.6"
+SERVER_DIR="tests/runs/reaper-pe-paper-1.20.6"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -16,7 +16,7 @@ while [[ $# -gt 0 ]]; do
       ;;
     *)
       echo "Unknown arg: $1"
-      echo "Usage: $0 [--mc-version 1.20.6] [--server-dir tests/runs/grim-pe-paper-1.20.6]"
+      echo "Usage: $0 [--mc-version 1.20.6] [--server-dir tests/runs/reaper-pe-paper-1.20.6]"
       exit 1
       ;;
   esac

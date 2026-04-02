@@ -1,7 +1,7 @@
-# GrimAC ana konfigrasyon dosyası
-# Kaynak kodu: https://github.com/MWHunter/Grim
+# ReaperAC ana konfigrasyon dosyası
+# Kaynak kodu: https://github.com/MWHunter/Reaper
 # Telif Hakkı 2025 DefineOutside ve katkıda bulunanlar, GPLv3 altında lisanslanmıştır.
-# Değiştirilmiş ikili dosyalar veya kopyalanmış grim kodlu eklentiler özel olmalıdır,
+# Değiştirilmiş ikili dosyalar veya kopyalanmış reaper kodlu eklentiler özel olmalıdır,
 # veya ek ücret ödemeden alıcılara sunulan tam kaynak kodu ile.
 
 alerts:
@@ -28,12 +28,12 @@ client-brand:
         - "^lunarclient:v\\d+\\.\\d+\\.\\d+-\\d{4},(?:fabric|forge)$"
         - "^Feather Fabric$"
         - "^labymod$"
-    # Grim will blacklist specific Forge versions which include built-in Reach hacks (Forge 1.18.2 to 1.19.3).
+    # Reaper will blacklist specific Forge versions which include built-in Reach hacks (Forge 1.18.2 to 1.19.3).
     # Setting this option to false will allow said clients to connect to the server. Disable this at your own risk.
     disconnect-blacklisted-forge-versions: true
 
 spectators:
-    # Seyirciler aktif olarak izliyor olsalar bile, grim.spectator iznine sahip tüm seyircileri gizle
+    # Seyirciler aktif olarak izliyor olsalar bile, reaper.spectator iznine sahip tüm seyircileri gizle
     hide-regardless: false
     # Sadece bu dünyalarda seyircileri gizleyecek, tüm dünyalara izin vermek için boş bırakın
     allowed-worlds:
@@ -42,15 +42,15 @@ spectators:
 # Oyuncuların zaman aşımından dolayı sunucudan atılmadan önce ne kadar süreleri olmalı? Varsayılan = 60 saniye
 max-transaction-time: 60
 
-# Enable this to stop Grim cancelling pongs received from players.
+# Enable this to stop Reaper cancelling pongs received from players.
 # This may improve compatibility with other anticheats. It may cause issues with packet limiters.
 # Do not enable this if you are not sure what you are doing.
 disable-pong-cancelling: false
 
 # Varsayılan blok yeniden senkronizasyon işleyicisi devre dışı bırakılsın mı?
-# Varsayılan olarak Grim, blokları sunucu dünyasından okur ve senkronizasyon bozukluğunu düzeltmek için istemciye gönderir.
+# Varsayılan olarak Reaper, blokları sunucu dünyasından okur ve senkronizasyon bozukluğunu düzeltmek için istemciye gönderir.
 # Paket tabanlı sahte bloklar (sunucu dünyasında var olmayan) oluşturan eklentiler kullanıyorsanız,
-# Grim'in bunları hava/gerçek bloklarla üzerine yazmasını önlemek için bunu true olarak ayarlamalısınız.
+# Reaper'in bunları hava/gerçek bloklarla üzerine yazmasını önlemek için bunu true olarak ayarlamalısınız.
 # Bu, API aracılığıyla özel bir tane sağlanmadıkça bir "NoOp" (İşlemsiz) işleyicisinin kullanılmasını zorlar.
 disable-default-resync-handler: false
 
@@ -106,7 +106,7 @@ RotationPlace:
     cancelvl: 5
 
 # Tahmin tabanlı yavaşlama kontrolü
-# Grim burada hatalı ağ kodunu dikkate alır... sağ tıklama ve el yan tuşunu spam yapsanız bile yanlış pozitiflik oluşturması zordur
+# Reaper burada hatalı ağ kodunu dikkate alır... sağ tıklama ve el yan tuşunu spam yapsanız bile yanlış pozitiflik oluşturması zordur
 # Diğer anti-hilelerden çok daha stabil, ancak herhangi bir yanlış pozitif rapor edin... burada birçok ağ kodu sorununu çözdüm.
 NoSlow:
     # Ne kadar bir sapma "hile" olarak kabul edilir?
@@ -203,14 +203,14 @@ reset-item-usage-on-attack: true
 reset-item-usage-on-slot-change: true
 reset-item-usage-on-item-use: true
 
-# Grim bazen timer gibi yasa dışı paketleri iptal eder; bir saniyede X paket iptal edildikten sonra, ne zaman
-# oyuncuyu basitçe atmalıyız? Bu, bazı paket sınırlayıcılarının Grim tarafından iptal edilen paketleri saymaması gerektiğindendir.
+# Reaper bazen timer gibi yasa dışı paketleri iptal eder; bir saniyede X paket iptal edildikten sonra, ne zaman
+# oyuncuyu basitçe atmalıyız? Bu, bazı paket sınırlayıcılarının Reaper tarafından iptal edilen paketleri saymaması gerektiğindendir.
 packet-spam-threshold: 100
 # Bir oyuncu packet-spam-threshold nedeniyle atıldığında stacktrace yazdırmak için bunu etkinleştirin
 debug-packet-cancel: false
 
-# Grim, uçma durumundan çıkmış bir oyuncunun X milisaniyeden fazla ping'e sahip olamayacağını uygulayabilir
-# Bu, Grim'in şu anda uçan oyuncuları kontrol etmemesindendir
+# Reaper, uçma durumundan çıkmış bir oyuncunun X milisaniyeden fazla ping'e sahip olamayacağını uygulayabilir
+# Bu, Reaper'in şu anda uçan oyuncuları kontrol etmemesindendir
 # Devre dışı bırakmak için -1 yazın
 max-ping-out-of-flying: 1000
 
@@ -220,7 +220,7 @@ max-ping-firework-boost: 1000
 
 history:
     enabled: true
-    # /grim history <player> ile her sayfada kaç kayıt gösterilsin
+    # /reaper history <player> ile her sayfada kaç kayıt gösterilsin
     entries-per-page: 15
     # History komutu için eklenecek sunucu adı nedir? Aynı veritabanını birden fazla sunucuda kullanıyorsanız faydalıdır
     server-name: Prison
@@ -230,7 +230,7 @@ history:
         # veritabanı bağlantı detayları
         host: localhost
         port: 3306
-        database: grim
+        database: reaper
         username: root
         password: ""
 

@@ -8,7 +8,7 @@ dependencyResolutionManagement {
     }
 }
 
-include(":grim-internal")
-include(":grim-internal-shims")
-include(":grim-bukkit-internal")
-include(":grim-fabric-internal")
+include(":reaper-internal")
+include(":reaper-internal-shims")
+include(":reaper-bukkit-internal")
+include(":reaper-fabric-internal")

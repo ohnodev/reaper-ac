@@ -3,7 +3,7 @@ package versioning
 import java.io.ByteArrayOutputStream
 
 /**
- * Utility for computing the version string of GrimAC artifacts.
+ * Utility for computing the version string of ReaperAC artifacts.
  *
  * The version string is constructed based on:
  * - A base semantic version (e.g., "2.3.72")
@@ -88,7 +88,7 @@ object VersionUtil {
             .trim(' ', '.', '_', '-')
             .removePrefix("heads_")
 
-        val mainBranch = System.getenv("GRIM_MAIN_BRANCH") ?: "2.0"
+        val mainBranch = System.getenv("REAPER_MAIN_BRANCH") ?: "2.0"
 
         return when (branch) {
             "main", mainBranch -> null                    // ← ignore these branches

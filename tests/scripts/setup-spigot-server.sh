@@ -2,7 +2,7 @@
 set -euo pipefail
 
 MC_VERSION="1.21.1"
-SERVER_DIR="tests/runs/grim-pe-spigot-1.21.1"
+SERVER_DIR="tests/runs/reaper-pe-spigot-1.21.1"
 JAVA_BIN="java"
 REBUILD="0"
 
@@ -26,7 +26,7 @@ while [[ $# -gt 0 ]]; do
       ;;
     *)
       echo "Unknown arg: $1"
-      echo "Usage: $0 [--mc-version 1.21.1] [--server-dir tests/runs/grim-pe-spigot-1.21.1] [--java-bin /path/to/java] [--rebuild]"
+      echo "Usage: $0 [--mc-version 1.21.1] [--server-dir tests/runs/reaper-pe-spigot-1.21.1] [--java-bin /path/to/java] [--rebuild]"
       exit 1
       ;;
   esac

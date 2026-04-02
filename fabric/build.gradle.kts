@@ -6,8 +6,8 @@ val fabric_version: String by project
 plugins {
     `maven-publish`
     alias(libs.plugins.fabric.loom)
-    grim.`base-conventions`
-    grim.`jij-conventions`
+    reaper.`base-conventions`
+    reaper.`jij-conventions`
 }
 
 dependencies {
@@ -41,10 +41,10 @@ repositories {
         includeGroup("net.fabricmc.fabric-api")
     }
 
-    exclusive("https://repo.grim.ac/snapshots") {
-        includeGroup("ac.grim.grimac")
+    exclusive("https://repo.reaper.ac/snapshots") {
+        includeGroup("ac.reaper")
     }
-    maven("https://repo.grim.ac/snapshots") {
+    maven("https://repo.reaper.ac/snapshots") {
         mavenContent { snapshotsOnly() }
         content {
             includeGroup("com.github.retrooper")
@@ -98,7 +98,7 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 loom {
-    accessWidenerPath = file("src/main/resources/grimac.accesswidener")
+    accessWidenerPath = file("src/main/resources/reaperac.accesswidener")
 }
 
 publishing.publications.create<MavenPublication>("maven") {

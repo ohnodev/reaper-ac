@@ -12,7 +12,7 @@ cloud-processors-requirements = "1.0.0-rc.1"
 # --- Minecraft-Specific APIs ---
 floodgate-api = "2.0-SNAPSHOT"
 geyser-base-api = "1.0.2"
-grim-api = "1.2.4.0"
+reaper-api = "1.2.4.0"
 # Pin PE to an exact snapshot build for reproducibility.
 packetevents = "2.12.0+7d7c846-SNAPSHOT"
 placeholderapi = "2.11.6"
@@ -50,11 +50,11 @@ placeholderapi = { group = "me.clip", name = "placeholderapi", version.ref = "pl
 configuralize = { group = "github.scarsz", name = "configuralize", version.ref = "configuralize" }
 floodgate-api = { group = "org.geysermc.floodgate", name = "api", version.ref = "floodgate-api"}
 geyser-base-api = { group = "org.geysermc.api", name = "base-api", version.ref = "geyser-base-api" }
-grim-api = { group = "ac.grim.grimac", name = "GrimAPI", version.ref = "grim-api" }
-grim-internal = { group = "ac.grim.grimac", name = "grim-internal", version.ref = "grim-api" }
-grim-internal-shims = { group = "ac.grim.grimac", name = "grim-internal-shims", version.ref = "grim-api" }
-grim-bukkit-internal = { group = "ac.grim.grimac", name = "grim-bukkit-internal", version.ref = "grim-api" }
-grim-fabric-internal = { group = "ac.grim.grimac", name = "grim-fabric-internal", version.ref = "grim-api" }
+reaper-api = { group = "ac.reaper", name = "ReaperAPI", version.ref = "reaper-api" }
+reaper-internal = { group = "ac.reaper", name = "reaper-internal", version.ref = "reaper-api" }
+reaper-internal-shims = { group = "ac.reaper", name = "reaper-internal-shims", version.ref = "reaper-api" }
+reaper-bukkit-internal = { group = "ac.reaper", name = "reaper-bukkit-internal", version.ref = "reaper-api" }
+reaper-fabric-internal = { group = "ac.reaper", name = "reaper-fabric-internal", version.ref = "reaper-api" }
 packetevents-api = { group = "com.github.retrooper", name = "packetevents-api", version.ref = "packetevents" }
 packetevents-fabric = { group  = "com.github.retrooper", name = "packetevents-fabric", version.ref = "packetevents" }
 packetevents-fabric-common = { group  = "com.github.retrooper", name = "packetevents-fabric-common", version.ref = "packetevents" }

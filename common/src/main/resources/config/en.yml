@@ -1,7 +1,7 @@
-# GrimAC main configuration
-# Source code: https://github.com/MWHunter/Grim
+# ReaperAC main configuration
+# Source code: https://github.com/MWHunter/Reaper
 # Copyright 2025 DefineOutside and contributors, Licensed under GPLv3.
-# Modified binaries, or plugins with copied grim code, must be private,
+# Modified binaries, or plugins with copied reaper code, must be private,
 # or with full source code available to buyers at no additional cost.
 
 alerts:
@@ -28,12 +28,12 @@ client-brand:
         - "^lunarclient:v\\d+\\.\\d+\\.\\d+-\\d{4},(?:fabric|forge)$"
         - "^Feather Fabric$"
         - "^labymod$"
-    # Grim will blacklist specific Forge versions which include built-in Reach hacks (Forge 1.18.2 to 1.19.3).
+    # Reaper will blacklist specific Forge versions which include built-in Reach hacks (Forge 1.18.2 to 1.19.3).
     # Setting this option to false will allow said clients to connect to the server. Disable this at your own risk.
     disconnect-blacklisted-forge-versions: true
 
 spectators:
-    # Hide all spectators with the grim.spectator permission regardless if they are actually actively spectating
+    # Hide all spectators with the reaper.spectator permission regardless if they are actually actively spectating
     hide-regardless: false
     # Will make spectators hidden only in these worlds, keep blank to allow all worlds
     allowed-worlds:
@@ -42,15 +42,15 @@ spectators:
 # How long should players have until we kick them for timing out? Default = 60 seconds
 max-transaction-time: 60
 
-# Enable this to stop Grim cancelling pongs received from players.
+# Enable this to stop Reaper cancelling pongs received from players.
 # This may improve compatibility with other anticheats. It may cause issues with packet limiters.
 # Do not enable this if you are not sure what you are doing.
 disable-pong-cancelling: false
 
 # Should the default block resynchronization handler be disabled?
-# By default, Grim reads blocks from the server world and sends them to the client to fix desync.
+# By default, Reaper reads blocks from the server world and sends them to the client to fix desync.
 # If you use plugins that create fake packet-based blocks (which don't exist in the server world),
-# you should set this to true to prevent Grim from overwriting them with air/real blocks.
+# you should set this to true to prevent Reaper from overwriting them with air/real blocks.
 # This forces the use of a "NoOp" (No Operation) handler unless a custom one is provided via API.
 disable-default-resync-handler: false
 
@@ -106,7 +106,7 @@ RotationPlace:
     cancelvl: 5
 
 # Prediction-based no slow check
-# Grim accounts for buggy netcode here... hard to false even when spamming right click and offhand button
+# Reaper accounts for buggy netcode here... hard to false even when spamming right click and offhand button
 # Much more stable than other anticheats, but please report any falses... I have fixed a ton of netcode issues here.
 NoSlow:
     # How much of an offset is "cheating"
@@ -203,14 +203,14 @@ reset-item-usage-on-attack: true
 reset-item-usage-on-slot-change: true
 reset-item-usage-on-item-use: true
 
-# Grim sometimes cancels illegal packets such as with timer, after X packets in a second cancelled, when should
-# we simply kick the player? This is required as some packet limiters don't count packets cancelled by grim.
+# Reaper sometimes cancels illegal packets such as with timer, after X packets in a second cancelled, when should
+# we simply kick the player? This is required as some packet limiters don't count packets cancelled by reaper.
 packet-spam-threshold: 100
 # Enable this to print a stacktrace when a player is kicked due to packet-spam-threshold
 debug-packet-cancel: false
 
-# Grim is able to enforce that a player set out of flying state cannot have more than X milliseconds of ping
-# This is due to Grim not currently checking flying players
+# Reaper is able to enforce that a player set out of flying state cannot have more than X milliseconds of ping
+# This is due to Reaper not currently checking flying players
 # To disable, use -1
 max-ping-out-of-flying: 1000
 
@@ -220,7 +220,7 @@ max-ping-firework-boost: 1000
 
 history:
     enabled: true
-    # How many entries should be shown for each page with /grim history <player>
+    # How many entries should be shown for each page with /reaper history <player>
     entries-per-page: 15
     # What should the inserted server name be for the history command? This is useful if you use the same database for multiple servers
     server-name: Prison
@@ -230,7 +230,7 @@ history:
         # database connection details
         host: localhost
         port: 3306
-        database: grim
+        database: reaper
         username: root
         password: ""
 

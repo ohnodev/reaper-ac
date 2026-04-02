@@ -1,0 +1,68 @@
+package ac.reaper.checks.impl.combat;
+
+import ac.reaper.checks.Check;
+import ac.reaper.checks.CheckData;
+import ac.reaper.checks.type.PostPredictionCheck;
+import ac.reaper.player.ReaperPlayer;
+import ac.reaper.utils.anticheat.MessageUtil;
+import ac.reaper.utils.anticheat.update.PredictionComplete;
+import com.github.retrooper.packetevents.event.PacketReceiveEvent;
+import com.github.retrooper.packetevents.protocol.packettype.PacketType;
+import com.github.retrooper.packetevents.util.Vector3f;
+import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientInteractEntity;
+
+import java.util.ArrayList;
+
+@CheckData(name = "MultiInteractB", experimental = true)
+public class MultiInteractB extends Check implements PostPredictionCheck {
+    private final ArrayList<String> flags = new ArrayList<>();
+    private Vector3f lastPos;
+    private boolean hasInteracted = false;
+
+    public MultiInteractB(final ReaperPlayer player) {
+        super(player);
+    }
+
+    @Override
+    public void onPacketReceive(PacketReceiveEvent event) {
+        if (event.getPacketType() == PacketType.Play.Client.INTERACT_ENTITY) {
+            Vector3f pos = new WrapperPlayClientInteractEntity(event).getTarget().orElse(null);
+
+            if (pos == null) {
+                return;
+            }
+
+            if (hasInteracted && !pos.equals(lastPos)) {
+                String verbose = "pos=" + MessageUtil.toUnlabledString(pos) + ", lastPos=" + MessageUtil.toUnlabledString(lastPos);
+                if (!player.canSkipTicks()) {
+                    if (flagAndAlert(verbose) && shouldModifyPackets()) {
+                        event.setCancelled(true);
+                        player.onPacketCancel();
+                    }
+                } else {
+                    flags.add(verbose);
+                }
+            }
+
+            lastPos = pos;
+            hasInteracted = true;
+        }
+
+        if (!player.cameraEntity.isSelf() || isTickPacket(event.getPacketType())) {
+            hasInteracted = false;
+        }
+    }
+
+    @Override
+    public void onPredictionComplete(PredictionComplete predictionComplete) {
+        if (!player.canSkipTicks()) return;
+
+        if (player.isTickingReliablyFor(3)) {
+            for (String verbose : flags) {
+                flagAndAlert(verbose);
+            }
+        }
+
+        flags.clear();
+    }
+}

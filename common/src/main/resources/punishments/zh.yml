@@ -108,7 +108,7 @@ Punishments:
     commands:
       - "20:40 [alert]"
       - "20:40 [log]"
-  # Grim2.0.10版本 没有连点器检查，Grim将在未来添加
+  # Reaper2.0.10版本 没有连点器检查，Reaper将在未来添加
   Autoclicker:
     remove-violations-after: 300
     checks:

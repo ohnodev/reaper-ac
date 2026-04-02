@@ -1,6 +1,6 @@
 # Reaper AC
 
-Reaper AC is our custom Grim-based anticheat repository for Fabric 26.1 only (single native protocol target, no Via translation support).
+Reaper AC is our custom Reaper-based anticheat repository for Fabric 26.1 only (single native protocol target, no Via translation support).
 
 ## Goals
 
@@ -10,9 +10,9 @@ Reaper AC is our custom Grim-based anticheat repository for Fabric 26.1 only (si
 
 ## Upstream Base
 
-This repository is derived from Grim (2.0 branch) and remains GPL-3.0 licensed.
+This repository is derived from Reaper (2.0 branch) and remains GPL-3.0 licensed.
 
-- Upstream Grim repository: https://github.com/GrimAnticheat/Grim
+- Upstream Reaper repository: https://github.com/ReaperAnticheat/Reaper
 - Original project license: see `LICENSE`
 
 ## Build

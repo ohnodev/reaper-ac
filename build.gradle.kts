@@ -1,5 +1,5 @@
 /**
- *          GrimAC Build Configuration
+ *          ReaperAC Build Configuration
  *
  * Build Flags:
  * -PshadePE=true   - Enables 'lite' mode
@@ -15,15 +15,15 @@ import versioning.VersionUtil
 BuildConfig.init(project)
 
 val baseVersion = "2.3.74"
-group = "ac.grim.grimac"
+group = "ac.reaper"
 version = VersionUtil.computeVersion(baseVersion)
 description = "Libre simulation anticheat designed for 1.21 with 1.8–1.21 support, powered by PacketEvents 2.0."
 
 ext["timestamp"] = System.currentTimeMillis().toString()
 ext["git_branch"] = VersionUtil.getGitBranch(true)
 ext["git_commit"] = VersionUtil.getGitCommitHash(true)
-ext["git_org"] = System.getenv("GRIM_GIT_ORG") ?: VersionUtil.getGitUser()
-ext["git_repo"] = System.getenv("GRIM_GIT_REPO") ?: "Grim"
+ext["git_org"] = System.getenv("REAPER_GIT_ORG") ?: VersionUtil.getGitUser()
+ext["git_repo"] = System.getenv("REAPER_GIT_REPO") ?: "Reaper"
 
 println("Build configuration:")
 println("    shadePE            = ${BuildConfig.shadePE}")

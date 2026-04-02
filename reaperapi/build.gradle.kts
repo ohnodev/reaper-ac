@@ -78,7 +78,7 @@ BuildFlags.init(project) // Initialize your build flags helper
 val baseVersion = project.findProperty("version") as String
 
 // --- Standard Project Configuration ---
-group = "ac.grim.reaperac" // Or your desired group ID
+group = "ac.reaper" // Or your desired group ID
 // VersionUtil appends commit/branch metadata if not a release build
 version = VersionUtil.compute(baseVersion)
 description = "ReaperAPI"
@@ -141,7 +141,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly(project(":grim-internal-shims"))
+    compileOnly(project(":reaper-internal-shims"))
     compileOnly(libs.annotations)
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
