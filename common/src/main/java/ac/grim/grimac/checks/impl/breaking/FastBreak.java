@@ -7,8 +7,6 @@ import ac.grim.grimac.player.GrimPlayer;
 import ac.grim.grimac.utils.anticheat.update.BlockBreak;
 import ac.grim.grimac.utils.math.GrimMath;
 import ac.grim.grimac.utils.nmsutil.BlockBreakSpeed;
-import ac.grim.grimac.utils.viaversion.ViaVersionUtil;
-import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
@@ -30,7 +28,6 @@ public class FastBreak extends Check implements BlockBreakCheck {
     // For some reason these states flag and I don't know why.
     // Better to just exempt to not annoy legit players.
     private static final Set<StateType> EXEMPT_STATES = Set.of();
-    private final boolean clientOlderThanServer = PacketEvents.getAPI().getServerManager().getVersion().getProtocolVersion() > player.getClientVersion().getProtocolVersion();
 
     public FastBreak(GrimPlayer playerData) {
         super(playerData);
@@ -53,19 +50,12 @@ public class FastBreak extends Check implements BlockBreakCheck {
     @Override
     public void onBlockBreak(BlockBreak blockBreak) {
         if (blockBreak.action == DiggingAction.START_DIGGING) {
-            if (!ViaVersionUtil.isAvailable) {
-                // Exempt all blocks that do not exist in the player version
-                final WrappedBlockState defaultState = WrappedBlockState.getDefaultState(player.getClientVersion(), blockBreak.block.getType());
-                if (defaultState.getType() == StateTypes.AIR || EXEMPT_STATES.contains(defaultState.getType())) {
-                    return;
-                }
+            // Exempt all blocks that do not exist in the player version
+            final WrappedBlockState defaultState = WrappedBlockState.getDefaultState(player.getClientVersion(), blockBreak.block.getType());
+            if (defaultState.getType() == StateTypes.AIR || EXEMPT_STATES.contains(defaultState.getType())) {
+                return;
             }
-            // If client is older than the server, fetch block client actually sees from via
-            // otherwise just return the server-side block (since if client is >= server version the block is guaranteed to exist in client version)
-            // TODO this lazy loads PacketEvents mappings for older versions for clients on versions older than the servers, increasing memory usage
-            //  * its the only thing we use non-native mappings for behind ViaVersion
-            //  * can we translate back "up" to server version and run check against server version to avoid loading older registries?
-            WrappedBlockState block = clientOlderThanServer ? WrappedBlockState.getByGlobalId(player.getClientVersion(), player.getViaTranslatedClientBlockID(blockBreak.block.getGlobalId())) : blockBreak.block;
+            WrappedBlockState block = blockBreak.block;
 
             startBreak = System.currentTimeMillis() - (targetBlockPosition == null ? 50 : 0); // ???
             targetBlockPosition = blockBreak.position;
@@ -116,7 +106,7 @@ public class FastBreak extends Check implements BlockBreakCheck {
     @Override
     public void onPacketReceive(PacketReceiveEvent event) {
         // Find the most optimal block damage using the animation packet, which is sent at least once a tick when breaking blocks
-        // On 1.8 clients, via screws with this packet meaning we must fall back to the 1.8 idle flying packet
+        // Select packet predicate by client protocol: animation for 1.9+, flying variants for legacy clients.
         if ((player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9) ? event.getPacketType() == PacketType.Play.Client.ANIMATION : WrapperPlayClientPlayerFlying.isFlying(event.getPacketType())) && targetBlockPosition != null) {
             maximumBlockDamage = Math.max(maximumBlockDamage, BlockBreakSpeed.getBlockDamage(player, player.compensatedWorld.getBlock(targetBlockPosition)));
         }

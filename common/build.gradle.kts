@@ -17,11 +17,6 @@ repositories {
         }
     }
 
-    // ViaVersion
-    exclusive("https://repo.viaversion.com", { mavenContent { releasesOnly() } }) {
-        includeGroup("com.viaversion")
-    }
-
     // Configuralize
     exclusive("https://nexus.scarsz.me/content/repositories/releases", { mavenContent { releasesOnly() } }) {
         includeGroup("github.scarsz")
@@ -79,7 +74,6 @@ dependencies {
     }
 
     compileOnly(libs.floodgate.api)
-    compileOnly(libs.viaversion)
     compileOnly(libs.netty)
 }
 

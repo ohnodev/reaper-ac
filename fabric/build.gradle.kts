@@ -55,10 +55,6 @@ repositories {
         includeGroup("com.github.Fallen-Breath.conditional-mixin")
     }
 
-    exclusive("https://repo.viaversion.com", { mavenContent { releasesOnly() } }) {
-        includeGroup("com.viaversion")
-    }
-
     exclusive("https://nexus.scarsz.me/content/repositories/releases", { mavenContent { releasesOnly() } }) {
         includeGroup("github.scarsz")
     }
