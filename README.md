@@ -60,12 +60,48 @@ Grim's plugin API allows you to integrate Grim into your own plugins. Visit
 the [plugin API repository](https://github.com/GrimAnticheat/GrimAPI) for the source code and more
 information.
 
-## Compiling From Source
+## Build From Source
 
-1. `git clone https://github.com/GrimAnticheat/Grim.git`
-2. `cd Grim`
-3. `./gradlew build`
-4. The final jars will compile into the `<platform>/build/libs` folders
+### Prerequisites
+
+- Java 17 or newer available on `PATH` (`java -version`)
+- Git
+- Internet access for Gradle dependencies
+
+### macOS / Linux
+
+```bash
+git clone https://github.com/ohnodev/grim-26-1-official-namespace.git
+cd grim-26-1-official-namespace
+./gradlew :fabric:clean :fabric:build
+```
+
+### Windows (PowerShell)
+
+```powershell
+git clone https://github.com/ohnodev/grim-26-1-official-namespace.git
+cd grim-26-1-official-namespace
+.\gradlew.bat :fabric:clean :fabric:build
+```
+
+### Build artifacts
+
+- Fabric runtime jar: `fabric/build/libs/grimac-fabric-<version>.jar`
+- Extra artifacts (sources/javadocs): `fabric/build/libs/`
+
+### Full multi-platform build note
+
+If you run `./gradlew build` (or `.\gradlew.bat build`) and hit a missing
+`packetevents-spigot` snapshot for the Bukkit module, build Fabric directly with
+the commands above.
+
+## Prebuilt Artifact In This Repo
+
+For quick deployment/testing without a local build, this repo includes a prebuilt
+Fabric artifact:
+
+- `prebuilt/grimac-fabric-2.3.74-docs_prebuilt-jar-and-build-guide-a59dd20.jar`
+- `prebuilt/grimac-fabric-2.3.74-docs_prebuilt-jar-and-build-guide-a59dd20.zip`
 
 ## Grim Supremacy
 

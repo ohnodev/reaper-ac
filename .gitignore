@@ -75,3 +75,8 @@ run/
 fabric/run/
 
 .ignored/
+
+# Track prebuilt artifacts committed to this repository.
+!prebuilt/
+!prebuilt/*.jar
+!prebuilt/*.zip
