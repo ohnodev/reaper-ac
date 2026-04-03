@@ -50,6 +50,7 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSp
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerUpdateAttributes;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerWindowItems;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -107,7 +108,7 @@ public class PacketEntityReplication extends Check implements PacketCheck {
     public void onPacketSend(PacketSendEvent event) {
         try {
         // ensure grim is the one that sent the transaction
-        if ((event.getPacketType() == PacketType.Play.Server.PING || event.getPacketType() == PacketType.Play.Server.WINDOW_CONFIRMATION) && player.packetStateData.lastServerTransWasValid) {
+        if ((event.getPacketType() == PacketType.Play.Server.PING || (event.getPacketType() == PacketType.Play.Server.WINDOW_CONFIRMATION)) && player.packetStateData.lastServerTransWasValid) {
             despawnedEntitiesThisTransaction.clear();
         } else if (event.getPacketType() == PacketType.Play.Server.SPAWN_LIVING_ENTITY) {
             WrapperPlayServerSpawnLivingEntity packetOutEntity = new WrapperPlayServerSpawnLivingEntity(event);
@@ -163,7 +164,12 @@ public class PacketEntityReplication extends Check implements PacketCheck {
                 });
             }
         } else if (event.getPacketType() == PacketType.Play.Server.PLAYER_INFO_REMOVE) {
-            WrapperPlayServerPlayerInfoRemove remove = new WrapperPlayServerPlayerInfoRemove(event);
+            WrapperPlayServerPlayerInfoRemove remove;
+            try {
+                remove = new WrapperPlayServerPlayerInfoRemove(event);
+            } catch (Exception e) {
+                return;
+            }
             player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get(), () -> remove.getProfileIds().forEach(player.compensatedEntities.profiles::remove));
         } else if (event.getPacketType() == PacketType.Play.Server.PLAYER_INFO) {
             WrapperPlayServerPlayerInfo info = new WrapperPlayServerPlayerInfo(event);
@@ -404,10 +410,10 @@ public class PacketEntityReplication extends Check implements PacketCheck {
             }
         }
         } catch (RuntimeException ex) {
-            if (!PacketDecodeUtils.isPacketDecodeDesync(ex)) {
-                throw ex;
+            if (PacketDecodeUtils.isPacketDecodeDesync(ex)) {
+                PacketDecodeUtils.logSuppressedDecode("PacketEntityReplication", event.getPacketType(), ex);
+                return;
             }
-            PacketDecodeUtils.logSuppressedDecode("PacketEntityReplication", event.getPacketType(), ex);
         }
     }
 

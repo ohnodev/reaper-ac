@@ -62,7 +62,12 @@ public class PacketWorldBorder extends Check implements PacketCheck {
     @Override
     public void onPacketSend(PacketSendEvent event) {
         if (event.getPacketType() == PacketType.Play.Server.WORLD_BORDER) {
-            WrapperPlayServerWorldBorder packet = new WrapperPlayServerWorldBorder(event);
+            WrapperPlayServerWorldBorder packet;
+            try {
+                packet = new WrapperPlayServerWorldBorder(event);
+            } catch (Exception e) {
+                return;
+            }
 
             player.sendTransaction();
             // Names are misleading, it's diameter not radius.

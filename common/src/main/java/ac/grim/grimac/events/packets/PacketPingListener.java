@@ -24,18 +24,20 @@ public class PacketPingListener extends PacketListenerAbstract {
     @Override
     public void onPacketReceive(PacketReceiveEvent event) {
         if (event.getPacketType() == PacketType.Play.Client.WINDOW_CONFIRMATION) {
-            WrapperPlayClientWindowConfirmation transaction = new WrapperPlayClientWindowConfirmation(event);
-            short id = transaction.getActionId();
-
             GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
             if (player == null) return;
             player.packetStateData.lastTransactionPacketWasValid = false;
+            try {
+                WrapperPlayClientWindowConfirmation transaction = new WrapperPlayClientWindowConfirmation(event);
+                short id = transaction.getActionId();
 
-            // Vanilla always uses an ID starting from 1
-            // Check if we sent this packet before cancelling it
-            if (id <= 0 && player.addTransactionResponse(id)) {
-                player.packetStateData.lastTransactionPacketWasValid = true;
-                event.setCancelled(true);
+                // Vanilla always uses an ID starting from 1
+                // Check if we sent this packet before cancelling it
+                if (id <= 0 && player.addTransactionResponse(id)) {
+                    player.packetStateData.lastTransactionPacketWasValid = true;
+                    event.setCancelled(true);
+                }
+            } catch (Exception e) {
             }
         }
 
@@ -62,19 +64,21 @@ public class PacketPingListener extends PacketListenerAbstract {
     @Override
     public void onPacketSend(PacketSendEvent event) {
         if (event.getPacketType() == PacketType.Play.Server.WINDOW_CONFIRMATION) {
-            WrapperPlayServerWindowConfirmation confirmation = new WrapperPlayServerWindowConfirmation(event);
-            short id = confirmation.getActionId();
-            //
             GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
             if (player == null) return;
             player.packetStateData.lastServerTransWasValid = false;
-            // Vanilla always uses an ID starting from 1
-            if (id <= 0) {
-                if (player.didWeSendThatTrans.remove(id)) {
-                    player.packetStateData.lastServerTransWasValid = true;
-                    player.transactionsSent.add(new Pair<>(id, System.nanoTime()));
-                    player.lastTransactionSent.getAndIncrement();
+            try {
+                WrapperPlayServerWindowConfirmation confirmation = new WrapperPlayServerWindowConfirmation(event);
+                short id = confirmation.getActionId();
+                // Vanilla always uses an ID starting from 1
+                if (id <= 0) {
+                    if (player.didWeSendThatTrans.remove(id)) {
+                        player.transactionsSent.add(new Pair<>(id, System.nanoTime()));
+                        player.lastTransactionSent.getAndIncrement();
+                        player.packetStateData.lastServerTransWasValid = true;
+                    }
                 }
+            } catch (Exception e) {
             }
         }
 

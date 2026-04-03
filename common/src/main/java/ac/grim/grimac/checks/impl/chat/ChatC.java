@@ -37,8 +37,13 @@ public class ChatC extends Check implements PacketCheck {
         }
 
         if (event.getPacketType() == PacketType.Play.Client.CHAT_COMMAND) {
-            // TODO make previa after making wrapper parse by client version instead of server version
-            check("/" + new WrapperPlayClientChatCommand(event).getCommand(), event);
+            String command;
+            try {
+                command = "/" + new WrapperPlayClientChatCommand(event).getCommand();
+            } catch (Exception e) {
+                return;
+            }
+            check(command, event);
         }
     }
 

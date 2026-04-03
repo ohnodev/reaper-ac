@@ -1,0 +1,4703 @@
+{
+  "meta": {
+    "title": "Grim packet mapping checklist (protocol 773 -> 775)",
+    "generated_at": "2026-04-02T19:01:03.155523+00:00",
+    "source": "code-scan",
+    "owner": "grim-26-1-official-namespace",
+    "status_values": [
+      "seeded_773",
+      "captured_775",
+      "decoded_775",
+      "legacy_773_compatible",
+      "needs_remap",
+      "validated_grim_path"
+    ],
+    "priority_values": [
+      "movement-core",
+      "grim-required"
+    ]
+  },
+  "summary": {
+    "grim_packets_total": 99,
+    "movement_core_total": 10
+  },
+  "packets": [
+    {
+      "key": "Client.ANIMATION",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.ANIMATION",
+      "packet_name_775": "Client.ANIMATION",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 3404,
+        "last_tested_at": "2026-04-02T20:39:21.005317+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Swing Arm",
+        "section_anchor": "Swing_Arm",
+        "field_names": [
+          "Hand"
+        ]
+      }
+    },
+    {
+      "key": "Client.CHAT_COMMAND",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.CHAT_COMMAND",
+      "packet_name_775": "Client.CHAT_COMMAND",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "seeded_773",
+      "tests": {
+        "captured_775": false,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 0,
+        "last_tested_at": null
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 1.0,
+        "section_title": "Chat Command",
+        "section_anchor": "Chat_Command",
+        "field_names": [
+          "Command"
+        ]
+      }
+    },
+    {
+      "key": "Client.CHAT_COMMAND_UNSIGNED",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.CHAT_COMMAND_UNSIGNED",
+      "packet_name_775": "Client.CHAT_COMMAND_UNSIGNED",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 60,
+        "last_tested_at": "2026-04-02T20:39:21.009024+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.7,
+        "section_title": "Chat Command",
+        "section_anchor": "Chat_Command",
+        "field_names": [
+          "Command"
+        ]
+      }
+    },
+    {
+      "key": "Client.CHAT_MESSAGE",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.CHAT_MESSAGE",
+      "packet_name_775": "Client.CHAT_MESSAGE",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 4,
+        "last_tested_at": "2026-04-02T20:21:58.301999+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 1.0,
+        "section_title": "Chat Message",
+        "section_anchor": "Chat_Message",
+        "field_names": [
+          "Message"
+        ]
+      }
+    },
+    {
+      "key": "Client.CHUNK_BATCH_ACK",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.CHUNK_BATCH_ACK",
+      "packet_name_775": "Client.CHUNK_BATCH_ACK",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 854,
+        "last_tested_at": "2026-04-02T20:39:21.009118+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Chunk Batch Received",
+        "section_anchor": "Chunk_Batch_Received",
+        "field_names": [
+          "Chunks per tick"
+        ]
+      }
+    },
+    {
+      "key": "Client.CLICK_WINDOW",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.CLICK_WINDOW",
+      "packet_name_775": "Client.CLICK_WINDOW",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 128,
+        "last_tested_at": "2026-04-02T20:21:58.303190+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Click Container",
+        "section_anchor": "Click_Container",
+        "field_names": [
+          "Window ID",
+          "Short"
+        ]
+      }
+    },
+    {
+      "key": "Client.CLIENT_SETTINGS",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.CLIENT_SETTINGS",
+      "packet_name_775": "Client.CLIENT_SETTINGS",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 4,
+        "last_tested_at": "2026-04-02T20:39:21.010037+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Client Information (play)",
+        "section_anchor": "Client_Information_(play)",
+        "field_names": [
+          "Locale"
+        ]
+      }
+    },
+    {
+      "key": "Client.CLIENT_STATUS",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.CLIENT_STATUS",
+      "packet_name_775": "Client.CLIENT_STATUS",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 10,
+        "last_tested_at": "2026-04-02T20:39:21.010068+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 1.0,
+        "section_title": "Client Status",
+        "section_anchor": "Client_Status",
+        "field_names": [
+          "Action ID"
+        ]
+      }
+    },
+    {
+      "key": "Client.CLIENT_TICK_END",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.CLIENT_TICK_END",
+      "packet_name_775": "Client.CLIENT_TICK_END",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "movement-core",
+      "status": "legacy_773_compatible",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": true,
+        "legacy_773_compatible": true,
+        "validated_grim_path": true,
+        "sample_count": 16246,
+        "last_tested_at": "2026-04-02T20:39:21.010089+00:00"
+      },
+      "notes": "No payload changes observed between 773 and 775 in live captures.",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "capture"
+      },
+      "examples": {
+        "decode_773": {},
+        "decode_775": {}
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 1.0,
+        "section_title": "Client Tick End",
+        "section_anchor": "Client_Tick_End",
+        "field_names": [
+          "no fields"
+        ]
+      }
+    },
+    {
+      "key": "Client.CLOSE_WINDOW",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.CLOSE_WINDOW",
+      "packet_name_775": "Client.CLOSE_WINDOW",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 66,
+        "last_tested_at": "2026-04-02T20:21:58.467289+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.4759,
+        "section_title": "Close Container",
+        "section_anchor": "Close_Container_2",
+        "field_names": [
+          "Window ID"
+        ]
+      }
+    },
+    {
+      "key": "Client.CREATIVE_INVENTORY_ACTION",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.CREATIVE_INVENTORY_ACTION",
+      "packet_name_775": "Client.CREATIVE_INVENTORY_ACTION",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 142,
+        "last_tested_at": "2026-04-02T20:21:58.467396+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Set Creative Mode Slot",
+        "section_anchor": "Set_Creative_Mode_Slot",
+        "field_names": [
+          "Slot"
+        ]
+      }
+    },
+    {
+      "key": "Client.EDIT_BOOK",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.EDIT_BOOK",
+      "packet_name_775": "Client.EDIT_BOOK",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "seeded_773",
+      "tests": {
+        "captured_775": false,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 0,
+        "last_tested_at": null
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 1.0,
+        "section_title": "Edit Book",
+        "section_anchor": "Edit_Book",
+        "field_names": [
+          "Slot"
+        ]
+      }
+    },
+    {
+      "key": "Client.ENTITY_ACTION",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.ENTITY_ACTION",
+      "packet_name_775": "Client.ENTITY_ACTION",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 60,
+        "last_tested_at": "2026-04-02T20:39:21.094071+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.4885,
+        "section_title": "Player Action",
+        "section_anchor": "Player_Action",
+        "field_names": [
+          "Status"
+        ]
+      }
+    },
+    {
+      "key": "Client.HELD_ITEM_CHANGE",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.HELD_ITEM_CHANGE",
+      "packet_name_775": "Client.HELD_ITEM_CHANGE",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 132,
+        "last_tested_at": "2026-04-02T20:39:21.094164+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Set Held Item (serverbound)",
+        "section_anchor": "Set_Held_Item_(serverbound)",
+        "field_names": [
+          "Slot"
+        ]
+      }
+    },
+    {
+      "key": "Client.INTERACT_ENTITY",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.INTERACT_ENTITY",
+      "packet_name_775": "Client.INTERACT_ENTITY",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 20,
+        "last_tested_at": "2026-04-02T20:39:21.094292+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.6076,
+        "section_title": "Interact",
+        "section_anchor": "Interact",
+        "field_names": [
+          "Entity ID"
+        ]
+      }
+    },
+    {
+      "key": "Client.KEEP_ALIVE",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.KEEP_ALIVE",
+      "packet_name_775": "Client.KEEP_ALIVE",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 106,
+        "last_tested_at": "2026-04-02T20:39:21.094314+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.5223,
+        "section_title": "Serverbound Keep Alive (play)",
+        "section_anchor": "Serverbound_Keep_Alive_(play)",
+        "field_names": [
+          "Keep Alive ID"
+        ]
+      }
+    },
+    {
+      "key": "Client.NAME_ITEM",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.NAME_ITEM",
+      "packet_name_775": "Client.NAME_ITEM",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 60,
+        "last_tested_at": "2026-04-02T20:21:58.468287+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.645,
+        "section_title": "Rename Item",
+        "section_anchor": "Rename_Item",
+        "field_names": [
+          "Item name"
+        ]
+      }
+    },
+    {
+      "key": "Client.PICK_ITEM",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.PICK_ITEM",
+      "packet_name_775": "Client.PICK_ITEM",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "seeded_773",
+      "tests": {
+        "captured_775": false,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 0,
+        "last_tested_at": null
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.5664,
+        "section_title": "Pick Item From Block",
+        "section_anchor": "Pick_Item_From_Block",
+        "field_names": [
+          "Location"
+        ]
+      }
+    },
+    {
+      "key": "Client.PLAYER_ABILITIES",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.PLAYER_ABILITIES",
+      "packet_name_775": "Client.PLAYER_ABILITIES",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 12,
+        "last_tested_at": "2026-04-02T20:39:21.094436+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.7,
+        "section_title": "Player Abilities (serverbound)",
+        "section_anchor": "Player_Abilities_(serverbound)",
+        "field_names": [
+          "Flags"
+        ]
+      }
+    },
+    {
+      "key": "Client.PLAYER_BLOCK_PLACEMENT",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.PLAYER_BLOCK_PLACEMENT",
+      "packet_name_775": "Client.PLAYER_BLOCK_PLACEMENT",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 18,
+        "last_tested_at": "2026-04-02T20:39:21.094454+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Use Item On",
+        "section_anchor": "Use_Item_On",
+        "field_names": [
+          "Hand"
+        ]
+      }
+    },
+    {
+      "key": "Client.PLAYER_DIGGING",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.PLAYER_DIGGING",
+      "packet_name_775": "Client.PLAYER_DIGGING",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 560,
+        "last_tested_at": "2026-04-02T20:39:21.094474+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Player Action",
+        "section_anchor": "Player_Action",
+        "field_names": [
+          "Status"
+        ]
+      }
+    },
+    {
+      "key": "Client.PLAYER_FLYING",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.PLAYER_FLYING",
+      "packet_name_775": "Client.PLAYER_FLYING",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "movement-core",
+      "status": "needs_remap",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": true,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 30,
+        "last_tested_at": "2026-04-02T20:39:21.095011+00:00"
+      },
+      "notes": "775 adds has_position/has_rotation/horizontal_collision flags; 773 movement fields remain compatible.",
+      "packet_structure": {
+        "fields_773": [
+          "on_ground"
+        ],
+        "fields_775": [
+          "has_position",
+          "has_rotation",
+          "horizontal_collision",
+          "on_ground"
+        ],
+        "added_in_775": [
+          "has_position",
+          "has_rotation",
+          "horizontal_collision"
+        ],
+        "removed_in_775": [],
+        "legacy_field_overlap": [
+          "on_ground"
+        ],
+        "source": "capture"
+      },
+      "examples": {
+        "decode_773": {
+          "on_ground": true
+        },
+        "decode_775": {
+          "has_position": false,
+          "has_rotation": false,
+          "horizontal_collision": false,
+          "on_ground": true
+        }
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Set Player Movement Flags",
+        "section_anchor": "Set_Player_Movement_Flags",
+        "field_names": [
+          "Flags"
+        ]
+      }
+    },
+    {
+      "key": "Client.PLAYER_INPUT",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.PLAYER_INPUT",
+      "packet_name_775": "Client.PLAYER_INPUT",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "movement-core",
+      "status": "legacy_773_compatible",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": true,
+        "legacy_773_compatible": true,
+        "validated_grim_path": true,
+        "sample_count": 1254,
+        "last_tested_at": "2026-04-02T20:39:21.095152+00:00"
+      },
+      "notes": "No payload changes observed between 773 and 775 in live captures.",
+      "packet_structure": {
+        "fields_773": [
+          "backward",
+          "forward",
+          "jump",
+          "left",
+          "right",
+          "shift",
+          "sprint"
+        ],
+        "fields_775": [
+          "backward",
+          "forward",
+          "jump",
+          "left",
+          "right",
+          "shift",
+          "sprint"
+        ],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [
+          "backward",
+          "forward",
+          "jump",
+          "left",
+          "right",
+          "shift",
+          "sprint"
+        ],
+        "source": "capture"
+      },
+      "examples": {
+        "decode_773": {
+          "backward": false,
+          "forward": true,
+          "jump": false,
+          "left": false,
+          "right": false,
+          "shift": false,
+          "sprint": false
+        },
+        "decode_775": {
+          "backward": false,
+          "forward": true,
+          "jump": false,
+          "left": false,
+          "right": false,
+          "shift": false,
+          "sprint": false
+        }
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 1.0,
+        "section_title": "Player Input",
+        "section_anchor": "Player_Input",
+        "field_names": [
+          "Flags"
+        ]
+      }
+    },
+    {
+      "key": "Client.PLAYER_POSITION",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.PLAYER_POSITION",
+      "packet_name_775": "Client.PLAYER_POSITION",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "movement-core",
+      "status": "needs_remap",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": true,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 3135,
+        "last_tested_at": "2026-04-02T20:39:21.103125+00:00"
+      },
+      "notes": "775 adds has_position/has_rotation/horizontal_collision flags; x/y/z/on_ground remain compatible with 773.",
+      "packet_structure": {
+        "fields_773": [
+          "on_ground",
+          "x",
+          "y",
+          "z"
+        ],
+        "fields_775": [
+          "has_position",
+          "has_rotation",
+          "horizontal_collision",
+          "on_ground",
+          "x",
+          "y",
+          "z"
+        ],
+        "added_in_775": [
+          "has_position",
+          "has_rotation",
+          "horizontal_collision"
+        ],
+        "removed_in_775": [],
+        "legacy_field_overlap": [
+          "on_ground",
+          "x",
+          "y",
+          "z"
+        ],
+        "source": "capture"
+      },
+      "examples": {
+        "decode_773": {
+          "on_ground": true,
+          "x": -367.136446,
+          "y": 63.0,
+          "z": 362.118512
+        },
+        "decode_775": {
+          "has_position": true,
+          "has_rotation": false,
+          "horizontal_collision": false,
+          "on_ground": true,
+          "x": -367.136446,
+          "y": 63.0,
+          "z": 362.118512
+        }
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.7853,
+        "section_title": "Set Player Position",
+        "section_anchor": "Set_Player_Position",
+        "field_names": [
+          "X"
+        ]
+      }
+    },
+    {
+      "key": "Client.PLAYER_POSITION_AND_ROTATION",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.PLAYER_POSITION_AND_ROTATION",
+      "packet_name_775": "Client.PLAYER_POSITION_AND_ROTATION",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "movement-core",
+      "status": "needs_remap",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": true,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 2373,
+        "last_tested_at": "2026-04-02T20:39:21.117387+00:00"
+      },
+      "notes": "775 adds has_position/has_rotation/horizontal_collision flags; position+rotation payload remains compatible with 773.",
+      "packet_structure": {
+        "fields_773": [
+          "on_ground",
+          "pitch",
+          "x",
+          "y",
+          "yaw",
+          "z"
+        ],
+        "fields_775": [
+          "has_position",
+          "has_rotation",
+          "horizontal_collision",
+          "on_ground",
+          "pitch",
+          "x",
+          "y",
+          "yaw",
+          "z"
+        ],
+        "added_in_775": [
+          "has_position",
+          "has_rotation",
+          "horizontal_collision"
+        ],
+        "removed_in_775": [],
+        "legacy_field_overlap": [
+          "on_ground",
+          "pitch",
+          "x",
+          "y",
+          "yaw",
+          "z"
+        ],
+        "source": "capture"
+      },
+      "examples": {
+        "decode_773": {
+          "on_ground": false,
+          "pitch": 28.500029,
+          "x": -367.136446,
+          "y": 63.0,
+          "yaw": -27.60005,
+          "z": 362.118512
+        },
+        "decode_775": {
+          "has_position": true,
+          "has_rotation": true,
+          "horizontal_collision": false,
+          "on_ground": false,
+          "pitch": 28.500029,
+          "x": -367.136446,
+          "y": 63.0,
+          "yaw": -27.60005,
+          "z": 362.118512
+        }
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.8733,
+        "section_title": "Set Player Position and Rotation",
+        "section_anchor": "Set_Player_Position_and_Rotation",
+        "field_names": [
+          "X"
+        ]
+      }
+    },
+    {
+      "key": "Client.PLAYER_ROTATION",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.PLAYER_ROTATION",
+      "packet_name_775": "Client.PLAYER_ROTATION",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "movement-core",
+      "status": "needs_remap",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": true,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 2973,
+        "last_tested_at": "2026-04-02T20:39:21.127471+00:00"
+      },
+      "notes": "775 adds has_position/has_rotation/horizontal_collision flags; yaw/pitch/on_ground remain compatible with 773.",
+      "packet_structure": {
+        "fields_773": [
+          "on_ground",
+          "pitch",
+          "yaw"
+        ],
+        "fields_775": [
+          "has_position",
+          "has_rotation",
+          "horizontal_collision",
+          "on_ground",
+          "pitch",
+          "yaw"
+        ],
+        "added_in_775": [
+          "has_position",
+          "has_rotation",
+          "horizontal_collision"
+        ],
+        "removed_in_775": [],
+        "legacy_field_overlap": [
+          "on_ground",
+          "pitch",
+          "yaw"
+        ],
+        "source": "capture"
+      },
+      "examples": {
+        "decode_773": {
+          "on_ground": true,
+          "pitch": 36.09847,
+          "yaw": -30.89009
+        },
+        "decode_775": {
+          "has_position": false,
+          "has_rotation": true,
+          "horizontal_collision": false,
+          "on_ground": true,
+          "pitch": 36.09847,
+          "yaw": -30.89009
+        }
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.7853,
+        "section_title": "Set Player Rotation",
+        "section_anchor": "Set_Player_Rotation",
+        "field_names": [
+          "Yaw"
+        ]
+      }
+    },
+    {
+      "key": "Client.PLUGIN_MESSAGE",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.PLUGIN_MESSAGE",
+      "packet_name_775": "Client.PLUGIN_MESSAGE",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 4,
+        "last_tested_at": "2026-04-02T20:39:21.138990+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.5672,
+        "section_title": "Serverbound Plugin Message (play)",
+        "section_anchor": "Serverbound_Plugin_Message_(play)",
+        "field_names": [
+          "Channel"
+        ]
+      }
+    },
+    {
+      "key": "Client.PONG",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.PONG",
+      "packet_name_775": "Client.PONG",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 33188,
+        "last_tested_at": "2026-04-02T20:39:21.139025+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.5635,
+        "section_title": "Pong (play)",
+        "section_anchor": "Pong_(play)",
+        "field_names": [
+          "ID"
+        ]
+      }
+    },
+    {
+      "key": "Client.SELECT_BUNDLE_ITEM",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.SELECT_BUNDLE_ITEM",
+      "packet_name_775": "Client.SELECT_BUNDLE_ITEM",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "seeded_773",
+      "tests": {
+        "captured_775": false,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 0,
+        "last_tested_at": null
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.5434,
+        "section_title": "Bundle Item Selected",
+        "section_anchor": "Bundle_Item_Selected",
+        "field_names": [
+          "Slot of Bundle"
+        ]
+      }
+    },
+    {
+      "key": "Client.SPECTATE",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.SPECTATE",
+      "packet_name_775": "Client.SPECTATE",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "seeded_773",
+      "tests": {
+        "captured_775": false,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 0,
+        "last_tested_at": null
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Teleport To Entity",
+        "section_anchor": "Teleport_To_Entity",
+        "field_names": [
+          "Target Player"
+        ]
+      }
+    },
+    {
+      "key": "Client.STEER_BOAT",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.STEER_BOAT",
+      "packet_name_775": "Client.STEER_BOAT",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 4898,
+        "last_tested_at": "2026-04-02T20:21:58.581416+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.4643,
+        "section_title": "Paddle Boat",
+        "section_anchor": "Paddle_Boat",
+        "field_names": [
+          "Left paddle turning"
+        ]
+      }
+    },
+    {
+      "key": "Client.STEER_VEHICLE",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.STEER_VEHICLE",
+      "packet_name_775": "Client.STEER_VEHICLE",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "seeded_773",
+      "tests": {
+        "captured_775": false,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 0,
+        "last_tested_at": null
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Move Vehicle (serverbound)",
+        "section_anchor": "Move_Vehicle_(serverbound)",
+        "field_names": [
+          "X"
+        ]
+      }
+    },
+    {
+      "key": "Client.TAB_COMPLETE",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.TAB_COMPLETE",
+      "packet_name_775": "Client.TAB_COMPLETE",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 42,
+        "last_tested_at": "2026-04-02T20:21:58.586195+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Command Suggestions Request",
+        "section_anchor": "Command_Suggestions_Request",
+        "field_names": [
+          "Transaction Id"
+        ]
+      }
+    },
+    {
+      "key": "Client.USE_ITEM",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.USE_ITEM",
+      "packet_name_775": "Client.USE_ITEM",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 4,
+        "last_tested_at": "2026-04-02T20:39:21.168323+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 1.0,
+        "section_title": "Use Item",
+        "section_anchor": "Use_Item",
+        "field_names": [
+          "Hand"
+        ]
+      }
+    },
+    {
+      "key": "Client.VEHICLE_MOVE",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.VEHICLE_MOVE",
+      "packet_name_775": "Client.VEHICLE_MOVE",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "movement-core",
+      "status": "legacy_773_compatible",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": true,
+        "legacy_773_compatible": true,
+        "validated_grim_path": true,
+        "sample_count": 257,
+        "last_tested_at": "2026-04-02T20:39:21.168362+00:00"
+      },
+      "notes": "No samples in current live capture; movement compatibility still pending.",
+      "packet_structure": {
+        "fields_773": [
+          "on_ground",
+          "pitch",
+          "x",
+          "y",
+          "yaw",
+          "z"
+        ],
+        "fields_775": [
+          "on_ground",
+          "pitch",
+          "x",
+          "y",
+          "yaw",
+          "z"
+        ],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [
+          "on_ground",
+          "pitch",
+          "x",
+          "y",
+          "yaw",
+          "z"
+        ],
+        "source": "capture"
+      },
+      "examples": {
+        "decode_773": {
+          "on_ground": false,
+          "pitch": 14.399974,
+          "x": -0.28062,
+          "y": -43.0,
+          "yaw": 257.10083,
+          "z": 0.471814
+        },
+        "decode_775": {
+          "on_ground": false,
+          "pitch": 14.399974,
+          "x": -0.28062,
+          "y": -43.0,
+          "yaw": 257.10083,
+          "z": 0.471814
+        }
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.6056,
+        "section_title": "Move Vehicle (serverbound)",
+        "section_anchor": "Move_Vehicle_(serverbound)",
+        "field_names": [
+          "X"
+        ]
+      }
+    },
+    {
+      "key": "Client.WINDOW_CONFIRMATION",
+      "direction": "serverbound",
+      "state": "play",
+      "packet_name_773": "Client.WINDOW_CONFIRMATION",
+      "packet_name_775": "Client.WINDOW_CONFIRMATION",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "seeded_773",
+      "tests": {
+        "captured_775": false,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 0,
+        "last_tested_at": null
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Change Container Slot State",
+        "section_anchor": "Change_Container_Slot_State",
+        "field_names": [
+          "Slot ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.ACKNOWLEDGE_BLOCK_CHANGES",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.ACKNOWLEDGE_BLOCK_CHANGES",
+      "packet_name_775": "Server.ACKNOWLEDGE_BLOCK_CHANGES",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 572,
+        "last_tested_at": "2026-04-02T20:39:21.171540+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Acknowledge Block Change",
+        "section_anchor": "Acknowledge_Block_Change",
+        "field_names": [
+          "Sequence ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.ACKNOWLEDGE_PLAYER_DIGGING",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.ACKNOWLEDGE_PLAYER_DIGGING",
+      "packet_name_775": "Server.ACKNOWLEDGE_PLAYER_DIGGING",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "seeded_773",
+      "tests": {
+        "captured_775": false,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 0,
+        "last_tested_at": null
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Acknowledge Block Change",
+        "section_anchor": "Acknowledge_Block_Change",
+        "field_names": [
+          "Sequence ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.ATTACH_ENTITY",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.ATTACH_ENTITY",
+      "packet_name_775": "Server.ATTACH_ENTITY",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 12,
+        "last_tested_at": "2026-04-02T20:39:21.172178+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.5036,
+        "section_title": "Teleport Entity",
+        "section_anchor": "Teleport_Entity",
+        "field_names": [
+          "Entity ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.BLOCK_ACTION",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.BLOCK_ACTION",
+      "packet_name_775": "Server.BLOCK_ACTION",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 96,
+        "last_tested_at": "2026-04-02T20:21:58.643072+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 1.0,
+        "section_title": "Block Action",
+        "section_anchor": "Block_Action",
+        "field_names": [
+          "Location"
+        ]
+      }
+    },
+    {
+      "key": "Server.BLOCK_CHANGE",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.BLOCK_CHANGE",
+      "packet_name_775": "Server.BLOCK_CHANGE",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 3682,
+        "last_tested_at": "2026-04-02T20:39:21.172217+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.6667,
+        "section_title": "Acknowledge Block Change",
+        "section_anchor": "Acknowledge_Block_Change",
+        "field_names": [
+          "Sequence ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.BUNDLE",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.BUNDLE",
+      "packet_name_775": "Server.BUNDLE",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 9680,
+        "last_tested_at": "2026-04-02T20:39:21.175272+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.525,
+        "section_title": "Bundle Delimiter",
+        "section_anchor": "Bundle_Delimiter",
+        "field_names": [
+          "no fields"
+        ]
+      }
+    },
+    {
+      "key": "Server.CAMERA",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.CAMERA",
+      "packet_name_775": "Server.CAMERA",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "seeded_773",
+      "tests": {
+        "captured_775": false,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 0,
+        "last_tested_at": null
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.6375,
+        "section_title": "Set Camera",
+        "section_anchor": "Set_Camera",
+        "field_names": [
+          "Camera ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.CHANGE_GAME_STATE",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.CHANGE_GAME_STATE",
+      "packet_name_775": "Server.CHANGE_GAME_STATE",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 440,
+        "last_tested_at": "2026-04-02T20:39:21.182055+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Game Event",
+        "section_anchor": "Game_Event",
+        "field_names": [
+          "Event"
+        ]
+      }
+    },
+    {
+      "key": "Server.CHUNK_BATCH_END",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.CHUNK_BATCH_END",
+      "packet_name_775": "Server.CHUNK_BATCH_END",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 854,
+        "last_tested_at": "2026-04-02T20:39:21.182555+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Chunk Batch Finished",
+        "section_anchor": "Chunk_Batch_Finished",
+        "field_names": [
+          "Batch size"
+        ]
+      }
+    },
+    {
+      "key": "Server.CHUNK_DATA",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.CHUNK_DATA",
+      "packet_name_775": "Server.CHUNK_DATA",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 7300,
+        "last_tested_at": "2026-04-02T20:39:21.183409+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Chunk Data and Update Light",
+        "section_anchor": "Chunk_Data_and_Update_Light",
+        "field_names": [
+          "Chunk X",
+          "Unsigned Byte"
+        ]
+      }
+    },
+    {
+      "key": "Server.CLOSE_WINDOW",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.CLOSE_WINDOW",
+      "packet_name_775": "Server.CLOSE_WINDOW",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 2,
+        "last_tested_at": "2026-04-02T20:21:58.666037+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.4759,
+        "section_title": "Close Container",
+        "section_anchor": "Close_Container",
+        "field_names": [
+          "Window ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.COMBAT_EVENT",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.COMBAT_EVENT",
+      "packet_name_775": "Server.COMBAT_EVENT",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "seeded_773",
+      "tests": {
+        "captured_775": false,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 0,
+        "last_tested_at": null
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.5625,
+        "section_title": "Combat Death",
+        "section_anchor": "Combat_Death",
+        "field_names": [
+          "Player ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.DEATH_COMBAT_EVENT",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.DEATH_COMBAT_EVENT",
+      "packet_name_775": "Server.DEATH_COMBAT_EVENT",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 10,
+        "last_tested_at": "2026-04-02T20:39:21.186215+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.63,
+        "section_title": "Combat Death",
+        "section_anchor": "Combat_Death",
+        "field_names": [
+          "Player ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.DESTROY_ENTITIES",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.DESTROY_ENTITIES",
+      "packet_name_775": "Server.DESTROY_ENTITIES",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 4636,
+        "last_tested_at": "2026-04-02T20:39:21.186238+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Remove Entities",
+        "section_anchor": "Remove_Entities",
+        "field_names": [
+          "Entity IDs"
+        ]
+      }
+    },
+    {
+      "key": "Server.ENTITY_ANIMATION",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.ENTITY_ANIMATION",
+      "packet_name_775": "Server.ENTITY_ANIMATION",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 12,
+        "last_tested_at": "2026-04-02T20:39:21.189632+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 1.0,
+        "section_title": "Entity Animation",
+        "section_anchor": "Entity_Animation",
+        "field_names": [
+          "Entity ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.ENTITY_EFFECT",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.ENTITY_EFFECT",
+      "packet_name_775": "Server.ENTITY_EFFECT",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 4,
+        "last_tested_at": "2026-04-02T20:39:21.189672+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 1.0,
+        "section_title": "Entity Effect",
+        "section_anchor": "Entity_Effect",
+        "field_names": [
+          "Entity ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.ENTITY_EQUIPMENT",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.ENTITY_EQUIPMENT",
+      "packet_name_775": "Server.ENTITY_EQUIPMENT",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 1290,
+        "last_tested_at": "2026-04-02T20:39:21.189682+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.6052,
+        "section_title": "Set Equipment",
+        "section_anchor": "Set_Equipment",
+        "field_names": [
+          "Entity ID",
+          "Byte Enum"
+        ]
+      }
+    },
+    {
+      "key": "Server.ENTITY_METADATA",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.ENTITY_METADATA",
+      "packet_name_775": "Server.ENTITY_METADATA",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 45642,
+        "last_tested_at": "2026-04-02T20:39:21.190848+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.7853,
+        "section_title": "Set Entity Metadata",
+        "section_anchor": "Set_Entity_Metadata",
+        "field_names": [
+          "Entity ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.ENTITY_POSITION_SYNC",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.ENTITY_POSITION_SYNC",
+      "packet_name_775": "Server.ENTITY_POSITION_SYNC",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "movement-core",
+      "status": "legacy_773_compatible",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": true,
+        "legacy_773_compatible": true,
+        "validated_grim_path": true,
+        "sample_count": 6506,
+        "last_tested_at": "2026-04-02T20:39:21.230385+00:00"
+      },
+      "notes": "No payload changes observed between 773 and 775 in live captures.",
+      "packet_structure": {
+        "fields_773": [
+          "entity_id",
+          "pitch",
+          "x",
+          "y",
+          "yaw",
+          "z"
+        ],
+        "fields_775": [
+          "entity_id",
+          "pitch",
+          "x",
+          "y",
+          "yaw",
+          "z"
+        ],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [
+          "entity_id",
+          "pitch",
+          "x",
+          "y",
+          "yaw",
+          "z"
+        ],
+        "source": "capture"
+      },
+      "examples": {
+        "decode_773": {
+          "entity_id": 50,
+          "pitch": 0.0,
+          "x": -321.766615,
+          "y": 20.0,
+          "yaw": 285.3641,
+          "z": 314.591593
+        },
+        "decode_775": {
+          "entity_id": 50,
+          "pitch": 0.0,
+          "x": -321.766615,
+          "y": 20.0,
+          "yaw": 285.3641,
+          "z": 314.591593
+        }
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Teleport Entity",
+        "section_anchor": "Teleport_Entity",
+        "field_names": [
+          "Entity ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.ENTITY_RELATIVE_MOVE",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.ENTITY_RELATIVE_MOVE",
+      "packet_name_775": "Server.ENTITY_RELATIVE_MOVE",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 158246,
+        "last_tested_at": "2026-04-02T20:39:21.324587+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.4562,
+        "section_title": "Entity Event",
+        "section_anchor": "Entity_Event",
+        "field_names": [
+          "Entity ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.ENTITY_RELATIVE_MOVE_AND_ROTATION",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.ENTITY_RELATIVE_MOVE_AND_ROTATION",
+      "packet_name_775": "Server.ENTITY_RELATIVE_MOVE_AND_ROTATION",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 137964,
+        "last_tested_at": "2026-04-02T20:39:21.437604+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.5649,
+        "section_title": "Update Entity Position and Rotation",
+        "section_anchor": "Update_Entity_Position_and_Rotation",
+        "field_names": [
+          "Entity ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.ENTITY_ROTATION",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.ENTITY_ROTATION",
+      "packet_name_775": "Server.ENTITY_ROTATION",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 4450,
+        "last_tested_at": "2026-04-02T20:39:21.553084+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.7459,
+        "section_title": "Update Entity Rotation",
+        "section_anchor": "Update_Entity_Rotation",
+        "field_names": [
+          "Entity ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.ENTITY_STATUS",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.ENTITY_STATUS",
+      "packet_name_775": "Server.ENTITY_STATUS",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 5488,
+        "last_tested_at": "2026-04-02T20:39:21.557177+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.502,
+        "section_title": "Entity Event",
+        "section_anchor": "Entity_Event",
+        "field_names": [
+          "Entity ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.ENTITY_TELEPORT",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.ENTITY_TELEPORT",
+      "packet_name_775": "Server.ENTITY_TELEPORT",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 16,
+        "last_tested_at": "2026-04-02T20:21:59.487747+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.7433,
+        "section_title": "Teleport Entity",
+        "section_anchor": "Teleport_Entity",
+        "field_names": [
+          "Entity ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.ENTITY_VELOCITY",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.ENTITY_VELOCITY",
+      "packet_name_775": "Server.ENTITY_VELOCITY",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 151666,
+        "last_tested_at": "2026-04-02T20:39:21.562126+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.7853,
+        "section_title": "Set Entity Velocity",
+        "section_anchor": "Set_Entity_Velocity",
+        "field_names": [
+          "Entity ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.EXPLOSION",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.EXPLOSION",
+      "packet_name_775": "Server.EXPLOSION",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 4,
+        "last_tested_at": "2026-04-02T20:39:21.695200+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 1.0,
+        "section_title": "Explosion",
+        "section_anchor": "Explosion",
+        "field_names": [
+          "X",
+          "Double",
+          "VarInt"
+        ]
+      }
+    },
+    {
+      "key": "Server.INITIALIZE_WORLD_BORDER",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.INITIALIZE_WORLD_BORDER",
+      "packet_name_775": "Server.INITIALIZE_WORLD_BORDER",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 16,
+        "last_tested_at": "2026-04-02T20:39:21.695251+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 1.0,
+        "section_title": "Initialize World Border",
+        "section_anchor": "Initialize_World_Border",
+        "field_names": [
+          "X"
+        ]
+      }
+    },
+    {
+      "key": "Server.JOIN_GAME",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.JOIN_GAME",
+      "packet_name_775": "Server.JOIN_GAME",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 4,
+        "last_tested_at": "2026-04-02T20:39:21.695281+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Login (play)",
+        "section_anchor": "Login_(play)",
+        "field_names": [
+          "Entity ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.KEEP_ALIVE",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.KEEP_ALIVE",
+      "packet_name_775": "Server.KEEP_ALIVE",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 106,
+        "last_tested_at": "2026-04-02T20:39:21.695295+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.5223,
+        "section_title": "Clientbound Keep Alive (play)",
+        "section_anchor": "Clientbound_Keep_Alive_(play)",
+        "field_names": [
+          "Keep Alive ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.MAP_CHUNK_BULK",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.MAP_CHUNK_BULK",
+      "packet_name_775": "Server.MAP_CHUNK_BULK",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "seeded_773",
+      "tests": {
+        "captured_775": false,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 0,
+        "last_tested_at": null
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Chunk Data and Update Light",
+        "section_anchor": "Chunk_Data_and_Update_Light",
+        "field_names": [
+          "Chunk X",
+          "Unsigned Byte"
+        ]
+      }
+    },
+    {
+      "key": "Server.MULTI_BLOCK_CHANGE",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.MULTI_BLOCK_CHANGE",
+      "packet_name_775": "Server.MULTI_BLOCK_CHANGE",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 7654,
+        "last_tested_at": "2026-04-02T20:39:21.695434+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Update Section Blocks",
+        "section_anchor": "Update_Section_Blocks",
+        "field_names": [
+          "Chunk section position"
+        ]
+      }
+    },
+    {
+      "key": "Server.OPEN_HORSE_WINDOW",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.OPEN_HORSE_WINDOW",
+      "packet_name_775": "Server.OPEN_HORSE_WINDOW",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 6,
+        "last_tested_at": "2026-04-02T20:21:59.782544+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Open Horse Screen",
+        "section_anchor": "Open_Horse_Screen",
+        "field_names": [
+          "Window ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.OPEN_WINDOW",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.OPEN_WINDOW",
+      "packet_name_775": "Server.OPEN_WINDOW",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 20,
+        "last_tested_at": "2026-04-02T20:21:59.782556+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Open Screen",
+        "section_anchor": "Open_Screen",
+        "field_names": [
+          "Window ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.PING",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.PING",
+      "packet_name_775": "Server.PING",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 33202,
+        "last_tested_at": "2026-04-02T20:39:21.703405+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.5635,
+        "section_title": "Ping (play)",
+        "section_anchor": "Ping_(play)",
+        "field_names": [
+          "ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.PLAYER_ABILITIES",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.PLAYER_ABILITIES",
+      "packet_name_775": "Server.PLAYER_ABILITIES",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 24,
+        "last_tested_at": "2026-04-02T20:39:21.737955+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.7,
+        "section_title": "Player Abilities (clientbound)",
+        "section_anchor": "Player_Abilities_(clientbound)",
+        "field_names": [
+          "Flags"
+        ]
+      }
+    },
+    {
+      "key": "Server.PLAYER_INFO",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.PLAYER_INFO",
+      "packet_name_775": "Server.PLAYER_INFO",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "seeded_773",
+      "tests": {
+        "captured_775": false,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 0,
+        "last_tested_at": null
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.7172,
+        "section_title": "Player Info Remove",
+        "section_anchor": "Player_Info_Remove",
+        "field_names": [
+          "UUIDs"
+        ]
+      }
+    },
+    {
+      "key": "Server.PLAYER_INFO_REMOVE",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.PLAYER_INFO_REMOVE",
+      "packet_name_775": "Server.PLAYER_INFO_REMOVE",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "seeded_773",
+      "tests": {
+        "captured_775": false,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 0,
+        "last_tested_at": null
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Player Info Remove",
+        "section_anchor": "Player_Info_Remove",
+        "field_names": [
+          "UUIDs"
+        ]
+      }
+    },
+    {
+      "key": "Server.PLAYER_INFO_UPDATE",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.PLAYER_INFO_UPDATE",
+      "packet_name_775": "Server.PLAYER_INFO_UPDATE",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 68,
+        "last_tested_at": "2026-04-02T20:39:21.738019+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Player Info Update",
+        "section_anchor": "Player_Info_Update",
+        "field_names": [
+          "Actions",
+          "UUID"
+        ]
+      }
+    },
+    {
+      "key": "Server.PLAYER_POSITION_AND_LOOK",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.PLAYER_POSITION_AND_LOOK",
+      "packet_name_775": "Server.PLAYER_POSITION_AND_LOOK",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "movement-core",
+      "status": "needs_remap",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": true,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 10,
+        "last_tested_at": "2026-04-02T20:39:21.738094+00:00"
+      },
+      "notes": "No payload changes observed between 773 and 775 in live captures.",
+      "packet_structure": {
+        "fields_773": [
+          "flags_mask",
+          "pitch",
+          "teleport_id",
+          "x",
+          "y",
+          "yaw",
+          "z"
+        ],
+        "fields_775": [
+          "delta_x",
+          "delta_y",
+          "delta_z",
+          "dismount_vehicle",
+          "flags_mask",
+          "pitch",
+          "teleport_id",
+          "x",
+          "y",
+          "yaw",
+          "z"
+        ],
+        "added_in_775": [
+          "delta_x",
+          "delta_y",
+          "delta_z",
+          "dismount_vehicle"
+        ],
+        "removed_in_775": [],
+        "legacy_field_overlap": [
+          "flags_mask",
+          "pitch",
+          "teleport_id",
+          "x",
+          "y",
+          "yaw",
+          "z"
+        ],
+        "source": "capture"
+      },
+      "examples": {
+        "decode_773": {
+          "flags_mask": 0,
+          "pitch": 28.500029,
+          "teleport_id": 1,
+          "x": -367.136446,
+          "y": 63.0,
+          "yaw": -27.60005,
+          "z": 362.118512
+        },
+        "decode_775": {
+          "delta_x": 0.0,
+          "delta_y": 0.0,
+          "delta_z": 0.0,
+          "dismount_vehicle": false,
+          "flags_mask": 0,
+          "pitch": 28.500029,
+          "teleport_id": 1,
+          "x": -367.136446,
+          "y": 63.0,
+          "yaw": -27.60005,
+          "z": 362.118512
+        }
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Synchronize Player Position",
+        "section_anchor": "Synchronize_Player_Position",
+        "field_names": [
+          "Teleport ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.PLAYER_ROTATION",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.PLAYER_ROTATION",
+      "packet_name_775": "Server.PLAYER_ROTATION",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "seeded_773",
+      "tests": {
+        "captured_775": false,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 0,
+        "last_tested_at": null
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 1.0,
+        "section_title": "Player Rotation",
+        "section_anchor": "Player_Rotation",
+        "field_names": [
+          "Yaw"
+        ]
+      }
+    },
+    {
+      "key": "Server.REMOVE_ENTITY_EFFECT",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.REMOVE_ENTITY_EFFECT",
+      "packet_name_775": "Server.REMOVE_ENTITY_EFFECT",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 4,
+        "last_tested_at": "2026-04-02T20:39:21.738214+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 1.0,
+        "section_title": "Remove Entity Effect",
+        "section_anchor": "Remove_Entity_Effect",
+        "field_names": [
+          "Entity ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.RESPAWN",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.RESPAWN",
+      "packet_name_775": "Server.RESPAWN",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 12,
+        "last_tested_at": "2026-04-02T20:39:21.738226+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 1.0,
+        "section_title": "Respawn",
+        "section_anchor": "Respawn",
+        "field_names": [
+          "Dimension Type"
+        ]
+      }
+    },
+    {
+      "key": "Server.SET_COOLDOWN",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.SET_COOLDOWN",
+      "packet_name_775": "Server.SET_COOLDOWN",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 4,
+        "last_tested_at": "2026-04-02T20:39:21.738241+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 1.0,
+        "section_title": "Set Cooldown",
+        "section_anchor": "Set_Cooldown",
+        "field_names": [
+          "Cooldown Group"
+        ]
+      }
+    },
+    {
+      "key": "Server.SET_PASSENGERS",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.SET_PASSENGERS",
+      "packet_name_775": "Server.SET_PASSENGERS",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 2,
+        "last_tested_at": "2026-04-02T20:39:21.738249+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 1.0,
+        "section_title": "Set Passengers",
+        "section_anchor": "Set_Passengers",
+        "field_names": [
+          "Entity ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.SET_PLAYER_INVENTORY",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.SET_PLAYER_INVENTORY",
+      "packet_name_775": "Server.SET_PLAYER_INVENTORY",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 4,
+        "last_tested_at": "2026-04-02T20:21:59.837926+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.8264,
+        "section_title": "Set Player Inventory Slot",
+        "section_anchor": "Set_Player_Inventory_Slot",
+        "field_names": [
+          "Slot"
+        ]
+      }
+    },
+    {
+      "key": "Server.SET_SLOT",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.SET_SLOT",
+      "packet_name_775": "Server.SET_SLOT",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 76,
+        "last_tested_at": "2026-04-02T20:39:21.738257+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.6385,
+        "section_title": "Set Container Slot",
+        "section_anchor": "Set_Container_Slot",
+        "field_names": [
+          "Window ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.SPAWN_ENTITY",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.SPAWN_ENTITY",
+      "packet_name_775": "Server.SPAWN_ENTITY",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 4840,
+        "last_tested_at": "2026-04-02T20:39:21.738331+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 1.0,
+        "section_title": "Spawn Entity",
+        "section_anchor": "Spawn_Entity",
+        "field_names": [
+          "Entity ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.SPAWN_LIVING_ENTITY",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.SPAWN_LIVING_ENTITY",
+      "packet_name_775": "Server.SPAWN_LIVING_ENTITY",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "seeded_773",
+      "tests": {
+        "captured_775": false,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 0,
+        "last_tested_at": null
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.7258,
+        "section_title": "Spawn Entity",
+        "section_anchor": "Spawn_Entity",
+        "field_names": [
+          "Entity ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.SPAWN_PAINTING",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.SPAWN_PAINTING",
+      "packet_name_775": "Server.SPAWN_PAINTING",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "seeded_773",
+      "tests": {
+        "captured_775": false,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 0,
+        "last_tested_at": null
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.5308,
+        "section_title": "Spawn Entity",
+        "section_anchor": "Spawn_Entity",
+        "field_names": [
+          "Entity ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.SPAWN_PLAYER",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.SPAWN_PLAYER",
+      "packet_name_775": "Server.SPAWN_PLAYER",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "seeded_773",
+      "tests": {
+        "captured_775": false,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 0,
+        "last_tested_at": null
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.4708,
+        "section_title": "Spawn Entity",
+        "section_anchor": "Spawn_Entity",
+        "field_names": [
+          "Entity ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.TAGS",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.TAGS",
+      "packet_name_775": "Server.TAGS",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 4,
+        "last_tested_at": "2026-04-02T20:39:21.743570+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Update Tags (play)",
+        "section_anchor": "Update_Tags_(play)",
+        "field_names": [
+          "Tagged Registries"
+        ]
+      }
+    },
+    {
+      "key": "Server.TEAMS",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.TEAMS",
+      "packet_name_775": "Server.TEAMS",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 154,
+        "last_tested_at": "2026-04-02T20:39:21.743603+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.5485,
+        "section_title": "Update Teams",
+        "section_anchor": "Update_Teams",
+        "field_names": [
+          "Team Name",
+          "Identifiers for the added entities.  For players, this is their username; for other entities, it is their UUID.",
+          "Identifiers for the removed entities.  For players, this is their username; for other entities, it is their UUID."
+        ]
+      }
+    },
+    {
+      "key": "Server.UNLOAD_CHUNK",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.UNLOAD_CHUNK",
+      "packet_name_775": "Server.UNLOAD_CHUNK",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 2696,
+        "last_tested_at": "2026-04-02T20:39:21.743765+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Unload Chunk",
+        "section_anchor": "Unload_Chunk",
+        "field_names": [
+          "Chunk Z"
+        ]
+      }
+    },
+    {
+      "key": "Server.UPDATE_ATTRIBUTES",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.UPDATE_ATTRIBUTES",
+      "packet_name_775": "Server.UPDATE_ATTRIBUTES",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 4948,
+        "last_tested_at": "2026-04-02T20:39:21.744866+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 1.0,
+        "section_title": "Update Attributes",
+        "section_anchor": "Update_Attributes",
+        "field_names": [
+          "Entity ID",
+          "VarInt"
+        ]
+      }
+    },
+    {
+      "key": "Server.UPDATE_HEALTH",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.UPDATE_HEALTH",
+      "packet_name_775": "Server.UPDATE_HEALTH",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 172,
+        "last_tested_at": "2026-04-02T20:39:21.749614+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.546,
+        "section_title": "Update Light",
+        "section_anchor": "Update_Light",
+        "field_names": [
+          "Chunk X"
+        ]
+      }
+    },
+    {
+      "key": "Server.USE_BED",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.USE_BED",
+      "packet_name_775": "Server.USE_BED",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "seeded_773",
+      "tests": {
+        "captured_775": false,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 0,
+        "last_tested_at": null
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "unmatched",
+        "match_method": "unmatched",
+        "match_score": 0.2588,
+        "section_title": null,
+        "section_anchor": null,
+        "field_names": []
+      }
+    },
+    {
+      "key": "Server.VEHICLE_MOVE",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.VEHICLE_MOVE",
+      "packet_name_775": "Server.VEHICLE_MOVE",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "movement-core",
+      "status": "legacy_773_compatible",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": true,
+        "legacy_773_compatible": true,
+        "validated_grim_path": true,
+        "sample_count": 5,
+        "last_tested_at": "2026-04-02T20:21:59.859418+00:00"
+      },
+      "notes": "No samples in current live capture; movement compatibility still pending.",
+      "packet_structure": {
+        "fields_773": [
+          "x",
+          "y",
+          "z"
+        ],
+        "fields_775": [
+          "x",
+          "y",
+          "z"
+        ],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [
+          "x",
+          "y",
+          "z"
+        ],
+        "source": "capture"
+      },
+      "examples": {
+        "decode_773": {
+          "x": -329.308996,
+          "y": 62.523264,
+          "z": 390.137915
+        },
+        "decode_775": {
+          "x": -329.308996,
+          "y": 62.523264,
+          "z": 390.137915
+        }
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.575,
+        "section_title": "Move Vehicle (clientbound)",
+        "section_anchor": "Move_Vehicle_(clientbound)",
+        "field_names": [
+          "X"
+        ]
+      }
+    },
+    {
+      "key": "Server.WINDOW_CONFIRMATION",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.WINDOW_CONFIRMATION",
+      "packet_name_775": "Server.WINDOW_CONFIRMATION",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "seeded_773",
+      "tests": {
+        "captured_775": false,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 0,
+        "last_tested_at": null
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Set Container Slot",
+        "section_anchor": "Set_Container_Slot",
+        "field_names": [
+          "Window ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.WINDOW_ITEMS",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.WINDOW_ITEMS",
+      "packet_name_775": "Server.WINDOW_ITEMS",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 18,
+        "last_tested_at": "2026-04-02T20:39:21.749825+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "alias",
+        "match_score": 1.0,
+        "section_title": "Set Container Content",
+        "section_anchor": "Set_Container_Content",
+        "field_names": [
+          "Window ID"
+        ]
+      }
+    },
+    {
+      "key": "Server.WORLD_BORDER",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.WORLD_BORDER",
+      "packet_name_775": "Server.WORLD_BORDER",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "seeded_773",
+      "tests": {
+        "captured_775": false,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 0,
+        "last_tested_at": null
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.6771,
+        "section_title": "Initialize World Border",
+        "section_anchor": "Initialize_World_Border",
+        "field_names": [
+          "X"
+        ]
+      }
+    },
+    {
+      "key": "Server.WORLD_BORDER_CENTER",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.WORLD_BORDER_CENTER",
+      "packet_name_775": "Server.WORLD_BORDER_CENTER",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 2,
+        "last_tested_at": "2026-04-02T20:39:21.749848+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.6528,
+        "section_title": "Set Border Center",
+        "section_anchor": "Set_Border_Center",
+        "field_names": [
+          "X"
+        ]
+      }
+    },
+    {
+      "key": "Server.WORLD_BORDER_LERP_SIZE",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.WORLD_BORDER_LERP_SIZE",
+      "packet_name_775": "Server.WORLD_BORDER_LERP_SIZE",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 2,
+        "last_tested_at": "2026-04-02T20:39:21.749856+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.7152,
+        "section_title": "Set Border Lerp Size",
+        "section_anchor": "Set_Border_Lerp_Size",
+        "field_names": [
+          "Old Diameter"
+        ]
+      }
+    },
+    {
+      "key": "Server.WORLD_BORDER_SIZE",
+      "direction": "clientbound",
+      "state": "play",
+      "packet_name_773": "Server.WORLD_BORDER_SIZE",
+      "packet_name_775": "Server.WORLD_BORDER_SIZE",
+      "packet_id_773": null,
+      "packet_id_775": null,
+      "grim_usage": true,
+      "priority": "grim-required",
+      "status": "captured_775",
+      "tests": {
+        "captured_775": true,
+        "decoded_775": false,
+        "legacy_773_compatible": false,
+        "validated_grim_path": false,
+        "sample_count": 2,
+        "last_tested_at": "2026-04-02T20:39:21.749865+00:00"
+      },
+      "notes": "",
+      "packet_structure": {
+        "fields_773": [],
+        "fields_775": [],
+        "added_in_775": [],
+        "removed_in_775": [],
+        "legacy_field_overlap": [],
+        "source": "seed"
+      },
+      "examples": {
+        "decode_773": null,
+        "decode_775": null
+      },
+      "wiki_reference": {
+        "url": "https://minecraft.wiki/w/Java_Edition_protocol/Packets",
+        "match_status": "matched",
+        "match_method": "fuzzy",
+        "match_score": 0.6375,
+        "section_title": "Set Border Size",
+        "section_anchor": "Set_Border_Size",
+        "field_names": [
+          "Diameter"
+        ]
+      }
+    }
+  ]
+}

@@ -17,22 +17,25 @@ public class CrashI extends Check implements PacketCheck {
     @Override
     public void onPacketReceive(PacketReceiveEvent event) {
         if (event.getPacketType() == PacketType.Play.Client.SELECT_BUNDLE_ITEM) {
-            int selectedItemIndex;
             try {
-                selectedItemIndex = new WrapperPlayClientSelectBundleItem(event).getSelectedItemIndex();
-            } catch (IllegalArgumentException e) {
-                // thanks packetevents!
-                if (e.getMessage().startsWith("Invalid selectedItemIndex: ")) {
-                    selectedItemIndex = Integer.parseInt(e.getMessage().substring(27));
-                } else {
-                    throw e;
+                int selectedItemIndex;
+                try {
+                    selectedItemIndex = new WrapperPlayClientSelectBundleItem(event).getSelectedItemIndex();
+                } catch (IllegalArgumentException e) {
+                    // thanks packetevents!
+                    if (e.getMessage().startsWith("Invalid selectedItemIndex: ")) {
+                        selectedItemIndex = Integer.parseInt(e.getMessage().substring(27));
+                    } else {
+                        throw e;
+                    }
                 }
-            }
 
-            if (selectedItemIndex < -1) {
-                flagAndAlert("selectedItemIndex=" + selectedItemIndex);
-                event.setCancelled(true);
-                player.onPacketCancel();
+                if (selectedItemIndex < -1) {
+                    flagAndAlert("selectedItemIndex=" + selectedItemIndex);
+                    event.setCancelled(true);
+                    player.onPacketCancel();
+                }
+            } catch (Exception e) {
             }
         }
     }

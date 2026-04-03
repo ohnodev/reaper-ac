@@ -39,8 +39,10 @@ public class BasePacketWorldReader extends PacketListenerAbstract {
         if (event.getPacketType() == PacketType.Play.Server.MAP_CHUNK_BULK) {
             GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
             if (player == null) return;
-
-            handleMapChunkBulk(player, event);
+            try {
+                handleMapChunkBulk(player, event);
+            } catch (Exception e) {
+            }
         }
 
         if (event.getPacketType() == PacketType.Play.Server.CHUNK_DATA) {
@@ -75,9 +77,11 @@ public class BasePacketWorldReader extends PacketListenerAbstract {
         if (event.getPacketType() == PacketType.Play.Server.ACKNOWLEDGE_PLAYER_DIGGING) {
             GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
             if (player == null) return;
-
-            WrapperPlayServerAcknowledgePlayerDigging ack = new WrapperPlayServerAcknowledgePlayerDigging(event);
-            player.compensatedWorld.handleBlockBreakAck(ack.getBlockPosition(), ack.getBlockId(), ack.getAction(), ack.isSuccessful());
+            try {
+                WrapperPlayServerAcknowledgePlayerDigging ack = new WrapperPlayServerAcknowledgePlayerDigging(event);
+                player.compensatedWorld.handleBlockBreakAck(ack.getBlockPosition(), ack.getBlockId(), ack.getAction(), ack.isSuccessful());
+            } catch (Exception e) {
+            }
         }
 
         if (event.getPacketType() == PacketType.Play.Server.CHANGE_GAME_STATE) {

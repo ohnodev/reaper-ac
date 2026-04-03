@@ -139,7 +139,13 @@ public class PacketServerTeleport extends PacketListenerAbstract {
             GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
             if (player == null) return;
 
-            WrapperPlayServerPlayerRotation packet = new WrapperPlayServerPlayerRotation(event);
+            WrapperPlayServerPlayerRotation packet;
+            try {
+                packet = new WrapperPlayServerPlayerRotation(event);
+            } catch (Exception e) {
+                PacketDecodeUtils.logSuppressedDecode("PacketServerTeleport(PLAYER_ROTATION)", event.getPacketType(), e);
+                return;
+            }
 
             // I don't want to deal with this, so we'll prevent it
             if (!Float.isFinite(packet.getPitch())) {

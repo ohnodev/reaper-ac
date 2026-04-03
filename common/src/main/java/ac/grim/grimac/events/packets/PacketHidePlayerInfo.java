@@ -13,6 +13,7 @@ import com.github.retrooper.packetevents.protocol.player.UserProfile;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPlayerInfo;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPlayerInfoUpdate;
 
+
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -36,7 +37,12 @@ public class PacketHidePlayerInfo extends PacketListenerAbstract {
                 return;
             }
 
-            WrapperPlayServerPlayerInfo info = new WrapperPlayServerPlayerInfo(event);
+            WrapperPlayServerPlayerInfo info;
+            try {
+                info = new WrapperPlayServerPlayerInfo(event);
+            } catch (Exception e) {
+                return;
+            }
 
             if (info.getAction() == WrapperPlayServerPlayerInfo.Action.UPDATE_GAME_MODE || info.getAction() == WrapperPlayServerPlayerInfo.Action.ADD_PLAYER) {
                 List<WrapperPlayServerPlayerInfo.PlayerData> nmsPlayerInfoDataList = info.getPlayerDataList();
