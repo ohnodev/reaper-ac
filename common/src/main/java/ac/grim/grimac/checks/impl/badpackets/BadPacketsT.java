@@ -36,8 +36,10 @@ public class BadPacketsT extends Check implements PacketCheck {
         if (event.getPacketType().equals(PacketType.Play.Client.INTERACT_ENTITY)) {
             final WrapperPlayClientInteractEntity wrapper = new WrapperPlayClientInteractEntity(event);
             // Only INTERACT_AT actually has an interaction vector
+            if (wrapper.getAction() != WrapperPlayClientInteractEntity.InteractAction.INTERACT_AT) return;
             Vector3d targetVector = wrapper.getLocation();
-            if (targetVector == null) return;
+            if (targetVector == null) return; // shouldn't ever happen, but whatever
+
             final PacketEntity packetEntity = player.compensatedEntities.getEntity(wrapper.getEntityId());
             // Don't continue if the compensated entity hasn't been resolved
             if (packetEntity == null) {
