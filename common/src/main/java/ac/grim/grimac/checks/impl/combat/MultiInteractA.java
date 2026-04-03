@@ -49,7 +49,7 @@ public class MultiInteractA extends Check implements PostPredictionCheck {
     }
 
     private void onInteract(PacketReceiveEvent event, int entity, boolean sneaking) {
-        if (hasInteracted && entity != lastEntity) {
+        if (hasInteracted && (entity != lastEntity || sneaking != lastSneaking)) {
             String verbose = "lastEntity=" + lastEntity + ", entity=" + entity
                     + ", lastSneaking=" + lastSneaking + ", sneaking=" + sneaking;
             if (!player.canSkipTicks()) {
