@@ -75,3 +75,7 @@ run/
 fabric/run/
 
 .ignored/
+
+# Keep folder placeholder only; publish build artifacts via CI/release storage.
+prebuilt/*
+!prebuilt/.gitkeep

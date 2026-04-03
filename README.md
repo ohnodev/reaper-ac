@@ -27,21 +27,12 @@ A premium version is planned, which will offer additional subscription-based pai
 
 - Latest updates:
   - **[Modrinth](https://modrinth.com/plugin/grimac)** *(recommended)*
-  - GitHub
-  artifacts: [Bukkit](https://nightly.link/GrimAnticheat/Grim/workflows/gradle-publish/2.0/grimac-bukkit.zip), [Fabric](https://nightly.link/GrimAnticheat/Grim/workflows/gradle-publish/2.0/grimac-fabric.zip) *(bleeding edge)*
-- Major releases only:
-  - ~~[Hangar](https://hangar.papermc.io/GrimAnticheat/GrimAnticheat)~~
-  - ~~[SpigotMC](https://www.spigotmc.org/resources/grim-anticheat.99923/)~~
+  - GitHub artifacts: [Fabric](https://nightly.link/GrimAnticheat/Grim/workflows/gradle-publish/2.0/grimac-fabric.zip) *(bleeding edge)*
 
 ## Requirements & Installation
 
 - Java 17 or higher. *For more details, see [Updating-to-Java-17](https://github.com/GrimAnticheat/Grim/wiki/Updating-to-Java-17).*
-- A Spigot, Paper, Folia, or Fabric server environment. *For more details, see [Supported-environments](https://github.com/GrimAnticheat/Grim/wiki/Supported-environments).*
-
-If you use a proxy such as Velocity or Bungeecord:
-- If you use Geyser, Floodgate must be installed on the backend server (where Grim is) so Grim can access the Floodgate API.
-- If you use ViaVersion, it must be installed on the backend server (where Grim is) ONLY.
-  Grim does not support having ViaVersion installed on the proxy, even if it is also installed on the backend.
+- A Fabric server environment.
 
 ## Resources
 
@@ -60,12 +51,53 @@ Grim's plugin API allows you to integrate Grim into your own plugins. Visit
 the [plugin API repository](https://github.com/GrimAnticheat/GrimAPI) for the source code and more
 information.
 
-## Compiling From Source
+## Build From Source
 
-1. `git clone https://github.com/GrimAnticheat/Grim.git`
-2. `cd Grim`
-3. `./gradlew build`
-4. The final jars will compile into the `<platform>/build/libs` folders
+This fork is maintained as **Fabric-only (26.1)**.
+
+### Prerequisites
+
+- Java 17 or newer available on `PATH` (`java -version`)
+- Git
+- Internet access for Gradle dependencies
+
+### macOS / Linux (Fabric-only build)
+
+```bash
+git clone https://github.com/ohnodev/grim-26-1-official-namespace.git
+cd grim-26-1-official-namespace
+./gradlew :fabric:clean :fabric:build
+```
+
+### Windows (PowerShell, Fabric-only build)
+
+```powershell
+git clone https://github.com/ohnodev/grim-26-1-official-namespace.git
+cd grim-26-1-official-namespace
+.\gradlew.bat :fabric:clean :fabric:build
+```
+
+These commands intentionally target only the Fabric module in this 26.1 fork.
+
+### Build artifacts
+
+- Fabric runtime jar: `fabric/build/libs/grimac-fabric-<version>.jar`
+- Extra artifacts (sources/javadocs): `fabric/build/libs/`
+
+## Artifact Distribution
+
+Prebuilt binaries are not committed to this repository. Use artifact storage instead:
+
+- GitHub Actions artifacts from CI runs (short-term download):
+  - https://github.com/ohnodev/grim-26-1-official-namespace/actions/workflows/gradle-publish.yml
+- Releases/nightly distribution for downloadable binaries:
+  - https://github.com/ohnodev/grim-26-1-official-namespace/releases
+
+To inspect locally produced files after a build:
+
+```bash
+ls -lah fabric/build/libs/
+```
 
 ## Grim Supremacy
 
