@@ -10,8 +10,6 @@ import ac.grim.grimac.utils.math.Vector3dm;
 import ac.grim.grimac.utils.nmsutil.FluidTypeFlowing;
 import ac.grim.grimac.utils.nmsutil.Materials;
 import com.github.retrooper.packetevents.protocol.world.chunk.BaseChunk;
-import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
-import com.github.retrooper.packetevents.protocol.world.states.type.StateTypes;
 
 import java.util.EnumMap;
 import java.util.Map.Entry;
@@ -110,37 +108,14 @@ public class EntityFluidInteraction {
                 for (int y = minY; y <= maxY; y++) {
                     int sectionY = y - (level.getMinHeight() >> 4);
                     if (sectionY >= 0 && sectionY < sections.length) {
-                        hasFluidAndLoaded |= sectionHasFluid(level, sections[sectionY]);
+                        BaseChunk section = sections[sectionY];
+                        hasFluidAndLoaded |= section != null && section.hasFluid();
                     }
                 }
             }
         }
 
         return hasFluidAndLoaded;
-    }
-
-    private static boolean sectionHasFluid(final CompensatedWorld level, final BaseChunk section) {
-        if (section == null || section.isEmpty()) {
-            return false;
-        }
-
-        for (int y = 0; y < 16; y++) {
-            for (int z = 0; z < 16; z++) {
-                for (int x = 0; x < 16; x++) {
-                    int blockId = section.getBlockId(x, y, z);
-                    if (blockId == 0) {
-                        continue;
-                    }
-
-                    WrappedBlockState state = WrappedBlockState.getByGlobalId(CompensatedWorld.blockVersion, blockId);
-                    if (Materials.isWater(level.player.getClientVersion(), state) || state.getType() == StateTypes.LAVA) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
     }
 
     private EntityFluidInteraction.Tracker getTrackerFor(final FluidTag fluid) {
