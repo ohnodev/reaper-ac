@@ -62,13 +62,6 @@ repositories {
         includeGroup("org.geysermc.api")
     }
 
-    exclusive("https://repo.opencollab.dev/maven-snapshots/", { mavenContent { snapshotsOnly() } }) {
-        includeGroup("org.geysermc.floodgate")
-        includeGroup("org.geysermc.cumulus")
-        includeModule("org.geysermc", "common")
-        includeModule("org.geysermc", "geyser-parent")
-    }
-
     exclusive(mavenCentral()) { includeGroup("me.lucko") }
 
     mavenCentral()
