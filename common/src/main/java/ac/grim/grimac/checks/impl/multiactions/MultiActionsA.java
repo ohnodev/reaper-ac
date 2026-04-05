@@ -20,14 +20,26 @@ public class MultiActionsA extends Check implements PacketCheck {
     @Override
     public void onPacketReceive(PacketReceiveEvent event) {
         if (player.packetStateData.isSlowedByUsingItem() && (player.packetStateData.lastSlotSelected == player.packetStateData.getSlowedByUsingItemSlot() || player.packetStateData.itemInUseHand == InteractionHand.OFF_HAND)) {
-            if (event.getPacketType() == PacketType.Play.Client.INTERACT_ENTITY && new WrapperPlayClientInteractEntity(event).getAction() == WrapperPlayClientInteractEntity.InteractAction.ATTACK
-                    || event.getPacketType() == PacketType.Play.Client.ATTACK || event.getPacketType() == PacketType.Play.Client.SPECTATE_ENTITY
-                    || event.getPacketType() == PacketType.Play.Client.PLAYER_DIGGING && new WrapperPlayClientPlayerDigging(event).getAction() == DiggingAction.STAB) {
+            if (isAttackPacket(event)) {
                 if (flagAndAlert() && shouldModifyPackets()) {
                     event.setCancelled(true);
                     player.onPacketCancel();
                 }
             }
         }
+    }
+
+    private boolean isAttackPacket(PacketReceiveEvent event) {
+        if (event.getPacketType() == PacketType.Play.Client.ATTACK
+                || event.getPacketType() == PacketType.Play.Client.SPECTATE_ENTITY) {
+            return true;
+        }
+        if (event.getPacketType() == PacketType.Play.Client.INTERACT_ENTITY) {
+            return new WrapperPlayClientInteractEntity(event).getAction() == WrapperPlayClientInteractEntity.InteractAction.ATTACK;
+        }
+        if (event.getPacketType() == PacketType.Play.Client.PLAYER_DIGGING) {
+            return new WrapperPlayClientPlayerDigging(event).getAction() == DiggingAction.STAB;
+        }
+        return false;
     }
 }
