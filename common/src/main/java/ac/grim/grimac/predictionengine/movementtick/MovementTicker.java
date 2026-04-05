@@ -174,7 +174,7 @@ public class MovementTicker {
         final PacketEntity riding = player.compensatedEntities.self.getRiding();
         // Re-run fluid interaction when needed for fall-distance and movement consistency.
         if (!player.wasTouchingWater && (riding == null || (!riding.isBoat && !riding.isHappyGhast))) {
-            PlayerBaseTick.updateFluidInteraction(player);
+            PlayerBaseTick.updateInWaterStateAndDoWaterCurrentPushing(player);
         }
 
         if (player.onGround) {

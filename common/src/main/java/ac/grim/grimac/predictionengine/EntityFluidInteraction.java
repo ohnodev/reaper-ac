@@ -39,7 +39,7 @@ public class EntityFluidInteraction {
             return;
         }
 
-        double aabbMinY = player.boundingBox.minY;
+        double aabbMinY = aabb.minY;
 
         int playerX = GrimMath.floor(player.lastX);
         double playerEyeY = player.lastY + player.getEyeHeight();
