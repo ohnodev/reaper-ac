@@ -19,7 +19,7 @@ public class GeyserUtil {
     private static final boolean geyser = ReflectionUtils.hasClass("org.geysermc.api.Geyser");
 
     public static boolean isBedrockPlayer(UUID uuid) {
-        return isFloodgatePlayer(uuid) || geyser && Geyser.api().isBedrockPlayer(uuid);
+        return isFloodgatePlayer(uuid) || (geyser && Geyser.api().isBedrockPlayer(uuid));
     }
 
     private static boolean isFloodgatePlayer(UUID uuid) {
@@ -29,6 +29,9 @@ public class GeyserUtil {
 
         try {
             Object floodgateApi = floodgateGetInstance.invoke(null);
+            if (floodgateApi == null) {
+                return false;
+            }
             Object result = floodgateIsFloodgatePlayer.invoke(floodgateApi, uuid);
             return result instanceof Boolean && (Boolean) result;
         } catch (ReflectiveOperationException ignored) {
