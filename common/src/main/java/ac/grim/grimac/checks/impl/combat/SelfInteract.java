@@ -21,14 +21,10 @@ public class SelfInteract extends Check implements PacketCheck {
         if (event.getPacketType() == PacketType.Play.Client.INTERACT_ENTITY) {
             WrapperPlayClientInteractEntity packet = new WrapperPlayClientInteractEntity(event);
             onInteract(event, packet.getEntityId());
-        }
-
-        if (event.getPacketType() == PacketType.Play.Client.ATTACK) {
+        } else if (event.getPacketType() == PacketType.Play.Client.ATTACK) {
             WrapperPlayClientAttack packet = new WrapperPlayClientAttack(event);
             onInteract(event, packet.getEntityId());
-        }
-
-        if (event.getPacketType() == PacketType.Play.Client.SPECTATE_ENTITY) {
+        } else if (event.getPacketType() == PacketType.Play.Client.SPECTATE_ENTITY) {
             WrapperPlayClientSpectateEntity packet = new WrapperPlayClientSpectateEntity(event);
             onInteract(event, packet.getEntityId());
         }
