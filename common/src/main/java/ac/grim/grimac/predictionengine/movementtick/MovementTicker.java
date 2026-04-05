@@ -174,11 +174,7 @@ public class MovementTicker {
         final PacketEntity riding = player.compensatedEntities.self.getRiding();
         // this needs to be looked at for 1.21.2+ (especially when riding entities, as Mojang has changed this logic a few times).
         if (player.getClientVersion() != ClientVersion.V_1_21_4 && (!player.wasTouchingWater && (riding == null || (!riding.isBoat && !riding.isHappyGhast)))) {
-            if (player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_21_11)) {
-                PlayerBaseTick.updateInWaterStateAndDoWaterCurrentPushing(player);
-            } else {
-                PlayerBaseTick.updateFluidInteraction(player);
-            }
+            PlayerBaseTick.updateFluidInteraction(player);
         }
 
         if (player.onGround) {

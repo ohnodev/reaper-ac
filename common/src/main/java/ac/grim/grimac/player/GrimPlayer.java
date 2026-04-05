@@ -1035,12 +1035,10 @@ public class GrimPlayer implements GrimUser {
     }
 
     public double getFluidHeight(FluidTag fluidTag) {
-        if (getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_21_11)) return this.fluidHeight.getDouble(fluidTag);
         return this.fluidInteraction.getFluidHeight(fluidTag);
     }
 
     public boolean isEyeInFluid(FluidTag fluidTag) {
-        if (getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_21_11)) return this.fluidOnEyes == fluidTag;
         return this.fluidInteraction.isEyeInFluid(fluidTag);
     }
 

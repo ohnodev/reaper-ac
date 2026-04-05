@@ -54,13 +54,8 @@ public final class PlayerBaseTick {
             player.trackBaseTickAddition(flyingShift);
         }
 
-        if (player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_21_11)) {
-            updateInWaterStateAndDoFluidPushing(player);
-            updateFluidOnEyes(player);
-        } else {
-            player.wasEyeInWater = player.fluidInteraction.isEyeInFluid(FluidTag.WATER);
-            updateFluidInteraction(player);
-        }
+        player.wasEyeInWater = player.fluidInteraction.isEyeInFluid(FluidTag.WATER);
+        updateFluidInteraction(player);
         updateSwimming(player);
 
         // If in lava, fall distance is multiplied by 0.5
