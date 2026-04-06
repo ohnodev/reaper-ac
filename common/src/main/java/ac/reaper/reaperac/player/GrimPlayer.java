@@ -2,7 +2,7 @@ package ac.reaper.reaperac.player;
 
 import ac.reaper.reaperac.GrimAPI;
 import ac.reaper.reaperac.api.AbstractCheck;
-import ac.reaper.reaperac.api.GrimUser;
+import ac.reaper.reaperac.api.ReaperUser;
 import ac.reaper.reaperac.api.PacketWorld;
 import ac.reaper.reaperac.api.config.ConfigManager;
 import ac.reaper.reaperac.api.handler.ResyncHandler;
@@ -100,7 +100,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 // Put variables sync'd to the netty thread in PacketStateData
 // Variables that need lag compensation should have their own class
 // Soon there will be a generic class for lag compensation
-public class GrimPlayer implements GrimUser {
+public class GrimPlayer implements ReaperUser {
     public final UUID uuid;
     public final User user;
     public int entityID;

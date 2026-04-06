@@ -1,6 +1,6 @@
 package ac.reaper.reaperac.api.events;
 
-import ac.reaper.reaperac.api.GrimUser;
+import ac.reaper.reaperac.api.ReaperUser;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
@@ -9,15 +9,15 @@ import org.jetbrains.annotations.NotNull;
 public class GrimJoinEvent extends Event implements GrimUserEvent {
 
     private static final HandlerList handlers = new HandlerList();
-    private final GrimUser user;
+    private final ReaperUser user;
 
-    public GrimJoinEvent(GrimUser user) {
+    public GrimJoinEvent(ReaperUser user) {
         super(true); // Async!
         this.user = user;
     }
 
     @Override
-    public GrimUser getUser() {
+    public ReaperUser getUser() {
         return user;
     }
 

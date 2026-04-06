@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.UUID;
 
-public interface GrimUser extends ConfigReloadable, BasicReloadable, UserHandlerHolder, GrimIdentity {
+public interface ReaperUser extends ConfigReloadable, BasicReloadable, UserHandlerHolder, ReaperIdentity {
 
     String getName();
 
@@ -58,7 +58,7 @@ public interface GrimUser extends ConfigReloadable, BasicReloadable, UserHandler
 
     /**
      * Schedules a task to run based on the player's transaction.
-     * This needs to be executed on the player's netty thread. You can use {@link GrimUser#runSafely(Runnable)} to ensure this.
+     * This needs to be executed on the player's netty thread. You can use {@link ReaperUser#runSafely(Runnable)} to ensure this.
      *
      * @param transaction If the player's transaction is greater than or equal to this, the task will run
      * @param runnable    The task that should run

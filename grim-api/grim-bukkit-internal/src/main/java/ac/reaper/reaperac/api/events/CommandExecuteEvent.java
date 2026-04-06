@@ -1,7 +1,7 @@
 package ac.reaper.reaperac.api.events;
 
 import ac.reaper.reaperac.api.AbstractCheck;
-import ac.reaper.reaperac.api.GrimUser;
+import ac.reaper.reaperac.api.ReaperUser;
 import lombok.Getter;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +12,7 @@ public class CommandExecuteEvent extends FlagEvent {
     private static final HandlerList handlers = new HandlerList();
     @Getter private final String command;
 
-    public CommandExecuteEvent(GrimUser player, AbstractCheck check, String verbose, String command) {
+    public CommandExecuteEvent(ReaperUser player, AbstractCheck check, String verbose, String command) {
         super(player, check, verbose); // Async!
         this.command = command;
     }

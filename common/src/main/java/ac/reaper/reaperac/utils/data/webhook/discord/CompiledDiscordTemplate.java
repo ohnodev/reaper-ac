@@ -1,7 +1,7 @@
 package ac.reaper.reaperac.utils.data.webhook.discord;
 
 import ac.reaper.reaperac.GrimAPI;
-import ac.reaper.reaperac.api.GrimUser;
+import ac.reaper.reaperac.api.ReaperUser;
 import ac.reaper.reaperac.player.GrimPlayer;
 import org.jetbrains.annotations.NotNull;
 
@@ -92,7 +92,7 @@ public record CompiledDiscordTemplate(Segment[] segments) {
      */
     public String render(@NotNull GrimPlayer player,
                          @NotNull Map<String, String> statics,
-                         @NotNull Map<String, Function<GrimUser, String>> dynamics,
+                         @NotNull Map<String, Function<ReaperUser, String>> dynamics,
                          char backtickReplacement) {
         StringBuilder sb = new StringBuilder(segments.length * 32);
         for (Segment seg : segments) {
@@ -103,7 +103,7 @@ public record CompiledDiscordTemplate(Segment[] segments) {
                 String val = statics.get(p.key);
 
                 if (val == null) {
-                    Function<GrimUser, String> fn = dynamics.get(p.key);
+                    Function<ReaperUser, String> fn = dynamics.get(p.key);
                     if (fn != null) val = fn.apply(player);
                 }
 

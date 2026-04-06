@@ -1,7 +1,7 @@
 package ac.reaper.reaperac;
 
-import ac.reaper.reaperac.api.GrimAbstractAPI;
-import ac.reaper.reaperac.api.GrimUser;
+import ac.reaper.reaperac.api.ReaperAbstractAPI;
+import ac.reaper.reaperac.api.ReaperUser;
 import ac.reaper.reaperac.api.alerts.AlertManager;
 import ac.reaper.reaperac.api.config.ConfigManager;
 import ac.reaper.reaperac.api.event.EventBus;
@@ -25,11 +25,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 // This is used for Reaper's external API. It has its own class just for organization.
-public class ReaperExternalAPI implements GrimAbstractAPI, ConfigReloadObserver, StartableInitable {
+public class ReaperExternalAPI implements ReaperAbstractAPI, ConfigReloadObserver, StartableInitable {
 
     private final GrimAPI api;
     @Getter
-    private final Map<String, Function<GrimUser, String>> variableReplacements = new ConcurrentHashMap<>();
+    private final Map<String, Function<ReaperUser, String>> variableReplacements = new ConcurrentHashMap<>();
     @Getter
     private final Map<String, String> staticReplacements = new ConcurrentHashMap<>();
     private final Map<String, Function<Object, Object>> functions = new ConcurrentHashMap<>();
@@ -47,17 +47,17 @@ public class ReaperExternalAPI implements GrimAbstractAPI, ConfigReloadObserver,
     }
 
     @Override
-    public @Nullable GrimUser getGrimUser(Player player) {
-        return getGrimUser(player.getUniqueId());
+    public @Nullable ReaperUser getReaperUser(Player player) {
+        return getReaperUser(player.getUniqueId());
     }
 
     @Override
-    public @Nullable GrimUser getGrimUser(UUID uuid) {
+    public @Nullable ReaperUser getReaperUser(UUID uuid) {
         return api.getPlayerDataManager().getPlayer(uuid);
     }
 
     @Override
-    public void registerVariable(String string, Function<GrimUser, String> replacement) {
+    public void registerVariable(String string, Function<ReaperUser, String> replacement) {
         if (replacement == null) {
             variableReplacements.remove(string);
         } else {
@@ -199,15 +199,15 @@ public class ReaperExternalAPI implements GrimAbstractAPI, ConfigReloadObserver,
     }
 
     private void updateVariables() {
-        variableReplacements.putIfAbsent("%player%", GrimUser::getName);
+        variableReplacements.putIfAbsent("%player%", ReaperUser::getName);
         variableReplacements.putIfAbsent("%uuid%", user -> user.getUniqueId().toString());
         variableReplacements.putIfAbsent("%ping%", user -> user.getTransactionPing() + "");
-        variableReplacements.putIfAbsent("%brand%", GrimUser::getBrand);
+        variableReplacements.putIfAbsent("%brand%", ReaperUser::getBrand);
         variableReplacements.putIfAbsent("%h_sensitivity%", user -> ((int) Math.round(user.getHorizontalSensitivity() * 200)) + "");
         variableReplacements.putIfAbsent("%v_sensitivity%", user -> ((int) Math.round(user.getVerticalSensitivity() * 200)) + "");
         variableReplacements.putIfAbsent("%fast_math%", user -> !user.isVanillaMath() + "");
         variableReplacements.putIfAbsent("%tps%", user -> String.format("%.2f", GrimAPI.INSTANCE.getPlatformServer().getTPS()));
-        variableReplacements.putIfAbsent("%version%", GrimUser::getVersionName);
+        variableReplacements.putIfAbsent("%version%", ReaperUser::getVersionName);
         // static variables
         staticReplacements.put("%prefix%", MessageUtil.translateAlternateColorCodes('&', GrimAPI.INSTANCE.getConfigManager().getPrefix()));
         staticReplacements.putIfAbsent("%grim_version%", getGrimVersion());

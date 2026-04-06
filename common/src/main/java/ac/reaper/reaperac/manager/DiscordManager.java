@@ -1,7 +1,7 @@
 package ac.reaper.reaperac.manager;
 
 import ac.reaper.reaperac.GrimAPI;
-import ac.reaper.reaperac.api.GrimUser;
+import ac.reaper.reaperac.api.ReaperUser;
 import ac.reaper.reaperac.api.config.ConfigManager;
 import ac.reaper.reaperac.manager.init.ReloadableInitable;
 import ac.reaper.reaperac.manager.init.start.StartableInitable;
@@ -163,7 +163,7 @@ public class DiscordManager implements StartableInitable, ReloadableInitable {
         statics.put("%check%", checkName);
         statics.put("%violations%", Integer.toString(violations));
 
-        Map<String, Function<GrimUser, String>> dynamics = GrimAPI.INSTANCE.getExternalAPI().getVariableReplacements();
+        Map<String, Function<ReaperUser, String>> dynamics = GrimAPI.INSTANCE.getExternalAPI().getVariableReplacements();
 
         String content = compiledContent.render(player, statics, dynamics, backtickReplacement);
 

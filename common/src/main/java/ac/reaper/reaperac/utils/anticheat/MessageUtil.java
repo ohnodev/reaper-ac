@@ -1,7 +1,7 @@
 package ac.reaper.reaperac.utils.anticheat;
 
 import ac.reaper.reaperac.GrimAPI;
-import ac.reaper.reaperac.api.GrimUser;
+import ac.reaper.reaperac.api.ReaperUser;
 import ac.reaper.reaperac.platform.api.player.PlatformPlayer;
 import ac.reaper.reaperac.platform.api.sender.Sender;
 import ac.reaper.reaperac.player.GrimPlayer;
@@ -84,7 +84,7 @@ public class MessageUtil {
 
         // Get references to the maps once, outside the loop.
         final Map<String, String> staticReplacements = GrimAPI.INSTANCE.getExternalAPI().getStaticReplacements();
-        final Map<String, Function<GrimUser, String>> variableReplacements = GrimAPI.INSTANCE.getExternalAPI().getVariableReplacements();
+        final Map<String, Function<ReaperUser, String>> variableReplacements = GrimAPI.INSTANCE.getExternalAPI().getVariableReplacements();
         // 32 is a heuristic buffer. It roughly covers the expansion cost of one UUID (36 chars) vs one placeholder (6 chars).
         final StringBuilder sb = new StringBuilder(string.length() + 32);
 
@@ -103,7 +103,7 @@ public class MessageUtil {
             } else if (grimPlayer != null) {
                 // If it's not a static placeholder, check if it's a dynamic one.
                 // This is a second, O(1) hash map lookup.
-                final Function<GrimUser, String> func = variableReplacements.get(keyWithPercent);
+                final Function<ReaperUser, String> func = variableReplacements.get(keyWithPercent);
                 if (func != null) {
                     // LAZY EVALUATION: We only call the expensive function (like getTPS)
                     // if we actually found its placeholder in the string.

@@ -14,7 +14,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
-public interface GrimAbstractAPI extends ConfigReloadable, BasicReloadable {
+public interface ReaperAbstractAPI extends ConfigReloadable, BasicReloadable {
     /**
      * Returns EventBus instanced used to register events and listen to Grim events
      * @return {@link EventBus}
@@ -22,20 +22,20 @@ public interface GrimAbstractAPI extends ConfigReloadable, BasicReloadable {
     @NotNull EventBus getEventBus();
 
     /**
-     * Retrieves a GrimUser reference from the player.
+     * Retrieves a ReaperUser reference from the player.
      * @param player Bukkit player reference
-     * @return GrimUser
+     * @return ReaperUser
      */
     @Nullable
     @Deprecated
-    GrimUser getGrimUser(Player player);
+    ReaperUser getReaperUser(Player player);
 
     /**
-     * Retrieves a GrimUser reference from the player's UUID.
+     * Retrieves a ReaperUser reference from the player's UUID.
      * @param uuid UUID of the player
-     * @return GrimUser
+     * @return ReaperUser
      */
-    @Nullable GrimUser getGrimUser(UUID uuid);
+    @Nullable ReaperUser getReaperUser(UUID uuid);
 
     /**
      * Used to create or replace variables, such as %player%. This only works
@@ -43,7 +43,7 @@ public interface GrimAbstractAPI extends ConfigReloadable, BasicReloadable {
      * @param variable
      * @param replacement
      */
-    void registerVariable(String variable, @Nullable Function<GrimUser, String> replacement);
+    void registerVariable(String variable, @Nullable Function<ReaperUser, String> replacement);
 
     /**
      * Used to create or replace static variables, such as %server%.

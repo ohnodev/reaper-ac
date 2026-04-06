@@ -1,7 +1,7 @@
 package ac.reaper.reaperac.manager;
 
 import ac.reaper.reaperac.GrimAPI;
-import ac.reaper.reaperac.api.GrimUser;
+import ac.reaper.reaperac.api.ReaperUser;
 import ac.reaper.reaperac.api.alerts.AlertManager;
 import ac.reaper.reaperac.api.config.ConfigManager;
 import ac.reaper.reaperac.api.config.ConfigReloadable;
@@ -90,11 +90,11 @@ public final class AlertManagerImpl implements AlertManager, ConfigReloadable, S
     }
 
     /**
-     * Gets the non-null PlatformPlayer from a GrimUser.
+     * Gets the non-null PlatformPlayer from a ReaperUser.
      * @throws IllegalArgumentException if the user is not a GrimPlayer.
      * @throws NullPointerException if the GrimPlayer's platformPlayer is null.
      */
-    private @NotNull PlatformPlayer requirePlatformPlayerFromUser(@NotNull GrimUser user) {
+    private @NotNull PlatformPlayer requirePlatformPlayerFromUser(@NotNull ReaperUser user) {
         Objects.requireNonNull(user, "user cannot be null"); // Should be guaranteed by interface contract, but good practice
 
         if (!(user instanceof GrimPlayer grimPlayer)) {
@@ -120,27 +120,27 @@ public final class AlertManagerImpl implements AlertManager, ConfigReloadable, S
     }
 
     @Override
-    public boolean hasAlertsEnabled(@NotNull GrimUser player) {
+    public boolean hasAlertsEnabled(@NotNull ReaperUser player) {
         return hasAlertsEnabled(requirePlatformPlayerFromUser(player));
     }
 
     @Override
-    public void setAlertsEnabled(@NotNull GrimUser player, boolean enabled, boolean silent) {
+    public void setAlertsEnabled(@NotNull ReaperUser player, boolean enabled, boolean silent) {
         setAlertsEnabled(requirePlatformPlayerFromUser(player), enabled, silent);
     }
 
     @Override
-    public boolean hasVerboseEnabled(@NotNull GrimUser player) {
+    public boolean hasVerboseEnabled(@NotNull ReaperUser player) {
         return hasVerboseEnabled(requirePlatformPlayerFromUser(player));
     }
 
     @Override
-    public void setVerboseEnabled(@NotNull GrimUser player, boolean enabled, boolean silent) {
+    public void setVerboseEnabled(@NotNull ReaperUser player, boolean enabled, boolean silent) {
         setVerboseEnabled(requirePlatformPlayerFromUser(player), enabled, silent);
     }
 
     @Override
-    public boolean hasBrandsEnabled(@NotNull GrimUser player) {
+    public boolean hasBrandsEnabled(@NotNull ReaperUser player) {
         GrimPlayer grimPlayer = (GrimPlayer) player;
         // Some proxies break packet order in sending brand and send the data too early for performance
         // which causes us to iterate over all players with this method
@@ -152,7 +152,7 @@ public final class AlertManagerImpl implements AlertManager, ConfigReloadable, S
     }
 
     @Override
-    public void setBrandsEnabled(@NotNull GrimUser player, boolean enabled, boolean silent) {
+    public void setBrandsEnabled(@NotNull ReaperUser player, boolean enabled, boolean silent) {
         setPlayerStateAndNotify(requirePlatformPlayerFromUser(player), enabled, silent, AlertType.BRAND);
     }
 

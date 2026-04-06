@@ -1,7 +1,7 @@
 package ac.reaper.reaperac.api.events;
 
 import ac.reaper.reaperac.api.AbstractCheck;
-import ac.reaper.reaperac.api.GrimUser;
+import ac.reaper.reaperac.api.ReaperUser;
 import lombok.Getter;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -12,12 +12,12 @@ import org.jetbrains.annotations.NotNull;
 public class FlagEvent extends Event implements GrimUserEvent, Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
-    @Getter private final GrimUser user;
+    @Getter private final ReaperUser user;
     @Getter private final AbstractCheck check;
     @Getter private final String verbose;
     private boolean cancelled;
 
-    public FlagEvent(GrimUser user, AbstractCheck check, String verbose) {
+    public FlagEvent(ReaperUser user, AbstractCheck check, String verbose) {
         super(true); // Async!
         this.user = user;
         this.check = check;

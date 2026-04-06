@@ -1,25 +1,25 @@
 package ac.reaper.reaperac.api.event.events;
 
 import ac.reaper.reaperac.api.AbstractCheck;
-import ac.reaper.reaperac.api.GrimUser;
+import ac.reaper.reaperac.api.ReaperUser;
 import ac.reaper.reaperac.api.event.Cancellable;
 import ac.reaper.reaperac.api.event.GrimEvent;
 import lombok.Getter;
 
 public abstract class GrimCheckEvent extends GrimEvent implements GrimUserEvent, Cancellable {
-    private final GrimUser user;
+    private final ReaperUser user;
     @Getter
     protected final AbstractCheck check;
     private boolean cancelled;
 
-    public GrimCheckEvent(GrimUser user, AbstractCheck check) {
+    public GrimCheckEvent(ReaperUser user, AbstractCheck check) {
         super(true); // Async
         this.user = user;
         this.check = check;
     }
 
     @Override
-    public GrimUser getUser() {
+    public ReaperUser getUser() {
         return user;
     }
 

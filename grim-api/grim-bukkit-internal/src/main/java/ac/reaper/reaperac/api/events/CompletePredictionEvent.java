@@ -1,7 +1,7 @@
 package ac.reaper.reaperac.api.events;
 
 import ac.reaper.reaperac.api.AbstractCheck;
-import ac.reaper.reaperac.api.GrimUser;
+import ac.reaper.reaperac.api.ReaperUser;
 import lombok.Getter;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +13,7 @@ public class CompletePredictionEvent extends FlagEvent {
     @Getter private final double offset;
     private boolean cancelled;
 
-    public CompletePredictionEvent(GrimUser player, AbstractCheck check, String verbose, double offset) {
+    public CompletePredictionEvent(ReaperUser player, AbstractCheck check, String verbose, double offset) {
         super(player, check, verbose);
         this.offset = offset;
     }

@@ -3,8 +3,8 @@ package ac.reaper.reaperac.api;
 import java.util.concurrent.CompletableFuture;
 
 public final class ReaperAPIProvider {
-    private static GrimAbstractAPI instance;
-    private static final CompletableFuture<GrimAbstractAPI> futureInstance = new CompletableFuture<>();
+    private static ReaperAbstractAPI instance;
+    private static final CompletableFuture<ReaperAbstractAPI> futureInstance = new CompletableFuture<>();
 
     private ReaperAPIProvider() {
         // Private constructor to prevent instantiation
@@ -14,10 +14,10 @@ public final class ReaperAPIProvider {
      * Initializes the ReaperAPI instance during mod loading.
      * This method should only be called once by the mod initializer.
      *
-     * @param api The GrimAbstractAPI instance to initialize.
+     * @param api The ReaperAbstractAPI instance to initialize.
      * @throws IllegalStateException If the API is already initialized.
      */
-    public static void init(GrimAbstractAPI api) {
+    public static void init(ReaperAbstractAPI api) {
         if (instance != null || futureInstance.isDone()) {
             throw new IllegalStateException("ReaperAPI is already initialized");
         }
@@ -28,10 +28,10 @@ public final class ReaperAPIProvider {
     /**
      * Gets the ReaperAPI instance synchronously.
      *
-     * @return The GrimAbstractAPI instance.
+     * @return The ReaperAbstractAPI instance.
      * @throws IllegalStateException If the API is not loaded.
      */
-    public static GrimAbstractAPI get() {
+    public static ReaperAbstractAPI get() {
         if (instance == null) {
             throw new IllegalStateException("ReaperAPI is not loaded. Ensure the Grim mod is installed and initialized.");
         }
@@ -44,9 +44,9 @@ public final class ReaperAPIProvider {
      * If the API is already loaded, the future will complete immediately.
      * If the API fails to load (e.g., the mod is not installed), the future will complete exceptionally.
      *
-     * @return A CompletableFuture that completes with the GrimAbstractAPI instance.
+     * @return A CompletableFuture that completes with the ReaperAbstractAPI instance.
      */
-    public static CompletableFuture<GrimAbstractAPI> getAsync() {
+    public static CompletableFuture<ReaperAbstractAPI> getAsync() {
         if (instance != null) {
             // If the instance is already loaded, return a completed future
             return CompletableFuture.completedFuture(instance);

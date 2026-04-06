@@ -1,7 +1,7 @@
 package ac.reaper.reaperac.internal.platform.bukkit.resolver;
 
 import ac.reaper.reaperac.api.ReaperAPIProvider;
-import ac.reaper.reaperac.api.GrimAbstractAPI;
+import ac.reaper.reaperac.api.ReaperAbstractAPI;
 import ac.reaper.reaperac.api.plugin.BasicReaperPlugin;
 import ac.reaper.reaperac.api.plugin.ReaperPlugin;
 import ac.reaper.reaperac.internal.plugin.resolver.GrimExtensionManager;

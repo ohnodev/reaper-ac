@@ -1,13 +1,13 @@
 package ac.reaper.reaperac.platform.api.entity;
 
-import ac.reaper.reaperac.api.GrimIdentity;
+import ac.reaper.reaperac.api.ReaperIdentity;
 import ac.reaper.reaperac.platform.api.world.PlatformWorld;
 import ac.reaper.reaperac.utils.math.Location;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
 
-public interface GrimEntity extends GrimIdentity {
+public interface GrimEntity extends ReaperIdentity {
     /**
      * Eject any passenger.
      *

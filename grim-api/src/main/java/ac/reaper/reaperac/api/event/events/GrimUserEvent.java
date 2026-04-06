@@ -1,10 +1,10 @@
 package ac.reaper.reaperac.api.event.events;
 
-import ac.reaper.reaperac.api.GrimUser;
+import ac.reaper.reaperac.api.ReaperUser;
 
 public interface GrimUserEvent {
-    GrimUser getUser();
-    default GrimUser getPlayer() {
+    ReaperUser getUser();
+    default ReaperUser getPlayer() {
         return getUser();
     }
 }
