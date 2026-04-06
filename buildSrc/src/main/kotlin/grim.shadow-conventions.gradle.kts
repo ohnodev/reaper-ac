@@ -12,26 +12,26 @@ tasks.named<ShadowJar>("shadowJar") {
 
     if (BuildConfig.relocate) {
         if (BuildConfig.shadePE) {
-            relocate("io.github.retrooper.packetevents", "ac.grim.grimac.shaded.io.github.retrooper.packetevents")
-            relocate("com.github.retrooper.packetevents", "ac.grim.grimac.shaded.com.github.retrooper.packetevents")
-            relocate("net.kyori", "ac.grim.grimac.shaded.kyori") // use PE's built-in adventure instead when not shading PE
+            relocate("io.github.retrooper.packetevents", "ac.reaper.reaperac.shaded.io.github.retrooper.packetevents")
+            relocate("com.github.retrooper.packetevents", "ac.reaper.reaperac.shaded.com.github.retrooper.packetevents")
+            relocate("net.kyori", "ac.reaper.reaperac.shaded.kyori") // use PE's built-in adventure instead when not shading PE
         }
-        relocate("club.minnced", "ac.grim.grimac.shaded.discord-webhooks")
-        relocate("org.slf4j", "ac.grim.grimac.shaded.slf4j") // Required by discord-webhooks
-        relocate("github.scarsz.configuralize", "ac.grim.grimac.shaded.configuralize")
-        relocate("com.github.puregero", "ac.grim.grimac.shaded.com.github.puregero")
-        relocate("com.google.code.gson", "ac.grim.grimac.shaded.gson")
-        relocate("alexh", "ac.grim.grimac.shaded.maps")
-        relocate("it.unimi.dsi.fastutil", "ac.grim.grimac.shaded.fastutil")
-        relocate("okhttp3", "ac.grim.grimac.shaded.okhttp3")
-        relocate("okio", "ac.grim.grimac.shaded.okio")
-        relocate("org.yaml.snakeyaml", "ac.grim.grimac.shaded.snakeyaml")
-        relocate("org.json", "ac.grim.grimac.shaded.json")
-        relocate("org.intellij", "ac.grim.grimac.shaded.intellij")
-        relocate("org.jetbrains", "ac.grim.grimac.shaded.jetbrains")
-        relocate("org.incendo", "ac.grim.grimac.shaded.incendo")
-        relocate("io.leangen.geantyref", "ac.grim.grimac.shaded.geantyref") // Required by cloud
-        relocate("com.zaxxer", "ac.grim.grimac.shaded.zaxxer") // Database history
+        relocate("club.minnced", "ac.reaper.reaperac.shaded.discord-webhooks")
+        relocate("org.slf4j", "ac.reaper.reaperac.shaded.slf4j") // Required by discord-webhooks
+        relocate("github.scarsz.configuralize", "ac.reaper.reaperac.shaded.configuralize")
+        relocate("com.github.puregero", "ac.reaper.reaperac.shaded.com.github.puregero")
+        relocate("com.google.code.gson", "ac.reaper.reaperac.shaded.gson")
+        relocate("alexh", "ac.reaper.reaperac.shaded.maps")
+        relocate("it.unimi.dsi.fastutil", "ac.reaper.reaperac.shaded.fastutil")
+        relocate("okhttp3", "ac.reaper.reaperac.shaded.okhttp3")
+        relocate("okio", "ac.reaper.reaperac.shaded.okio")
+        relocate("org.yaml.snakeyaml", "ac.reaper.reaperac.shaded.snakeyaml")
+        relocate("org.json", "ac.reaper.reaperac.shaded.json")
+        relocate("org.intellij", "ac.reaper.reaperac.shaded.intellij")
+        relocate("org.jetbrains", "ac.reaper.reaperac.shaded.jetbrains")
+        relocate("org.incendo", "ac.reaper.reaperac.shaded.incendo")
+        relocate("io.leangen.geantyref", "ac.reaper.reaperac.shaded.geantyref") // Required by cloud
+        relocate("com.zaxxer", "ac.reaper.reaperac.shaded.zaxxer") // Database history
     }
     mergeServiceFiles()
 }

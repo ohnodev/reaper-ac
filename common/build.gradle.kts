@@ -7,7 +7,7 @@ plugins {
 
 repositories {
     exclusive("https://repo.grim.ac/snapshots") {
-        includeGroup("ac.grim.grimac")
+        includeGroup("ac.reaper.reaperac")
     }
     // PacketEvents snapshots: same host but not exclusiveContent-locked so mavenLocal() can still resolve
     maven("https://repo.grim.ac/snapshots") {

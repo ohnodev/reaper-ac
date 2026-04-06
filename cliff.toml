@@ -34,11 +34,11 @@ commit_parsers = [
     { message = ".*", group = "Miscellaneous" } # CHANGED THIS LINE
 ]
 commit_preprocessors = [
-    { pattern = 'src/main/java/ac/grim/grimac/checks/.*', group = "✔️ Checks" },
-    { pattern = 'src/main/java/ac/grim/grimac/api/.*', group = "🔌 API" },
-    { pattern = 'src/main/java/ac/grim/grimac/platform/.*', group = "🏗️ Platform" },
-    { pattern = 'src/main/java/ac/grim/grimac/engine/.*', group = "⚙️ Core Engine" },
-    { pattern = 'src/main/java/ac/grim/grimac/config/.*', group = "⚙️ Configuration" },
+    { pattern = 'src/main/java/ac/reaper/reaperac/checks/.*', group = "✔️ Checks" },
+    { pattern = 'src/main/java/ac/reaper/reaperac/api/.*', group = "🔌 API" },
+    { pattern = 'src/main/java/ac/reaper/reaperac/platform/.*', group = "🏗️ Platform" },
+    { pattern = 'src/main/java/ac/reaper/reaperac/engine/.*', group = "⚙️ Core Engine" },
+    { pattern = 'src/main/java/ac/reaper/reaperac/config/.*', group = "⚙️ Configuration" },
     { pattern = 'pom.xml', group = "🤖 Maintenance & CI" },
     { pattern = '.github/.*', group = "🤖 Maintenance & CI" },
     { pattern = 'build.gradle.kts', group = "🤖 Maintenance & CI" },

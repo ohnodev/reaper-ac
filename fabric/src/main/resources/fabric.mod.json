@@ -11,13 +11,13 @@
   "environment": "server",
   "entrypoints": {
     "main": [
-      "ac.grim.grimac.platform.fabric.GrimACFabricEntryPoint"
+      "ac.reaper.reaperac.platform.fabric.GrimACFabricEntryPoint"
     ],
     "preLaunch": [
-      "ac.grim.grimac.platform.fabric.GrimACFabricEntryPoint"
+      "ac.reaper.reaperac.platform.fabric.GrimACFabricEntryPoint"
     ],
     "grimMainLoad": [
-      "ac.grim.grimac.platform.fabric.mc1216.GrimACFabric1212LoaderPlugin"
+      "ac.reaper.reaperac.platform.fabric.mc1216.GrimACFabric1212LoaderPlugin"
     ]
   },
   "mixins": [
@@ -26,7 +26,7 @@
   "custom": {
     "loom:injected_interfaces": {
       "net/minecraft/world/level/Level": [
-        "ac/grim/grimac/platform/api/world/PlatformWorld"
+        "ac/reaper/reaperac/platform/api/world/PlatformWorld"
       ]
     }
   },

@@ -37,7 +37,7 @@ repositories {
     }
 
     exclusive("https://repo.grim.ac/snapshots") {
-        includeGroup("ac.grim.grimac")
+        includeGroup("ac.reaper.reaperac")
     }
     maven("https://repo.grim.ac/snapshots") {
         mavenContent { snapshotsOnly() }
