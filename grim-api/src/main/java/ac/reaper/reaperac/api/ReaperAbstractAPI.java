@@ -56,7 +56,7 @@ public interface ReaperAbstractAPI extends ConfigReloadable, BasicReloadable {
      * Retrieves the plugin version of Grim.
      * @return Grim version
      */
-    String getGrimVersion();
+    String getReaperVersion();
 
     /**
      * Used for future expansion. Don't use this unless you know what you're doing.

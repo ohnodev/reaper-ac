@@ -75,7 +75,7 @@ public class ReaperExternalAPI implements ReaperAbstractAPI, ConfigReloadObserve
     }
 
     @Override
-    public String getGrimVersion() {
+    public String getReaperVersion() {
         return api.getReaperPlugin().getDescription().getVersion();
     }
 
@@ -210,6 +210,7 @@ public class ReaperExternalAPI implements ReaperAbstractAPI, ConfigReloadObserve
         variableReplacements.putIfAbsent("%version%", ReaperUser::getVersionName);
         // static variables
         staticReplacements.put("%prefix%", MessageUtil.translateAlternateColorCodes('&', GrimAPI.INSTANCE.getConfigManager().getPrefix()));
-        staticReplacements.putIfAbsent("%grim_version%", getGrimVersion());
+        staticReplacements.putIfAbsent("%grim_version%", getReaperVersion());
+        staticReplacements.putIfAbsent("%reaper_version%", getReaperVersion());
     }
 }

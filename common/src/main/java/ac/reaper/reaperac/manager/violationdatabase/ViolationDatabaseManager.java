@@ -129,7 +129,7 @@ public class ViolationDatabaseManager implements StartableInitable, ReloadableIn
     }
 
     public void logAlert(GrimPlayer player, String verbose, String checkName, int vls) {
-        String grimVersion = GrimAPI.INSTANCE.getExternalAPI().getGrimVersion();
+        String grimVersion = GrimAPI.INSTANCE.getExternalAPI().getReaperVersion();
         GrimAPI.INSTANCE.getScheduler().getAsyncScheduler().runNow(plugin, () -> database.logAlert(player, grimVersion, verbose, checkName, vls));
     }
 

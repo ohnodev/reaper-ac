@@ -33,7 +33,7 @@ public final class GrimUpdateCheckService {
     }
 
     public static void checkForUpdatesAsync(Sender sender) {
-        String current = GrimAPI.INSTANCE.getExternalAPI().getGrimVersion();
+        String current = GrimAPI.INSTANCE.getExternalAPI().getReaperVersion();
         sender.sendMessage(Component.text()
                 .append(Component.text("Grim Version: ").color(NamedTextColor.GRAY))
                 .append(Component.text(current).color(NamedTextColor.AQUA))
@@ -63,7 +63,7 @@ public final class GrimUpdateCheckService {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(CommonGrimArguments.API_URL.value() + "updates"))
                     .GET()
-                    .header("User-Agent", "GrimAC/" + GrimAPI.INSTANCE.getExternalAPI().getGrimVersion())
+                    .header("User-Agent", "GrimAC/" + GrimAPI.INSTANCE.getExternalAPI().getReaperVersion())
                     .header("Content-Type", "application/json")
                     .timeout(Duration.of(5, ChronoUnit.SECONDS))
                     .build();
@@ -92,7 +92,7 @@ public final class GrimUpdateCheckService {
             if (object.has("status")) {
                 status = Status.getStatus(object.get("status").getAsString());
             } else {
-                status = Status.SemVer.getVersionStatus(GrimAPI.INSTANCE.getExternalAPI().getGrimVersion(), latest);
+                status = Status.SemVer.getVersionStatus(GrimAPI.INSTANCE.getExternalAPI().getReaperVersion(), latest);
             }
 
             Component msg = switch (status) {
