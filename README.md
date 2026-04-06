@@ -90,13 +90,13 @@ This fork includes prebuilt Fabric artifacts in `prebuilt/` for direct deploymen
 
 Current prebuilt files:
 
-- `prebuilt/reaperac-fabric-2.3.74-feat_reaperac-fabric-identity-rename-00d6263.jar`
-- `prebuilt/reaperac-fabric-2.3.74-feat_reaperac-fabric-identity-rename-00d6263.jar.sha256`
+- `prebuilt/reaperac-fabric-2.3.74-feat_reaperac-fabric-identity-rename-ae19994.jar`
+- `prebuilt/reaperac-fabric-2.3.74-feat_reaperac-fabric-identity-rename-ae19994.jar.sha256`
 
 Verify integrity:
 
 ```bash
-sha256sum -c prebuilt/reaperac-fabric-2.3.74-feat_reaperac-fabric-identity-rename-00d6263.jar.sha256
+sha256sum -c prebuilt/reaperac-fabric-2.3.74-feat_reaperac-fabric-identity-rename-ae19994.jar.sha256
 ```
 
 To inspect locally produced files after a build:
