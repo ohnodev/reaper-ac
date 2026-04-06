@@ -60,8 +60,13 @@ public abstract class GrimACFabricLoaderPlugin implements PlatformLoader {
         resolverRegistrar.registerAll(extensionManager);
         // Resolve by Fabric mod id, not display name.
         ReaperPlugin resolvedPlugin = extensionManager.getPlugin("reaperac");
+        if (resolvedPlugin == null) {
+            throw new IllegalStateException("Failed to resolve ReaperPlugin from getPlugin(\"reaperac\"): resolver returned null.");
+        }
         if (!(resolvedPlugin instanceof ReaperPlugin reaperPlugin)) {
-            throw new IllegalStateException("Resolved plugin does not implement ReaperPlugin: " + resolvedPlugin.getClass().getName());
+            throw new IllegalStateException(
+                    "Resolved plugin does not implement ReaperPlugin: " + String.valueOf(resolvedPlugin)
+            );
         }
         plugin = reaperPlugin;
     }
