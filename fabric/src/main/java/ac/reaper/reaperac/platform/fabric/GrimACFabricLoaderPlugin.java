@@ -5,7 +5,6 @@ import ac.reaper.reaperac.api.ReaperAPIProvider;
 import ac.reaper.reaperac.api.plugin.GrimPlugin;
 import ac.reaper.reaperac.internal.plugin.resolver.GrimExtensionManager;
 import ac.reaper.reaperac.platform.api.PlatformLoader;
-import ac.reaper.reaperac.platform.api.command.CommandService;
 import ac.reaper.reaperac.platform.api.manager.*;
 import ac.reaper.reaperac.platform.api.permissions.PermissionDefaultValue;
 import ac.reaper.reaperac.platform.api.sender.SenderFactory;
@@ -16,7 +15,6 @@ import ac.reaper.reaperac.platform.fabric.scheduler.FabricPlatformScheduler;
 import ac.reaper.reaperac.platform.fabric.sender.FabricSenderFactory;
 import ac.reaper.reaperac.platform.fabric.utils.convert.IFabricConversionUtil;
 import ac.reaper.reaperac.platform.fabric.utils.message.IFabricMessageUtil;
-import ac.reaper.reaperac.utils.anticheat.LogUtil;
 import ac.reaper.reaperac.utils.lazy.LazyHolder;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.PacketEventsAPI;
@@ -34,7 +32,6 @@ public abstract class GrimACFabricLoaderPlugin implements PlatformLoader {
     protected final PacketEventsAPI<?> packetEvents = PacketEvents.getAPI();
     protected final LazyHolder<FabricSenderFactory> senderFactory = LazyHolder.simple(FabricSenderFactory::new);
     protected final LazyHolder<ItemResetHandler> itemResetHandler = LazyHolder.simple(FabricItemResetHandler::new);
-    protected final LazyHolder<CommandService> commandService = LazyHolder.simple(this::createCommandService);
     protected final GrimPlugin plugin;
     @Getter
     protected final PlatformPluginManager pluginManager = new FabricPlatformPluginManager();
@@ -86,11 +83,6 @@ public abstract class GrimACFabricLoaderPlugin implements PlatformLoader {
     }
 
     @Override
-    public CommandService getCommandService() {
-        return commandService.get();
-    }
-
-    @Override
     public GrimPlugin getPlugin() {
         return plugin;
     }
@@ -98,10 +90,6 @@ public abstract class GrimACFabricLoaderPlugin implements PlatformLoader {
     @Override
     public void registerAPIService() {
         ReaperAPIProvider.init(GrimAPI.INSTANCE.getExternalAPI());
-    }
-
-    private CommandService createCommandService() {
-        return () -> LogUtil.warn("Grim command registration is disabled on Fabric; skipping command registration.");
     }
 
     public FabricSenderFactory getFabricSenderFactory() {

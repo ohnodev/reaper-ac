@@ -15,7 +15,6 @@ import ac.reaper.reaperac.manager.violationdatabase.ViolationDatabaseManager;
 import ac.reaper.reaperac.platform.api.Platform;
 import ac.reaper.reaperac.platform.api.PlatformLoader;
 import ac.reaper.reaperac.platform.api.PlatformServer;
-import ac.reaper.reaperac.platform.api.command.CommandService;
 import ac.reaper.reaperac.platform.api.manager.ItemResetHandler;
 import ac.reaper.reaperac.platform.api.manager.MessagePlaceHolderManager;
 import ac.reaper.reaperac.platform.api.manager.PlatformPluginManager;
@@ -120,10 +119,6 @@ public final class GrimAPI {
 
     public @NotNull MessagePlaceHolderManager getMessagePlaceHolderManager() {
         return loader.getMessagePlaceHolderManager();
-    }
-
-    public CommandService getCommandService() {
-        return loader.getCommandService();
     }
 
     private void checkInitialized() {

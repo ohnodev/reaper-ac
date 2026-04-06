@@ -48,7 +48,6 @@ public class InitManager {
                 .add(new PacketManager())
                 .add(new ViaBackwardsManager())
                 .add(new TickRunner())
-                .add(new CommandRegister(GrimAPI.INSTANCE.getCommandService()))
                 .add(new UpdateChecker())
                 .add(new PacketLimiter())
                 .add(GrimAPI.INSTANCE.getAlertManager())
