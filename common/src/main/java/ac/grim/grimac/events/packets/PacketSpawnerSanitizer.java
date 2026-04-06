@@ -1,5 +1,6 @@
 package ac.grim.grimac.events.packets;
 
+import ac.grim.grimac.utils.anticheat.LogUtil;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketListenerAbstract;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
@@ -14,11 +15,14 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerCh
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class PacketSpawnerSanitizer extends PacketListenerAbstract {
     private static final ClientVersion SERVER_CLIENT_VERSION =
             PacketEvents.getAPI().getServerManager().getVersion().toClientVersion();
     private static final int MOB_SPAWNER_TYPE_ID = BlockEntityTypes.MOB_SPAWNER.getId(SERVER_CLIENT_VERSION);
+    private static final AtomicLong LAST_DEBUG_LOG_AT_MS = new AtomicLong(0L);
+    private static final long DEBUG_LOG_INTERVAL_MS = 2000L;
 
     public PacketSpawnerSanitizer() {
         // Run after world cache listeners to avoid affecting Grim internals.
@@ -43,6 +47,10 @@ public class PacketSpawnerSanitizer extends PacketListenerAbstract {
             if (wrapper.getBlockEntityType() == BlockEntityTypes.MOB_SPAWNER) {
                 // Hide raw spawner block-entity updates entirely from clients.
                 event.setCancelled(true);
+                debugLog("blocked BLOCK_ENTITY_DATA spawner update at "
+                        + wrapper.getPosition().getX() + " "
+                        + wrapper.getPosition().getY() + " "
+                        + wrapper.getPosition().getZ());
             }
         } catch (Exception ex) {
             PacketDecodeUtils.logSuppressedDecode("PacketSpawnerSanitizer(BLOCK_ENTITY_DATA)", event.getPacketType(), ex);
@@ -59,9 +67,11 @@ public class PacketSpawnerSanitizer extends PacketListenerAbstract {
 
             List<TileEntity> filtered = new ArrayList<>(tileEntities.length);
             boolean removedSpawner = false;
+            int removedCount = 0;
             for (TileEntity tileEntity : tileEntities) {
                 if (tileEntity.getType() == MOB_SPAWNER_TYPE_ID) {
                     removedSpawner = true;
+                    removedCount++;
                     continue;
                 }
                 filtered.add(tileEntity);
@@ -82,8 +92,22 @@ public class PacketSpawnerSanitizer extends PacketListenerAbstract {
             );
             wrapper.setColumn(sanitizedColumn);
             event.markForReEncode(true);
+            debugLog("stripped " + removedCount + " spawner tile entities from CHUNK_DATA chunk="
+                    + column.getX() + "," + column.getZ());
         } catch (Exception ex) {
             PacketDecodeUtils.logSuppressedDecode("PacketSpawnerSanitizer(CHUNK_DATA)", event.getPacketType(), ex);
         }
+    }
+
+    private void debugLog(String message) {
+        long now = System.currentTimeMillis();
+        long previous = LAST_DEBUG_LOG_AT_MS.get();
+        if (now - previous < DEBUG_LOG_INTERVAL_MS) {
+            return;
+        }
+        if (!LAST_DEBUG_LOG_AT_MS.compareAndSet(previous, now)) {
+            return;
+        }
+        LogUtil.info("[SpawnerSanitizer] " + message);
     }
 }
