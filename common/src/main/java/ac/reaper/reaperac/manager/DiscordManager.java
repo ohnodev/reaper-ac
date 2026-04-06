@@ -202,7 +202,7 @@ public class DiscordManager implements StartableInitable, ReloadableInitable {
 
         if (!taskStarted.getAndSet(true)) {
             // there's probably a better way to handle rate limits, but this works, so whatever.
-            GrimAPI.INSTANCE.getScheduler().getAsyncScheduler().runAtFixedRate(GrimAPI.INSTANCE.getGrimPlugin(), DiscordManager::tick, 0, 1);
+            GrimAPI.INSTANCE.getScheduler().getAsyncScheduler().runAtFixedRate(GrimAPI.INSTANCE.getReaperPlugin(), DiscordManager::tick, 0, 1);
         }
 
         return future;

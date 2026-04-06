@@ -204,7 +204,7 @@ public class CompensatedWorld implements PacketWorld {
             // So we must wait for the bukkit thread to start ticking so via can "confirm" it.
             //
             // no need to support Folia on this one because Folia is 1.19+ only
-            GrimAPI.INSTANCE.getScheduler().getGlobalRegionScheduler().run(GrimAPI.INSTANCE.getGrimPlugin(), () -> {
+            GrimAPI.INSTANCE.getScheduler().getGlobalRegionScheduler().run(GrimAPI.INSTANCE.getReaperPlugin(), () -> {
                 // And then we jump back to the netty thread to simulate that Via sent the confirmation
                 player.runSafely(() -> applyBlockChanges(toApplyBlocks));
             });

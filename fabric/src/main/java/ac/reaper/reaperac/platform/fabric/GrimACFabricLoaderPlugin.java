@@ -2,7 +2,7 @@ package ac.reaper.reaperac.platform.fabric;
 
 import ac.reaper.reaperac.GrimAPI;
 import ac.reaper.reaperac.api.ReaperAPIProvider;
-import ac.reaper.reaperac.api.plugin.GrimPlugin;
+import ac.reaper.reaperac.api.plugin.ReaperPlugin;
 import ac.reaper.reaperac.api.plugin.ReaperPlugin;
 import ac.reaper.reaperac.internal.plugin.resolver.GrimExtensionManager;
 import ac.reaper.reaperac.platform.api.PlatformLoader;
@@ -59,7 +59,7 @@ public abstract class GrimACFabricLoaderPlugin implements PlatformLoader {
         FabricResolverRegistrar resolverRegistrar = new FabricResolverRegistrar();
         GrimExtensionManager extensionManager = GrimAPI.INSTANCE.getExtensionManager();
         resolverRegistrar.registerAll(extensionManager);
-        GrimPlugin resolvedPlugin = extensionManager.getPlugin("GrimAC");
+        ReaperPlugin resolvedPlugin = extensionManager.getPlugin("GrimAC");
         if (!(resolvedPlugin instanceof ReaperPlugin reaperPlugin)) {
             throw new IllegalStateException("Resolved plugin does not implement ReaperPlugin: " + resolvedPlugin.getClass().getName());
         }

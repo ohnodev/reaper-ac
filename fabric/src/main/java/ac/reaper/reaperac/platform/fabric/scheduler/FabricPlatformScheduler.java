@@ -1,7 +1,7 @@
 package ac.reaper.reaperac.platform.fabric.scheduler;
 
 import ac.reaper.reaperac.GrimAPI;
-import ac.reaper.reaperac.api.plugin.GrimPlugin;
+import ac.reaper.reaperac.api.plugin.ReaperPlugin;
 import ac.reaper.reaperac.platform.api.scheduler.*;
 import ac.reaper.reaperac.utils.anticheat.LogUtil;
 import net.minecraft.server.MinecraftServer;
@@ -19,7 +19,7 @@ public class FabricPlatformScheduler implements PlatformScheduler {
     private final FabricRegionScheduler regionScheduler;
 
     public FabricPlatformScheduler() {
-        GrimPlugin plugin = GrimAPI.INSTANCE.getGrimPlugin();
+        ReaperPlugin plugin = GrimAPI.INSTANCE.getReaperPlugin();
         this.asyncScheduler = new FabricAsyncScheduler(plugin);
         this.globalRegionScheduler = new FabricGlobalRegionScheduler(plugin);
         this.entityScheduler = new FabricEntityScheduler(plugin);
@@ -30,7 +30,7 @@ public class FabricPlatformScheduler implements PlatformScheduler {
     // Add this to FabricPlatformScheduler.java
     public static final ThreadLocal<Boolean> EXECUTING_TASK = ThreadLocal.withInitial(() -> false);
 
-    protected static void handleSyncTasks(Map<ScheduledTask, Runnable> taskMap, MinecraftServer server, GrimPlugin plugin) {
+    protected static void handleSyncTasks(Map<ScheduledTask, Runnable> taskMap, MinecraftServer server, ReaperPlugin plugin) {
         Iterator<ScheduledTask> iterator = taskMap.keySet().iterator();
         while (iterator.hasNext()) {
             ScheduledTask task = iterator.next();
@@ -54,7 +54,7 @@ public class FabricPlatformScheduler implements PlatformScheduler {
     }
 
     // Cancel tasks for a specific plugin
-    protected static void cancelPluginTasks(Map<ScheduledTask, Runnable> taskMap, GrimPlugin plugin) {
+    protected static void cancelPluginTasks(Map<ScheduledTask, Runnable> taskMap, ReaperPlugin plugin) {
         Iterator<Map.Entry<ScheduledTask, Runnable>> iterator = taskMap.entrySet().iterator();
         List<Runnable> cancellationTasks = new ArrayList<>();
 
@@ -80,7 +80,7 @@ public class FabricPlatformScheduler implements PlatformScheduler {
         }
     }
 
-    protected static void scheduleTask(Map<ScheduledTask, Runnable> taskMap, GrimPlugin plugin, Runnable task, long initialDelayTicks, long periodTicks, boolean isPeriodic) {
+    protected static void scheduleTask(Map<ScheduledTask, Runnable> taskMap, ReaperPlugin plugin, Runnable task, long initialDelayTicks, long periodTicks, boolean isPeriodic) {
 
     }
 
@@ -119,10 +119,10 @@ public class FabricPlatformScheduler implements PlatformScheduler {
         final Runnable task;
         final long period;
         final boolean isPeriodic;
-        final GrimPlugin plugin; // Add plugin reference
+        final ReaperPlugin plugin; // Add plugin reference
         long nextRunTick;
 
-        ScheduledTask(Runnable task, long nextRunTick, long period, boolean isPeriodic, GrimPlugin plugin) {
+        ScheduledTask(Runnable task, long nextRunTick, long period, boolean isPeriodic, ReaperPlugin plugin) {
             this.task = task;
             this.nextRunTick = nextRunTick;
             this.period = period;

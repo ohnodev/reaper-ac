@@ -1,6 +1,6 @@
 package ac.reaper.reaperac.api.event;
 
-import ac.reaper.reaperac.api.plugin.GrimPlugin;
+import ac.reaper.reaperac.api.plugin.ReaperPlugin;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * <ul>
  *   <li><b>For Platform Plugins (Bukkit, Fabric, etc.):</b> Pass your main plugin/mod instance (e.g., {@code this} from
  *       your {@code JavaPlugin} class). The API will resolve it automatically.</li>
- *   <li><b>For Standalone Extensions:</b> Manually create a {@link GrimPlugin} instance and pass it directly.</li>
+ *   <li><b>For Standalone Extensions:</b> Manually create a {@link ReaperPlugin} instance and pass it directly.</li>
  * </ul>
  */
 public interface EventBus {
@@ -29,19 +29,19 @@ public interface EventBus {
      * eventBus.registerAnnotatedListeners(this, new MyListener());
      * }</pre>
      *
-     * @param pluginContext The context (e.g., Bukkit Plugin, Fabric Mod, GrimPlugin) to bind listeners to.
+     * @param pluginContext The context (e.g., Bukkit Plugin, Fabric Mod, ReaperPlugin) to bind listeners to.
      * @param listener The listener instance containing annotated methods.
      */
     void registerAnnotatedListeners(@NotNull Object pluginContext, @NotNull Object listener);
 
     /**
-     * Registers instance methods annotated with {@link GrimEventHandler} using an explicit {@link GrimPlugin} instance.
+     * Registers instance methods annotated with {@link GrimEventHandler} using an explicit {@link ReaperPlugin} instance.
      * This is useful for standalone extensions or when you have already resolved a context.
      *
-     * @param plugin   The GrimPlugin instance to bind listeners to.
+     * @param plugin   The ReaperPlugin instance to bind listeners to.
      * @param listener The listener instance containing annotated methods.
      */
-    void registerAnnotatedListeners(@NotNull GrimPlugin plugin, @NotNull Object listener);
+    void registerAnnotatedListeners(@NotNull ReaperPlugin plugin, @NotNull Object listener);
 
 
     /**
@@ -65,7 +65,7 @@ public interface EventBus {
     void registerStaticAnnotatedListeners(@NotNull Object pluginContext, @NotNull Class<?> clazz);
 
     /**
-     * Registers static methods annotated with {@link GrimEventHandler} using an explicit {@link GrimPlugin} instance.
+     * Registers static methods annotated with {@link GrimEventHandler} using an explicit {@link ReaperPlugin} instance.
      *
      * <p>
      * Example:
@@ -79,10 +79,10 @@ public interface EventBus {
      * eventBus.registerStaticAnnotatedListeners(plugin, MyStaticListener.class);
      * }</pre>
      *
-     * @param plugin The GrimPlugin instance to bind listeners to.
+     * @param plugin The ReaperPlugin instance to bind listeners to.
      * @param clazz  The class containing static annotated methods.
      */
-    void registerStaticAnnotatedListeners(@NotNull GrimPlugin plugin, @NotNull Class<?> clazz);
+    void registerStaticAnnotatedListeners(@NotNull ReaperPlugin plugin, @NotNull Class<?> clazz);
 
     /**
      * Unregisters all instance listeners associated with the given listener object and its plugin context.
@@ -93,12 +93,12 @@ public interface EventBus {
     void unregisterListeners(@NotNull Object pluginContext, @NotNull Object listener);
 
     /**
-     * Unregisters all instance listeners associated with an explicit {@link GrimPlugin} instance.
+     * Unregisters all instance listeners associated with an explicit {@link ReaperPlugin} instance.
      *
-     * @param plugin   The GrimPlugin the listener was registered with.
+     * @param plugin   The ReaperPlugin the listener was registered with.
      * @param listener The listener instance to unregister.
      */
-    void unregisterListeners(@NotNull GrimPlugin plugin, @NotNull Object listener);
+    void unregisterListeners(@NotNull ReaperPlugin plugin, @NotNull Object listener);
 
 
     /**
@@ -110,12 +110,12 @@ public interface EventBus {
     void unregisterStaticListeners(@NotNull Object pluginContext, @NotNull Class<?> clazz);
 
     /**
-     * Unregisters all static listeners associated with an explicit {@link GrimPlugin} instance.
+     * Unregisters all static listeners associated with an explicit {@link ReaperPlugin} instance.
      *
-     * @param plugin The GrimPlugin the listener was registered with.
+     * @param plugin The ReaperPlugin the listener was registered with.
      * @param clazz  The class containing static listeners to unregister.
      */
-    void unregisterStaticListeners(@NotNull GrimPlugin plugin, @NotNull Class<?> clazz);
+    void unregisterStaticListeners(@NotNull ReaperPlugin plugin, @NotNull Class<?> clazz);
 
 
     /**
@@ -127,11 +127,11 @@ public interface EventBus {
     void unregisterAllListeners(@NotNull Object pluginContext);
 
     /**
-     * Unregisters all listeners associated with an explicit {@link GrimPlugin} instance.
+     * Unregisters all listeners associated with an explicit {@link ReaperPlugin} instance.
      *
-     * @param plugin The GrimPlugin to unregister all listeners for.
+     * @param plugin The ReaperPlugin to unregister all listeners for.
      */
-    void unregisterAllListeners(@NotNull GrimPlugin plugin);
+    void unregisterAllListeners(@NotNull ReaperPlugin plugin);
 
 
     /**
@@ -143,12 +143,12 @@ public interface EventBus {
     void unregisterListener(@NotNull Object pluginContext, @NotNull GrimEventListener<?> listener);
 
     /**
-     * Unregisters a specific explicit listener associated with an explicit {@link GrimPlugin} instance.
+     * Unregisters a specific explicit listener associated with an explicit {@link ReaperPlugin} instance.
      *
-     * @param plugin   The GrimPlugin the listener was registered with.
+     * @param plugin   The ReaperPlugin the listener was registered with.
      * @param listener The explicit listener to unregister.
      */
-    void unregisterListener(@NotNull GrimPlugin plugin, @NotNull GrimEventListener<?> listener);
+    void unregisterListener(@NotNull ReaperPlugin plugin, @NotNull GrimEventListener<?> listener);
 
     /**
      * Posts an event to all registered listeners.
@@ -176,9 +176,9 @@ public interface EventBus {
     <T extends GrimEvent> void subscribe(@NotNull Object pluginContext, @NotNull Class<T> eventType, @NotNull GrimEventListener<T> listener, int priority, boolean ignoreCancelled, @NotNull Class<?> declaringClass);
 
     /**
-     * Subscribes an explicit listener using an explicit {@link GrimPlugin} instance.
+     * Subscribes an explicit listener using an explicit {@link ReaperPlugin} instance.
      *
-     * @param plugin          The GrimPlugin instance to bind the listener to.
+     * @param plugin          The ReaperPlugin instance to bind the listener to.
      * @param eventType       The event type to listen for.
      * @param listener        The listener to handle the event.
      * @param priority        The priority of the listener.
@@ -186,7 +186,7 @@ public interface EventBus {
      * @param declaringClass  The class declaring the listener (for unregistration purposes).
      * @param <T>             The event type.
      */
-    <T extends GrimEvent> void subscribe(@NotNull GrimPlugin plugin, @NotNull Class<T> eventType, @NotNull GrimEventListener<T> listener, int priority, boolean ignoreCancelled, @NotNull Class<?> declaringClass);
+    <T extends GrimEvent> void subscribe(@NotNull ReaperPlugin plugin, @NotNull Class<T> eventType, @NotNull GrimEventListener<T> listener, int priority, boolean ignoreCancelled, @NotNull Class<?> declaringClass);
 
 
     /**
@@ -206,14 +206,14 @@ public interface EventBus {
     /**
      * Subscribes an explicit listener with a default declaring class.
      *
-     * @param plugin          The GrimPlugin instance to bind the listener to.
+     * @param plugin          The ReaperPlugin instance to bind the listener to.
      * @param eventType       The event type to listen for.
      * @param listener        The listener to handle the event.
      * @param priority        The priority of the listener.
      * @param ignoreCancelled Whether to ignore cancelled events.
      * @param <T>             The event type.
      */
-    default <T extends GrimEvent> void subscribe(@NotNull GrimPlugin plugin, @NotNull Class<T> eventType, @NotNull GrimEventListener<T> listener, int priority, boolean ignoreCancelled) {
+    default <T extends GrimEvent> void subscribe(@NotNull ReaperPlugin plugin, @NotNull Class<T> eventType, @NotNull GrimEventListener<T> listener, int priority, boolean ignoreCancelled) {
         subscribe(plugin, eventType, listener, priority, ignoreCancelled, listener.getClass());
     }
 
@@ -233,12 +233,12 @@ public interface EventBus {
     /**
      * Subscribes an explicit listener with default priority and ignoreCancelled settings.
      *
-     * @param plugin    The GrimPlugin instance to bind the listener to.
+     * @param plugin    The ReaperPlugin instance to bind the listener to.
      * @param eventType The event type to listen for.
      * @param listener  The listener to handle the event.
      * @param <T>       The event type.
      */
-    default <T extends GrimEvent> void subscribe(@NotNull GrimPlugin plugin, @NotNull Class<T> eventType, @NotNull GrimEventListener<T> listener) {
+    default <T extends GrimEvent> void subscribe(@NotNull ReaperPlugin plugin, @NotNull Class<T> eventType, @NotNull GrimEventListener<T> listener) {
         subscribe(plugin, eventType, listener, 0, false);
     }
 }

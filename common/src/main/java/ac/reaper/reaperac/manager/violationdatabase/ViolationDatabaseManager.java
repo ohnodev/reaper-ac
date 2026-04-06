@@ -2,7 +2,7 @@ package ac.reaper.reaperac.manager.violationdatabase;
 
 import ac.reaper.reaperac.GrimAPI;
 import ac.reaper.reaperac.api.config.ConfigManager;
-import ac.reaper.reaperac.api.plugin.GrimPlugin;
+import ac.reaper.reaperac.api.plugin.ReaperPlugin;
 import ac.reaper.reaperac.manager.init.ReloadableInitable;
 import ac.reaper.reaperac.manager.init.start.StartableInitable;
 import ac.reaper.reaperac.manager.violationdatabase.mysql.MySQLViolationDatabase;
@@ -19,13 +19,13 @@ import java.util.UUID;
 
 public class ViolationDatabaseManager implements StartableInitable, ReloadableInitable {
 
-    private final GrimPlugin plugin;
+    private final ReaperPlugin plugin;
     @Getter private boolean enabled = false;
     @Getter private boolean loaded = false;
 
     private @NotNull ViolationDatabase database;
 
-    public ViolationDatabaseManager(GrimPlugin plugin) {
+    public ViolationDatabaseManager(ReaperPlugin plugin) {
         this.plugin = plugin;
         this.database = NoOpViolationDatabase.INSTANCE;
     }

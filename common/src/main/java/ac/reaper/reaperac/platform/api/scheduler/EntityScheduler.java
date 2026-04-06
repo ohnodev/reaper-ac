@@ -18,7 +18,7 @@
 
 package ac.reaper.reaperac.platform.api.scheduler;
 
-import ac.reaper.reaperac.api.plugin.GrimPlugin;
+import ac.reaper.reaperac.api.plugin.ReaperPlugin;
 import ac.reaper.reaperac.platform.api.entity.GrimEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,7 +41,7 @@ public interface EntityScheduler {
      * @param retired Retire callback to run if the entity is retired before the run callback can be invoked, may be null.
      * @param delay   The delay in ticks before the run callback is invoked.
      */
-    void execute(@NotNull GrimEntity entity, @NotNull GrimPlugin plugin, @NotNull Runnable run, @Nullable Runnable retired, long delay);
+    void execute(@NotNull GrimEntity entity, @NotNull ReaperPlugin plugin, @NotNull Runnable run, @Nullable Runnable retired, long delay);
 
     /**
      * Schedules a task to execute on the next tick. If the task failed to schedule because the scheduler is retired (entity removed),
@@ -57,7 +57,7 @@ public interface EntityScheduler {
      * @param retired Retire callback to run if the entity is retired before the run callback can be invoked, may be null.
      * @return {@link TaskHandle} instance representing a wrapped task
      */
-    TaskHandle run(@NotNull GrimEntity entity, @NotNull GrimPlugin plugin, @NotNull Runnable task, @Nullable Runnable retired);
+    TaskHandle run(@NotNull GrimEntity entity, @NotNull ReaperPlugin plugin, @NotNull Runnable task, @Nullable Runnable retired);
 
     /**
      * Schedules a task with the given delay. If the task failed to schedule because the scheduler is retired (entity removed),
@@ -73,7 +73,7 @@ public interface EntityScheduler {
      * @param delayTicks The delay in ticks before the run callback is invoked. Any value less-than 1 may throw an error.
      * @return {@link TaskHandle} instance representing a wrapped task
      */
-    TaskHandle runDelayed(@NotNull GrimEntity entity, @NotNull GrimPlugin plugin, @NotNull Runnable task, @Nullable Runnable retired, long delayTicks);
+    TaskHandle runDelayed(@NotNull GrimEntity entity, @NotNull ReaperPlugin plugin, @NotNull Runnable task, @Nullable Runnable retired, long delayTicks);
 
     /**
      * Schedules a repeating task with the given delay and period. If the task failed to schedule because the scheduler is retired (entity removed),
@@ -90,5 +90,5 @@ public interface EntityScheduler {
      * @param periodTicks       The period, in ticks. Any value less-than 1 may throw an error.
      * @return {@link TaskHandle} instance representing a wrapped task
      */
-    TaskHandle runAtFixedRate(@NotNull GrimEntity entity, @NotNull GrimPlugin plugin, @NotNull Runnable task, @Nullable Runnable retired, long initialDelayTicks, long periodTicks);
+    TaskHandle runAtFixedRate(@NotNull GrimEntity entity, @NotNull ReaperPlugin plugin, @NotNull Runnable task, @Nullable Runnable retired, long initialDelayTicks, long periodTicks);
 }

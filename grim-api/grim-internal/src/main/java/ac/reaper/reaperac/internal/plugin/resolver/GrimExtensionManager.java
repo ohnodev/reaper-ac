@@ -1,6 +1,6 @@
 package ac.reaper.reaperac.internal.plugin.resolver;
 
-import ac.reaper.reaperac.api.plugin.GrimPlugin;
+import ac.reaper.reaperac.api.plugin.ReaperPlugin;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * Manages the resolution of platform-specific plugin contexts into the universal {@link GrimPlugin} interface.
+ * Manages the resolution of platform-specific plugin contexts into the universal {@link ReaperPlugin} interface.
  * <p>
  * This class is the bridge that allows the API to remain platform-agnostic while still supporting
  * platform-specific objects for lifecycle management.
@@ -18,7 +18,7 @@ public final class GrimExtensionManager {
     private final List<GrimExtensionResolver> resolvers = new CopyOnWriteArrayList<>();
     private ResolutionFailureHandler failureHandler = failedContext ->
             new IllegalArgumentException("Unable to resolve plugin context for type: " + failedContext.getClass().getName() +
-                    ". Ensure you are passing a valid platform plugin instance or a pre-existing GrimPlugin.");
+                    ". Ensure you are passing a valid platform plugin instance or a pre-existing ReaperPlugin.");
 
     /**
      * Sets a custom handler for creating exceptions when plugin context resolution fails.
@@ -42,26 +42,26 @@ public final class GrimExtensionManager {
     }
 
     /**
-     * Resolves a context object into a GrimPlugin by trying all registered resolvers in order.
+     * Resolves a context object into a ReaperPlugin by trying all registered resolvers in order.
      * <p>
-     * It also has built-in logic to handle being passed a {@link GrimPlugin} instance directly.
+     * It also has built-in logic to handle being passed a {@link ReaperPlugin} instance directly.
      *
      * @param context The context object to resolve.
-     * @return The resolved GrimPlugin.
+     * @return The resolved ReaperPlugin.
      * @throws IllegalArgumentException if no registered resolver can handle the provided context type.
      */
     @NotNull
-    public GrimPlugin getPlugin(@NotNull Object context) {
+    public ReaperPlugin getPlugin(@NotNull Object context) {
         Objects.requireNonNull(context, "context cannot be null");
 
-        // First, check for the universal case: was a GrimPlugin already passed?
-        if (context instanceof GrimPlugin) {
-            return (GrimPlugin) context;
+        // First, check for the universal case: was a ReaperPlugin already passed?
+        if (context instanceof ReaperPlugin) {
+            return (ReaperPlugin) context;
         }
 
         // Next, iterate through platform-specific resolvers.
         for (GrimExtensionResolver resolver : resolvers) {
-            GrimPlugin resolved = resolver.resolve(context);
+            ReaperPlugin resolved = resolver.resolve(context);
             if (resolved != null) {
                 return resolved;
             }

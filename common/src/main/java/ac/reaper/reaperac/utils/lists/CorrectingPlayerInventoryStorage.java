@@ -113,7 +113,7 @@ public class CorrectingPlayerInventoryStorage extends InventoryStorage {
             ItemStack toPE = player.platformPlayer.getInventory().getStack(bukkitSlot, slot);
 
             if (existing.getType() != toPE.getType() || existing.getAmount() != toPE.getAmount()) {
-                GrimAPI.INSTANCE.getScheduler().getEntityScheduler().execute(player.platformPlayer, GrimAPI.INSTANCE.getGrimPlugin(),
+                GrimAPI.INSTANCE.getScheduler().getEntityScheduler().execute(player.platformPlayer, GrimAPI.INSTANCE.getReaperPlugin(),
                         () -> player.platformPlayer.updateInventory(), null, 0);
                 setItem(slot, toPE);
             }
@@ -137,7 +137,7 @@ public class CorrectingPlayerInventoryStorage extends InventoryStorage {
         // If the player's inventory needs to be resent so that Grim can enable the player's packet inventory again
         // Then resend once the player has a supported inventory to activate that.
         if (player.inventory.needResend) {
-            GrimAPI.INSTANCE.getScheduler().getEntityScheduler().execute(player.platformPlayer, GrimAPI.INSTANCE.getGrimPlugin(), () -> {
+            GrimAPI.INSTANCE.getScheduler().getEntityScheduler().execute(player.platformPlayer, GrimAPI.INSTANCE.getReaperPlugin(), () -> {
                 // Potential race condition doing this multiple times
                 if (!player.inventory.needResend) return;
 

@@ -6,7 +6,7 @@ import ac.reaper.reaperac.player.GrimPlayer;
 public class PacketLimiter implements StartableInitable {
     @Override
     public void start() {
-        GrimAPI.INSTANCE.getScheduler().getAsyncScheduler().runAtFixedRate(GrimAPI.INSTANCE.getGrimPlugin(), () -> {
+        GrimAPI.INSTANCE.getScheduler().getAsyncScheduler().runAtFixedRate(GrimAPI.INSTANCE.getReaperPlugin(), () -> {
             for (GrimPlayer player : GrimAPI.INSTANCE.getPlayerDataManager().getEntries()) {
                 // Avoid concurrent reading on an integer as it's results are unknown
                 player.cancelledPackets.set(0);

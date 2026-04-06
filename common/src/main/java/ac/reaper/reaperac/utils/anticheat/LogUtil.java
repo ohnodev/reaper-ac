@@ -52,7 +52,7 @@ public class LogUtil {
     }
 
     public Logger getLogger() {
-        return GrimAPI.INSTANCE.getGrimPlugin().getLogger();
+        return GrimAPI.INSTANCE.getReaperPlugin().getLogger();
     }
 
     public void console(final String info) {

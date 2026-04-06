@@ -1,7 +1,7 @@
 package ac.reaper.reaperac.platform.fabric.resolver;
 
-import ac.reaper.reaperac.api.plugin.BasicGrimPlugin;
-import ac.reaper.reaperac.api.plugin.GrimPlugin;
+import ac.reaper.reaperac.api.plugin.BasicReaperPlugin;
+import ac.reaper.reaperac.api.plugin.ReaperPlugin;
 import ac.reaper.reaperac.internal.plugin.resolver.GrimExtensionManager;
 import ac.reaper.reaperac.platform.fabric.utils.message.JULoggerFactory;
 import lombok.RequiredArgsConstructor;
@@ -31,10 +31,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public final class FabricResolverRegistrar {
 
-    // Cache to ensure we only create one GrimPlugin wrapper per Fabric ModContainer.
-    private final Map<ModContainer, GrimPlugin> modContainerCache = new ConcurrentHashMap<>();
-    private final Map<Class<?>, GrimPlugin> classCache = new ConcurrentHashMap<>();
-    private final Map<Object, GrimPlugin> entrypointCache = new ConcurrentHashMap<>();
+    // Cache to ensure we only create one ReaperPlugin wrapper per Fabric ModContainer.
+    private final Map<ModContainer, ReaperPlugin> modContainerCache = new ConcurrentHashMap<>();
+    private final Map<Class<?>, ReaperPlugin> classCache = new ConcurrentHashMap<>();
+    private final Map<Object, ReaperPlugin> entrypointCache = new ConcurrentHashMap<>();
 
     /**
      * Registers all the Fabric-specific resolvers in order of performance (fastest to slowest).
@@ -49,13 +49,13 @@ public final class FabricResolverRegistrar {
 
     /**
      * Create a shared, reusable function to handle the core logic of
-     * converting a Fabric ModContainer to a GrimPlugin wrapper.
+     * converting a Fabric ModContainer to a ReaperPlugin wrapper.
      */
-    private GrimPlugin resolveMod(ModContainer modContainer) {
+    private ReaperPlugin resolveMod(ModContainer modContainer) {
         return modContainerCache.computeIfAbsent(modContainer, container -> {
             net.fabricmc.loader.api.metadata.ModMetadata metadata = container.getMetadata();
             String folderName = metadata.getId().equals("grimac") ? metadata.getName() : metadata.getId();
-            return new BasicGrimPlugin(
+            return new BasicReaperPlugin(
                     JULoggerFactory.createLogger(metadata.getName()),
                     new File(FabricLoader.getInstance().getConfigDir().toFile(), folderName),
                     metadata.getVersion().getFriendlyString(),
@@ -68,14 +68,14 @@ public final class FabricResolverRegistrar {
     /**
      * Resolver #0: Direct ModContainer (fastest)
      */
-    private GrimPlugin resolveModContainer(Object context) {
+    private ReaperPlugin resolveModContainer(Object context) {
         return (context instanceof ModContainer mc) ? resolveMod(mc) : null;
     }
 
     /**
      * Resolver #1: String Mod ID (very fast)
      */
-    private GrimPlugin resolveStringId(Object context) {
+    private ReaperPlugin resolveStringId(Object context) {
         if (context instanceof String modId) {
             // Mod IDs are enforced to always be fully lowercase
             return FabricLoader.getInstance().getModContainer(modId.toLowerCase(Locale.ROOT))
@@ -88,7 +88,7 @@ public final class FabricResolverRegistrar {
     /**
      * Resolver #2: Mod Entrypoint Instance (slower, but cached)
      */
-    private GrimPlugin resolveEntrypointInstance(Object context) {
+    private ReaperPlugin resolveEntrypointInstance(Object context) {
         // We only care about potential entrypoint instances
         if (context instanceof ModInitializer || context instanceof PreLaunchEntrypoint || context instanceof ClientModInitializer || context instanceof DedicatedServerModInitializer) {
             return entrypointCache.computeIfAbsent(context, this::findEntrypoint);
@@ -96,8 +96,8 @@ public final class FabricResolverRegistrar {
         return null;
     }
 
-    private GrimPlugin findEntrypoint(Object key) {
-        GrimPlugin result;
+    private ReaperPlugin findEntrypoint(Object key) {
+        ReaperPlugin result;
         if ((result = findEntrypoint(key, ModInitializer.class, "main")) != null) return result;
         if ((result = findEntrypoint(key, PreLaunchEntrypoint.class, "preLaunch")) != null) return result;
         if ((result = findEntrypoint(key, ClientModInitializer.class, "client")) != null) return result;
@@ -105,7 +105,7 @@ public final class FabricResolverRegistrar {
         return null;
     }
 
-    private <T> GrimPlugin findEntrypoint(Object context, Class<T> entrypointClass, String entrypointKey) {
+    private <T> ReaperPlugin findEntrypoint(Object context, Class<T> entrypointClass, String entrypointKey) {
         if (entrypointClass.isInstance(context)) {
             for (EntrypointContainer<T> container : FabricLoader.getInstance().getEntrypointContainers(entrypointKey, entrypointClass)) {
                 if (container.getEntrypoint() == context) {
@@ -119,14 +119,14 @@ public final class FabricResolverRegistrar {
     /**
      * Resolver #3: Class object (slowest - involves I/O, but cached)
      */
-    private GrimPlugin resolveClass(Object context) {
+    private ReaperPlugin resolveClass(Object context) {
         if (context instanceof Class<?> clazz) {
             return classCache.computeIfAbsent(clazz, this::findClassProvider);
         }
         return null;
     }
 
-    private GrimPlugin findClassProvider(Class<?> c) {
+    private ReaperPlugin findClassProvider(Class<?> c) {
         try {
             // 1. Get the path to the physical JAR/directory the class was loaded from.
             // This is our ground truth.
@@ -170,13 +170,13 @@ public final class FabricResolverRegistrar {
 
     private RuntimeException createFailureException(Object failedContext) {
         String message = """
-        Failed to resolve GrimPlugin context from the provided object of type '%s'.
+        Failed to resolve ReaperPlugin context from the provided object of type '%s'.
 
         Please ensure you are passing one of the following:
           - The main instance of your mod (e.g., 'this' from your ModInitializer class).
           - The mod ID as a String (e.g., "my-mod-id").
           - Any Class from your mod's JAR file (e.g., MyListener.class).
-          - A pre-existing GrimPlugin instance.
+          - A pre-existing ReaperPlugin instance.
         """.formatted(failedContext.getClass().getName());
         return new IllegalArgumentException(message);
     }

@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 public class FabricFutureUtil {
     public static <U> CompletableFuture<U> supplySync(Supplier<U> entityTeleportSupplier) {
         CompletableFuture<U> ret = new CompletableFuture<>();
-        GrimAPI.INSTANCE.getScheduler().getGlobalRegionScheduler().run(GrimAPI.INSTANCE.getGrimPlugin(),
+        GrimAPI.INSTANCE.getScheduler().getGlobalRegionScheduler().run(GrimAPI.INSTANCE.getReaperPlugin(),
                 () -> ret.complete(entityTeleportSupplier.get()));
         return ret;
     }

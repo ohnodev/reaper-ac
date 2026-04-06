@@ -5,7 +5,7 @@ import ac.reaper.reaperac.api.event.GrimEvent;
 import ac.reaper.reaperac.api.event.GrimEventHandler;
 import ac.reaper.reaperac.api.event.GrimEventListener;
 import ac.reaper.reaperac.api.event.events.*;
-import ac.reaper.reaperac.api.plugin.GrimPlugin;
+import ac.reaper.reaperac.api.plugin.ReaperPlugin;
 import ac.reaper.reaperac.internal.plugin.resolver.GrimExtensionManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -53,33 +53,33 @@ public class OptimizedEventBus implements EventBus {
 
     @Override
     public void registerAnnotatedListeners(@NotNull Object pluginContext, @NotNull Object listener) {
-        GrimPlugin plugin = extensionManager.getPlugin(pluginContext);
+        ReaperPlugin plugin = extensionManager.getPlugin(pluginContext);
         registerAnnotatedListeners(plugin, listener);
     }
 
     @Override
-    public void registerAnnotatedListeners(GrimPlugin plugin, @NotNull Object listener) {
+    public void registerAnnotatedListeners(ReaperPlugin plugin, @NotNull Object listener) {
         registerMethods(plugin, listener, listener.getClass());
     }
 
     @Override
     public void registerStaticAnnotatedListeners(@NotNull Object pluginContext, @NotNull Class<?> clazz) {
-        GrimPlugin plugin = extensionManager.getPlugin(pluginContext);
+        ReaperPlugin plugin = extensionManager.getPlugin(pluginContext);
         registerStaticAnnotatedListeners(plugin, clazz);
     }
 
     @Override
-    public void registerStaticAnnotatedListeners(GrimPlugin plugin, @NotNull Class<?> clazz) {
+    public void registerStaticAnnotatedListeners(ReaperPlugin plugin, @NotNull Class<?> clazz) {
         registerMethods(plugin, null, clazz);
     }
 
     @Override
     public void unregisterListeners(@NotNull Object pluginContext, @NotNull Object listener) {
-        GrimPlugin plugin = extensionManager.getPlugin(pluginContext);
+        ReaperPlugin plugin = extensionManager.getPlugin(pluginContext);
         unregisterListeners(plugin, listener);
     }
 
-    private void registerMethods(GrimPlugin plugin, @Nullable Object instance, @NotNull Class<?> clazz) {
+    private void registerMethods(ReaperPlugin plugin, @Nullable Object instance, @NotNull Class<?> clazz) {
         for (Method method : clazz.getDeclaredMethods()) {
             GrimEventHandler annotation = method.getAnnotation(GrimEventHandler.class);
             if (annotation != null && method.getParameterCount() == 1) {
@@ -181,7 +181,7 @@ public class OptimizedEventBus implements EventBus {
     }
 
     @Override
-    public void unregisterListeners(GrimPlugin plugin, Object instance) {
+    public void unregisterListeners(ReaperPlugin plugin, Object instance) {
         for (Map.Entry<Class<? extends GrimEvent>, AtomicReference<OptimizedListener[]>> entry : listenerMap.entrySet()) {
             removeListeners(entry.getKey(), entry.getValue(),
                     listener -> listener.plugin.equals(plugin) &&
@@ -192,12 +192,12 @@ public class OptimizedEventBus implements EventBus {
 
     @Override
     public void unregisterStaticListeners(@NotNull Object pluginContext, @NotNull Class<?> clazz) {
-        GrimPlugin plugin = extensionManager.getPlugin(pluginContext);
+        ReaperPlugin plugin = extensionManager.getPlugin(pluginContext);
         unregisterStaticListeners(plugin, clazz);
     }
 
     @Override
-    public void unregisterStaticListeners(GrimPlugin plugin, Class<?> clazz) {
+    public void unregisterStaticListeners(ReaperPlugin plugin, Class<?> clazz) {
         for (Map.Entry<Class<? extends GrimEvent>, AtomicReference<OptimizedListener[]>> entry : listenerMap.entrySet()) {
             removeListeners(entry.getKey(), entry.getValue(),
                     listener -> listener.plugin.equals(plugin) &&
@@ -207,12 +207,12 @@ public class OptimizedEventBus implements EventBus {
     }
 
     @Override public void unregisterAllListeners(@NotNull Object pluginContext) {
-        GrimPlugin plugin = extensionManager.getPlugin(pluginContext);
+        ReaperPlugin plugin = extensionManager.getPlugin(pluginContext);
         unregisterAllListeners(plugin);
     }
 
     @Override
-    public void unregisterAllListeners(GrimPlugin plugin) {
+    public void unregisterAllListeners(ReaperPlugin plugin) {
         for (Map.Entry<Class<? extends GrimEvent>, AtomicReference<OptimizedListener[]>> entry : listenerMap.entrySet()) {
             removeListeners(entry.getKey(), entry.getValue(),
                     listener -> listener.plugin.equals(plugin));
@@ -221,12 +221,12 @@ public class OptimizedEventBus implements EventBus {
 
     @Override
     public void unregisterListener(@NotNull Object pluginContext, @NotNull GrimEventListener<?> listener) {
-        GrimPlugin plugin = extensionManager.getPlugin(pluginContext);
+        ReaperPlugin plugin = extensionManager.getPlugin(pluginContext);
         unregisterListener(plugin, listener);
     }
 
     @Override
-    public void unregisterListener(GrimPlugin plugin, GrimEventListener<?> eventListener) {
+    public void unregisterListener(ReaperPlugin plugin, GrimEventListener<?> eventListener) {
         for (Map.Entry<Class<? extends GrimEvent>, AtomicReference<OptimizedListener[]>> entry : listenerMap.entrySet()) {
             removeListeners(entry.getKey(), entry.getValue(),
                     listener -> listener.plugin.equals(plugin) &&
@@ -303,7 +303,7 @@ public class OptimizedEventBus implements EventBus {
     }
 
     @Override
-    public <T extends GrimEvent> void subscribe(GrimPlugin plugin, @NotNull Class<T> eventType,
+    public <T extends GrimEvent> void subscribe(ReaperPlugin plugin, @NotNull Class<T> eventType,
                                                 @NotNull GrimEventListener<T> listener, int priority,
                                                 boolean ignoreCancelled, @NotNull Class<?> declaringClass) {
         @SuppressWarnings("unchecked")
@@ -316,14 +316,14 @@ public class OptimizedEventBus implements EventBus {
     }
 
     private static class OptimizedListener {
-        final GrimPlugin plugin;
+        final ReaperPlugin plugin;
         final GrimEventListener<GrimEvent> listener;
         final int priority;
         final boolean ignoreCancelled;
         final Class<?> declaringClass;
         final Object instance;
 
-        OptimizedListener(GrimPlugin plugin, GrimEventListener<GrimEvent> listener,
+        OptimizedListener(ReaperPlugin plugin, GrimEventListener<GrimEvent> listener,
                           int priority, boolean ignoreCancelled,
                           Class<?> declaringClass, Object instance) {
             this.plugin = plugin;

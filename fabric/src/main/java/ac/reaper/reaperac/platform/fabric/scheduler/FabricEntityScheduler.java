@@ -1,6 +1,6 @@
 package ac.reaper.reaperac.platform.fabric.scheduler;
 
-import ac.reaper.reaperac.api.plugin.GrimPlugin;
+import ac.reaper.reaperac.api.plugin.ReaperPlugin;
 import ac.reaper.reaperac.platform.api.entity.GrimEntity;
 import ac.reaper.reaperac.platform.api.scheduler.EntityScheduler;
 import ac.reaper.reaperac.platform.api.scheduler.TaskHandle;
@@ -16,9 +16,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class FabricEntityScheduler implements EntityScheduler {
     // TODO (Cross-platform) (Threading) try to make this not Concurrent
     private final Map<FabricPlatformScheduler.ScheduledTask, Runnable> taskMap = new ConcurrentHashMap<>();
-    private final GrimPlugin plugin;
+    private final ReaperPlugin plugin;
 
-    public FabricEntityScheduler(GrimPlugin plugin) {
+    public FabricEntityScheduler(ReaperPlugin plugin) {
         this.plugin = plugin;
         ServerTickEvents.END_SERVER_TICK.register(this::handleTasks);
     }
@@ -28,17 +28,17 @@ public class FabricEntityScheduler implements EntityScheduler {
     }
 
     @Override
-    public void execute(@NotNull GrimEntity entity, @NotNull GrimPlugin plugin, @NotNull Runnable run, @Nullable Runnable retired, long delay) {
+    public void execute(@NotNull GrimEntity entity, @NotNull ReaperPlugin plugin, @NotNull Runnable run, @Nullable Runnable retired, long delay) {
         runDelayed(entity, plugin, run, retired, delay);
     }
 
     @Override
-    public TaskHandle run(@NotNull GrimEntity entity, @NotNull GrimPlugin plugin, @NotNull Runnable task, @Nullable Runnable retired) {
+    public TaskHandle run(@NotNull GrimEntity entity, @NotNull ReaperPlugin plugin, @NotNull Runnable task, @Nullable Runnable retired) {
         return runDelayed(entity, plugin, task, retired, 0);
     }
 
     @Override
-    public TaskHandle runDelayed(@NotNull GrimEntity entity, @NotNull GrimPlugin plugin, @NotNull Runnable task, @Nullable Runnable retired, long delayTicks) {
+    public TaskHandle runDelayed(@NotNull GrimEntity entity, @NotNull ReaperPlugin plugin, @NotNull Runnable task, @Nullable Runnable retired, long delayTicks) {
         FabricPlatformScheduler.ScheduledTask scheduledTask = new FabricPlatformScheduler.ScheduledTask(
                 () -> {
                     task.run();
@@ -57,7 +57,7 @@ public class FabricEntityScheduler implements EntityScheduler {
     }
 
     @Override
-    public TaskHandle runAtFixedRate(@NotNull GrimEntity entity, @NotNull GrimPlugin plugin, @NotNull Runnable task, @Nullable Runnable retired, long initialDelayTicks, long periodTicks) {
+    public TaskHandle runAtFixedRate(@NotNull GrimEntity entity, @NotNull ReaperPlugin plugin, @NotNull Runnable task, @Nullable Runnable retired, long initialDelayTicks, long periodTicks) {
         FabricPlatformScheduler.ScheduledTask scheduledTask = new FabricPlatformScheduler.ScheduledTask(
                 () -> {
                     task.run();
@@ -75,7 +75,7 @@ public class FabricEntityScheduler implements EntityScheduler {
         return new FabricTaskHandle(cancellationTask, true); // true for sync
     }
 
-    public void cancel(@NotNull GrimPlugin plugin) {
+    public void cancel(@NotNull ReaperPlugin plugin) {
         FabricPlatformScheduler.cancelPluginTasks(taskMap, plugin);
     }
 

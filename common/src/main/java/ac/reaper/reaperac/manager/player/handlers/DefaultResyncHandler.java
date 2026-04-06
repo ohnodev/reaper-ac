@@ -27,7 +27,7 @@ public record DefaultResyncHandler(GrimPlayer player) implements ResyncHandler {
 
         // Takes 0.15ms or so to complete. Not bad IMO. Unsure how I could improve this other than sending packets async.
         // But that's on PacketEvents.
-        GrimAPI.INSTANCE.getScheduler().getRegionScheduler().execute(GrimAPI.INSTANCE.getGrimPlugin(), world,
+        GrimAPI.INSTANCE.getScheduler().getRegionScheduler().execute(GrimAPI.INSTANCE.getReaperPlugin(), world,
                 minBlockX >> 4, minBlockZ >> 4, () -> {
                     // Player hasn't spawned, don't spam packets
                     if (!player.getSetbackTeleportUtil().hasAcceptedSpawnTeleport) return;
@@ -112,7 +112,7 @@ public record DefaultResyncHandler(GrimPlayer player) implements ResyncHandler {
         // In the future we should replace with completable-future for getting player world that runs on the region thread
         final PlatformWorld world = player.platformPlayer.getWorld();
 
-        GrimAPI.INSTANCE.getScheduler().getRegionScheduler().execute(GrimAPI.INSTANCE.getGrimPlugin(), world, chunkX, chunkZ, () -> {
+        GrimAPI.INSTANCE.getScheduler().getRegionScheduler().execute(GrimAPI.INSTANCE.getReaperPlugin(), world, chunkX, chunkZ, () -> {
             if (!player.platformPlayer.isOnline() || !player.getSetbackTeleportUtil().hasAcceptedSpawnTeleport)
                 return;
             if (player.platformPlayer.distanceSquared(x, y, z) >= 64 * 64)

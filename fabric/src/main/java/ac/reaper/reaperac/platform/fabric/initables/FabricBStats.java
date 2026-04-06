@@ -13,7 +13,7 @@ public class FabricBStats implements StartableInitable, StoppableInitable {
     @Override
     public void start() {
         try {
-            metricsFabric = new MetricsFabric(GrimAPI.INSTANCE.getGrimPlugin(), Constants.BSTATS_PLUGIN_ID);
+            metricsFabric = new MetricsFabric(GrimAPI.INSTANCE.getReaperPlugin(), Constants.BSTATS_PLUGIN_ID);
         } catch (Exception ignored) {}
     }
 

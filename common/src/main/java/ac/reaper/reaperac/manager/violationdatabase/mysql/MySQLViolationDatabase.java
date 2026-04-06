@@ -1,7 +1,7 @@
 package ac.reaper.reaperac.manager.violationdatabase.mysql;
 
 import ac.reaper.reaperac.GrimAPI;
-import ac.reaper.reaperac.api.plugin.GrimPlugin;
+import ac.reaper.reaperac.api.plugin.ReaperPlugin;
 import ac.reaper.reaperac.manager.violationdatabase.DatabaseConstants;
 import ac.reaper.reaperac.manager.violationdatabase.DatabaseDialect;
 import ac.reaper.reaperac.manager.violationdatabase.DatabaseUtils;
@@ -20,11 +20,11 @@ import java.util.UUID;
 
 public class MySQLViolationDatabase implements ViolationDatabase {
 
-    private final GrimPlugin plugin;
+    private final ReaperPlugin plugin;
     private HikariDataSource dataSource;
     private final DatabaseDialect dialect;
 
-    public MySQLViolationDatabase(GrimPlugin plugin, String url, String database, String username, String password) {
+    public MySQLViolationDatabase(ReaperPlugin plugin, String url, String database, String username, String password) {
         this.plugin = plugin;
         this.dialect = new MySQLDialect();
         setupDataSource(url, database, username, password);

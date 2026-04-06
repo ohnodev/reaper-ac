@@ -55,7 +55,7 @@ public final class GrimUpdateCheckService {
             }
         }
 
-        GrimAPI.INSTANCE.getScheduler().getAsyncScheduler().runNow(GrimAPI.INSTANCE.getGrimPlugin(), () -> checkForUpdates(sender));
+        GrimAPI.INSTANCE.getScheduler().getAsyncScheduler().runNow(GrimAPI.INSTANCE.getReaperPlugin(), () -> checkForUpdates(sender));
     }
 
     private static void checkForUpdates(Sender sender) {

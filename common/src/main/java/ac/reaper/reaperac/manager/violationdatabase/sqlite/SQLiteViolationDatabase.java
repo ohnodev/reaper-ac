@@ -1,7 +1,7 @@
 package ac.reaper.reaperac.manager.violationdatabase.sqlite;
 
 import ac.reaper.reaperac.GrimAPI;
-import ac.reaper.reaperac.api.plugin.GrimPlugin;
+import ac.reaper.reaperac.api.plugin.ReaperPlugin;
 import ac.reaper.reaperac.manager.violationdatabase.DatabaseConstants;
 import ac.reaper.reaperac.manager.violationdatabase.DatabaseDialect;
 import ac.reaper.reaperac.manager.violationdatabase.DatabaseUtils;
@@ -21,11 +21,11 @@ import java.util.UUID;
 
 public class SQLiteViolationDatabase implements ViolationDatabase {
 
-    private final GrimPlugin plugin;
+    private final ReaperPlugin plugin;
     private Connection openConnection;
     private final DatabaseDialect dialect;
 
-    public SQLiteViolationDatabase(@NotNull GrimPlugin plugin) {
+    public SQLiteViolationDatabase(@NotNull ReaperPlugin plugin) {
         this.plugin = plugin;
         this.dialect = new SQLiteDialect();
     }

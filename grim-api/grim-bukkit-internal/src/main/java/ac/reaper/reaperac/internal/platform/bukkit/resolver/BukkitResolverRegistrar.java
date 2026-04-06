@@ -2,8 +2,8 @@ package ac.reaper.reaperac.internal.platform.bukkit.resolver;
 
 import ac.reaper.reaperac.api.ReaperAPIProvider;
 import ac.reaper.reaperac.api.GrimAbstractAPI;
-import ac.reaper.reaperac.api.plugin.BasicGrimPlugin;
-import ac.reaper.reaperac.api.plugin.GrimPlugin;
+import ac.reaper.reaperac.api.plugin.BasicReaperPlugin;
+import ac.reaper.reaperac.api.plugin.ReaperPlugin;
 import ac.reaper.reaperac.internal.plugin.resolver.GrimExtensionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -20,8 +20,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class BukkitResolverRegistrar {
 
-    // Cache to ensure we only create one GrimPlugin wrapper per Bukkit Plugin instance.
-    private final Map<Plugin, GrimPlugin> pluginCache = new ConcurrentHashMap<>();
+    // Cache to ensure we only create one ReaperPlugin wrapper per Bukkit Plugin instance.
+    private final Map<Plugin, ReaperPlugin> pluginCache = new ConcurrentHashMap<>();
 
     /**
      * Registers all the Bukkit-specific resolvers in order of performance (fastest to slowest).
@@ -34,12 +34,12 @@ public final class BukkitResolverRegistrar {
     }
 
     /**
-     * The core logic for converting a Bukkit Plugin into a GrimPlugin, with caching.
+     * The core logic for converting a Bukkit Plugin into a ReaperPlugin, with caching.
      */
-    public GrimPlugin resolvePlugin(Plugin bukkitPlugin) {
+    public ReaperPlugin resolvePlugin(Plugin bukkitPlugin) {
         return pluginCache.computeIfAbsent(bukkitPlugin, plugin -> {
             PluginDescriptionFile desc = plugin.getDescription();
-            return new BasicGrimPlugin(
+            return new BasicReaperPlugin(
                     plugin.getLogger(),
                     plugin.getDataFolder(),
                     desc.getVersion(),
@@ -52,7 +52,7 @@ public final class BukkitResolverRegistrar {
     /**
      * 1. Resolver for raw Plugin instances (the most common case).
      */
-    private GrimPlugin resolvePluginInstance(Object context) {
+    private ReaperPlugin resolvePluginInstance(Object context) {
         if (context instanceof Plugin bukkitPlugin) {
             return resolvePlugin(bukkitPlugin);
         }
@@ -62,7 +62,7 @@ public final class BukkitResolverRegistrar {
     /**
      * 2. Resolver for String plugin names.
      */
-    private GrimPlugin resolveStringName(Object context) {
+    private ReaperPlugin resolveStringName(Object context) {
         if (context instanceof String pluginName) {
             // Use the Bukkit API to look up the plugin by name. This returns null if not found.
             Plugin bukkitPlugin = Bukkit.getPluginManager().getPlugin(pluginName);
@@ -75,12 +75,12 @@ public final class BukkitResolverRegistrar {
     /**
      * 3. Resolver for Class objects.
      */
-    private GrimPlugin resolveClass(Object context) {
+    private ReaperPlugin resolveClass(Object context) {
         if (context instanceof Class) {
             try {
                 // First, resolve the Class to a Plugin instance.
                 JavaPlugin providingPlugin = JavaPlugin.getProvidingPlugin((Class<?>) context);
-                // Then, use our shared logic directly to get the GrimPlugin wrapper.
+                // Then, use our shared logic directly to get the ReaperPlugin wrapper.
                 return resolvePlugin(providingPlugin);
             } catch (IllegalArgumentException | IllegalStateException e) {
                 // This is an expected failure if the class is not from a plugin
@@ -95,13 +95,13 @@ public final class BukkitResolverRegistrar {
 
     private RuntimeException createFailureException(Object failedContext) {
         String message = """
-        Failed to resolve GrimPlugin context from the provided object of type '%s'.
+        Failed to resolve ReaperPlugin context from the provided object of type '%s'.
 
         Please ensure you are passing one of the following:
           - The main instance of your plugin (e.g., 'this' from your class extending JavaPlugin).
           - The plugin name as a String (e.g., "MyPluginName").
           - Any Class from your plugin's JAR file (e.g., MyListener.class).
-          - A pre-existing GrimPlugin instance.
+          - A pre-existing ReaperPlugin instance.
         """.formatted(failedContext.getClass().getName());
         return new IllegalArgumentException(message);
     }

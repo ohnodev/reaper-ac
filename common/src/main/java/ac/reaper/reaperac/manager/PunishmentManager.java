@@ -156,7 +156,7 @@ public class PunishmentManager implements ConfigReloadable {
                                         GrimAPI.INSTANCE.getAlertManager().sendAlert(message, verboseListeners);
                                     }
                                 }
-                                default -> GrimAPI.INSTANCE.getScheduler().getGlobalRegionScheduler().run(GrimAPI.INSTANCE.getGrimPlugin(), () ->
+                                default -> GrimAPI.INSTANCE.getScheduler().getGlobalRegionScheduler().run(GrimAPI.INSTANCE.getReaperPlugin(), () ->
                                         GrimAPI.INSTANCE.getPlatformServer().dispatchCommand(
                                                 GrimAPI.INSTANCE.getPlatformServer().getConsoleSender(),
                                                 cmd

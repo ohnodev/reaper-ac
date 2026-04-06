@@ -16,7 +16,7 @@ package ac.reaper.reaperac.platform.fabric.utils.metrics;
  */
 
 import ac.reaper.reaperac.GrimAPI;
-import ac.reaper.reaperac.api.plugin.GrimPlugin;
+import ac.reaper.reaperac.api.plugin.ReaperPlugin;
 import ac.reaper.reaperac.platform.fabric.GrimACFabricLoaderPlugin;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -32,7 +32,7 @@ public class MetricsFabric implements Metrics {
      * @param serviceId The id of the service. It can be found at <a
      *                  href="https://bstats.org/what-is-my-plugin-id">What is my plugin id?</a>
      */
-    public MetricsFabric(GrimPlugin plugin, int serviceId) {
+    public MetricsFabric(ReaperPlugin plugin, int serviceId) {
         // Get the config file
         BStatsConfig.Config config = BStatsConfig.loadConfig();
 

@@ -6,7 +6,7 @@ import ac.reaper.reaperac.api.alerts.AlertManager;
 import ac.reaper.reaperac.api.config.ConfigManager;
 import ac.reaper.reaperac.api.event.EventBus;
 import ac.reaper.reaperac.api.event.events.GrimReloadEvent;
-import ac.reaper.reaperac.api.plugin.GrimPlugin;
+import ac.reaper.reaperac.api.plugin.ReaperPlugin;
 import ac.reaper.reaperac.manager.config.ConfigManagerFileImpl;
 import ac.reaper.reaperac.manager.init.start.StartableInitable;
 import ac.reaper.reaperac.player.GrimPlayer;
@@ -24,9 +24,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
-//This is used for grim's external API. It has its own class just for organization.
-
-public class GrimExternalAPI implements GrimAbstractAPI, ConfigReloadObserver, StartableInitable {
+// This is used for Reaper's external API. It has its own class just for organization.
+public class ReaperExternalAPI implements GrimAbstractAPI, ConfigReloadObserver, StartableInitable {
 
     private final GrimAPI api;
     @Getter
@@ -38,7 +37,7 @@ public class GrimExternalAPI implements GrimAbstractAPI, ConfigReloadObserver, S
     private ConfigManager configManager = null;
     private boolean started = false;
 
-    public GrimExternalAPI(GrimAPI api) {
+    public ReaperExternalAPI(GrimAPI api) {
         this.api = api;
     }
 
@@ -77,7 +76,7 @@ public class GrimExternalAPI implements GrimAbstractAPI, ConfigReloadObserver, S
 
     @Override
     public String getGrimVersion() {
-        return api.getGrimPlugin().getDescription().getVersion();
+        return api.getReaperPlugin().getDescription().getVersion();
     }
 
     @Override
@@ -115,7 +114,7 @@ public class GrimExternalAPI implements GrimAbstractAPI, ConfigReloadObserver, S
     }
 
     @Override
-    public @NotNull GrimPlugin getGrimPlugin(@NotNull Object o) {
+    public @NotNull ReaperPlugin getReaperPlugin(@NotNull Object o) {
         return this.api.getExtensionManager().getPlugin(o);
     }
 
@@ -139,7 +138,7 @@ public class GrimExternalAPI implements GrimAbstractAPI, ConfigReloadObserver, S
     @Override
     public void reload(ConfigManager config) {
         if (config.isLoadedAsync() && started) {
-            GrimAPI.INSTANCE.getScheduler().getAsyncScheduler().runNow(GrimAPI.INSTANCE.getGrimPlugin(),
+            GrimAPI.INSTANCE.getScheduler().getAsyncScheduler().runNow(GrimAPI.INSTANCE.getReaperPlugin(),
                     () -> successfulReload(config));
         } else {
             successfulReload(config);
@@ -150,7 +149,7 @@ public class GrimExternalAPI implements GrimAbstractAPI, ConfigReloadObserver, S
     public CompletableFuture<Boolean> reloadAsync(ConfigManager config) {
         if (config.isLoadedAsync() && started) {
             CompletableFuture<Boolean> future = new CompletableFuture<>();
-            GrimAPI.INSTANCE.getScheduler().getAsyncScheduler().runNow(GrimAPI.INSTANCE.getGrimPlugin(),
+            GrimAPI.INSTANCE.getScheduler().getAsyncScheduler().runNow(GrimAPI.INSTANCE.getReaperPlugin(),
                     () -> future.complete(successfulReload(config)));
             return future;
         }
@@ -164,14 +163,14 @@ public class GrimExternalAPI implements GrimAbstractAPI, ConfigReloadObserver, S
             if (started) GrimAPI.INSTANCE.getConfigManager().start();
             onReload(config);
             if (started)
-                GrimAPI.INSTANCE.getScheduler().getAsyncScheduler().runNow(GrimAPI.INSTANCE.getGrimPlugin(),
+                GrimAPI.INSTANCE.getScheduler().getAsyncScheduler().runNow(GrimAPI.INSTANCE.getReaperPlugin(),
                         () -> GrimAPI.INSTANCE.getEventBus().post(new GrimReloadEvent(true)));
             return true;
         } catch (Exception e) {
             LogUtil.error("Failed to reload config", e);
         }
         if (started)
-            GrimAPI.INSTANCE.getScheduler().getAsyncScheduler().runNow(GrimAPI.INSTANCE.getGrimPlugin(),
+            GrimAPI.INSTANCE.getScheduler().getAsyncScheduler().runNow(GrimAPI.INSTANCE.getReaperPlugin(),
                     () -> GrimAPI.INSTANCE.getEventBus().post(new GrimReloadEvent(false)));
         return false;
     }

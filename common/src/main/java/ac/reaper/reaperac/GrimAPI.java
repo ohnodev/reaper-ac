@@ -1,7 +1,6 @@
 package ac.reaper.reaperac;
 
 import ac.reaper.reaperac.api.event.EventBus;
-import ac.reaper.reaperac.api.plugin.GrimPlugin;
 import ac.reaper.reaperac.api.plugin.ReaperPlugin;
 import ac.reaper.reaperac.internal.plugin.resolver.GrimExtensionManager;
 import ac.reaper.reaperac.internal.event.OptimizedEventBus;
@@ -43,7 +42,7 @@ public final class GrimAPI {
     private final TickManager tickManager;
     private final GrimExtensionManager extensionManager;
     private final EventBus eventBus;
-    private final GrimExternalAPI externalAPI;
+    private final ReaperExternalAPI externalAPI;
     private ViolationDatabaseManager violationDatabaseManager;
     private PlatformLoader loader;
     @Getter
@@ -59,7 +58,7 @@ public final class GrimAPI {
         this.tickManager = new TickManager();
         this.extensionManager = new GrimExtensionManager();
         this.eventBus = new OptimizedEventBus(extensionManager);
-        this.externalAPI = new GrimExternalAPI(this);
+        this.externalAPI = new ReaperExternalAPI(this);
     }
 
     // the order matters
@@ -100,14 +99,6 @@ public final class GrimAPI {
 
     public ReaperPlugin getReaperPlugin() {
         return loader.getPlugin();
-    }
-
-    /**
-     * @deprecated Use {@link #getReaperPlugin()}.
-     */
-    @Deprecated
-    public GrimPlugin getGrimPlugin() {
-        return getReaperPlugin();
     }
 
     public SenderFactory<?> getSenderFactory() {

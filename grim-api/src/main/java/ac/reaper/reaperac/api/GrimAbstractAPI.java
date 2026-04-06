@@ -5,7 +5,7 @@ import ac.reaper.reaperac.api.common.BasicReloadable;
 import ac.reaper.reaperac.api.config.ConfigManager;
 import ac.reaper.reaperac.api.config.ConfigReloadable;
 import ac.reaper.reaperac.api.event.EventBus;
-import ac.reaper.reaperac.api.plugin.GrimPlugin;
+import ac.reaper.reaperac.api.plugin.ReaperPlugin;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -109,10 +109,10 @@ public interface GrimAbstractAPI extends ConfigReloadable, BasicReloadable {
     int getCurrentTick();
 
     /**
-     * Resolves a platform-specific object into a {@link GrimPlugin} wrapper.
+     * Resolves a platform-specific object into a {@link ReaperPlugin} wrapper.
      * <p>
      * This method is the bridge between platform-specific objects (like a Bukkit {@code JavaPlugin})
-     * and the universal Grim API.
+     * and the universal Reaper API.
      * <p>
      * <b>Supported Context Types:</b>
      * <ul>
@@ -124,12 +124,12 @@ public interface GrimAbstractAPI extends ConfigReloadable, BasicReloadable {
      * <b>Performance Note:</b>
      * While convenience methods in the {@link EventBus} accept generic Objects, they perform this resolution
      * check every time they are called. If you are performing frequent operations, it is recommended to
-     * call this method once, cache the {@link GrimPlugin} result, and pass that to the API instead.
+     * call this method once, cache the {@link ReaperPlugin} result, and pass that to the API instead.
      *
      * @param platformContext The platform-specific context (e.g., {@code this}).
-     * @return The resolved GrimPlugin wrapper.
+     * @return The resolved ReaperPlugin wrapper.
      * @throws IllegalArgumentException If the provided context is not a valid plugin, mod, or class known to the platform.
      */
-    @NotNull GrimPlugin getGrimPlugin(@NotNull Object platformContext);
+    @NotNull ReaperPlugin getReaperPlugin(@NotNull Object platformContext);
 
 }

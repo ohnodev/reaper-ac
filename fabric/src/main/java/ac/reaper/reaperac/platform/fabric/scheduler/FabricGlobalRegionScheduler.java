@@ -1,6 +1,6 @@
 package ac.reaper.reaperac.platform.fabric.scheduler;
 
-import ac.reaper.reaperac.api.plugin.GrimPlugin;
+import ac.reaper.reaperac.api.plugin.ReaperPlugin;
 import ac.reaper.reaperac.platform.api.scheduler.GlobalRegionScheduler;
 import ac.reaper.reaperac.platform.api.scheduler.TaskHandle;
 import ac.reaper.reaperac.platform.fabric.GrimACFabricLoaderPlugin;
@@ -14,9 +14,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class FabricGlobalRegionScheduler implements GlobalRegionScheduler {
     // TODO (Cross-platform) (Threading) try to make this not Concurrent
     private final Map<FabricPlatformScheduler.ScheduledTask, Runnable> taskMap = new ConcurrentHashMap<>();
-    private final GrimPlugin plugin;
+    private final ReaperPlugin plugin;
 
-    public FabricGlobalRegionScheduler(GrimPlugin plugin) {
+    public FabricGlobalRegionScheduler(ReaperPlugin plugin) {
         this.plugin = plugin;
         // Register the task handler to run on server tick
         ServerTickEvents.END_SERVER_TICK.register(this::handleTasks);
@@ -27,17 +27,17 @@ public class FabricGlobalRegionScheduler implements GlobalRegionScheduler {
     }
 
     @Override
-    public void execute(@NotNull GrimPlugin plugin, @NotNull Runnable run) {
+    public void execute(@NotNull ReaperPlugin plugin, @NotNull Runnable run) {
         run(plugin, run);
     }
 
     @Override
-    public TaskHandle run(@NotNull GrimPlugin plugin, @NotNull Runnable task) {
+    public TaskHandle run(@NotNull ReaperPlugin plugin, @NotNull Runnable task) {
         return runDelayed(plugin, task, 0);
     }
 
     @Override
-    public TaskHandle runDelayed(@NotNull GrimPlugin plugin, @NotNull Runnable task, long delay) {
+    public TaskHandle runDelayed(@NotNull ReaperPlugin plugin, @NotNull Runnable task, long delay) {
         FabricPlatformScheduler.ScheduledTask scheduledTask = new FabricPlatformScheduler.ScheduledTask(
                 task,
                 GrimACFabricLoaderPlugin.FABRIC_SERVER.getTickCount() + delay,
@@ -51,7 +51,7 @@ public class FabricGlobalRegionScheduler implements GlobalRegionScheduler {
     }
 
     @Override
-    public TaskHandle runAtFixedRate(@NotNull GrimPlugin plugin, @NotNull Runnable task, long initialDelayTicks, long periodTicks) {
+    public TaskHandle runAtFixedRate(@NotNull ReaperPlugin plugin, @NotNull Runnable task, long initialDelayTicks, long periodTicks) {
         FabricPlatformScheduler.ScheduledTask scheduledTask = new FabricPlatformScheduler.ScheduledTask(
                 task,
                 GrimACFabricLoaderPlugin.FABRIC_SERVER.getTickCount() + initialDelayTicks,
@@ -65,7 +65,7 @@ public class FabricGlobalRegionScheduler implements GlobalRegionScheduler {
     }
 
     @Override
-    public void cancel(@NotNull GrimPlugin plugin) {
+    public void cancel(@NotNull ReaperPlugin plugin) {
         FabricPlatformScheduler.cancelPluginTasks(taskMap, plugin);
     }
 

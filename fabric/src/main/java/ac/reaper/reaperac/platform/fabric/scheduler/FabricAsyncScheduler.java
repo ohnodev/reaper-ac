@@ -1,6 +1,6 @@
 package ac.reaper.reaperac.platform.fabric.scheduler;
 
-import ac.reaper.reaperac.api.plugin.GrimPlugin;
+import ac.reaper.reaperac.api.plugin.ReaperPlugin;
 import ac.reaper.reaperac.platform.api.scheduler.AsyncScheduler;
 import ac.reaper.reaperac.platform.api.scheduler.PlatformScheduler;
 import ac.reaper.reaperac.platform.api.scheduler.TaskHandle;
@@ -15,15 +15,15 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class FabricAsyncScheduler implements AsyncScheduler {
-    private final Map<Thread, Pair<GrimPlugin, Runnable>> asyncTasks = new HashMap<>();
-    private final GrimPlugin plugin;
+    private final Map<Thread, Pair<ReaperPlugin, Runnable>> asyncTasks = new HashMap<>();
+    private final ReaperPlugin plugin;
 
-    public FabricAsyncScheduler(GrimPlugin plugin) {
+    public FabricAsyncScheduler(ReaperPlugin plugin) {
         this.plugin = plugin;
     }
 
     @Override
-    public TaskHandle runNow(@NotNull GrimPlugin plugin, @NotNull Runnable task) {
+    public TaskHandle runNow(@NotNull ReaperPlugin plugin, @NotNull Runnable task) {
         Thread thread = new Thread(task);
         Runnable cancellationTask = () -> {
             thread.interrupt();
@@ -35,7 +35,7 @@ public class FabricAsyncScheduler implements AsyncScheduler {
     }
 
     @Override
-    public TaskHandle runDelayed(@NotNull GrimPlugin plugin, @NotNull Runnable task, long delay, @NotNull TimeUnit timeUnit) {
+    public TaskHandle runDelayed(@NotNull ReaperPlugin plugin, @NotNull Runnable task, long delay, @NotNull TimeUnit timeUnit) {
         long delayMillis = timeUnit.toMillis(delay);
         Thread thread = new Thread(() -> {
             try {
@@ -55,7 +55,7 @@ public class FabricAsyncScheduler implements AsyncScheduler {
     }
 
     @Override
-    public TaskHandle runAtFixedRate(@NotNull GrimPlugin plugin, @NotNull Runnable task, long delay, long period, @NotNull TimeUnit timeUnit) {
+    public TaskHandle runAtFixedRate(@NotNull ReaperPlugin plugin, @NotNull Runnable task, long delay, long period, @NotNull TimeUnit timeUnit) {
         long delayMillis = timeUnit.toMillis(delay);
         long periodMillis = timeUnit.toMillis(period);
         Thread thread = new Thread(() -> {
@@ -79,7 +79,7 @@ public class FabricAsyncScheduler implements AsyncScheduler {
     }
 
     @Override
-    public TaskHandle runAtFixedRate(@NotNull GrimPlugin plugin, @NotNull Runnable task, long initialDelayTicks, long periodTicks) {
+    public TaskHandle runAtFixedRate(@NotNull ReaperPlugin plugin, @NotNull Runnable task, long initialDelayTicks, long periodTicks) {
         return runAtFixedRate(plugin, task,
                 PlatformScheduler.convertTicksToTime(initialDelayTicks, TimeUnit.MILLISECONDS),
                 PlatformScheduler.convertTicksToTime(periodTicks, TimeUnit.MILLISECONDS),
@@ -87,13 +87,13 @@ public class FabricAsyncScheduler implements AsyncScheduler {
     }
 
     @Override
-    public void cancel(@NotNull GrimPlugin plugin) {
+    public void cancel(@NotNull ReaperPlugin plugin) {
         // Cancel tasks only for the specified plugin
-        Iterator<Map.Entry<Thread, Pair<GrimPlugin, Runnable>>> iterator = asyncTasks.entrySet().iterator();
+        Iterator<Map.Entry<Thread, Pair<ReaperPlugin, Runnable>>> iterator = asyncTasks.entrySet().iterator();
         List<Runnable> cancellationTasks = new ArrayList<>();
 
         while (iterator.hasNext()) {
-            Map.Entry<Thread, Pair<GrimPlugin, Runnable>> entry = iterator.next();
+            Map.Entry<Thread, Pair<ReaperPlugin, Runnable>> entry = iterator.next();
             if (entry.getValue().first().equals(plugin)) {
                 cancellationTasks.add(entry.getValue().second());
                 iterator.remove();
