@@ -62,6 +62,6 @@ if (gradle.startParameter.isBuildScan) {
 }
 
 rootProject.name = "reaperac"
-includeBuild("grim-api")
+includeBuild("reaper-api")
 include("common")
 include("fabric")
