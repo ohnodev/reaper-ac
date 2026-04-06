@@ -26,7 +26,7 @@ public class PacketSpawnerSanitizer extends PacketListenerAbstract {
 
     public PacketSpawnerSanitizer() {
         // Run after world cache listeners to avoid affecting Grim internals.
-        super(PacketListenerPriority.LOWEST);
+        super(PacketListenerPriority.HIGHEST);
     }
 
     @Override
