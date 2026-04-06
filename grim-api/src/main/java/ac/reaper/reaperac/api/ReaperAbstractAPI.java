@@ -43,14 +43,20 @@ public interface ReaperAbstractAPI extends ConfigReloadable, BasicReloadable {
      * @param variable
      * @param replacement
      */
-    void registerVariable(String variable, @Nullable Function<ReaperUser, String> replacement);
+    void registerVariable(String variable, Function<ReaperUser, String> replacement);
 
     /**
      * Used to create or replace static variables, such as %server%.
      * @param variable
      * @param replacement
      */
-    void registerVariable(String variable, @Nullable String replacement);
+    void registerVariable(String variable, String replacement);
+
+    /**
+     * Unregisters both dynamic and static variable mappings for the key.
+     * @param variable variable key to remove
+     */
+    void unregisterVariable(String variable);
 
     /**
      * Retrieves the plugin version of Grim.

@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -58,20 +59,18 @@ public class ReaperExternalAPI implements ReaperAbstractAPI, ConfigReloadObserve
 
     @Override
     public void registerVariable(String string, Function<ReaperUser, String> replacement) {
-        if (replacement == null) {
-            variableReplacements.remove(string);
-        } else {
-            variableReplacements.put(string, replacement);
-        }
+        variableReplacements.put(string, Objects.requireNonNull(replacement, "replacement cannot be null; use unregisterVariable(variable)"));
     }
 
     @Override
     public void registerVariable(String variable, String replacement) {
-        if (replacement == null) {
-            staticReplacements.remove(variable);
-        } else {
-            staticReplacements.put(variable, replacement);
-        }
+        staticReplacements.put(variable, Objects.requireNonNull(replacement, "replacement cannot be null; use unregisterVariable(variable)"));
+    }
+
+    @Override
+    public void unregisterVariable(String variable) {
+        variableReplacements.remove(variable);
+        staticReplacements.remove(variable);
     }
 
     @Override
@@ -95,7 +94,7 @@ public class ReaperExternalAPI implements ReaperAbstractAPI, ConfigReloadObserve
 
     @Override
     public AlertManager getAlertManager() {
-        return GrimAPI.INSTANCE.getAlertManager();
+        return api.getAlertManager();
     }
 
     @Override
@@ -110,7 +109,7 @@ public class ReaperExternalAPI implements ReaperAbstractAPI, ConfigReloadObserve
 
     @Override
     public int getCurrentTick() {
-        return GrimAPI.INSTANCE.getTickManager().currentTick;
+        return api.getTickManager().currentTick;
     }
 
     @Override
@@ -129,7 +128,7 @@ public class ReaperExternalAPI implements ReaperAbstractAPI, ConfigReloadObserve
     public void start() {
         started = true;
         try {
-            GrimAPI.INSTANCE.getConfigManager().start();
+            api.getConfigManager().start();
         } catch (Exception e) {
             LogUtil.error("Failed to start config manager.", e);
         }
@@ -138,7 +137,7 @@ public class ReaperExternalAPI implements ReaperAbstractAPI, ConfigReloadObserve
     @Override
     public void reload(ConfigManager config) {
         if (config.isLoadedAsync() && started) {
-            GrimAPI.INSTANCE.getScheduler().getAsyncScheduler().runNow(GrimAPI.INSTANCE.getReaperPlugin(),
+            api.getScheduler().getAsyncScheduler().runNow(api.getReaperPlugin(),
                     () -> successfulReload(config));
         } else {
             successfulReload(config);
@@ -149,7 +148,7 @@ public class ReaperExternalAPI implements ReaperAbstractAPI, ConfigReloadObserve
     public CompletableFuture<Boolean> reloadAsync(ConfigManager config) {
         if (config.isLoadedAsync() && started) {
             CompletableFuture<Boolean> future = new CompletableFuture<>();
-            GrimAPI.INSTANCE.getScheduler().getAsyncScheduler().runNow(GrimAPI.INSTANCE.getReaperPlugin(),
+            api.getScheduler().getAsyncScheduler().runNow(api.getReaperPlugin(),
                     () -> future.complete(successfulReload(config)));
             return future;
         }
@@ -159,19 +158,19 @@ public class ReaperExternalAPI implements ReaperAbstractAPI, ConfigReloadObserve
     private boolean successfulReload(ConfigManager config) {
         try {
             config.reload();
-            GrimAPI.INSTANCE.getConfigManager().load(config);
-            if (started) GrimAPI.INSTANCE.getConfigManager().start();
+            api.getConfigManager().load(config);
+            if (started) api.getConfigManager().start();
             onReload(config);
             if (started)
-                GrimAPI.INSTANCE.getScheduler().getAsyncScheduler().runNow(GrimAPI.INSTANCE.getReaperPlugin(),
-                        () -> GrimAPI.INSTANCE.getEventBus().post(new GrimReloadEvent(true)));
+                api.getScheduler().getAsyncScheduler().runNow(api.getReaperPlugin(),
+                        () -> api.getEventBus().post(new GrimReloadEvent(true)));
             return true;
         } catch (Exception e) {
             LogUtil.error("Failed to reload config", e);
         }
         if (started)
-            GrimAPI.INSTANCE.getScheduler().getAsyncScheduler().runNow(GrimAPI.INSTANCE.getReaperPlugin(),
-                    () -> GrimAPI.INSTANCE.getEventBus().post(new GrimReloadEvent(false)));
+            api.getScheduler().getAsyncScheduler().runNow(api.getReaperPlugin(),
+                    () -> api.getEventBus().post(new GrimReloadEvent(false)));
         return false;
     }
 
@@ -186,14 +185,14 @@ public class ReaperExternalAPI implements ReaperAbstractAPI, ConfigReloadObserve
         // Update variables
         updateVariables();
         // Restart
-        GrimAPI.INSTANCE.getAlertManager().reload(configManager);
-        GrimAPI.INSTANCE.getDiscordManager().reload();
-        GrimAPI.INSTANCE.getSpectateManager().reload();
-        GrimAPI.INSTANCE.getViolationDatabaseManager().reload();
+        api.getAlertManager().reload(configManager);
+        api.getDiscordManager().reload();
+        api.getSpectateManager().reload();
+        api.getViolationDatabaseManager().reload();
         // Don't reload players if the plugin hasn't started yet
         if (!started) return;
         // Reload checks for all players
-        for (GrimPlayer player : GrimAPI.INSTANCE.getPlayerDataManager().getEntries()) {
+        for (GrimPlayer player : api.getPlayerDataManager().getEntries()) {
             player.runSafely(() -> player.reload(configManager));
         }
     }
@@ -206,10 +205,10 @@ public class ReaperExternalAPI implements ReaperAbstractAPI, ConfigReloadObserve
         variableReplacements.putIfAbsent("%h_sensitivity%", user -> ((int) Math.round(user.getHorizontalSensitivity() * 200)) + "");
         variableReplacements.putIfAbsent("%v_sensitivity%", user -> ((int) Math.round(user.getVerticalSensitivity() * 200)) + "");
         variableReplacements.putIfAbsent("%fast_math%", user -> !user.isVanillaMath() + "");
-        variableReplacements.putIfAbsent("%tps%", user -> String.format("%.2f", GrimAPI.INSTANCE.getPlatformServer().getTPS()));
+        variableReplacements.putIfAbsent("%tps%", user -> String.format("%.2f", api.getPlatformServer().getTPS()));
         variableReplacements.putIfAbsent("%version%", ReaperUser::getVersionName);
         // static variables
-        staticReplacements.put("%prefix%", MessageUtil.translateAlternateColorCodes('&', GrimAPI.INSTANCE.getConfigManager().getPrefix()));
+        staticReplacements.put("%prefix%", MessageUtil.translateAlternateColorCodes('&', api.getConfigManager().getPrefix()));
         staticReplacements.putIfAbsent("%grim_version%", getReaperVersion());
         staticReplacements.putIfAbsent("%reaper_version%", getReaperVersion());
     }
