@@ -5,8 +5,8 @@ adventure = "4.23.0"
 # --- Minecraft-Specific APIs ---
 geyser-base-api = "1.0.2"
 grim-api = "1.2.4.0"
-# Locked to PacketEvents built from local 26.1-only fork (publishToMavenLocal).
-packetevents = "2.12.0+b4e77b5-SNAPSHOT"
+# Locked to PacketEvents built from ohnodev/packetevents main.
+packetevents = "2.12.0+3d5cadb-SNAPSHOT"
 viaversion = "5.7.1"
 
 # --- General Java Utilities ---
