@@ -1,8 +1,8 @@
 package ac.reaper.reaperac.manager.config;
 
 import ac.reaper.reaperac.GrimAPI;
-import ac.grim.reaperac.api.common.BasicReloadable;
-import ac.grim.reaperac.api.config.ConfigManager;
+import ac.reaper.reaperac.api.common.BasicReloadable;
+import ac.reaper.reaperac.api.config.ConfigManager;
 import ac.reaper.reaperac.utils.anticheat.LogUtil;
 import github.scarsz.configuralize.DynamicConfig;
 import github.scarsz.configuralize.Language;

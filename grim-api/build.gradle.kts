@@ -78,7 +78,7 @@ BuildFlags.init(project) // Initialize your build flags helper
 val baseVersion = project.findProperty("version") as String
 
 // --- Standard Project Configuration ---
-group = "ac.grim.reaperac" // Or your desired group ID
+group = "ac.reaper.reaperac" // Or your desired group ID
 // VersionUtil appends commit/branch metadata if not a release build
 version = VersionUtil.compute(baseVersion)
 description = "ReaperAPI"

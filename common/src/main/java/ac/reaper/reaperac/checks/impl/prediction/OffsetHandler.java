@@ -1,8 +1,8 @@
 package ac.reaper.reaperac.checks.impl.prediction;
 
 import ac.reaper.reaperac.GrimAPI;
-import ac.grim.reaperac.api.config.ConfigManager;
-import ac.grim.reaperac.api.event.events.CompletePredictionEvent;
+import ac.reaper.reaperac.api.config.ConfigManager;
+import ac.reaper.reaperac.api.event.events.CompletePredictionEvent;
 import ac.reaper.reaperac.checks.Check;
 import ac.reaper.reaperac.checks.CheckData;
 import ac.reaper.reaperac.checks.type.PostPredictionCheck;

@@ -1,6 +1,6 @@
 package ac.reaper.reaperac.checks.impl.misc;
 
-import ac.grim.reaperac.api.config.ConfigManager;
+import ac.reaper.reaperac.api.config.ConfigManager;
 import ac.reaper.reaperac.checks.type.BlockPlaceCheck;
 import ac.reaper.reaperac.platform.api.world.PlatformWorld;
 import ac.reaper.reaperac.player.GrimPlayer;

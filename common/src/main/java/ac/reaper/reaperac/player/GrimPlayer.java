@@ -1,11 +1,11 @@
 package ac.reaper.reaperac.player;
 
 import ac.reaper.reaperac.GrimAPI;
-import ac.grim.reaperac.api.AbstractCheck;
-import ac.grim.reaperac.api.GrimUser;
-import ac.grim.reaperac.api.PacketWorld;
-import ac.grim.reaperac.api.config.ConfigManager;
-import ac.grim.reaperac.api.handler.ResyncHandler;
+import ac.reaper.reaperac.api.AbstractCheck;
+import ac.reaper.reaperac.api.GrimUser;
+import ac.reaper.reaperac.api.PacketWorld;
+import ac.reaper.reaperac.api.config.ConfigManager;
+import ac.reaper.reaperac.api.handler.ResyncHandler;
 import ac.reaper.reaperac.checks.Check;
 import ac.reaper.reaperac.checks.impl.aim.processor.AimProcessor;
 import ac.reaper.reaperac.checks.impl.misc.ClientBrand;

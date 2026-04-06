@@ -1,6 +1,6 @@
 package ac.reaper.reaperac.events.packets;
 
-import ac.grim.reaperac.api.config.ConfigManager;
+import ac.reaper.reaperac.api.config.ConfigManager;
 import ac.reaper.reaperac.checks.Check;
 import ac.reaper.reaperac.checks.type.PacketCheck;
 import ac.reaper.reaperac.player.GrimPlayer;

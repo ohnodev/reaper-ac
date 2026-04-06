@@ -1,6 +1,6 @@
 package ac.reaper.reaperac.manager;
 
-import ac.grim.reaperac.api.AbstractCheck;
+import ac.reaper.reaperac.api.AbstractCheck;
 import ac.reaper.reaperac.checks.impl.aim.AimDuplicateLook;
 import ac.reaper.reaperac.checks.impl.aim.AimModulo360;
 import ac.reaper.reaperac.checks.impl.aim.processor.AimProcessor;

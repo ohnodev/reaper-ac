@@ -1,6 +1,6 @@
 package ac.reaper.reaperac.checks.impl.chat;
 
-import ac.grim.reaperac.api.config.ConfigManager;
+import ac.reaper.reaperac.api.config.ConfigManager;
 import ac.reaper.reaperac.checks.Check;
 import ac.reaper.reaperac.checks.CheckData;
 import ac.reaper.reaperac.checks.impl.multiactions.MultiActionsC;

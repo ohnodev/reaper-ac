@@ -1,7 +1,7 @@
 package ac.reaper.reaperac.platform.fabric.scheduler;
 
 import ac.reaper.reaperac.GrimAPI;
-import ac.grim.reaperac.api.plugin.GrimPlugin;
+import ac.reaper.reaperac.api.plugin.GrimPlugin;
 import ac.reaper.reaperac.platform.api.scheduler.*;
 import ac.reaper.reaperac.utils.anticheat.LogUtil;
 import net.minecraft.server.MinecraftServer;

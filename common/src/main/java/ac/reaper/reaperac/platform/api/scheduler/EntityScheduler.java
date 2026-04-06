@@ -18,7 +18,7 @@
 
 package ac.reaper.reaperac.platform.api.scheduler;
 
-import ac.grim.reaperac.api.plugin.GrimPlugin;
+import ac.reaper.reaperac.api.plugin.GrimPlugin;
 import ac.reaper.reaperac.platform.api.entity.GrimEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

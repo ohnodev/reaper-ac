@@ -1,6 +1,6 @@
 package ac.reaper.reaperac.manager.player.handlers;
 
-import ac.grim.reaperac.api.handler.ResyncHandler;
+import ac.reaper.reaperac.api.handler.ResyncHandler;
 
 public class NoOpResyncHandler implements ResyncHandler {
 

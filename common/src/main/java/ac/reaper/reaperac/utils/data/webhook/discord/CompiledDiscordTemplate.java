@@ -1,7 +1,7 @@
 package ac.reaper.reaperac.utils.data.webhook.discord;
 
 import ac.reaper.reaperac.GrimAPI;
-import ac.grim.reaperac.api.GrimUser;
+import ac.reaper.reaperac.api.GrimUser;
 import ac.reaper.reaperac.player.GrimPlayer;
 import org.jetbrains.annotations.NotNull;
 

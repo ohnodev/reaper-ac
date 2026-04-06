@@ -1,12 +1,12 @@
 package ac.reaper.reaperac;
 
-import ac.grim.reaperac.api.GrimAbstractAPI;
-import ac.grim.reaperac.api.GrimUser;
-import ac.grim.reaperac.api.alerts.AlertManager;
-import ac.grim.reaperac.api.config.ConfigManager;
-import ac.grim.reaperac.api.event.EventBus;
-import ac.grim.reaperac.api.event.events.GrimReloadEvent;
-import ac.grim.reaperac.api.plugin.GrimPlugin;
+import ac.reaper.reaperac.api.GrimAbstractAPI;
+import ac.reaper.reaperac.api.GrimUser;
+import ac.reaper.reaperac.api.alerts.AlertManager;
+import ac.reaper.reaperac.api.config.ConfigManager;
+import ac.reaper.reaperac.api.event.EventBus;
+import ac.reaper.reaperac.api.event.events.GrimReloadEvent;
+import ac.reaper.reaperac.api.plugin.GrimPlugin;
 import ac.reaper.reaperac.manager.config.ConfigManagerFileImpl;
 import ac.reaper.reaperac.manager.init.start.StartableInitable;
 import ac.reaper.reaperac.player.GrimPlayer;

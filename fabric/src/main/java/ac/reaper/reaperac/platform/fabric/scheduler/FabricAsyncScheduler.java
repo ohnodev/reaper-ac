@@ -1,6 +1,6 @@
 package ac.reaper.reaperac.platform.fabric.scheduler;
 
-import ac.grim.reaperac.api.plugin.GrimPlugin;
+import ac.reaper.reaperac.api.plugin.GrimPlugin;
 import ac.reaper.reaperac.platform.api.scheduler.AsyncScheduler;
 import ac.reaper.reaperac.platform.api.scheduler.PlatformScheduler;
 import ac.reaper.reaperac.platform.api.scheduler.TaskHandle;

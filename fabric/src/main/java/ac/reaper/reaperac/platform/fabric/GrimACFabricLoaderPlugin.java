@@ -1,9 +1,9 @@
 package ac.reaper.reaperac.platform.fabric;
 
 import ac.reaper.reaperac.GrimAPI;
-import ac.grim.reaperac.api.ReaperAPIProvider;
-import ac.grim.reaperac.api.plugin.GrimPlugin;
-import ac.grim.reaperac.internal.plugin.resolver.GrimExtensionManager;
+import ac.reaper.reaperac.api.ReaperAPIProvider;
+import ac.reaper.reaperac.api.plugin.GrimPlugin;
+import ac.reaper.reaperac.internal.plugin.resolver.GrimExtensionManager;
 import ac.reaper.reaperac.platform.api.PlatformLoader;
 import ac.reaper.reaperac.platform.api.command.CommandService;
 import ac.reaper.reaperac.platform.api.manager.*;

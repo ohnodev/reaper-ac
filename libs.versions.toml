@@ -38,10 +38,10 @@ adventure-text-minimessage = { group = "net.kyori", name = "adventure-text-minim
 # --- Minecraft-Specific Libraries ---
 configuralize = { group = "github.scarsz", name = "configuralize", version.ref = "configuralize" }
 geyser-base-api = { group = "org.geysermc.api", name = "base-api", version.ref = "geyser-base-api" }
-grim-api = { group = "ac.grim.reaperac", name = "ReaperAPI", version.ref = "grim-api" }
-grim-internal = { group = "ac.grim.reaperac", name = "grim-internal", version.ref = "grim-api" }
-grim-internal-shims = { group = "ac.grim.reaperac", name = "grim-internal-shims", version.ref = "grim-api" }
-grim-fabric-internal = { group = "ac.grim.reaperac", name = "grim-fabric-internal", version.ref = "grim-api" }
+grim-api = { group = "ac.reaper.reaperac", name = "ReaperAPI", version.ref = "grim-api" }
+grim-internal = { group = "ac.reaper.reaperac", name = "grim-internal", version.ref = "grim-api" }
+grim-internal-shims = { group = "ac.reaper.reaperac", name = "grim-internal-shims", version.ref = "grim-api" }
+grim-fabric-internal = { group = "ac.reaper.reaperac", name = "grim-fabric-internal", version.ref = "grim-api" }
 packetevents-api = { group = "com.github.retrooper", name = "packetevents-api", version.ref = "packetevents" }
 packetevents-fabric = { group  = "com.github.retrooper", name = "packetevents-fabric", version.ref = "packetevents" }
 packetevents-fabric-common = { group  = "com.github.retrooper", name = "packetevents-fabric-common", version.ref = "packetevents" }

@@ -1,7 +1,7 @@
 package ac.reaper.reaperac.manager.player.handlers;
 
 import ac.reaper.reaperac.GrimAPI;
-import ac.grim.reaperac.api.handler.ResyncHandler;
+import ac.reaper.reaperac.api.handler.ResyncHandler;
 import ac.reaper.reaperac.platform.api.player.BlockTranslator;
 import ac.reaper.reaperac.platform.api.world.PlatformChunk;
 import ac.reaper.reaperac.platform.api.world.PlatformWorld;

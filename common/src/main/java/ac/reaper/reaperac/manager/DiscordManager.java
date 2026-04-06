@@ -1,8 +1,8 @@
 package ac.reaper.reaperac.manager;
 
 import ac.reaper.reaperac.GrimAPI;
-import ac.grim.reaperac.api.GrimUser;
-import ac.grim.reaperac.api.config.ConfigManager;
+import ac.reaper.reaperac.api.GrimUser;
+import ac.reaper.reaperac.api.config.ConfigManager;
 import ac.reaper.reaperac.manager.init.ReloadableInitable;
 import ac.reaper.reaperac.manager.init.start.StartableInitable;
 import ac.reaper.reaperac.player.GrimPlayer;

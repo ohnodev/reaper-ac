@@ -6,7 +6,7 @@
    <img alt="Workflow" src="https://github.com/GrimAnticheat/ReaperAPI/actions/workflows/gradle-publish.yml/badge.svg" />
   </a>
   <a href="https://repo.grim.ac">
-   <img alt="Maven repository" src="https://repo.grim.ac/api/badge/latest/snapshots/ac/grim/reaperac/ReaperAPI?name=Version&style=flat">
+   <img alt="Maven repository" src="https://repo.grim.ac/api/badge/latest/snapshots/ac/reaper/reaperac/ReaperAPI?name=Version&style=flat">
   </a>
   <a href="https://discord.grim.ac">
    <img alt="Discord" src="https://img.shields.io/discord/811396969670901800?style=flat&label=Discord&logo=discord">
@@ -49,7 +49,7 @@ repositories {
 }
 dependencies {
     // replace %VERSION% with the latest API version
-    compileOnly("ac.grim.reaperac:ReaperAPI:%VERSION%")
+    compileOnly("ac.reaper.reaperac:ReaperAPI:%VERSION%")
 }
 ```
 
@@ -62,7 +62,7 @@ dependencies {
 </repository>
 <!-- replace %VERSION% with the latest API version -->
 <dependency>
-  <groupId>ac.grim.reaperac</groupId>
+  <groupId>ac.reaper.reaperac</groupId>
   <artifactId>ReaperAPI</artifactId>
   <version>%VERSION%</version>
   <scope>provided</scope>

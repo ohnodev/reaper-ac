@@ -1,10 +1,10 @@
 package ac.reaper.reaperac.manager;
 
 import ac.reaper.reaperac.GrimAPI;
-import ac.grim.reaperac.api.AbstractCheck;
-import ac.grim.reaperac.api.config.ConfigManager;
-import ac.grim.reaperac.api.config.ConfigReloadable;
-import ac.grim.reaperac.api.event.events.CommandExecuteEvent;
+import ac.reaper.reaperac.api.AbstractCheck;
+import ac.reaper.reaperac.api.config.ConfigManager;
+import ac.reaper.reaperac.api.config.ConfigReloadable;
+import ac.reaper.reaperac.api.event.events.CommandExecuteEvent;
 import ac.reaper.reaperac.checks.Check;
 import ac.reaper.reaperac.events.packets.ProxyAlertMessenger;
 import ac.reaper.reaperac.platform.api.player.PlatformPlayer;

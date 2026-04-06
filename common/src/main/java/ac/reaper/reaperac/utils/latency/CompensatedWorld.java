@@ -1,7 +1,7 @@
 package ac.reaper.reaperac.utils.latency;
 
 import ac.reaper.reaperac.GrimAPI;
-import ac.grim.reaperac.api.PacketWorld;
+import ac.reaper.reaperac.api.PacketWorld;
 import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.utils.change.BlockModification;
 import ac.reaper.reaperac.utils.chunks.Column;
