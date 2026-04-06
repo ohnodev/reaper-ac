@@ -6,7 +6,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.logging.Logger;
 
-public class BasicGrimPlugin implements GrimPlugin {
+public class BasicGrimPlugin implements ReaperPlugin {
     private final Logger logger;
     private final File dataFolder;
     private final BasicGrimPluginDescription description;

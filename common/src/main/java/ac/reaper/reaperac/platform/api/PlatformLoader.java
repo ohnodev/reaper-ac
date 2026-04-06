@@ -1,6 +1,6 @@
 package ac.reaper.reaperac.platform.api;
 
-import ac.reaper.reaperac.api.plugin.GrimPlugin;
+import ac.reaper.reaperac.api.plugin.ReaperPlugin;
 import ac.reaper.reaperac.platform.api.manager.ItemResetHandler;
 import ac.reaper.reaperac.platform.api.manager.MessagePlaceHolderManager;
 import ac.reaper.reaperac.platform.api.manager.PlatformPluginManager;
@@ -21,7 +21,7 @@ public interface PlatformLoader {
 
     SenderFactory<?> getSenderFactory();
 
-    GrimPlugin getPlugin();
+    ReaperPlugin getPlugin();
 
     PlatformPluginManager getPluginManager();
 

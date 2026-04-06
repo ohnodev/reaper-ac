@@ -2,6 +2,7 @@ package ac.reaper.reaperac;
 
 import ac.reaper.reaperac.api.event.EventBus;
 import ac.reaper.reaperac.api.plugin.GrimPlugin;
+import ac.reaper.reaperac.api.plugin.ReaperPlugin;
 import ac.reaper.reaperac.internal.plugin.resolver.GrimExtensionManager;
 import ac.reaper.reaperac.internal.event.OptimizedEventBus;
 import ac.reaper.reaperac.manager.AlertManagerImpl;
@@ -73,7 +74,7 @@ public final class GrimAPI {
 
     public void load(PlatformLoader platformLoader, Initable... platformSpecificInitables) {
         this.loader = platformLoader;
-        this.violationDatabaseManager = new ViolationDatabaseManager(getGrimPlugin());
+        this.violationDatabaseManager = new ViolationDatabaseManager(getReaperPlugin());
         this.initManager = new InitManager(loader.getPacketEvents(), platformSpecificInitables);
         this.initManager.load();
         this.initialized = true;
@@ -97,8 +98,16 @@ public final class GrimAPI {
         return loader.getPlatformPlayerFactory();
     }
 
-    public GrimPlugin getGrimPlugin() {
+    public ReaperPlugin getReaperPlugin() {
         return loader.getPlugin();
+    }
+
+    /**
+     * @deprecated Use {@link #getReaperPlugin()}.
+     */
+    @Deprecated
+    public GrimPlugin getGrimPlugin() {
+        return getReaperPlugin();
     }
 
     public SenderFactory<?> getSenderFactory() {
