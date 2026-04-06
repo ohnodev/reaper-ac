@@ -1,6 +1,6 @@
 package ac.reaper.reaperac.manager.config;
 
-import ac.reaper.reaperac.api.config.ConfigManager;
+import ac.grim.reaperac.api.config.ConfigManager;
 import ac.reaper.reaperac.utils.anticheat.LogUtil;
 import lombok.Getter;
 

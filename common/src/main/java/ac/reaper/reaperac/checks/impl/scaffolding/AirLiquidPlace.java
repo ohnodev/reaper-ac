@@ -1,7 +1,7 @@
 package ac.reaper.reaperac.checks.impl.scaffolding;
 
 import ac.reaper.reaperac.GrimAPI;
-import ac.reaper.reaperac.api.config.ConfigManager;
+import ac.grim.reaperac.api.config.ConfigManager;
 import ac.reaper.reaperac.checks.CheckData;
 import ac.reaper.reaperac.checks.type.BlockPlaceCheck;
 import ac.reaper.reaperac.player.GrimPlayer;

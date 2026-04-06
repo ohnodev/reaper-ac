@@ -1,7 +1,7 @@
 package ac.reaper.reaperac.utils.anticheat;
 
 import ac.reaper.reaperac.GrimAPI;
-import ac.reaper.reaperac.api.GrimUser;
+import ac.grim.reaperac.api.GrimUser;
 import ac.reaper.reaperac.platform.api.player.PlatformPlayer;
 import ac.reaper.reaperac.platform.api.sender.Sender;
 import ac.reaper.reaperac.player.GrimPlayer;

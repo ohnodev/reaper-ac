@@ -1,6 +1,6 @@
 package ac.reaper.reaperac.checks.type;
 
-import ac.reaper.reaperac.api.AbstractCheck;
+import ac.grim.reaperac.api.AbstractCheck;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
 

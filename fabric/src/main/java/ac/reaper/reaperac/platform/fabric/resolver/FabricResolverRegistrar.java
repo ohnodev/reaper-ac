@@ -1,8 +1,8 @@
 package ac.reaper.reaperac.platform.fabric.resolver;
 
-import ac.reaper.reaperac.api.plugin.BasicGrimPlugin;
-import ac.reaper.reaperac.api.plugin.GrimPlugin;
-import ac.reaper.reaperac.internal.plugin.resolver.GrimExtensionManager;
+import ac.grim.reaperac.api.plugin.BasicGrimPlugin;
+import ac.grim.reaperac.api.plugin.GrimPlugin;
+import ac.grim.reaperac.internal.plugin.resolver.GrimExtensionManager;
 import ac.reaper.reaperac.platform.fabric.utils.message.JULoggerFactory;
 import lombok.RequiredArgsConstructor;
 import net.fabricmc.api.*;

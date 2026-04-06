@@ -1,8 +1,8 @@
 package ac.reaper.reaperac.utils.anticheat;
 
 import ac.reaper.reaperac.GrimAPI;
-import ac.reaper.reaperac.api.event.events.GrimJoinEvent;
-import ac.reaper.reaperac.api.event.events.GrimQuitEvent;
+import ac.grim.reaperac.api.event.events.GrimJoinEvent;
+import ac.grim.reaperac.api.event.events.GrimQuitEvent;
 import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.utils.reflection.GeyserUtil;
 import com.github.retrooper.packetevents.PacketEvents;

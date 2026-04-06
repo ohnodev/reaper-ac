@@ -1,6 +1,6 @@
 package ac.reaper.reaperac.predictionengine;
 
-import ac.reaper.reaperac.api.config.ConfigManager;
+import ac.grim.reaperac.api.config.ConfigManager;
 import ac.reaper.reaperac.checks.Check;
 import ac.reaper.reaperac.checks.impl.prediction.Phase;
 import ac.reaper.reaperac.checks.impl.vehicle.VehicleC;

@@ -4,7 +4,6 @@ import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.utils.collisions.datatypes.SimpleCollisionBox;
 import ac.reaper.reaperac.utils.data.attribute.ValuedAttribute;
 import ac.reaper.reaperac.utils.data.packetentity.PacketEntity;
-import ac.reaper.reaperac.utils.data.packetentity.PacketEntityNautilus;
 import ac.reaper.reaperac.utils.enums.FluidTag;
 import ac.reaper.reaperac.utils.enums.Pose;
 import ac.reaper.reaperac.utils.latency.CompensatedEntities;

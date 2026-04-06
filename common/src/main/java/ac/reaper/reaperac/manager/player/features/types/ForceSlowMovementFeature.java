@@ -1,7 +1,7 @@
 package ac.reaper.reaperac.manager.player.features.types;
 
-import ac.reaper.reaperac.api.config.ConfigManager;
-import ac.reaper.reaperac.api.feature.FeatureState;
+import ac.grim.reaperac.api.config.ConfigManager;
+import ac.grim.reaperac.api.feature.FeatureState;
 import ac.reaper.reaperac.player.GrimPlayer;
 
 public class ForceSlowMovementFeature implements GrimFeature {

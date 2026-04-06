@@ -1,9 +1,9 @@
 package ac.reaper.reaperac;
 
-import ac.reaper.reaperac.api.event.EventBus;
-import ac.reaper.reaperac.api.plugin.GrimPlugin;
-import ac.reaper.reaperac.internal.plugin.resolver.GrimExtensionManager;
-import ac.reaper.reaperac.internal.event.OptimizedEventBus;
+import ac.grim.reaperac.api.event.EventBus;
+import ac.grim.reaperac.api.plugin.GrimPlugin;
+import ac.grim.reaperac.internal.plugin.resolver.GrimExtensionManager;
+import ac.grim.reaperac.internal.event.OptimizedEventBus;
 import ac.reaper.reaperac.manager.AlertManagerImpl;
 import ac.reaper.reaperac.manager.DiscordManager;
 import ac.reaper.reaperac.manager.InitManager;

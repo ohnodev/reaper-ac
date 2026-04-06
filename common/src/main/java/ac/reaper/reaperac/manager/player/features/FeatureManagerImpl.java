@@ -1,9 +1,9 @@
 package ac.reaper.reaperac.manager.player.features;
 
 import ac.reaper.reaperac.GrimAPI;
-import ac.reaper.reaperac.api.config.ConfigManager;
-import ac.reaper.reaperac.api.feature.FeatureManager;
-import ac.reaper.reaperac.api.feature.FeatureState;
+import ac.grim.reaperac.api.config.ConfigManager;
+import ac.grim.reaperac.api.feature.FeatureManager;
+import ac.grim.reaperac.api.feature.FeatureState;
 import ac.reaper.reaperac.manager.player.features.types.*;
 import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.utils.common.ConfigReloadObserver;

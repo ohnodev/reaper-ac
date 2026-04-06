@@ -1,7 +1,7 @@
 package ac.reaper.reaperac.manager.violationdatabase.mysql;
 
 import ac.reaper.reaperac.GrimAPI;
-import ac.reaper.reaperac.api.plugin.GrimPlugin;
+import ac.grim.reaperac.api.plugin.GrimPlugin;
 import ac.reaper.reaperac.manager.violationdatabase.DatabaseConstants;
 import ac.reaper.reaperac.manager.violationdatabase.DatabaseDialect;
 import ac.reaper.reaperac.manager.violationdatabase.DatabaseUtils;

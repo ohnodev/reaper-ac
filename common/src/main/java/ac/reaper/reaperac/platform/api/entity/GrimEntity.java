@@ -1,6 +1,6 @@
 package ac.reaper.reaperac.platform.api.entity;
 
-import ac.reaper.reaperac.api.GrimIdentity;
+import ac.grim.reaperac.api.GrimIdentity;
 import ac.reaper.reaperac.platform.api.world.PlatformWorld;
 import ac.reaper.reaperac.utils.math.Location;
 import org.jetbrains.annotations.NotNull;

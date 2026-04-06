@@ -16,7 +16,7 @@ package ac.reaper.reaperac.platform.fabric.utils.metrics;
  */
 
 import ac.reaper.reaperac.GrimAPI;
-import ac.reaper.reaperac.api.plugin.GrimPlugin;
+import ac.grim.reaperac.api.plugin.GrimPlugin;
 import ac.reaper.reaperac.platform.fabric.GrimACFabricLoaderPlugin;
 import net.fabricmc.loader.api.FabricLoader;
 

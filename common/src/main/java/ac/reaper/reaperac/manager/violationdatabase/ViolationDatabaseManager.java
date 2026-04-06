@@ -1,8 +1,8 @@
 package ac.reaper.reaperac.manager.violationdatabase;
 
 import ac.reaper.reaperac.GrimAPI;
-import ac.reaper.reaperac.api.config.ConfigManager;
-import ac.reaper.reaperac.api.plugin.GrimPlugin;
+import ac.grim.reaperac.api.config.ConfigManager;
+import ac.grim.reaperac.api.plugin.GrimPlugin;
 import ac.reaper.reaperac.manager.init.ReloadableInitable;
 import ac.reaper.reaperac.manager.init.start.StartableInitable;
 import ac.reaper.reaperac.manager.violationdatabase.mysql.MySQLViolationDatabase;

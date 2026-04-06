@@ -1,6 +1,6 @@
 package ac.reaper.reaperac.platform.api.player;
 
-import ac.reaper.reaperac.api.GrimIdentity;
+import ac.grim.reaperac.api.GrimIdentity;
 
 public interface OfflinePlatformPlayer extends GrimIdentity {
 

@@ -1,6 +1,6 @@
 package ac.reaper.reaperac.checks.impl.timer;
 
-import ac.reaper.reaperac.api.config.ConfigManager;
+import ac.grim.reaperac.api.config.ConfigManager;
 import ac.reaper.reaperac.checks.CheckData;
 import ac.reaper.reaperac.checks.type.PostPredictionCheck;
 import ac.reaper.reaperac.player.GrimPlayer;

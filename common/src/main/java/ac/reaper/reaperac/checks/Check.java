@@ -1,9 +1,9 @@
 package ac.reaper.reaperac.checks;
 
 import ac.reaper.reaperac.GrimAPI;
-import ac.reaper.reaperac.api.AbstractCheck;
-import ac.reaper.reaperac.api.config.ConfigManager;
-import ac.reaper.reaperac.api.event.events.FlagEvent;
+import ac.grim.reaperac.api.AbstractCheck;
+import ac.grim.reaperac.api.config.ConfigManager;
+import ac.grim.reaperac.api.event.events.FlagEvent;
 import ac.reaper.reaperac.player.GrimPlayer;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.packettype.PacketTypeCommon;

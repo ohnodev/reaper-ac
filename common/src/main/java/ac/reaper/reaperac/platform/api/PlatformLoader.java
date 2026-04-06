@@ -1,6 +1,6 @@
 package ac.reaper.reaperac.platform.api;
 
-import ac.reaper.reaperac.api.plugin.GrimPlugin;
+import ac.grim.reaperac.api.plugin.GrimPlugin;
 import ac.reaper.reaperac.platform.api.command.CommandService;
 import ac.reaper.reaperac.platform.api.manager.ItemResetHandler;
 import ac.reaper.reaperac.platform.api.manager.MessagePlaceHolderManager;

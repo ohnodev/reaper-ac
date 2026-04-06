@@ -1,7 +1,7 @@
 package ac.reaper.reaperac.utils.common;
 
 
-import ac.reaper.reaperac.api.config.ConfigManager;
+import ac.grim.reaperac.api.config.ConfigManager;
 
 public interface ConfigReloadObserver {
 

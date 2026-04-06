@@ -18,7 +18,7 @@
 
 package ac.reaper.reaperac.platform.api.scheduler;
 
-import ac.reaper.reaperac.api.plugin.GrimPlugin;
+import ac.grim.reaperac.api.plugin.GrimPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
