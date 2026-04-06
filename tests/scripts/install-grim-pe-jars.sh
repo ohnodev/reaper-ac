@@ -111,12 +111,12 @@ install_fabric_api() {
   echo "  - $(basename "${file}")"
 }
 
-echo "[install] Cleaning existing Grim/PacketEvents jars in ${MODS_DIR}"
-rm -f "${MODS_DIR}"/grimac-fabric*.jar "${MODS_DIR}"/packetevents*.jar
+echo "[install] Cleaning existing ReaperAC/PacketEvents jars in ${MODS_DIR}"
+rm -f "${MODS_DIR}"/grimac-fabric*.jar "${MODS_DIR}"/reaperac-fabric*.jar "${MODS_DIR}"/packetevents*.jar
 
-echo "[install] Copying Grim jar:"
-grim_jar="$(latest_non_doc_jar "${GRIM_LIBS}" "grimac-fabric-*.jar" || true)"
-copy_required "${grim_jar}" "grimac-fabric"
+echo "[install] Copying ReaperAC jar:"
+grim_jar="$(latest_non_doc_jar "${GRIM_LIBS}" "reaperac-fabric-*.jar" || true)"
+copy_required "${grim_jar}" "reaperac-fabric"
 
 echo "[install] Copying PacketEvents jars for profile ${PROFILE}:"
 
