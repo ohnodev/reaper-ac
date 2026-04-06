@@ -92,7 +92,7 @@ publishing.publications.create<MavenPublication>("maven") {
 
 tasks {
     jar {
-        archiveBaseName.set("${rootProject.name}-fabric")
+        archiveBaseName.set("reaperac-fabric")
         archiveVersion.set(rootProject.version as String)
     }
 }

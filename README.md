@@ -1,5 +1,5 @@
 <div align="center">
- <h1>GrimAC</h1>
+ <h1>ReaperAC</h1>
 
  <div>
   <a href="https://github.com/GrimAnticheat/Grim/actions/workflows/gradle-publish.yml">
@@ -18,7 +18,7 @@
  <br>
 </div>
 
-GrimAC is an open source Minecraft anticheat designed to support the latest versions of Minecraft.
+ReaperAC is an open-source Minecraft anticheat designed to support the latest versions of Minecraft.
 It currently supports minecraft versions 1.8–1.21. Geyser players are fully exempt from the anticheat to prevent false positives.
 This project is considered feature-complete for the 2.0 (open-source) branch. If you would like a bug fix or enhancement and cannot sponsor the work, pull requests are welcome.
 A premium version is planned, which will offer additional subscription-based paid checks, such as heuristics.
@@ -81,7 +81,7 @@ These commands intentionally target only the Fabric module in this 26.1 fork.
 
 ### Build artifacts
 
-- Fabric runtime jar: `fabric/build/libs/grimac-fabric-<version>.jar`
+- Fabric runtime jar: `fabric/build/libs/reaperac-fabric-<version>.jar`
 - Extra artifacts (sources/javadocs): `fabric/build/libs/`
 
 ## Prebuilt Artifact In This Repo
@@ -90,16 +90,13 @@ This fork includes prebuilt Fabric artifacts in `prebuilt/` for direct deploymen
 
 Current prebuilt files:
 
-- `prebuilt/grimac-fabric-2.3.74-feat_spawner-detection-sanitizer-c82baf0.jar`
-- `prebuilt/grimac-fabric-2.3.74-feat_spawner-detection-sanitizer-c82baf0.zip`
-- `prebuilt/grimac-fabric-2.3.74-feat_spawner-detection-sanitizer-c82baf0.jar.sha256`
-- `prebuilt/grimac-fabric-2.3.74-feat_spawner-detection-sanitizer-c82baf0.zip.sha256`
+- `prebuilt/reaperac-fabric-2.3.74-feat_reaperac-fabric-identity-rename-ae19994.jar`
+- `prebuilt/reaperac-fabric-2.3.74-feat_reaperac-fabric-identity-rename-ae19994.jar.sha256`
 
 Verify integrity:
 
 ```bash
-sha256sum -c prebuilt/grimac-fabric-2.3.74-feat_spawner-detection-sanitizer-c82baf0.jar.sha256
-sha256sum -c prebuilt/grimac-fabric-2.3.74-feat_spawner-detection-sanitizer-c82baf0.zip.sha256
+sha256sum -c prebuilt/reaperac-fabric-2.3.74-feat_reaperac-fabric-identity-rename-ae19994.jar.sha256
 ```
 
 To inspect locally produced files after a build:
