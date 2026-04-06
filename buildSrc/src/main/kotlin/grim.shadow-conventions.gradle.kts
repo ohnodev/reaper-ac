@@ -11,27 +11,28 @@ tasks.named<ShadowJar>("shadowJar") {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
     if (BuildConfig.relocate) {
+        val shadedPrefix = "ac.reaper.reaperac.shaded."
         if (BuildConfig.shadePE) {
-            relocate("io.github.retrooper.packetevents", "ac.grim.grimac.shaded.io.github.retrooper.packetevents")
-            relocate("com.github.retrooper.packetevents", "ac.grim.grimac.shaded.com.github.retrooper.packetevents")
-            relocate("net.kyori", "ac.grim.grimac.shaded.kyori") // use PE's built-in adventure instead when not shading PE
+            relocate("io.github.retrooper.packetevents", shadedPrefix + "io.github.retrooper.packetevents")
+            relocate("com.github.retrooper.packetevents", shadedPrefix + "com.github.retrooper.packetevents")
+            relocate("net.kyori", shadedPrefix + "kyori") // use PE's built-in adventure instead when not shading PE
         }
-        relocate("club.minnced", "ac.grim.grimac.shaded.discord-webhooks")
-        relocate("org.slf4j", "ac.grim.grimac.shaded.slf4j") // Required by discord-webhooks
-        relocate("github.scarsz.configuralize", "ac.grim.grimac.shaded.configuralize")
-        relocate("com.github.puregero", "ac.grim.grimac.shaded.com.github.puregero")
-        relocate("com.google.code.gson", "ac.grim.grimac.shaded.gson")
-        relocate("alexh", "ac.grim.grimac.shaded.maps")
-        relocate("it.unimi.dsi.fastutil", "ac.grim.grimac.shaded.fastutil")
-        relocate("okhttp3", "ac.grim.grimac.shaded.okhttp3")
-        relocate("okio", "ac.grim.grimac.shaded.okio")
-        relocate("org.yaml.snakeyaml", "ac.grim.grimac.shaded.snakeyaml")
-        relocate("org.json", "ac.grim.grimac.shaded.json")
-        relocate("org.intellij", "ac.grim.grimac.shaded.intellij")
-        relocate("org.jetbrains", "ac.grim.grimac.shaded.jetbrains")
-        relocate("org.incendo", "ac.grim.grimac.shaded.incendo")
-        relocate("io.leangen.geantyref", "ac.grim.grimac.shaded.geantyref") // Required by cloud
-        relocate("com.zaxxer", "ac.grim.grimac.shaded.zaxxer") // Database history
+        relocate("club.minnced", shadedPrefix + "discord-webhooks")
+        relocate("org.slf4j", shadedPrefix + "slf4j") // Required by discord-webhooks
+        relocate("github.scarsz.configuralize", shadedPrefix + "configuralize")
+        relocate("com.github.puregero", shadedPrefix + "com.github.puregero")
+        relocate("com.google.code.gson", shadedPrefix + "gson")
+        relocate("alexh", shadedPrefix + "maps")
+        relocate("it.unimi.dsi.fastutil", shadedPrefix + "fastutil")
+        relocate("okhttp3", shadedPrefix + "okhttp3")
+        relocate("okio", shadedPrefix + "okio")
+        relocate("org.yaml.snakeyaml", shadedPrefix + "snakeyaml")
+        relocate("org.json", shadedPrefix + "json")
+        relocate("org.intellij", shadedPrefix + "intellij")
+        relocate("org.jetbrains", shadedPrefix + "jetbrains")
+        relocate("org.incendo", shadedPrefix + "incendo")
+        relocate("io.leangen.geantyref", shadedPrefix + "geantyref") // Required by cloud
+        relocate("com.zaxxer", shadedPrefix + "zaxxer") // Database history
     }
     mergeServiceFiles()
 }

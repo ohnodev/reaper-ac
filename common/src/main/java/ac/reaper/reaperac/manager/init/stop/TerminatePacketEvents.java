@@ -1,0 +1,12 @@
+package ac.reaper.reaperac.manager.init.stop;
+
+import ac.reaper.reaperac.utils.anticheat.LogUtil;
+import com.github.retrooper.packetevents.PacketEvents;
+
+public class TerminatePacketEvents implements StoppableInitable {
+    @Override
+    public void stop() {
+        LogUtil.info("Terminating PacketEvents...");
+        PacketEvents.getAPI().terminate();
+    }
+}

@@ -6,9 +6,6 @@ plugins {
 }
 
 repositories {
-    exclusive("https://repo.grim.ac/snapshots") {
-        includeGroup("ac.grim.grimac")
-    }
     // PacketEvents snapshots: same host but not exclusiveContent-locked so mavenLocal() can still resolve
     maven("https://repo.grim.ac/snapshots") {
         mavenContent { snapshotsOnly() }
@@ -61,7 +58,6 @@ dependencies {
     api(libs.adventure.text.minimessage)
     api(libs.jetbrains.annotations)
     api(libs.hikaricp)
-
     api(libs.grim.api)
     api(libs.grim.internal)
     compileOnly(libs.grim.internal.shims)
