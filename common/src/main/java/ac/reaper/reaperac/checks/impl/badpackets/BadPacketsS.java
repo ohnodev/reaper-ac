@@ -4,6 +4,7 @@ import ac.reaper.reaperac.checks.Check;
 import ac.reaper.reaperac.checks.CheckData;
 import ac.reaper.reaperac.checks.type.PacketCheck;
 import ac.reaper.reaperac.player.GrimPlayer;
+import ac.reaper.reaperac.utils.anticheat.LogUtil;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientWindowConfirmation;
@@ -25,6 +26,7 @@ public class BadPacketsS extends Check implements PacketCheck {
                     player.onPacketCancel();
                 }
             } catch (Exception e) {
+                LogUtil.error("Failed to process WINDOW_CONFIRMATION in BadPacketsS", e);
             }
         }
     }

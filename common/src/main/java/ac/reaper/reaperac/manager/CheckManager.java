@@ -63,7 +63,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CheckManager {
     private static final AtomicBoolean initedAtomic = new AtomicBoolean(false);
-    private static boolean inited;
     public final ClassToInstanceMap<AbstractCheck> allChecks;
     private final ClassToInstanceMap<PacketCheck> packetChecks;
     private final ClassToInstanceMap<PositionCheck> positionChecks;
@@ -142,6 +141,7 @@ public class CheckManager {
                 .put(SprintA.class, new SprintA(player))
                 .put(VehicleA.class, new VehicleA(player))
                 .put(VehicleB.class, new VehicleB(player))
+                .put(VehicleC.class, new VehicleC(player))
                 .put(VehicleD.class, new VehicleD(player))
                 .put(VehicleE.class, new VehicleE(player))
                 .put(VehicleF.class, new VehicleF(player))
@@ -257,11 +257,10 @@ public class CheckManager {
         // All checks that have no listeners, generally invoked by other code to flag
         // TODO migrate more checks to here
         ClassToInstanceMap<AbstractCheck> noneModules = new ImmutableClassToInstanceMap.Builder<AbstractCheck>()
-                // BadPacketsN/W + VehicleC + TransactionOrder are packet checks with no listener
+                // BadPacketsN/W + TransactionOrder are packet checks with no listener
                 .put(BadPacketsN.class, new BadPacketsN(player))
                 .put(BadPacketsW.class, new BadPacketsW(player))
                 .put(TransactionOrder.class, new TransactionOrder(player))
-                .put(VehicleC.class, new VehicleC(player))
                 .put(Hitboxes.class, new Hitboxes(player)) // Hitboxes is invoked by Reach
                 .build();
 
@@ -455,8 +454,7 @@ public class CheckManager {
     }
 
     private void init() {
-        if (inited || initedAtomic.getAndSet(true)) return;
-        inited = true;
+        if (initedAtomic.getAndSet(true)) return;
 
         // Check-specific bypass permissions are intentionally disabled.
     }

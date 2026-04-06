@@ -12,8 +12,8 @@ public record CommandRegister(CommandService service) implements StartableInitab
                 service.registerCommands();
             }
         } catch (Throwable t) {
-            // This is the ultimate safety net. If command registration fails, Grim keeps running.
-            LogUtil.error("Failed to register commands! Grim will run without command support.", t);
+            // This is the ultimate safety net. If command registration fails, ReaperAC keeps running.
+            LogUtil.error("Failed to register commands! ReaperAC will run without command support.", t);
         }
     }
 }

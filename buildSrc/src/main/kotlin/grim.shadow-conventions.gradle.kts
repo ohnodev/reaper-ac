@@ -11,27 +11,28 @@ tasks.named<ShadowJar>("shadowJar") {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
     if (BuildConfig.relocate) {
+        val shadedPrefix = "ac.reaper.reaperac.shaded."
         if (BuildConfig.shadePE) {
-            relocate("io.github.retrooper.packetevents", "ac.reaper.reaperac.shaded.io.github.retrooper.packetevents")
-            relocate("com.github.retrooper.packetevents", "ac.reaper.reaperac.shaded.com.github.retrooper.packetevents")
-            relocate("net.kyori", "ac.reaper.reaperac.shaded.kyori") // use PE's built-in adventure instead when not shading PE
+            relocate("io.github.retrooper.packetevents", shadedPrefix + "io.github.retrooper.packetevents")
+            relocate("com.github.retrooper.packetevents", shadedPrefix + "com.github.retrooper.packetevents")
+            relocate("net.kyori", shadedPrefix + "kyori") // use PE's built-in adventure instead when not shading PE
         }
-        relocate("club.minnced", "ac.reaper.reaperac.shaded.discord-webhooks")
-        relocate("org.slf4j", "ac.reaper.reaperac.shaded.slf4j") // Required by discord-webhooks
-        relocate("github.scarsz.configuralize", "ac.reaper.reaperac.shaded.configuralize")
-        relocate("com.github.puregero", "ac.reaper.reaperac.shaded.com.github.puregero")
-        relocate("com.google.code.gson", "ac.reaper.reaperac.shaded.gson")
-        relocate("alexh", "ac.reaper.reaperac.shaded.maps")
-        relocate("it.unimi.dsi.fastutil", "ac.reaper.reaperac.shaded.fastutil")
-        relocate("okhttp3", "ac.reaper.reaperac.shaded.okhttp3")
-        relocate("okio", "ac.reaper.reaperac.shaded.okio")
-        relocate("org.yaml.snakeyaml", "ac.reaper.reaperac.shaded.snakeyaml")
-        relocate("org.json", "ac.reaper.reaperac.shaded.json")
-        relocate("org.intellij", "ac.reaper.reaperac.shaded.intellij")
-        relocate("org.jetbrains", "ac.reaper.reaperac.shaded.jetbrains")
-        relocate("org.incendo", "ac.reaper.reaperac.shaded.incendo")
-        relocate("io.leangen.geantyref", "ac.reaper.reaperac.shaded.geantyref") // Required by cloud
-        relocate("com.zaxxer", "ac.reaper.reaperac.shaded.zaxxer") // Database history
+        relocate("club.minnced", shadedPrefix + "discord-webhooks")
+        relocate("org.slf4j", shadedPrefix + "slf4j") // Required by discord-webhooks
+        relocate("github.scarsz.configuralize", shadedPrefix + "configuralize")
+        relocate("com.github.puregero", shadedPrefix + "com.github.puregero")
+        relocate("com.google.code.gson", shadedPrefix + "gson")
+        relocate("alexh", shadedPrefix + "maps")
+        relocate("it.unimi.dsi.fastutil", shadedPrefix + "fastutil")
+        relocate("okhttp3", shadedPrefix + "okhttp3")
+        relocate("okio", shadedPrefix + "okio")
+        relocate("org.yaml.snakeyaml", shadedPrefix + "snakeyaml")
+        relocate("org.json", shadedPrefix + "json")
+        relocate("org.intellij", shadedPrefix + "intellij")
+        relocate("org.jetbrains", shadedPrefix + "jetbrains")
+        relocate("org.incendo", shadedPrefix + "incendo")
+        relocate("io.leangen.geantyref", shadedPrefix + "geantyref") // Required by cloud
+        relocate("com.zaxxer", shadedPrefix + "zaxxer") // Database history
     }
     mergeServiceFiles()
 }

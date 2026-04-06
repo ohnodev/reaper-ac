@@ -24,7 +24,7 @@ public class PacketSpawnerSanitizer extends PacketListenerAbstract {
     private static final int MOB_SPAWNER_TYPE_ID = BlockEntityTypes.MOB_SPAWNER.getId(SERVER_CLIENT_VERSION);
 
     public PacketSpawnerSanitizer() {
-        // Run after world cache listeners to avoid affecting Grim internals.
+        // Run after world cache listeners to avoid affecting Reaper internals.
         super(PacketListenerPriority.HIGHEST);
     }
 

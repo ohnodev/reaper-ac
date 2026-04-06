@@ -69,7 +69,9 @@ public class AimProcessor extends Check implements RotationCheck {
             }
         }
 
-        this.deltaDotsX = deltaXRot / modeX;
-        this.deltaDotsY = deltaYRot / modeY;
+        // Mode values start at 0 until enough samples are collected.
+        // Avoid divide-by-zero and keep downstream math stable during warmup.
+        this.deltaDotsX = modeX != 0.0 ? deltaXRot / modeX : 0.0;
+        this.deltaDotsY = modeY != 0.0 ? deltaYRot / modeY : 0.0;
     }
 }
