@@ -120,6 +120,12 @@ public class PacketEntitySelf extends PacketEntity {
                 .requiredVersion(player, ClientVersion.V_1_21));
         trackAttribute(ValuedAttribute.ranged(Attributes.MOVEMENT_EFFICIENCY, 0, 0, 1)
                 .requiredVersion(player, ClientVersion.V_1_21));
+        trackAttribute(ValuedAttribute.ranged(Attributes.AIR_DRAG_MODIFIER, 1.0, 0, 2048)
+                .requiredVersion(player, ClientVersion.V_26_2));
+        trackAttribute(ValuedAttribute.ranged(Attributes.BOUNCINESS, 0.0, 0, 1)
+                .requiredVersion(player, ClientVersion.V_26_2));
+        trackAttribute(ValuedAttribute.ranged(Attributes.FRICTION_MODIFIER, 1.0, 0, 2048)
+                .requiredVersion(player, ClientVersion.V_26_2));
         trackAttribute(ValuedAttribute.ranged(Attributes.SNEAKING_SPEED, 0.3, 0, 1)
                 .withGetRewriter(value -> {
                     if (player.getClientVersion().isOlderThan(ClientVersion.V_1_19)) {

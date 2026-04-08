@@ -31,9 +31,11 @@ dependencies {
 // Remote-first resolution; mavenLocal last (or only when MAVEN_LOCAL_OVERRIDE) so CI/dev machines
 // don’t silently pick stale local artifacts. PacketEvents/cloud snapshot sources: README-26.1-dependencies.md
 repositories {
-    exclusive("https://maven.fabricmc.net/") {
-        includeGroup("net.fabricmc")
-        includeGroup("net.fabricmc.fabric-api")
+    maven("https://maven.fabricmc.net/") {
+        content {
+            includeGroup("net.fabricmc")
+            includeGroup("net.fabricmc.fabric-api")
+        }
     }
 
     exclusive("https://repo.grim.ac/snapshots") {
