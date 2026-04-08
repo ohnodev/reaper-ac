@@ -31,8 +31,11 @@ jobs:
 
       - name: Bootstrap PacketEvents 26.2 to Maven local
         run: |
-          git clone --depth 1 --branch 26.2 https://github.com/ohnodev/packetevents.git /tmp/packetevents-26.2
+          PACKETEVENTS_REF=74c87ab54565eb714f5d3289ead7909fc3c991b2
+          git clone --depth 1 https://github.com/ohnodev/packetevents.git /tmp/packetevents-26.2
           cd /tmp/packetevents-26.2
+          git fetch --depth 1 origin "$PACKETEVENTS_REF"
+          git checkout --detach "$PACKETEVENTS_REF"
           ./gradlew publishToMavenLocal -x test -x check
 
       - name: Build
