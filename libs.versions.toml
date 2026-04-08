@@ -5,8 +5,8 @@ adventure = "4.23.0"
 # --- Minecraft-Specific APIs ---
 geyser-base-api = "1.0.2"
 grim-api = "1.2.4.0"
-# Locked to PacketEvents built from ohnodev/packetevents main.
-packetevents = "2.12.0+3d5cadb-SNAPSHOT"
+# Locked to PacketEvents built from ohnodev/packetevents 26.2.
+packetevents = "2.12.0+67056a4-SNAPSHOT"
 viaversion = "5.7.1"
 
 # --- General Java Utilities ---
@@ -22,7 +22,7 @@ snakeyaml = "2.2"
 configuralize = "1.4.1" # :slim classifier is applied in build.gradle.kts
 
 # --- Build & Tooling ---
-fabric-loader = "0.18.5"
+fabric-loader = "0.19.0"
 # Loom snapshot is intentional for MC 26.1 support until a stable equivalent is validated.
 fabric-loom = "1.15-SNAPSHOT"
 lombok = "9.0.0"

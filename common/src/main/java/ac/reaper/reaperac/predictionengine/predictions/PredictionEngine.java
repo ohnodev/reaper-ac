@@ -2,6 +2,7 @@ package ac.reaper.reaperac.predictionengine.predictions;
 
 import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.predictionengine.SneakingEstimator;
+import ac.reaper.reaperac.predictionengine.movementtick.MovementTicker;
 import ac.reaper.reaperac.predictionengine.movementtick.MovementTickerPlayer;
 import ac.reaper.reaperac.utils.collisions.datatypes.SimpleCollisionBox;
 import ac.reaper.reaperac.utils.data.KnownInput;
@@ -750,12 +751,13 @@ public class PredictionEngine {
         // Handle missing a tick with friction in vehicles
         // TODO: Attempt to fix mojang's netcode here
         if (player.uncertaintyHandler.lastVehicleSwitch.hasOccurredSince(1)) {
-            double trueFriction = player.lastOnGround ? player.friction * 0.91 : 0.91;
+            float airDrag = MovementTicker.getAirDrag(player);
+            double trueFriction = player.lastOnGround ? player.friction * airDrag : airDrag;
             if (player.wasTouchingLava) trueFriction = 0.5;
             if (player.wasTouchingWater) trueFriction = 0.96;
 
-            double maxY = Math.max(box.maxY, box.maxY + ((box.maxY - player.gravity) * 0.91));
-            double minY = Math.min(box.minY, box.minY + ((box.minY - player.gravity) * 0.91));
+            double maxY = Math.max(box.maxY, box.maxY + ((box.maxY - player.gravity) * airDrag));
+            double minY = Math.min(box.minY, box.minY + ((box.minY - player.gravity) * airDrag));
             double minX = Math.min(box.minX, box.minX + (-player.speed * trueFriction));
             double minZ = Math.min(box.minZ, box.minZ + (-player.speed * trueFriction));
             double maxX = Math.max(box.maxX, box.maxX + (player.speed * trueFriction));

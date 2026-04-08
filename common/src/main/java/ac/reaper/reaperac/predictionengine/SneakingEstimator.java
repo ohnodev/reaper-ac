@@ -3,6 +3,7 @@ package ac.reaper.reaperac.predictionengine;
 import ac.reaper.reaperac.checks.Check;
 import ac.reaper.reaperac.checks.type.PostPredictionCheck;
 import ac.reaper.reaperac.player.GrimPlayer;
+import ac.reaper.reaperac.predictionengine.movementtick.MovementTicker;
 import ac.reaper.reaperac.utils.anticheat.update.PredictionComplete;
 import ac.reaper.reaperac.utils.collisions.datatypes.SimpleCollisionBox;
 import ac.reaper.reaperac.utils.data.VectorData;
@@ -48,7 +49,8 @@ public class SneakingEstimator extends Check implements PostPredictionCheck {
     public void onPredictionComplete(final PredictionComplete predictionComplete) {
         if (!predictionComplete.isChecked()) return;
 
-        double trueFriction = player.lastOnGround ? player.friction * 0.91 : 0.91;
+        float airDrag = MovementTicker.getAirDrag(player);
+        double trueFriction = player.lastOnGround ? player.friction * airDrag : airDrag;
         if (player.wasTouchingLava) trueFriction = 0.5;
         if (player.wasTouchingWater) trueFriction = 0.96;
         if (player.isGliding) trueFriction = 0.99;

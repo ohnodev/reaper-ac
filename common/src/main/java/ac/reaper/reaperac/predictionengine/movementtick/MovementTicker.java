@@ -39,6 +39,30 @@ import lombok.RequiredArgsConstructor;
 public class MovementTicker {
     public final GrimPlayer player;
 
+    /**
+     * Vanilla 26.2+: clamp(1.0 - (1.0 - friction) * modifier, 0.0, 1.0)
+     * For pre-26.2 clients the modifier is always 1.0 so this is identity.
+     */
+    public static float computeModifiedFriction(float friction, double modifier) {
+        return (float) GrimMath.clamp(1.0 - (1.0 - friction) * modifier, 0.0, 1.0);
+    }
+
+    public static float getAirDrag(GrimPlayer player) {
+        if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_26_2)) {
+            double airDragMod = player.compensatedEntities.self.getAttributeValue(Attributes.AIR_DRAG_MODIFIER);
+            return computeModifiedFriction(0.91f, airDragMod);
+        }
+        return 0.91f;
+    }
+
+    public static float getBlockFrictionModified(GrimPlayer player, float blockFriction) {
+        if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_26_2)) {
+            double frictionMod = player.compensatedEntities.self.getAttributeValue(Attributes.FRICTION_MODIFIER);
+            return computeModifiedFriction(blockFriction, frictionMod);
+        }
+        return blockFriction;
+    }
+
     public static void handleEntityCollisions(GrimPlayer player) {
         // 1.7 and 1.8 do not have player collision
         final boolean serverSupported = PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_9);
@@ -461,7 +485,9 @@ public class MovementTicker {
             } else if (player.isGliding) {
                 if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21_5) && Collisions.onClimbable(player, player.lastX, player.lastY, player.lastZ)) {
                     float blockFriction = BlockProperties.getFriction(player, player.mainSupportingBlockData, new Vector3d(player.lastX, player.lastY, player.lastZ));
-                    player.friction = player.lastOnGround ? blockFriction * 0.91f : 0.91f;
+                    float airDrag = getAirDrag(player);
+                    float modifiedBlockFriction = getBlockFrictionModified(player, blockFriction);
+                    player.friction = player.lastOnGround ? modifiedBlockFriction * airDrag : airDrag;
 
                     doNormalMove(blockFriction);
 
@@ -478,7 +504,9 @@ public class MovementTicker {
                 }
             } else {
                 float blockFriction = BlockProperties.getFriction(player, player.mainSupportingBlockData, new Vector3d(player.lastX, player.lastY, player.lastZ));
-                player.friction = player.lastOnGround ? blockFriction * 0.91f : 0.91f;
+                float airDrag = getAirDrag(player);
+                float modifiedBlockFriction = getBlockFrictionModified(player, blockFriction);
+                player.friction = player.lastOnGround ? modifiedBlockFriction * airDrag : airDrag;
 
                 doNormalMove(blockFriction);
             }
