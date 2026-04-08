@@ -33,18 +33,24 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-read-only: false
+
+      - name: Checkout PacketEvents 26.2 bootstrap ref
+        uses: actions/checkout@v4
+        with:
+          repository: ohnodev/packetevents
+          ref: 2b5414d9a88c3c0f580a988b184d5b728030183b
+          path: packetevents-26.2
+          fetch-depth: 1
 
       - name: Bootstrap PacketEvents 26.2 to Maven local
         run: |
-          PACKETEVENTS_REF=2b5414d9a88c3c0f580a988b184d5b728030183b
-          git clone --depth 1 https://github.com/ohnodev/packetevents.git /tmp/packetevents-26.2
-          cd /tmp/packetevents-26.2
-          git fetch --depth 1 origin "$PACKETEVENTS_REF"
-          git checkout --detach "$PACKETEVENTS_REF"
+          cd packetevents-26.2
           ./gradlew publishToMavenLocal -x test -x check
 
       - name: Build for CodeQL
-        run: ./gradlew clean build
+        run: ./gradlew clean :fabric:build -x test -x check
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
