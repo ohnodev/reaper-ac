@@ -1,11 +1,13 @@
 package ac.reaper.reaperac.utils.data.tags;
 
+import ac.reaper.reaperac.utils.anticheat.LogUtil;
 import com.github.retrooper.packetevents.resources.ResourceLocation;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerTags;
 
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 public final class SyncedTag<T> {
@@ -14,6 +16,7 @@ public final class SyncedTag<T> {
     private final Set<T> values;
     private final Function<Integer, T> remapper;
     private final boolean supported;
+    private static final Set<String> LOGGED_MISSING_IDS = ConcurrentHashMap.newKeySet();
 
     private SyncedTag(ResourceLocation location, Function<Integer, T> remapper, Set<T> defaultValues, boolean supported) {
         this.location = location;
@@ -38,10 +41,23 @@ public final class SyncedTag<T> {
     public void readTagValues(WrapperPlayServerTags.Tag tag) {
         if (!supported) return;
 
-        // Server is sending tag replacement, clear default values.
-        values.clear();
+        final Set<T> nextValues = Collections.newSetFromMap(new IdentityHashMap<>());
         for (int id : tag.getValues()) {
-            values.add(remapper.apply(id));
+            T mapped = remapper.apply(id);
+            if (mapped != null) {
+                nextValues.add(mapped);
+                continue;
+            }
+            String dedupe = location + "#" + id;
+            if (LOGGED_MISSING_IDS.add(dedupe)) {
+                LogUtil.error("[CRITICAL] Missing tag remap id=" + id + " for tag=" + location
+                        + " (26.2-only runtime; no legacy fallback)");
+            }
+        }
+        if (!nextValues.isEmpty()) {
+            // Server is sending tag replacement. Replace only if we decoded at least one value.
+            values.clear();
+            values.addAll(nextValues);
         }
     }
 

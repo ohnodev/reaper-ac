@@ -102,7 +102,9 @@ public class BlockBreakSpeed {
 
         final float speedMultiplier = getSpeedMultiplierFromToolData(player, tool, toolSpeedData);
 
-        final boolean canHarvest = !block.isRequiresCorrectTool() || toolSpeedData.isCorrectToolForDrop
+        final boolean canHarvest = !block.isRequiresCorrectTool()
+                || toolSpeedData.isCorrectToolForDrop
+                || inferCorrectToolFromTags(player, toolType, block)
                 // temporary hardcode to workaround PE bug https://github.com/retrooper/packetevents/issues/1217; see https://github.com/GrimAnticheat/Grim/issues/2091
                 || player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21_4) && HARVESTABLE_TYPES_1_21_4.contains(block);
 
@@ -298,6 +300,50 @@ public class BlockBreakSpeed {
         }
         //
         return new ToolSpeedData(speedMultiplier, isCorrectToolForDrop);
+    }
+
+    private static boolean inferCorrectToolFromTags(GrimPlayer player, ItemType toolType, StateType block) {
+        if (toolType.hasAttribute(ItemTypes.ItemAttribute.PICKAXE)) {
+            if (!isInTag(player, SyncedTags.MINEABLE_PICKAXE, BlockTags.MINEABLE_PICKAXE, block)) {
+                return false;
+            }
+            int tier = getPickaxeTier(toolType);
+            if (tier < 0) {
+                return false;
+            }
+            if (tier < 3 && isInTag(player, SyncedTags.NEEDS_DIAMOND_TOOL, BlockTags.NEEDS_DIAMOND_TOOL, block)) {
+                return false;
+            }
+            if (tier < 2 && isInTag(player, SyncedTags.NEEDS_IRON_TOOL, BlockTags.NEEDS_IRON_TOOL, block)) {
+                return false;
+            }
+            return tier >= 1 || !isInTag(player, SyncedTags.NEEDS_STONE_TOOL, BlockTags.NEEDS_STONE_TOOL, block);
+        }
+
+        if (toolType.hasAttribute(ItemTypes.ItemAttribute.AXE)) {
+            return isInTag(player, SyncedTags.MINEABLE_AXE, BlockTags.MINEABLE_AXE, block);
+        }
+        if (toolType.hasAttribute(ItemTypes.ItemAttribute.SHOVEL)) {
+            return isInTag(player, SyncedTags.MINEABLE_SHOVEL, BlockTags.MINEABLE_SHOVEL, block);
+        }
+        if (toolType.hasAttribute(ItemTypes.ItemAttribute.HOE)) {
+            return isInTag(player, SyncedTags.MINEABLE_HOE, BlockTags.MINEABLE_HOE, block);
+        }
+        return false;
+    }
+
+    private static int getPickaxeTier(ItemType toolType) {
+        if (toolType.hasAttribute(ItemTypes.ItemAttribute.NETHERITE_TIER)) return 4;
+        if (toolType.hasAttribute(ItemTypes.ItemAttribute.DIAMOND_TIER)) return 3;
+        if (toolType.hasAttribute(ItemTypes.ItemAttribute.IRON_TIER)) return 2;
+        if (toolType.hasAttribute(ItemTypes.ItemAttribute.STONE_TIER)) return 1;
+        if (toolType.hasAttribute(ItemTypes.ItemAttribute.WOOD_TIER) || toolType.hasAttribute(ItemTypes.ItemAttribute.GOLD_TIER)) return 0;
+        return -1;
+    }
+
+    private static boolean isInTag(GrimPlayer player, ResourceLocation syncedTag, com.github.retrooper.packetevents.protocol.world.states.defaulttags.BlockTags defaultTag, StateType block) {
+        SyncedTag<StateType> synced = player.tagManager.block(syncedTag);
+        return (synced != null && synced.contains(block)) || defaultTag.contains(block);
     }
 
 

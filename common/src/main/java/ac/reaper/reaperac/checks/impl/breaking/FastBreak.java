@@ -127,4 +127,5 @@ public class FastBreak extends Check implements BlockBreakCheck {
         blockBreakBalance = GrimMath.clamp(blockBreakBalance, -balance, balance); // Clamp not Math.max in case other logic changes
         blockDelayBalance = GrimMath.clamp(blockDelayBalance, -balance, balance);
     }
+
 }
