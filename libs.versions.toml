@@ -6,7 +6,7 @@ adventure = "4.23.0"
 geyser-base-api = "1.0.2"
 grim-api = "1.2.4.0"
 # Locked to PacketEvents built from ohnodev/packetevents 26.2.
-packetevents = "2.12.0+67056a4-SNAPSHOT"
+packetevents = "2.12.0+8111402-SNAPSHOT"
 viaversion = "5.7.1"
 
 # --- General Java Utilities ---
