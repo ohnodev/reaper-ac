@@ -90,13 +90,16 @@ This fork includes prebuilt Fabric artifacts in `prebuilt/` for direct deploymen
 
 Current prebuilt files:
 
-- `prebuilt/reaperac-fabric-2.3.74-bc74903.jar`
-- `prebuilt/reaperac-fabric-2.3.74-bc74903.jar.sha256`
+- `prebuilt/reaperac-fabric-2.3.74-26.2-b567b7e.jar`
+- `prebuilt/reaperac-fabric-2.3.74-26.2-b567b7e.zip`
+- `prebuilt/reaperac-fabric-2.3.74-26.2-b567b7e.jar.sha256`
+- `prebuilt/reaperac-fabric-2.3.74-26.2-b567b7e.zip.sha256`
 
 Verify integrity:
 
 ```bash
-sha256sum -c prebuilt/reaperac-fabric-2.3.74-bc74903.jar.sha256
+sha256sum -c prebuilt/reaperac-fabric-2.3.74-26.2-b567b7e.jar.sha256
+sha256sum -c prebuilt/reaperac-fabric-2.3.74-26.2-b567b7e.zip.sha256
 ```
 
 To inspect locally produced files after a build:
