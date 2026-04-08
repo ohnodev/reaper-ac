@@ -31,7 +31,7 @@ jobs:
 
       - name: Bootstrap PacketEvents 26.2 to Maven local
         run: |
-          PACKETEVENTS_REF=2b5414d9a88c3c0f580a988b184d5b728030183b
+          PACKETEVENTS_REF=67056a4d6d0a085d11e229c347306370aa7ea1b8
           git clone --depth 1 https://github.com/ohnodev/packetevents.git /tmp/packetevents-26.2
           cd /tmp/packetevents-26.2
           git fetch --depth 1 origin "$PACKETEVENTS_REF"
