@@ -1,6 +1,7 @@
 package ac.reaper.reaperac.utils.data.tags;
 
 import ac.reaper.reaperac.utils.anticheat.LogUtil;
+import com.github.retrooper.packetevents.protocol.world.states.type.StateType;
 import com.github.retrooper.packetevents.resources.ResourceLocation;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerTags;
 
@@ -36,6 +37,27 @@ public final class SyncedTag<T> {
 
     public boolean contains(T value) {
         return values.contains(value);
+    }
+
+    /**
+     * Like {@link #contains} but also matches {@link StateType} entries by {@link StateType#getName()} when the
+     * runtime block type is not the same object (or not {@link StateType#equals(Object)} to) the static
+     * {@code StateTypes.*} constants in {@code BlockTags}. {@link #values} uses identity for defaults; tag sync
+     * remaps use registry instances — both must recognize the same logical block for mining checks.
+     */
+    public boolean matchesBlock(StateType block) {
+        @SuppressWarnings("unchecked")
+        T asMember = (T) block;
+        if (contains(asMember)) {
+            return true;
+        }
+        String name = block.getName();
+        for (T member : values) {
+            if (member instanceof StateType st && st.getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void readTagValues(WrapperPlayServerTags.Tag tag) {

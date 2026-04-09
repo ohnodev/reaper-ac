@@ -90,6 +90,22 @@ public class FastBreak extends Check implements BlockBreakCheck {
         }
 
         if (blockBreak.action == DiggingAction.FINISHED_DIGGING && targetBlockPosition != null) {
+            if (!blockBreak.position.equals(targetBlockPosition)) {
+                // Client finished a different block than the last START_DIGGING we tracked — do not reuse
+                // timing/damage from the previous target (caused false FastBreak on e.g. dirt after sulfur).
+                targetBlockPosition = blockBreak.position;
+                maximumBlockDamage = BlockBreakSpeed.getBlockDamage(player, blockBreak.block);
+                lastFinishBreak = startBreak = System.currentTimeMillis();
+                return;
+            }
+
+            // Prefer the higher of animation-accumulated damage and damage for the block type in this FINISH packet.
+            maximumBlockDamage = Math.max(maximumBlockDamage, BlockBreakSpeed.getBlockDamage(player, blockBreak.block));
+            if (maximumBlockDamage <= 0) {
+                lastFinishBreak = startBreak = System.currentTimeMillis();
+                return;
+            }
+
             double predictedTime = Math.ceil(1 / maximumBlockDamage) * 50;
             double realTime = System.currentTimeMillis() - startBreak;
             double diff = predictedTime - realTime;

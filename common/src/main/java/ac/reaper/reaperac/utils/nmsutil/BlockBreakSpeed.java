@@ -4,7 +4,6 @@ import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.utils.data.tags.SyncedTag;
 import ac.reaper.reaperac.utils.data.tags.SyncedTags;
 import ac.reaper.reaperac.utils.enums.FluidTag;
-import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.protocol.attribute.Attributes;
 import com.github.retrooper.packetevents.protocol.component.ComponentTypes;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemTool;
@@ -12,6 +11,7 @@ import com.github.retrooper.packetevents.protocol.item.ItemStack;
 import com.github.retrooper.packetevents.protocol.item.type.ItemType;
 import com.github.retrooper.packetevents.protocol.item.type.ItemTypes;
 import com.github.retrooper.packetevents.protocol.mapper.MappedEntitySet;
+import com.github.retrooper.packetevents.protocol.world.states.type.StateType.Mapped;
 import com.github.retrooper.packetevents.protocol.player.GameMode;
 import com.github.retrooper.packetevents.protocol.potion.PotionTypes;
 import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
@@ -22,6 +22,7 @@ import com.github.retrooper.packetevents.resources.ResourceLocation;
 import com.google.common.collect.Sets;
 import lombok.experimental.UtilityClass;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.Set;
@@ -54,8 +55,35 @@ public class BlockBreakSpeed {
     }
 
     public static double getBlockDamage(GrimPlayer player, WrappedBlockState block) {
-        ItemStack tool = player.inventory.getHeldItem();
-        return getBlockDamage(player, tool, block.getType());
+        return getBlockDamage(player, toolStackForMiningSimulation(player), block.getType());
+    }
+
+    /**
+     * Prefer the packet-tracked held item for dig-time correctness, because START/FINISH digging arrives on
+     * Netty and slot selection updates are mirrored there. If the platform stack is the same item type and has
+     * richer TOOL component data, use it to keep modern mining rules accurate.
+     */
+    private static ItemStack toolStackForMiningSimulation(GrimPlayer player) {
+        ItemStack packetHeld = player.inventory.getHeldItem();
+        ItemStack platformHeld = ItemStack.EMPTY;
+        if (player.platformPlayer != null) {
+            ItemStack fromPlatform = player.platformPlayer.getInventory().getItemInHand();
+            if (fromPlatform != null) {
+                platformHeld = fromPlatform;
+            }
+        }
+
+        if (!packetHeld.isEmpty()) {
+            boolean sameType = !platformHeld.isEmpty() && platformHeld.getType() == packetHeld.getType();
+            boolean platformHasToolData = platformHeld.hasComponent(ComponentTypes.TOOL);
+            boolean packetMissingToolData = !packetHeld.hasComponent(ComponentTypes.TOOL);
+            if (sameType && platformHasToolData && packetMissingToolData) {
+                return platformHeld;
+            }
+            return packetHeld;
+        }
+
+        return platformHeld;
     }
 
     public static double getBlockDamage(GrimPlayer player, ItemStack tool, StateType block) {
@@ -81,10 +109,11 @@ public class BlockBreakSpeed {
                 || toolSpeedData.isCorrectToolForDrop
                 || inferCorrectToolFromTags(player, toolType, block)
                 // temporary hardcode to workaround PE bug https://github.com/retrooper/packetevents/issues/1217; see https://github.com/GrimAnticheat/Grim/issues/2091
-                || HARVESTABLE_TYPES_1_21_4.contains(block);
+                || harvestableHardcoded(block);
 
         float damage = speedMultiplier / blockHardness;
         damage /= canHarvest ? 30F : 100F;
+
         return damage;
     }
 
@@ -134,9 +163,6 @@ public class BlockBreakSpeed {
         return speedMultiplier;
     }
 
-    // TODO technically its possible to use packet level manipulation to enforce Tool rules on newer clients on older servers
-    // But I've yet to hear of anyone even trying to do such a thing rather than just update the server
-    // And we can't support this because we don't see the tool components/data before Via
     private static ToolSpeedData getModernToolSpeedData(GrimPlayer player, ItemStack tool, StateType block) {
         Optional<ItemTool> toolComponentOpt = tool.getComponent(ComponentTypes.TOOL);
         float speedMultiplier = 1.0f;
@@ -159,10 +185,11 @@ public class BlockBreakSpeed {
                 // First, determine if the current rule even applies to this block.
                 if (tagKey != null) {
                     SyncedTag<StateType> playerTag = player.tagManager.block(tagKey);
-                    isMatch = (playerTag != null && playerTag.contains(block))
-                            || BlockTags.getByName(tagKey.getKey()).contains(block);
+                    BlockTags staticTag = BlockTags.getByName(tagKey.getKey());
+                    isMatch = (playerTag != null && playerTag.matchesBlock(block))
+                            || (staticTag != null && staticBlockTagContains(staticTag, block));
                 } else {
-                    isMatch = predicate.getEntities().contains(block.getMapped());
+                    isMatch = ruleBlockListMatches(predicate, block);
                 }
 
                 // If the rule matches the block, check if we still need its properties.
@@ -224,13 +251,63 @@ public class BlockBreakSpeed {
         if (toolType.hasAttribute(ItemTypes.ItemAttribute.IRON_TIER)) return 2;
         if (toolType.hasAttribute(ItemTypes.ItemAttribute.STONE_TIER)) return 1;
         if (toolType.hasAttribute(ItemTypes.ItemAttribute.WOOD_TIER) || toolType.hasAttribute(ItemTypes.ItemAttribute.GOLD_TIER)) return 0;
+        // 26.x: copper_pickaxe only has ItemAttribute.PICKAXE in PacketEvents — treat as stone-tier harvest for tag inference.
+        if (toolType == ItemTypes.COPPER_PICKAXE) return 1;
         return -1;
     }
 
     private static boolean isInTag(GrimPlayer player, ResourceLocation syncedTag, com.github.retrooper.packetevents.protocol.world.states.defaulttags.BlockTags defaultTag, StateType block) {
         SyncedTag<StateType> synced = player.tagManager.block(syncedTag);
-        return (synced != null && synced.contains(block)) || defaultTag.contains(block);
+        return (synced != null && synced.matchesBlock(block)) || staticBlockTagContains(defaultTag, block);
     }
 
+    /**
+     * {@link BlockTags} uses {@link java.util.HashSet} with {@link StateType#equals(Object)}, which compares
+     * hardness, blast resistance, and more. Runtime/registry {@link StateType} instances often differ from static
+     * {@code StateTypes.*} used when tags were built, so we also match by {@link StateType#getName()}.
+     */
+    private static boolean staticBlockTagContains(BlockTags tag, StateType block) {
+        if (tag.contains(block)) {
+            return true;
+        }
+        String name = block.getName();
+        for (StateType listed : tag.getStates()) {
+            if (listed.getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean ruleBlockListMatches(MappedEntitySet<Mapped> predicate, StateType block) {
+        List<Mapped> entities = predicate.getEntities();
+        if (entities == null) {
+            return false;
+        }
+        Mapped mapped = block.getMapped();
+        if (entities.contains(mapped)) {
+            return true;
+        }
+        String name = block.getName();
+        for (Mapped m : entities) {
+            if (m.getName().getKey().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean harvestableHardcoded(StateType block) {
+        if (HARVESTABLE_TYPES_1_21_4.contains(block)) {
+            return true;
+        }
+        String name = block.getName();
+        for (StateType listed : HARVESTABLE_TYPES_1_21_4) {
+            if (listed.getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

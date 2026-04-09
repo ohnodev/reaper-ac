@@ -6,7 +6,7 @@ adventure = "4.23.0"
 geyser-base-api = "1.0.2"
 grim-api = "1.2.4.0"
 # Locked to PacketEvents built from ohnodev/packetevents 26.2.
-packetevents = "2.12.0+402083a-SNAPSHOT"
+packetevents = "2.12.0+8db4424a9-SNAPSHOT"
 viaversion = "5.7.1"
 
 # --- General Java Utilities ---
@@ -31,6 +31,7 @@ spotless = "6.25.0"
 
 [libraries]
 # --- Core Frameworks: Adventure (Text) ---
+adventure-nbt = { group = "net.kyori", name = "adventure-nbt", version.ref = "adventure" }
 adventure-text-minimessage = { group = "net.kyori", name = "adventure-text-minimessage", version.ref = "adventure" }
 
 # --- Minecraft Server APIs ---
@@ -43,6 +44,7 @@ grim-internal = { group = "ac.reaper.reaperac", name = "grim-internal", version.
 grim-internal-shims = { group = "ac.reaper.reaperac", name = "grim-internal-shims", version.ref = "grim-api" }
 grim-fabric-internal = { group = "ac.reaper.reaperac", name = "grim-fabric-internal", version.ref = "grim-api" }
 packetevents-api = { group = "com.github.retrooper", name = "packetevents-api", version.ref = "packetevents" }
+packetevents-netty-common = { group = "com.github.retrooper", name = "packetevents-netty-common", version.ref = "packetevents" }
 packetevents-fabric = { group  = "com.github.retrooper", name = "packetevents-fabric", version.ref = "packetevents" }
 packetevents-fabric-common = { group  = "com.github.retrooper", name = "packetevents-fabric-common", version.ref = "packetevents" }
 packetevents-fabric-official = { group  = "com.github.retrooper", name = "packetevents-fabric-official", version.ref = "packetevents" }

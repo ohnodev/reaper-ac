@@ -6,6 +6,10 @@ plugins {
 }
 
 repositories {
+    // Prefer locally published PacketEvents (e.g. cabal PE fork) over remote snapshots when enabled.
+    if (BuildConfig.mavenLocalOverride) {
+        mavenLocal()
+    }
     // PacketEvents snapshots: same host but not exclusiveContent-locked so mavenLocal() can still resolve
     maven("https://repo.grim.ac/snapshots") {
         mavenContent { snapshotsOnly() }
@@ -30,11 +34,6 @@ repositories {
     }
 
     mavenCentral()
-
-    // Optional local fallback: only when explicitly enabled via MAVEN_LOCAL_OVERRIDE.
-    if (BuildConfig.mavenLocalOverride) {
-        mavenLocal()
-    }
 }
 
 
@@ -70,6 +69,29 @@ dependencies {
     compileOnly(libs.jsr305)
     compileOnly(libs.viaversion)
     compileOnly(libs.netty)
+
+    testImplementation(platform(testlibs.junit.bom))
+    testImplementation(testlibs.junit.jupiter)
+    testRuntimeOnly(testlibs.junit.platform.launcher)
+    testImplementation(testlibs.mockito.core)
+    testImplementation(testlibs.mockito.junit.jupiter)
+    // Mockito's ByteBuddy needs ViaVersion on classpath for GrimPlayer instrumentation
+    testImplementation(libs.viaversion)
+    // PE static init chain needs real Netty buffers, adventure-nbt, and the netty bridge
+    testImplementation(libs.netty)
+    testImplementation(libs.packetevents.netty.common)
+    testImplementation(libs.adventure.nbt)
+    // PE 26.2 fork was built against adventure 4.25.0 — force that version at test runtime
+    testImplementation("net.kyori:adventure-api:4.25.0")
+    testImplementation("net.kyori:adventure-key:4.25.0")
+    testImplementation("net.kyori:adventure-text-serializer-gson:4.25.0")
+    testImplementation("net.kyori:adventure-text-serializer-legacy:4.25.0")
+    testImplementation("net.kyori:examination-api:1.3.0")
+    testImplementation("net.kyori:examination-string:1.3.0")
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 publishing.publications.create<MavenPublication>("maven") {

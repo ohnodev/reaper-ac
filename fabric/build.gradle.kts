@@ -28,9 +28,11 @@ dependencies {
     implementation(project(":common"))
 }
 
-// Remote-first resolution; mavenLocal last (or only when MAVEN_LOCAL_OVERRIDE) so CI/dev machines
-// don’t silently pick stale local artifacts. PacketEvents/cloud snapshot sources: README-26.1-dependencies.md
+// When MAVEN_LOCAL_OVERRIDE is on, prefer mavenLocal first so a locally published PacketEvents wins.
 repositories {
+    if (BuildConfig.mavenLocalOverride) {
+        mavenLocal()
+    }
     exclusive("https://maven.fabricmc.net/") {
         includeGroup("net.fabricmc")
         includeGroup("net.fabricmc.fabric-api")
@@ -65,11 +67,6 @@ repositories {
     exclusive(mavenCentral()) { includeGroup("me.lucko") }
 
     mavenCentral()
-
-    // Optional local publish fallback when explicitly enabled via MAVEN_LOCAL_OVERRIDE.
-    if (BuildConfig.mavenLocalOverride) {
-        mavenLocal()
-    }
 }
 
 java {

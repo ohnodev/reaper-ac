@@ -441,17 +441,22 @@ public class CompensatedInventory extends Check implements PacketCheck {
             });
         }
 
-        // This packet replaces SET_SLOT for player inventory for 1.21.2+
+        // This packet replaces SET_SLOT for player inventory for 1.21.2+.
+        // Its slot IDs use vanilla Inventory indices (hotbar=0-8, main=9-35, armor=36-39, offhand=40),
+        // NOT the container screen slot indices that inventory.getSlot() expects.
         if (event.getPacketType() == PacketType.Play.Server.SET_PLAYER_INVENTORY) {
             WrapperPlayServerSetPlayerInventory slot = new WrapperPlayServerSetPlayerInventory(event);
-            final int slotID = slot.getSlot();
+            final int vanillaSlot = slot.getSlot();
             final ItemStack item = slot.getStack();
+            final int storageSlot = vanillaInvToStorageSlot(vanillaSlot);
 
-            inventory.getInventoryStorage().handleServerCorrectSlot(slotID);
+            if (storageSlot < 0) return;
+
+            inventory.getInventoryStorage().handleServerCorrectSlot(storageSlot);
 
             player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get(), () -> {
                 if (!isPacketInventoryActive) return;
-                inventory.getSlot(slotID).set(item);
+                inventory.getInventoryStorage().setItem(storageSlot, item);
             });
         }
 
@@ -505,5 +510,31 @@ public class CompensatedInventory extends Check implements PacketCheck {
         openWindowID = 0;
         menu = inventory;
         menu.setCarried(ItemStack.EMPTY); // Reset carried item
+    }
+
+    /**
+     * Translate a vanilla {@code Inventory} slot index (used by {@code SET_PLAYER_INVENTORY}) to the
+     * internal {@link ac.reaper.reaperac.utils.lists.CorrectingPlayerInventoryStorage} index.
+     *
+     * <p>Vanilla layout: hotbar 0-8, main 9-35, armor 36-39 (FEET,LEGS,CHEST,HEAD), offhand 40.
+     * <br>Storage layout: helmet 4, chest 5, legs 6, boots 7, main 9-35, hotbar 36-44, offhand 45.
+     *
+     * @return storage slot index, or -1 if the slot is not tracked (body, saddle, etc.)
+     */
+    private static int vanillaInvToStorageSlot(int vanillaSlot) {
+        if (vanillaSlot >= 0 && vanillaSlot < 9) {
+            return vanillaSlot + Inventory.HOTBAR_OFFSET; // hotbar 0-8 → storage 36-44
+        }
+        if (vanillaSlot >= 9 && vanillaSlot < 36) {
+            return vanillaSlot; // main inventory 9-35 → same
+        }
+        return switch (vanillaSlot) {
+            case 36 -> Inventory.SLOT_BOOTS;      // FEET → storage 7
+            case 37 -> Inventory.SLOT_LEGGINGS;   // LEGS → storage 6
+            case 38 -> Inventory.SLOT_CHESTPLATE;  // CHEST → storage 5
+            case 39 -> Inventory.SLOT_HELMET;      // HEAD → storage 4
+            case 40 -> Inventory.SLOT_OFFHAND;     // offhand → storage 45
+            default -> -1;
+        };
     }
 }
