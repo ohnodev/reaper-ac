@@ -1,5 +1,5 @@
 {
-  "V_1_21_4": [
+  "V_26_2": [
     "amethyst",
     "copper",
     "diamond",
@@ -11,17 +11,5 @@
     "quartz",
     "redstone",
     "resin"
-  ],
-  "V_1_19_4": [
-    "amethyst",
-    "copper",
-    "diamond",
-    "emerald",
-    "gold",
-    "iron",
-    "lapis",
-    "netherite",
-    "quartz",
-    "redstone"
   ]
 }

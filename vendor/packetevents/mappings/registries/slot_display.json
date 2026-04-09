@@ -1,5 +1,5 @@
 {
-  "V_26_1": [
+  "V_26_2": [
     "empty",
     "any_fuel",
     "with_any_potion",
@@ -8,16 +8,6 @@
     "item_stack",
     "tag",
     "dyed",
-    "smithing_trim",
-    "with_remainder",
-    "composite"
-  ],
-  "V_1_21_2": [
-    "empty",
-    "any_fuel",
-    "item",
-    "item_stack",
-    "tag",
     "smithing_trim",
     "with_remainder",
     "composite"
