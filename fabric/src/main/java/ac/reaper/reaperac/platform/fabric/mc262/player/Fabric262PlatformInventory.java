@@ -42,7 +42,7 @@ public class Fabric262PlatformInventory extends AbstractFabricPlatformInventory 
         } else if (type == MenuType.GENERIC_3x3) {
             return "DISPENSER";
         } else {
-            Identifier registryKey = (Identifier) getScreenID(type);
+            Identifier registryKey = getScreenID(type);
             if (registryKey != null) {
                 return registryKey.getPath().toUpperCase(Locale.ROOT).replace('.', '_');
             }
@@ -55,7 +55,7 @@ public class Fabric262PlatformInventory extends AbstractFabricPlatformInventory 
         return simpleName.replaceAll("([a-z0-9])([A-Z])", "$1_$2").toUpperCase(Locale.ROOT);
     }
 
-    protected Object getScreenID(MenuType<?> type) {
+    protected @Nullable Identifier getScreenID(MenuType<?> type) {
         return BuiltInRegistries.MENU.getKey(type);
     }
 

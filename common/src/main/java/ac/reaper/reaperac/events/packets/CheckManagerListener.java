@@ -48,6 +48,8 @@ import java.util.List;
 import java.util.function.Function;
 
 public class CheckManagerListener extends PacketListenerAbstract {
+    private static final boolean DEBUG_DIG_HELD_TRACE =
+            Boolean.getBoolean("reaper.debug.dig-held-trace");
     // Manual filter on FINISH_DIGGING to prevent clients setting non-breakable blocks to air
     private static final Function<StateType, Boolean> BREAKABLE = type -> !type.isAir() && type.getHardness() != -1.0f && type != StateTypes.WATER && type != StateTypes.LAVA;
 
@@ -847,6 +849,9 @@ public class CheckManagerListener extends PacketListenerAbstract {
     }
 
     private static void traceDigHeldItem(GrimPlayer player, BlockBreak blockBreak) {
+        if (!DEBUG_DIG_HELD_TRACE) {
+            return;
+        }
         String state = blockBreak.block.getType().getName();
         String normalized = state.toLowerCase();
         if (!normalized.contains("sulfur") && !normalized.contains("cinnabar")) {
@@ -863,12 +868,10 @@ public class CheckManagerListener extends PacketListenerAbstract {
             }
         }
 
-        LogUtil.info(String.format(
-                "[TRACE][dig-held] user=%s/%s action=%s pos=%s seq=%d selected=%d lastSelected=%d packetInvActive=%s "
-                        + "packetHeld=%s(hasTOOL=%s,empty=%s) effectiveHeld=%s(hasTOOL=%s,empty=%s) platformHeld=%s(hasTOOL=%s,empty=%s) "
-                        + "packetHotbar=%s platformHotbar=%s",
+        LogUtil.getLogger().fine(String.format(
+                "[TRACE][dig-held] user=%s action=%s pos=%s seq=%d selected=%d lastSelected=%d packetInvActive=%s "
+                        + "packetHeld=%s(tool=%s,empty=%s) effectiveHeld=%s(tool=%s,empty=%s) platformHeld=%s(tool=%s,empty=%s)",
                 player.user.getName(),
-                player.user.getUUID(),
                 blockBreak.action,
                 blockBreak.position,
                 blockBreak.sequence,
@@ -883,28 +886,6 @@ public class CheckManagerListener extends PacketListenerAbstract {
                 effectiveHeld.isEmpty(),
                 platformHeld.getType().getName(),
                 platformHeld.hasComponent(com.github.retrooper.packetevents.protocol.component.ComponentTypes.TOOL),
-                platformHeld.isEmpty(),
-                packetHotbarSnapshot(player),
-                platformHotbarSnapshot(player)));
-    }
-
-    private static String packetHotbarSnapshot(GrimPlayer player) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < 9; i++) {
-            if (i > 0) sb.append(',');
-            int storageSlot = Inventory.HOTBAR_OFFSET + i;
-            sb.append(i).append('=').append(player.inventory.inventory.getInventoryStorage().getItem(storageSlot).getType().getName());
-        }
-        return sb.toString();
-    }
-
-    private static String platformHotbarSnapshot(GrimPlayer player) {
-        if (player.platformPlayer == null) return "none";
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < 9; i++) {
-            if (i > 0) sb.append(',');
-            sb.append(i).append('=').append(player.platformPlayer.getInventory().getStack(i, i).getType().getName());
-        }
-        return sb.toString();
+                platformHeld.isEmpty()));
     }
 }

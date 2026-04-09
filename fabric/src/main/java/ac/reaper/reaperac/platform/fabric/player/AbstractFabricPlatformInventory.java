@@ -5,6 +5,7 @@ import ac.reaper.reaperac.platform.fabric.GrimACFabricLoaderPlugin;
 import ac.reaper.reaperac.platform.fabric.utils.convert.IFabricConversionUtil;
 import com.github.retrooper.packetevents.protocol.item.ItemStack;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -102,11 +103,11 @@ public abstract class AbstractFabricPlatformInventory implements PlatformInvento
             return null;
         }
         String normalized = blockKey.contains(":") ? blockKey : "minecraft:" + blockKey;
-        for (Block block : BuiltInRegistries.BLOCK) {
-            if (BuiltInRegistries.BLOCK.getKey(block).toString().equals(normalized)) {
-                return block.defaultBlockState();
-            }
+        Identifier id = Identifier.tryParse(normalized);
+        if (id == null) {
+            return null;
         }
-        return null;
+        Block block = BuiltInRegistries.BLOCK.getValue(id);
+        return block != null ? block.defaultBlockState() : null;
     }
 }

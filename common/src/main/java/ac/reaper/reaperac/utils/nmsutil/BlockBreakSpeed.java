@@ -31,6 +31,8 @@ import java.util.Set;
 
 @UtilityClass
 public class BlockBreakSpeed {
+    private static final boolean DEBUG_MINING_TRACE =
+            Boolean.getBoolean("reaper.debug.mining.trace");
     // temporary hardcode to workaround PE bug https://github.com/retrooper/packetevents/issues/1217; see https://github.com/GrimAnticheat/Grim/issues/2117
     private static final Set<StateType> HARVESTABLE_TYPES_1_21_4 = Sets.newHashSet(
             StateTypes.BELL,
@@ -129,7 +131,7 @@ public class BlockBreakSpeed {
         damage /= canHarvest ? 30F : 100F;
 
         // Keep this trace active while diagnosing 26.2 mining mismatches.
-        if (damage > 0 && block.isRequiresCorrectTool()) {
+        if (DEBUG_MINING_TRACE && damage > 0 && block.isRequiresCorrectTool()) {
             double predictedMs = Math.ceil(1.0 / damage) * 50.0;
             if (predictedMs >= 5000) {
                 CompensatedInventory compensatedInventory = player.inventory;
