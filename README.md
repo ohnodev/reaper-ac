@@ -16,7 +16,7 @@
 </div>
 
 ReaperAC is an open-source Minecraft anticheat designed to support the latest versions of Minecraft.
-This fork targets **Minecraft 26.2 (Fabric-only)** with a vendored PacketEvents monorepo and is currently synced to the latest 26.2 snapshot line (including Snapshot 2).
+This fork targets **Minecraft 26.2 (Fabric-only)** with a vendored PacketEvents monorepo, as of **2026-04-09**. For the current snapshot/release status, see [Minecraft Java release notes](https://www.minecraft.net/en-us/article/minecraft-26-2-snapshot-2) and [this repository's releases](https://github.com/ohnodev/reaper-ac/releases).
 Geyser players are fully exempt from the anticheat to prevent false positives.
 
 ## Downloads
@@ -24,7 +24,7 @@ Geyser players are fully exempt from the anticheat to prevent false positives.
 - Latest updates:
   - **Modrinth:** coming soon (release pipeline pending)
   - **GitHub Releases:** coming soon
-  - **Current download count:** `0` (new fork, pre-release stage)
+  - **Download stats:** will be shown via live badges once public release listings are active
 
 ## Requirements & Installation
 
@@ -34,7 +34,7 @@ Geyser players are fully exempt from the anticheat to prevent false positives.
 ## Version Policy
 
 - ReaperAC in this repo is **latest-only**.
-- We only support the current upstream Minecraft line (currently 26.2 snapshot line).
+- We only support the current upstream Minecraft line (as of **2026-04-09**, the 26.2 snapshot line). See [release notes](https://www.minecraft.net/en-us/article/minecraft-26-2-snapshot-2) for the latest snapshot status.
 - Backports are intentionally out of scope; historical support will be handled via tagged releases later.
 
 ## Resources
