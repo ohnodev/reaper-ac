@@ -2,42 +2,47 @@
  <h1>ReaperAC</h1>
 
  <div>
-  <a href="https://github.com/GrimAnticheat/Grim/actions/workflows/gradle-publish.yml">
-   <img alt="Workflow" src="https://img.shields.io/github/actions/workflow/status/GrimAnticheat/Grim/gradle-publish.yml?style=flat&logo=github"/>
+  <a href="https://github.com/ohnodev/reaper-ac/actions/workflows/build.yml">
+   <img alt="Build" src="https://img.shields.io/github/actions/workflow/status/ohnodev/reaper-ac/build.yml?style=flat&logo=github&label=build"/>
   </a>&nbsp;&nbsp;
-  <a href="https://modrinth.com/plugin/grimac">
-   <img alt="Modrinth" src="https://img.shields.io/modrinth/v/LJNGWSvH?style=flat&label=version&logo=modrinth">
+  <a href="https://smp.thecabal.app">
+   <img alt="Website" src="https://img.shields.io/badge/website-smp.thecabal.app-4caf50?style=flat">
   </a>&nbsp;&nbsp;
-  <a href="https://modrinth.com/plugin/grimac#download">
-   <img alt="Downloads" src="https://img.shields.io/modrinth/dt/LJNGWSvH?style=flat&logo=modrinth&label=downloads&link=https%3A%2F%2Fmodrinth.com%2Fplugin%2Fgrimac%23download">
-  </a>&nbsp;&nbsp;
-  <a href="https://discord.grim.ac">
-   <img alt="Discord" src="https://img.shields.io/discord/811396969670901800?style=flat&label=discord&logo=discord">
+  <a href="https://discord.gg/2NR3W7j4vP">
+   <img alt="Discord" src="https://img.shields.io/badge/discord-Cabal%20SMP-5865F2?style=flat&logo=discord&logoColor=white">
   </a>
  </div>
  <br>
 </div>
 
 ReaperAC is an open-source Minecraft anticheat designed to support the latest versions of Minecraft.
-This fork targets **Minecraft 26.2 (Fabric-only)** with a vendored PacketEvents monorepo.
+This fork targets **Minecraft 26.2 (Fabric-only)** with a vendored PacketEvents monorepo and is currently synced to the latest 26.2 snapshot line (including Snapshot 2).
 Geyser players are fully exempt from the anticheat to prevent false positives.
 
 ## Downloads
 
 - Latest updates:
-  - **[Modrinth](https://modrinth.com/plugin/grimac)** *(recommended)*
-  - GitHub artifacts: [Fabric](https://nightly.link/GrimAnticheat/Grim/workflows/gradle-publish/2.0/grimac-fabric.zip) *(bleeding edge)*
+  - **Modrinth:** coming soon (release pipeline pending)
+  - **GitHub Releases:** coming soon
+  - **Current download count:** `0` (new fork, pre-release stage)
 
 ## Requirements & Installation
 
 - **Java 25** or higher (required by MC 26.2 / Fabric Loader).
 - A Fabric server environment running Minecraft 26.2.
 
+## Version Policy
+
+- ReaperAC in this repo is **latest-only**.
+- We only support the current upstream Minecraft line (currently 26.2 snapshot line).
+- Backports are intentionally out of scope; historical support will be handled via tagged releases later.
+
 ## Resources
 
+- Server website: [smp.thecabal.app](https://smp.thecabal.app)
 - For documentation and examples visit the [Wiki](https://github.com/GrimAnticheat/Grim/wiki).
 - For answers to commonly asked questions visit the [FAQ](https://github.com/GrimAnticheat/Grim/wiki/FAQ).
-- For community support and project discussion join our [Discord](https://discord.grim.ac).
+- For community support and project discussion join our [Discord](https://discord.gg/2NR3W7j4vP).
 
 ## Pull Requests
 
