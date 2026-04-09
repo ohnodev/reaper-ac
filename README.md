@@ -105,6 +105,15 @@ This fork includes one final combined Fabric runtime jar in `prebuilt/` for dire
 Current prebuilt file:
 
 - `prebuilt/reaperac-fabric-2.3.74-f6690b4.jar`
+- SHA-256: `dda395ae51b478ef3dda091651426014e96ff076d048ba9c78ae44e7b732ff8f`
+
+Verify integrity:
+
+```bash
+sha256sum prebuilt/reaperac-fabric-2.3.74-f6690b4.jar
+```
+
+Update this checksum in the README whenever the prebuilt jar is rebuilt.
 
 To inspect locally produced files after a build:
 
