@@ -445,8 +445,9 @@ public class CompensatedInventory extends Check implements PacketCheck {
             stateID = items.getStateId();
 
             List<ItemStack> slots = items.getItems();
-            final boolean vanillaPlayerInventoryIndices = items.getWindowId() == 0
-                    && PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_21_2);
+            // WINDOW_ITEMS always uses container slot ordering (46 slots) even on 1.21.2+.
+            // Vanilla inventory indices (hotbar 0-8, armor 36-39) are only used by SET_PLAYER_INVENTORY.
+            final boolean vanillaPlayerInventoryIndices = false;
             for (int i = 0; i < slots.size(); i++) {
                 if (items.getWindowId() == 0 && vanillaPlayerInventoryIndices) {
                     int mapped = vanillaInvToStorageSlot(i);
@@ -581,13 +582,10 @@ public class CompensatedInventory extends Check implements PacketCheck {
             final int inventoryID = slot.getWindowId();
             final ItemStack item = slot.getItem();
 
-            // 1.21.2+ can surface player inventory updates in terms of vanilla inventory indices
-            // (hotbar 0-8, main 9-35, armor 36-39, offhand 40). When this happens through window 0,
-            // translate before touching compensated storage.
-            final boolean treatAsVanillaPlayerInventoryIndex = inventoryID == 0
-                    && PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_21_2)
-                    && slotID >= 0 && slotID <= 40;
-            final int translatedPlayerSlot = treatAsVanillaPlayerInventoryIndex ? vanillaInvToStorageSlot(slotID) : slotID;
+            // SET_SLOT uses container slot ordering even on 1.21.2+ (hotbar 36-44, armor 5-8).
+            // Vanilla inventory indices are only used by SET_PLAYER_INVENTORY.
+            final boolean treatAsVanillaPlayerInventoryIndex = false;
+            final int translatedPlayerSlot = slotID;
 
             if (inventoryID == -2) { // Direct inventory change
                 inventory.getInventoryStorage().handleServerCorrectSlot(slotID);

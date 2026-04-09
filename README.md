@@ -19,9 +19,8 @@
 </div>
 
 ReaperAC is an open-source Minecraft anticheat designed to support the latest versions of Minecraft.
-It currently supports minecraft versions 1.8–1.21. Geyser players are fully exempt from the anticheat to prevent false positives.
-This project is considered feature-complete for the 2.0 (open-source) branch. If you would like a bug fix or enhancement and cannot sponsor the work, pull requests are welcome.
-A premium version is planned, which will offer additional subscription-based paid checks, such as heuristics.
+This fork targets **Minecraft 26.2 (Fabric-only)** with a vendored PacketEvents monorepo.
+Geyser players are fully exempt from the anticheat to prevent false positives.
 
 ## Downloads
 
@@ -31,8 +30,8 @@ A premium version is planned, which will offer additional subscription-based pai
 
 ## Requirements & Installation
 
-- Java 17 or higher. *For more details, see [Updating-to-Java-17](https://github.com/GrimAnticheat/Grim/wiki/Updating-to-Java-17).*
-- A Fabric server environment.
+- **Java 25** or higher (required by MC 26.2 / Fabric Loader).
+- A Fabric server environment running Minecraft 26.2.
 
 ## Resources
 
@@ -53,31 +52,45 @@ information.
 
 ## Build From Source
 
-This fork is maintained as **Fabric-only (26.1)**.
+This fork targets **Fabric-only, Minecraft 26.2**, with PacketEvents vendored as a
+Gradle composite build under `vendor/packetevents/`.
 
 ### Prerequisites
 
-- Java 17 or newer available on `PATH` (`java -version`)
+- **Java 25** or newer (`java -version` — required by MC 26.2 / Fabric Loader)
 - Git
 - Internet access for Gradle dependencies
 
-### macOS / Linux (Fabric-only build)
+### Two-step build (PE → Reaper-AC)
+
+PacketEvents must be published to Maven Local before building the main jar.
+This is required because the Fabric Loom jar-in-jar mechanism resolves PE
+from Maven Local, while the API is compiled from the vendored source.
 
 ```bash
 git clone https://github.com/ohnodev/grim-26-1-official-namespace.git
 cd grim-26-1-official-namespace
-./gradlew :fabric:clean :fabric:build
+
+# Step 1: Build and publish PacketEvents to Maven Local
+cd vendor/packetevents
+./gradlew clean publishToMavenLocal
+cd ../..
+
+# Step 2: Build the Reaper-AC Fabric jar
+./gradlew :fabric:build -x test
 ```
 
-### Windows (PowerShell, Fabric-only build)
+**If you change any PE source code** (under `vendor/packetevents/`), you must
+re-run Step 1 before Step 2. Changes to `common/` or `fabric/` only need Step 2.
+
+### Windows (PowerShell)
 
 ```powershell
-git clone https://github.com/ohnodev/grim-26-1-official-namespace.git
-cd grim-26-1-official-namespace
-.\gradlew.bat :fabric:clean :fabric:build
+cd vendor\packetevents
+.\gradlew.bat clean publishToMavenLocal
+cd ..\..
+.\gradlew.bat :fabric:build -x test
 ```
-
-These commands intentionally target only the Fabric module in this 26.1 fork.
 
 ### Build artifacts
 
