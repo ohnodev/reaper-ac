@@ -89,17 +89,9 @@ public class BlockBreakSpeed {
             }
         }
 
-        if (!packetHeld.isEmpty()) {
-            return packetHeld;
-        }
-
-        if (!nativeKeyHeld.isEmpty()) {
-            return nativeKeyHeld;
-        }
-
         // Do not fallback to platform inventory for dig-time simulation.
         // Packet-timed checks must reflect compensated packet inventory only.
-        return ItemStack.EMPTY;
+        return packetHeld;
     }
 
     public static double getBlockDamage(GrimPlayer player, ItemStack tool, StateType block) {
