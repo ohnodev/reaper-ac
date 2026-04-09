@@ -29,6 +29,9 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
+      - name: Publish PacketEvents to Maven Local
+        run: ./gradlew -p vendor/packetevents clean publishToMavenLocal
+
       - name: Build
         run: ./gradlew build -x test
 

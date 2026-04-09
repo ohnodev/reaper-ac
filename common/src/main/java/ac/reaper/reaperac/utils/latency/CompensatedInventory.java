@@ -181,7 +181,7 @@ public class CompensatedInventory extends Check implements PacketCheck {
             type = ItemTypes.getByName(key);
         }
         if (type == null) {
-            throw new IllegalStateException("Missing ItemType mapping for native main hand key: " + key);
+            return ItemStack.EMPTY;
         }
         return ItemStack.builder().type(type).amount(1).build();
     }

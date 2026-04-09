@@ -126,7 +126,7 @@ public class PatchableComponentMap implements IComponentMap {
     @Override
     public PatchableComponentMap withRegistries(IRegistryHolder registries) {
         if (this.registries != registries) {
-            return new PatchableComponentMap(this.base, this.patches, this.registries);
+            return new PatchableComponentMap(this.base, new HashMap<>(this.patches), registries);
         }
         return this;
     }

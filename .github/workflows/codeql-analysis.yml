@@ -36,8 +36,11 @@ jobs:
         with:
           cache-read-only: false
 
+      - name: Publish PacketEvents to Maven Local
+        run: ./gradlew -p vendor/packetevents clean publishToMavenLocal
+
       - name: Build for CodeQL
-        run: ./gradlew clean :fabric:build -x test -x check
+        run: ./gradlew :fabric:build -x test -x check
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3

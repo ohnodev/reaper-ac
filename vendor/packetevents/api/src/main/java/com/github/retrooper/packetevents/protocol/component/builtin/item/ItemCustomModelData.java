@@ -126,7 +126,7 @@ public class ItemCustomModelData {
 
     @ApiStatus.Obsolete
     public void setLegacyId(int legacyId) {
-        if (this.flags.isEmpty()) {
+        if (this.floats.isEmpty()) {
             this.floats.add((float) legacyId);
         } else {
             this.floats.set(0, (float) legacyId);

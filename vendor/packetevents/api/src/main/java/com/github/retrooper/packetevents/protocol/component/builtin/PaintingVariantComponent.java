@@ -68,10 +68,8 @@ public class PaintingVariantComponent {
                 w.writeVarInt(staticVar.getHeight());
                 w.writeIdentifier(staticVar.getAssetId());
             } else {
-                // Safe fallback just in case
-                w.writeVarInt(1);
-                w.writeVarInt(1);
-                w.writeIdentifier(new ResourceLocation("minecraft", "custom"));
+                throw new IllegalStateException(
+                        "Cannot serialize non-static PaintingVariant of type " + v.getClass().getName());
             }
 
             // Write false for optional Title and Author as they aren't currently stored in PE

@@ -80,10 +80,10 @@ public final class Parsers {
                 return Arrays.asList(flags, min, max);
             },
             (packetWrapper, properties) -> {
-                byte flags = (byte) properties.get(0);
+                byte flags = (Byte) properties.get(0);
                 packetWrapper.writeByte(flags);
-                if ((flags & 0x01) != 0) packetWrapper.writeFloat((float) properties.get(1));
-                if ((flags & 0x02) != 0) packetWrapper.writeFloat((float) properties.get(2));
+                if ((flags & 0x01) != 0) packetWrapper.writeFloat((Float) properties.get(1));
+                if ((flags & 0x02) != 0) packetWrapper.writeFloat((Float) properties.get(2));
             }
     );
     public static final Parser BRIGADIER_DOUBLE = define("brigadier:double",
@@ -94,10 +94,10 @@ public final class Parsers {
                 return Arrays.asList(flags, min, max);
             },
             (packetWrapper, properties) -> {
-                byte flags = (byte) properties.get(0);
+                byte flags = (Byte) properties.get(0);
                 packetWrapper.writeByte(flags);
-                if ((flags & 0x01) != 0) packetWrapper.writeDouble((double) properties.get(1));
-                if ((flags & 0x02) != 0) packetWrapper.writeDouble((double) properties.get(2));
+                if ((flags & 0x01) != 0) packetWrapper.writeDouble((Double) properties.get(1));
+                if ((flags & 0x02) != 0) packetWrapper.writeDouble((Double) properties.get(2));
             }
     );
     public static final Parser BRIGADIER_INTEGER = define("brigadier:integer",
@@ -108,10 +108,10 @@ public final class Parsers {
                 return Arrays.asList(flags, min, max);
             },
             (packetWrapper, properties) -> {
-                byte flags = (byte) properties.get(0);
+                byte flags = (Byte) properties.get(0);
                 packetWrapper.writeByte(flags);
-                if ((flags & 0x01) != 0) packetWrapper.writeInt((int) properties.get(1));
-                if ((flags & 0x02) != 0) packetWrapper.writeInt((int) properties.get(2));
+                if ((flags & 0x01) != 0) packetWrapper.writeInt((Integer) properties.get(1));
+                if ((flags & 0x02) != 0) packetWrapper.writeInt((Integer) properties.get(2));
             }
     );
     public static final Parser BRIGADIER_LONG = define("brigadier:long",
@@ -122,10 +122,10 @@ public final class Parsers {
                 return Arrays.asList(flags, min, max);
             },
             (packetWrapper, properties) -> {
-                byte flags = (byte) properties.get(0);
+                byte flags = (Byte) properties.get(0);
                 packetWrapper.writeByte(flags);
-                if ((flags & 0x01) != 0) packetWrapper.writeLong((long) properties.get(1));
-                if ((flags & 0x02) != 0) packetWrapper.writeLong((long) properties.get(2));
+                if ((flags & 0x01) != 0) packetWrapper.writeLong((Long) properties.get(1));
+                if ((flags & 0x02) != 0) packetWrapper.writeLong((Long) properties.get(2));
             }
     );
     public static final Parser BRIGADIER_STRING = define("brigadier:string",
@@ -184,7 +184,7 @@ public final class Parsers {
                     .isNewerThanOrEquals(ServerVersion.V_1_19_4) ? wrapper.readInt() : 0),
             (wrapper, properties) -> {
                 if (wrapper.getServerVersion().isNewerThanOrEquals(ServerVersion.V_1_19_4)) {
-                    wrapper.writeInt((int) properties.get(0));
+                    wrapper.writeInt((Integer) properties.get(0));
                 }
             }
     );

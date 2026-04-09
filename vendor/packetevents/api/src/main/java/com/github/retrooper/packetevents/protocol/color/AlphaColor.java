@@ -98,10 +98,10 @@ public final class AlphaColor extends Color {
             return new NBTInt(color.asRGB());
         }
         NBTList<NBTFloat> list = new NBTList<>(NBTType.FLOAT, 4);
-        list.addTag(new NBTFloat(color.red));
-        list.addTag(new NBTFloat(color.green));
-        list.addTag(new NBTFloat(color.blue));
-        list.addTag(new NBTFloat(color.alpha));
+        list.addTag(new NBTFloat(color.red / 255f));
+        list.addTag(new NBTFloat(color.green / 255f));
+        list.addTag(new NBTFloat(color.blue / 255f));
+        list.addTag(new NBTFloat(color.alpha / 255f));
         return list;
     }
 

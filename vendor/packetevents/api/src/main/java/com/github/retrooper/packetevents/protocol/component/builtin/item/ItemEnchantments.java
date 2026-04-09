@@ -26,6 +26,7 @@ import com.github.retrooper.packetevents.wrapper.PacketWrapper;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
@@ -61,7 +62,7 @@ public class ItemEnchantments implements Iterable<Map.Entry<EnchantmentType, Int
      */
     @ApiStatus.Obsolete
     public ItemEnchantments(Map<EnchantmentType, Integer> enchantments, boolean showInTooltip) {
-        this.enchantments = Collections.unmodifiableMap(enchantments);
+        this.enchantments = new HashMap<>(enchantments);
         this.showInTooltip = showInTooltip;
     }
 
@@ -106,7 +107,7 @@ public class ItemEnchantments implements Iterable<Map.Entry<EnchantmentType, Int
     }
 
     public Map<EnchantmentType, Integer> getEnchantments() {
-        return this.enchantments;
+        return Collections.unmodifiableMap(this.enchantments);
     }
 
     public void setEnchantments(Map<EnchantmentType, Integer> enchantments) {
