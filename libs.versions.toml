@@ -5,8 +5,8 @@ adventure = "4.23.0"
 # --- Minecraft-Specific APIs ---
 geyser-base-api = "1.0.2"
 grim-api = "1.2.4.0"
-# Locked to PacketEvents built from ohnodev/packetevents 26.2 sync line.
-packetevents = "2.12.0+71f7e42b4-SNAPSHOT"
+# Vendored PE under vendor/packetevents — version must match PE's gradle.properties fullVersion.
+packetevents = "2.12.0"
 viaversion = "5.7.1"
 
 # --- General Java Utilities ---
