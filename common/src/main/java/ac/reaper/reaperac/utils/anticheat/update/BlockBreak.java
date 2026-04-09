@@ -1,12 +1,14 @@
 package ac.reaper.reaperac.utils.anticheat.update;
 
 import ac.reaper.reaperac.player.GrimPlayer;
+import ac.reaper.reaperac.utils.anticheat.LogUtil;
 import ac.reaper.reaperac.utils.collisions.HitboxData;
 import ac.reaper.reaperac.utils.collisions.datatypes.CollisionBox;
 import ac.reaper.reaperac.utils.collisions.datatypes.SimpleCollisionBox;
 import com.github.retrooper.packetevents.protocol.player.DiggingAction;
 import com.github.retrooper.packetevents.protocol.world.BlockFace;
 import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
+import com.github.retrooper.packetevents.protocol.world.states.type.StateType;
 import com.github.retrooper.packetevents.util.Vector3i;
 import lombok.Getter;
 
@@ -14,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class BlockBreak {
+    private static final boolean DEBUG_BREAK_CANCEL_TRACE =
+            Boolean.getBoolean("reaper.debug.break-cancel-trace");
     public final Vector3i position;
     public final BlockFace face;
     public final int faceId;
@@ -35,6 +39,12 @@ public final class BlockBreak {
     }
 
     public void cancel() {
+        traceCancel("unspecified");
+        this.cancelled = true;
+    }
+
+    public void cancel(String reason) {
+        traceCancel(reason);
         this.cancelled = true;
     }
 
@@ -56,5 +66,42 @@ public final class BlockBreak {
         }
 
         return combined;
+    }
+
+    private void traceCancel(String reason) {
+        if (!DEBUG_BREAK_CANCEL_TRACE) {
+            return;
+        }
+        String state = block.getType().getName();
+        if (!isSulfurFamily(state)) {
+            return;
+        }
+        StateType t = block.getType();
+        LogUtil.info("[TRACE][break-cancel] user=<redacted>"
+                + " check=" + resolveCheckName()
+                + " reason=" + reason
+                + " action=" + action
+                + " pos=" + position
+                + " face=" + faceId
+                + " seq=" + sequence
+                + " state=" + state
+                + " hardness=" + t.getHardness());
+    }
+
+    private String resolveCheckName() {
+        for (StackTraceElement element : Thread.currentThread().getStackTrace()) {
+            String className = element.getClassName();
+            if (className.startsWith("ac.reaper.reaperac.checks.")) {
+                int idx = className.lastIndexOf('.');
+                String simple = idx >= 0 ? className.substring(idx + 1) : className;
+                return simple + "#" + element.getMethodName();
+            }
+        }
+        return "unknown";
+    }
+
+    private boolean isSulfurFamily(String stateName) {
+        String normalized = stateName.toLowerCase();
+        return normalized.contains("sulfur") || normalized.contains("cinnabar");
     }
 }

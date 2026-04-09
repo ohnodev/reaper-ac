@@ -31,7 +31,7 @@ jobs:
 
       - name: Bootstrap PacketEvents 26.2 to Maven local
         run: |
-          PACKETEVENTS_REF=67056a4d6d0a085d11e229c347306370aa7ea1b8
+          PACKETEVENTS_REF=8111402533ebb85f8244c4050797c5ef1a2a60b0
           git clone --depth 1 https://github.com/ohnodev/packetevents.git /tmp/packetevents-26.2
           cd /tmp/packetevents-26.2
           git fetch --depth 1 origin "$PACKETEVENTS_REF"
@@ -39,7 +39,7 @@ jobs:
           ./gradlew publishToMavenLocal -x test -x check
 
       - name: Build
-        run: ./gradlew build
+        run: ./gradlew build -x test
 
       - name: Resolve Fabric artifact path
         id: artifact

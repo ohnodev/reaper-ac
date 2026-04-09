@@ -3,6 +3,7 @@ package ac.reaper.reaperac.utils.latency;
 import ac.reaper.reaperac.checks.Check;
 import ac.reaper.reaperac.checks.type.PacketCheck;
 import ac.reaper.reaperac.player.GrimPlayer;
+import ac.reaper.reaperac.utils.anticheat.LogUtil;
 import ac.reaper.reaperac.utils.anticheat.update.BlockPlace;
 import ac.reaper.reaperac.utils.inventory.EquipmentType;
 import ac.reaper.reaperac.utils.inventory.Inventory;
@@ -151,6 +152,39 @@ public class CompensatedInventory extends Check implements PacketCheck {
         return item == null ? ItemStack.EMPTY : item;
     }
 
+    /**
+     * Returns the packet-tracked main hand stack directly from compensated storage.
+     * Use this for packet-timed simulation paths (e.g., block breaking) to avoid
+     * platform inventory fallbacks when packet inventory tracking is temporarily inactive.
+     */
+    public ItemStack getPacketTrackedHeldItem() {
+        ItemStack item = inventory.getHeldItem();
+        return item == null ? ItemStack.EMPTY : item;
+    }
+
+    /**
+     * Returns a held stack derived from the native platform main-hand key (for example, minecraft:diamond_pickaxe)
+     * to avoid protocol-ID mapping drift in snapshot versions.
+     */
+    public ItemStack getNativeKeyMainHandStack() {
+        if (player.platformPlayer == null) {
+            return ItemStack.EMPTY;
+        }
+        String key = player.platformPlayer.getInventory().getNativeMainHandItemKey();
+        if (key == null || key.isBlank() || "minecraft:air".equals(key) || "air".equals(key)) {
+            return ItemStack.EMPTY;
+        }
+        String normalized = key.startsWith("minecraft:") ? key.substring("minecraft:".length()) : key;
+        ItemType type = ItemTypes.getByName(normalized);
+        if (type == null) {
+            type = ItemTypes.getByName(key);
+        }
+        if (type == null) {
+            return ItemStack.EMPTY;
+        }
+        return ItemStack.builder().type(type).amount(1).build();
+    }
+
     public ItemStack getOffHand() {
         if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThan(ServerVersion.V_1_9))
             return ItemStack.EMPTY;
@@ -271,6 +305,13 @@ public class CompensatedInventory extends Check implements PacketCheck {
             if (slot > 8 || slot < 0) return;
 
             inventory.setSelected(slot);
+            LogUtil.info(String.format(
+                    "[TRACE][held-item-change] player=%s slot=%d storageSlot=%d heldNow=%s hasTOOL=%s",
+                    player.user.getName(),
+                    slot,
+                    slot + Inventory.HOTBAR_OFFSET,
+                    getHeldItem().getType().getName(),
+                    getHeldItem().hasComponent(com.github.retrooper.packetevents.protocol.component.ComponentTypes.TOOL)));
         } else if (event.getPacketType() == PacketType.Play.Client.CREATIVE_INVENTORY_ACTION) {
             WrapperPlayClientCreativeInventoryAction action = new WrapperPlayClientCreativeInventoryAction(event);
             if (player.gamemode != GameMode.CREATIVE) return;
@@ -391,8 +432,17 @@ public class CompensatedInventory extends Check implements PacketCheck {
             stateID = items.getStateId();
 
             List<ItemStack> slots = items.getItems();
+            final boolean vanillaPlayerInventoryIndices = items.getWindowId() == 0
+                    && PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_21_2);
             for (int i = 0; i < slots.size(); i++) {
-                markServerForChangingSlot(i, items.getWindowId());
+                if (items.getWindowId() == 0 && vanillaPlayerInventoryIndices) {
+                    int mapped = vanillaInvToStorageSlot(i);
+                    if (mapped >= 0) {
+                        inventory.getInventoryStorage().handleServerCorrectSlot(mapped);
+                    }
+                } else {
+                    markServerForChangingSlot(i, items.getWindowId());
+                }
             }
 
             final int cachedPacketInvSize = packetSendingInventorySize;
@@ -413,7 +463,26 @@ public class CompensatedInventory extends Check implements PacketCheck {
                 player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get(), () -> {
                     if (!isPacketInventoryActive) return;
                     for (int i = 0; i < slots.size(); i++) {
-                        inventory.getSlot(i).set(slots.get(i));
+                        int slotToSet = vanillaPlayerInventoryIndices ? vanillaInvToStorageSlot(i) : i;
+                        if (slotToSet < 0 || slotToSet > 45) continue;
+                        inventory.getSlot(slotToSet).set(slots.get(i));
+                        if (slotToSet == Inventory.SLOT_HELMET || slotToSet == Inventory.SLOT_CHESTPLATE || slotToSet == Inventory.SLOT_LEGGINGS
+                                || slotToSet == Inventory.SLOT_BOOTS || slotToSet == Inventory.SLOT_OFFHAND
+                                || (slotToSet >= Inventory.HOTBAR_OFFSET && slotToSet < Inventory.HOTBAR_OFFSET + 9)) {
+                            ItemStack stack = slots.get(i);
+                            LogUtil.info(String.format(
+                                    "[TRACE][window-items-slot] player=%s windowId=%d slotCount=%d rawSlot=%d appliedSlot=%d vanillaIndexMode=%s item=%s hasTOOL=%s selected=%d heldNow=%s",
+                                    player.user.getName(),
+                                    items.getWindowId(),
+                                    slots.size(),
+                                    i,
+                                    slotToSet,
+                                    vanillaPlayerInventoryIndices,
+                                    stack.getType().getName(),
+                                    stack.hasComponent(com.github.retrooper.packetevents.protocol.component.ComponentTypes.TOOL),
+                                    inventory.getSelected(),
+                                    getHeldItem().getType().getName()));
+                        }
                     }
                     if (items.getCarriedItem().isPresent()) {
                         inventory.setCarried(items.getCarriedItem().get());
@@ -441,17 +510,36 @@ public class CompensatedInventory extends Check implements PacketCheck {
             });
         }
 
-        // This packet replaces SET_SLOT for player inventory for 1.21.2+
+        // This packet replaces SET_SLOT for player inventory for 1.21.2+.
+        // Its slot IDs use vanilla Inventory indices (hotbar=0-8, main=9-35, armor=36-39, offhand=40),
+        // NOT the container screen slot indices that inventory.getSlot() expects.
         if (event.getPacketType() == PacketType.Play.Server.SET_PLAYER_INVENTORY) {
             WrapperPlayServerSetPlayerInventory slot = new WrapperPlayServerSetPlayerInventory(event);
-            final int slotID = slot.getSlot();
+            final int vanillaSlot = slot.getSlot();
             final ItemStack item = slot.getStack();
+            final int storageSlot = vanillaInvToStorageSlot(vanillaSlot);
 
-            inventory.getInventoryStorage().handleServerCorrectSlot(slotID);
+            if (storageSlot < 0) return;
+
+            inventory.getInventoryStorage().handleServerCorrectSlot(storageSlot);
 
             player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get(), () -> {
                 if (!isPacketInventoryActive) return;
-                inventory.getSlot(slotID).set(item);
+                inventory.getInventoryStorage().setItem(storageSlot, item);
+
+                // Focused inventory-sync trace for 1.21.2+ set-player-inventory slot translation.
+                if ((vanillaSlot >= 0 && vanillaSlot <= 8) || (vanillaSlot >= 36 && vanillaSlot <= 40)) {
+                    LogUtil.info(String.format(
+                            "[TRACE][set-player-inventory] player=%s vanillaSlot=%d storageSlot=%d item=%s hasTOOL=%s selected=%d heldNow=%s heldHasTOOL=%s",
+                            player.user.getName(),
+                            vanillaSlot,
+                            storageSlot,
+                            item.getType().getName(),
+                            item.hasComponent(com.github.retrooper.packetevents.protocol.component.ComponentTypes.TOOL),
+                            inventory.getSelected(),
+                            getHeldItem().getType().getName(),
+                            getHeldItem().hasComponent(com.github.retrooper.packetevents.protocol.component.ComponentTypes.TOOL)));
+                }
             });
         }
 
@@ -465,10 +553,19 @@ public class CompensatedInventory extends Check implements PacketCheck {
             final int inventoryID = slot.getWindowId();
             final ItemStack item = slot.getItem();
 
+            // 1.21.2+ can surface player inventory updates in terms of vanilla inventory indices
+            // (hotbar 0-8, main 9-35, armor 36-39, offhand 40). When this happens through window 0,
+            // translate before touching compensated storage.
+            final boolean treatAsVanillaPlayerInventoryIndex = inventoryID == 0
+                    && PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_21_2)
+                    && slotID >= 0 && slotID <= 40;
+            final int translatedPlayerSlot = treatAsVanillaPlayerInventoryIndex ? vanillaInvToStorageSlot(slotID) : slotID;
+
             if (inventoryID == -2) { // Direct inventory change
                 inventory.getInventoryStorage().handleServerCorrectSlot(slotID);
             } else if (inventoryID == 0) { // Inventory change through window ID, no crafting result
-                inventory.getInventoryStorage().handleServerCorrectSlot(slotID);
+                if (translatedPlayerSlot < 0) return;
+                inventory.getInventoryStorage().handleServerCorrectSlot(translatedPlayerSlot);
             } else {
                 markServerForChangingSlot(slotID, inventoryID);
             }
@@ -487,8 +584,23 @@ public class CompensatedInventory extends Check implements PacketCheck {
                     // This packet can only be used to edit the hotbar and offhand of the player's inventory if
                     // window ID is set to 0 (slots 36 through 45) if the player is in creative, with their inventory open,
                     // and not in their survival inventory tab. Otherwise, when window ID is 0, it can edit any slot in the player's inventory.
-                    if (slotID >= 0 && slotID <= 45) {
-                        inventory.getSlot(slotID).set(item);
+                    final int slotToSet = treatAsVanillaPlayerInventoryIndex ? translatedPlayerSlot : slotID;
+                    if (slotToSet >= 0 && slotToSet <= 45) {
+                        inventory.getSlot(slotToSet).set(item);
+                        if (slotToSet == Inventory.SLOT_HELMET || slotToSet == Inventory.SLOT_CHESTPLATE || slotToSet == Inventory.SLOT_LEGGINGS
+                                || slotToSet == Inventory.SLOT_BOOTS || slotToSet == Inventory.SLOT_OFFHAND
+                                || (slotToSet >= Inventory.HOTBAR_OFFSET && slotToSet < Inventory.HOTBAR_OFFSET + 9)) {
+                            LogUtil.info(String.format(
+                                    "[TRACE][set-slot-player-inv] player=%s rawSlot=%d appliedSlot=%d vanillaIndexMode=%s item=%s hasTOOL=%s selected=%d heldNow=%s",
+                                    player.user.getName(),
+                                    slotID,
+                                    slotToSet,
+                                    treatAsVanillaPlayerInventoryIndex,
+                                    item.getType().getName(),
+                                    item.hasComponent(com.github.retrooper.packetevents.protocol.component.ComponentTypes.TOOL),
+                                    inventory.getSelected(),
+                                    getHeldItem().getType().getName()));
+                        }
                     }
                 } else if (inventoryID == openWindowID) { // Opened inventory (if not valid, client crashes)
                     menu.getSlot(slotID).set(item);
@@ -505,5 +617,31 @@ public class CompensatedInventory extends Check implements PacketCheck {
         openWindowID = 0;
         menu = inventory;
         menu.setCarried(ItemStack.EMPTY); // Reset carried item
+    }
+
+    /**
+     * Translate a vanilla {@code Inventory} slot index (used by {@code SET_PLAYER_INVENTORY}) to the
+     * internal {@link ac.reaper.reaperac.utils.lists.CorrectingPlayerInventoryStorage} index.
+     *
+     * <p>Vanilla layout: hotbar 0-8, main 9-35, armor 36-39 (FEET,LEGS,CHEST,HEAD), offhand 40.
+     * <br>Storage layout: helmet 4, chest 5, legs 6, boots 7, main 9-35, hotbar 36-44, offhand 45.
+     *
+     * @return storage slot index, or -1 if the slot is not tracked (body, saddle, etc.)
+     */
+    static int vanillaInvToStorageSlot(int vanillaSlot) {
+        if (vanillaSlot >= 0 && vanillaSlot < 9) {
+            return vanillaSlot + Inventory.HOTBAR_OFFSET; // hotbar 0-8 → storage 36-44
+        }
+        if (vanillaSlot >= 9 && vanillaSlot < 36) {
+            return vanillaSlot; // main inventory 9-35 → same
+        }
+        return switch (vanillaSlot) {
+            case 36 -> Inventory.SLOT_BOOTS;      // FEET → storage 7
+            case 37 -> Inventory.SLOT_LEGGINGS;   // LEGS → storage 6
+            case 38 -> Inventory.SLOT_CHESTPLATE;  // CHEST → storage 5
+            case 39 -> Inventory.SLOT_HELMET;      // HEAD → storage 4
+            case 40 -> Inventory.SLOT_OFFHAND;     // offhand → storage 45
+            default -> -1;
+        };
     }
 }

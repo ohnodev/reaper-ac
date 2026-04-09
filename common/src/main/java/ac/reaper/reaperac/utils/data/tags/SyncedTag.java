@@ -1,11 +1,14 @@
 package ac.reaper.reaperac.utils.data.tags;
 
+import ac.reaper.reaperac.utils.anticheat.LogUtil;
+import com.github.retrooper.packetevents.protocol.world.states.type.StateType;
 import com.github.retrooper.packetevents.resources.ResourceLocation;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerTags;
 
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 public final class SyncedTag<T> {
@@ -14,6 +17,7 @@ public final class SyncedTag<T> {
     private final Set<T> values;
     private final Function<Integer, T> remapper;
     private final boolean supported;
+    private static final Set<String> LOGGED_MISSING_IDS = ConcurrentHashMap.newKeySet();
 
     private SyncedTag(ResourceLocation location, Function<Integer, T> remapper, Set<T> defaultValues, boolean supported) {
         this.location = location;
@@ -35,14 +39,45 @@ public final class SyncedTag<T> {
         return values.contains(value);
     }
 
+    /**
+     * Like {@link #contains} but also matches {@link StateType} entries by {@link StateType#getName()} when the
+     * runtime block type is not the same object (or not {@link StateType#equals(Object)} to) the static
+     * {@code StateTypes.*} constants in {@code BlockTags}. {@link #values} uses identity for defaults; tag sync
+     * remaps use registry instances — both must recognize the same logical block for mining checks.
+     */
+    public boolean matchesBlock(StateType block) {
+        @SuppressWarnings("unchecked")
+        T asMember = (T) block;
+        if (contains(asMember)) {
+            return true;
+        }
+        String name = block.getName();
+        for (T member : values) {
+            if (member instanceof StateType st && st.getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void readTagValues(WrapperPlayServerTags.Tag tag) {
         if (!supported) return;
 
-        // Server is sending tag replacement, clear default values.
-        values.clear();
+        final Set<T> nextValues = Collections.newSetFromMap(new IdentityHashMap<>());
         for (int id : tag.getValues()) {
-            values.add(remapper.apply(id));
+            T mapped = remapper.apply(id);
+            if (mapped != null) {
+                nextValues.add(mapped);
+                continue;
+            }
+            String dedupe = location + "#" + id;
+            if (LOGGED_MISSING_IDS.add(dedupe)) {
+                LogUtil.error("[CRITICAL] Missing tag remap id=" + id + " for tag=" + location
+                        + " (26.2-only runtime; no legacy fallback)");
+            }
         }
+        values.clear();
+        values.addAll(nextValues);
     }
 
     public static final class Builder<T> {

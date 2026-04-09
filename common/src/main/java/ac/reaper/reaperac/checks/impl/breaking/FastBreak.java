@@ -82,7 +82,7 @@ public class FastBreak extends Check implements BlockBreakCheck {
 
             if (blockDelayBalance > 1000) { // If more than a second of advantage
                 if (flagAndAlert("delay=" + breakDelay + "ms, type=" + blockBreak.block.getType()) && shouldModifyPackets()) {
-                    blockBreak.cancel();
+                    blockBreak.cancel("FastBreak delay=" + breakDelay + "ms balance=" + blockDelayBalance + " maxDamage=" + maximumBlockDamage);
                 }
             }
 
@@ -90,6 +90,23 @@ public class FastBreak extends Check implements BlockBreakCheck {
         }
 
         if (blockBreak.action == DiggingAction.FINISHED_DIGGING && targetBlockPosition != null) {
+            if (!blockBreak.position.equals(targetBlockPosition)) {
+                // Mismatched finish must clear current break state; otherwise unrelated starts can reuse
+                // old timing and damage values.
+                targetBlockPosition = null;
+                maximumBlockDamage = 0;
+                lastFinishBreak = 0;
+                startBreak = 0;
+                return;
+            }
+
+            // Prefer the higher of animation-accumulated damage and damage for the block type in this FINISH packet.
+            maximumBlockDamage = Math.max(maximumBlockDamage, BlockBreakSpeed.getBlockDamage(player, blockBreak.block));
+            if (maximumBlockDamage <= 0) {
+                lastFinishBreak = startBreak = System.currentTimeMillis();
+                return;
+            }
+
             double predictedTime = Math.ceil(1 / maximumBlockDamage) * 50;
             double realTime = System.currentTimeMillis() - startBreak;
             double diff = predictedTime - realTime;
@@ -104,7 +121,7 @@ public class FastBreak extends Check implements BlockBreakCheck {
 
             if (blockBreakBalance > 1000) { // If more than a second of advantage
                 if (flagAndAlert("diff=" + diff + "ms, balance=" + blockBreakBalance + "ms, type=" + blockBreak.block.getType()) && shouldModifyPackets()) {
-                    blockBreak.cancel();
+                    blockBreak.cancel("FastBreak diff=" + diff + "ms predicted=" + predictedTime + " real=" + realTime + " balance=" + blockBreakBalance);
                 }
             }
 
@@ -127,4 +144,5 @@ public class FastBreak extends Check implements BlockBreakCheck {
         blockBreakBalance = GrimMath.clamp(blockBreakBalance, -balance, balance); // Clamp not Math.max in case other logic changes
         blockDelayBalance = GrimMath.clamp(blockDelayBalance, -balance, balance);
     }
+
 }

@@ -35,10 +35,11 @@ final class PacketDecodeUtils {
             return;
         }
 
-        LogUtil.warn("Suppressed PacketEvents decode exception in " + source
+        LogUtil.error("[CRITICAL] Suppressed PacketEvents decode exception in " + source
                 + " packet=" + packetType
                 + " cause=" + throwable.getClass().getSimpleName()
-                + ": " + throwable.getMessage());
+                + ": " + throwable.getMessage()
+                + " (no protocol fallback path; check 26.2 mappings immediately)");
     }
 
     private static boolean isDecodeThrowableType(Throwable throwable) {

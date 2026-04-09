@@ -2,6 +2,7 @@ package ac.reaper.reaperac.events.packets;
 
 import ac.reaper.reaperac.GrimAPI;
 import ac.reaper.reaperac.player.GrimPlayer;
+import ac.reaper.reaperac.utils.anticheat.LogUtil;
 import ac.reaper.reaperac.utils.anticheat.update.*;
 import ac.reaper.reaperac.utils.blockplace.BlockPlaceResult;
 import ac.reaper.reaperac.utils.blockplace.ConsumesBlockPlace;
@@ -47,6 +48,8 @@ import java.util.List;
 import java.util.function.Function;
 
 public class CheckManagerListener extends PacketListenerAbstract {
+    private static final boolean DEBUG_DIG_HELD_TRACE =
+            Boolean.getBoolean("reaper.debug.dig-held-trace");
     // Manual filter on FINISH_DIGGING to prevent clients setting non-breakable blocks to air
     private static final Function<StateType, Boolean> BREAKABLE = type -> !type.isAir() && type.getHardness() != -1.0f && type != StateTypes.WATER && type != StateTypes.LAVA;
 
@@ -797,6 +800,7 @@ public class CheckManagerListener extends PacketListenerAbstract {
         }
 
         final BlockBreak blockBreak = new BlockBreak(player, packet.getBlockPosition(), packet.getBlockFace(), packet.getBlockFaceId(), action, packet.getSequence(), player.compensatedWorld.getBlock(packet.getBlockPosition()));
+        traceDigHeldItem(player, blockBreak);
 
         player.checkManager.onBlockBreak(blockBreak);
 
@@ -842,5 +846,46 @@ public class CheckManagerListener extends PacketListenerAbstract {
         }
 
         player.compensatedWorld.handleBlockBreakPrediction(packet);
+    }
+
+    private static void traceDigHeldItem(GrimPlayer player, BlockBreak blockBreak) {
+        if (!DEBUG_DIG_HELD_TRACE) {
+            return;
+        }
+        String state = blockBreak.block.getType().getName();
+        String normalized = state.toLowerCase();
+        if (!normalized.contains("sulfur") && !normalized.contains("cinnabar")) {
+            return;
+        }
+
+        ItemStack packetHeld = player.inventory.getPacketTrackedHeldItem();
+        ItemStack effectiveHeld = player.inventory.getHeldItem();
+        ItemStack platformHeld = ItemStack.EMPTY;
+        if (player.platformPlayer != null) {
+            ItemStack inHand = player.platformPlayer.getInventory().getItemInHand();
+            if (inHand != null) {
+                platformHeld = inHand;
+            }
+        }
+
+        LogUtil.getLogger().fine(String.format(
+                "[TRACE][dig-held] user=%s action=%s pos=%s seq=%d selected=%d lastSelected=%d packetInvActive=%s "
+                        + "packetHeld=%s(tool=%s,empty=%s) effectiveHeld=%s(tool=%s,empty=%s) platformHeld=%s(tool=%s,empty=%s)",
+                player.user.getName(),
+                blockBreak.action,
+                blockBreak.position,
+                blockBreak.sequence,
+                player.inventory.inventory.getSelected(),
+                player.packetStateData.lastSlotSelected,
+                player.inventory.isPacketInventoryActive,
+                packetHeld.getType().getName(),
+                packetHeld.hasComponent(com.github.retrooper.packetevents.protocol.component.ComponentTypes.TOOL),
+                packetHeld.isEmpty(),
+                effectiveHeld.getType().getName(),
+                effectiveHeld.hasComponent(com.github.retrooper.packetevents.protocol.component.ComponentTypes.TOOL),
+                effectiveHeld.isEmpty(),
+                platformHeld.getType().getName(),
+                platformHeld.hasComponent(com.github.retrooper.packetevents.protocol.component.ComponentTypes.TOOL),
+                platformHeld.isEmpty()));
     }
 }

@@ -40,7 +40,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: ohnodev/packetevents
-          ref: 67056a4d6d0a085d11e229c347306370aa7ea1b8
+          ref: 8111402533ebb85f8244c4050797c5ef1a2a60b0
           path: packetevents-26.2
           fetch-depth: 1
 
