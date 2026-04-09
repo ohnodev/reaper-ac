@@ -30,7 +30,7 @@ Geyser players are fully exempt from the anticheat to prevent false positives.
 
 - **Java 25** or higher (required by MC 26.2 / Fabric Loader).
 - A Fabric server environment running Minecraft 26.2 Snapshot 2.
-- **Fabric Loader:** 0.19.x for MC 26.2 Snapshot 2 (minecraft-cabal currently runs 0.19.0; latest is 0.19.1).
+- **Fabric Loader:** 0.19.1+ for MC 26.2 Snapshot 2.
 - **Fabric API:** use a build that matches the MC 26.2 snapshot line (minecraft-cabal currently runs `fabric-api-0.145.5+26.2-snapshot-1.jar`).
 - References:
   - Fabric Loader releases: https://github.com/FabricMC/fabric-loader/releases/tag/0.19.1
