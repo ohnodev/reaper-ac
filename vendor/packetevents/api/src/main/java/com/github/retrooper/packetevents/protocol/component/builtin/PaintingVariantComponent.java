@@ -31,7 +31,7 @@ public class PaintingVariantComponent {
     private PaintingVariant variant;
 
     public PaintingVariantComponent(PaintingVariant variant) {
-        this.variant = variant;
+        this.variant = Objects.requireNonNull(variant, "PaintingVariant must not be null");
     }
 
     public static PaintingVariantComponent read(PacketWrapper<?> wrapper) {
@@ -83,7 +83,7 @@ public class PaintingVariantComponent {
     }
 
     public void setVariant(PaintingVariant variant) {
-        this.variant = variant;
+        this.variant = Objects.requireNonNull(variant, "PaintingVariant must not be null");
     }
 
     @Override

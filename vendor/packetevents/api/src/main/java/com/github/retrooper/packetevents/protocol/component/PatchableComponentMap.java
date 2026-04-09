@@ -85,7 +85,7 @@ public class PatchableComponentMap implements IComponentMap {
             IRegistryHolder registries
     ) {
         this.base = Collections.unmodifiableMap(new HashMap<>(base));
-        this.patches = patches;
+        this.patches = new HashMap<>(patches);
         this.registries = registries;
     }
 

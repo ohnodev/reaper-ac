@@ -94,7 +94,15 @@ public class Color implements RGBLike {
         if (nbt instanceof NBTNumber) {
             return new Color(((NBTNumber) nbt).getAsInt());
         }
+        if (!(nbt instanceof NBTList)) {
+            throw new IllegalArgumentException(
+                    "Expected NBTNumber or NBTList for Color, got " + nbt.getClass().getSimpleName());
+        }
         NBTList<?> list = (NBTList<?>) nbt;
+        if (list.size() < 3) {
+            throw new IllegalArgumentException(
+                    "Color NBTList must have at least 3 elements, got " + list.size());
+        }
         float red = ((NBTNumber) list.getTag(0)).getAsFloat();
         float green = ((NBTNumber) list.getTag(1)).getAsFloat();
         float blue = ((NBTNumber) list.getTag(2)).getAsFloat();
@@ -179,7 +187,7 @@ public class Color implements RGBLike {
         } else if (srcAlpha == 0) {
             return this.withAlpha();
         }
-        int alpha = srcAlpha + (255 - srcAlpha);
+        int alpha = 255;
         return new AlphaColor(
                 alpha,
                 alphaBlendChannel(alpha, srcAlpha, this.red, source.red),

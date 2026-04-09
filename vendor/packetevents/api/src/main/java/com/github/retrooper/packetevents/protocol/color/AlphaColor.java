@@ -85,7 +85,15 @@ public final class AlphaColor extends Color {
         if (nbt instanceof NBTNumber) {
             return new AlphaColor(((NBTNumber) nbt).getAsInt());
         }
+        if (!(nbt instanceof NBTList)) {
+            throw new IllegalArgumentException(
+                    "Expected NBTNumber or NBTList for AlphaColor, got " + nbt.getClass().getSimpleName());
+        }
         NBTList<?> list = (NBTList<?>) nbt;
+        if (list.size() < 4) {
+            throw new IllegalArgumentException(
+                    "AlphaColor NBTList must have at least 4 elements, got " + list.size());
+        }
         float red = ((NBTNumber) list.getTag(0)).getAsFloat();
         float green = ((NBTNumber) list.getTag(1)).getAsFloat();
         float blue = ((NBTNumber) list.getTag(2)).getAsFloat();
