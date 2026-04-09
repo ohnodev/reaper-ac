@@ -5,8 +5,11 @@ import com.github.retrooper.packetevents.protocol.item.type.ItemType;
 import com.github.retrooper.packetevents.protocol.item.type.ItemTypes;
 import com.github.retrooper.packetevents.protocol.world.states.type.StateType;
 import com.github.retrooper.packetevents.protocol.world.states.type.StateTypes;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.api.TestInstance;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,12 +21,25 @@ import static org.junit.jupiter.api.Assertions.*;
  * Comprehensive tests for all 26.2 materials (sulfur family, cinnabar family)
  * with every relevant tool type using real PacketEvents types.
  */
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class Material26_2Test {
+    private BlockBreakTestFixture fixture;
+
+    @BeforeAll
+    void setUpFixture() {
+        fixture = new BlockBreakTestFixture();
+    }
+
+    @AfterAll
+    void tearDownFixture() {
+        if (fixture != null) {
+            fixture.close();
+        }
+    }
 
     @TestFactory
     Collection<DynamicTest> allMaterial26_2Tests() {
-        try (BlockBreakTestFixture fixture = new BlockBreakTestFixture()) {
-            List<DynamicTest> tests = new ArrayList<>();
+        List<DynamicTest> tests = new ArrayList<>();
 
             StateType[] sulfurBlocks = {
                     StateTypes.SULFUR, StateTypes.POTENT_SULFUR,
@@ -54,40 +70,41 @@ class Material26_2Test {
                     new ToolDef("netherite_pickaxe", ItemTypes.NETHERITE_PICKAXE, 350),
             };
 
-            // Sulfur family × all pickaxe tiers
-            for (StateType block : sulfurBlocks) {
-                for (ToolDef tool : pickaxes) {
-                    ItemStack stack = ItemStack.builder().type(tool.type).build();
+        // Sulfur family × all pickaxe tiers
+        for (StateType block : sulfurBlocks) {
+            for (ToolDef tool : pickaxes) {
+                ItemStack stack = ItemStack.builder().type(tool.type).build();
+                String label = block.getName() + " + " + tool.name;
+                tests.add(DynamicTest.dynamicTest(label, () -> {
                     double predicted = fixture.predictedBreakTimeMs(stack, block);
-                    String label = block.getName() + " + " + tool.name;
-                    tests.add(DynamicTest.dynamicTest(label, () -> {
-                        assertTrue(predicted > 0, label + ": predicted must be positive");
-                        assertTrue(predicted <= tool.maxMs,
-                                label + ": predicted=" + predicted + "ms exceeds max=" + tool.maxMs + "ms");
-                    }));
-                }
+                    assertTrue(predicted > 0, label + ": predicted must be positive");
+                    assertTrue(predicted <= tool.maxMs,
+                            label + ": predicted=" + predicted + "ms exceeds max=" + tool.maxMs + "ms");
+                }));
             }
-
-            // Cinnabar family × stone pickaxe
-            ItemStack stonePick = ItemStack.builder().type(ItemTypes.STONE_PICKAXE).build();
-            for (StateType block : cinnabarBlocks) {
-                double predicted = fixture.predictedBreakTimeMs(stonePick, block);
-                String label = block.getName() + " + stone_pickaxe";
-                tests.add(DynamicTest.dynamicTest(label, () ->
-                        assertTrue(predicted <= 800,
-                                label + ": predicted=" + predicted + "ms exceeds 800ms")));
-            }
-
-            // Bare hand on sulfur/cinnabar should be slow
-            for (StateType block : new StateType[]{StateTypes.SULFUR, StateTypes.CINNABAR}) {
-                double predicted = fixture.predictedBreakTimeMs(ItemStack.EMPTY, block);
-                String label = block.getName() + " + bare_hand";
-                tests.add(DynamicTest.dynamicTest(label, () ->
-                        assertTrue(predicted >= 7000,
-                                label + ": bare hand should be >= 7000ms, got " + predicted + "ms")));
-            }
-
-            return tests;
         }
+
+        // Cinnabar family × stone pickaxe
+        ItemStack stonePick = ItemStack.builder().type(ItemTypes.STONE_PICKAXE).build();
+        for (StateType block : cinnabarBlocks) {
+            String label = block.getName() + " + stone_pickaxe";
+            tests.add(DynamicTest.dynamicTest(label, () -> {
+                double predicted = fixture.predictedBreakTimeMs(stonePick, block);
+                assertTrue(predicted <= 800,
+                        label + ": predicted=" + predicted + "ms exceeds 800ms");
+            }));
+        }
+
+        // Bare hand on sulfur/cinnabar should be slow
+        for (StateType block : new StateType[]{StateTypes.SULFUR, StateTypes.CINNABAR}) {
+            String label = block.getName() + " + bare_hand";
+            tests.add(DynamicTest.dynamicTest(label, () -> {
+                double predicted = fixture.predictedBreakTimeMs(ItemStack.EMPTY, block);
+                assertTrue(predicted >= 7000,
+                        label + ": bare hand should be >= 7000ms, got " + predicted + "ms");
+            }));
+        }
+
+        return tests;
     }
 }

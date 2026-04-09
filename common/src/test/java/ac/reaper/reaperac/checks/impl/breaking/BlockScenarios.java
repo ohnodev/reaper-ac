@@ -1,6 +1,6 @@
 package ac.reaper.reaperac.checks.impl.breaking;
 
-import com.github.retrooper.packetevents.protocol.component.ComponentType;
+import com.github.retrooper.packetevents.protocol.component.ComponentTypes;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemTool;
 import com.github.retrooper.packetevents.protocol.item.ItemStack;
 import com.github.retrooper.packetevents.protocol.item.type.ItemType;
@@ -155,16 +155,7 @@ public final class BlockScenarios {
 
     @SuppressWarnings("unchecked")
     private static void stubToolComponent(ItemStack stack, ItemTool tool) {
-        when(stack.getComponent(any(ComponentType.class))).thenAnswer(inv -> {
-            ComponentType<?> compType = inv.getArgument(0);
-            if (compType != null && "minecraft:tool".equals(compType.getName().toString())) {
-                return Optional.of(tool);
-            }
-            return Optional.empty();
-        });
-        when(stack.hasComponent(any(ComponentType.class))).thenAnswer(inv -> {
-            ComponentType<?> compType = inv.getArgument(0);
-            return compType != null && "minecraft:tool".equals(compType.getName().toString());
-        });
+        when(stack.getComponent(ComponentTypes.TOOL)).thenReturn(Optional.of(tool));
+        when(stack.hasComponent(ComponentTypes.TOOL)).thenReturn(true);
     }
 }

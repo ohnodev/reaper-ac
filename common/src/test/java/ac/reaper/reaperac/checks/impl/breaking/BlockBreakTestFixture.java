@@ -14,6 +14,9 @@ import com.github.retrooper.packetevents.PacketEventsAPI;
 import com.github.retrooper.packetevents.manager.server.ServerManager;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.netty.NettyManager;
+import com.github.retrooper.packetevents.netty.buffer.ByteBufAllocationOperator;
+import com.github.retrooper.packetevents.netty.buffer.ByteBufOperator;
+import com.github.retrooper.packetevents.netty.channel.ChannelOperator;
 import com.github.retrooper.packetevents.protocol.attribute.Attribute;
 import com.github.retrooper.packetevents.protocol.item.ItemStack;
 import com.github.retrooper.packetevents.protocol.item.type.ItemType;
@@ -22,7 +25,8 @@ import com.github.retrooper.packetevents.protocol.player.GameMode;
 import com.github.retrooper.packetevents.protocol.world.states.type.StateType;
 import com.github.retrooper.packetevents.resources.ResourceLocation;
 import com.github.retrooper.packetevents.settings.PacketEventsSettings;
-import io.github.retrooper.packetevents.impl.netty.NettyManagerImpl;
+import io.github.retrooper.packetevents.impl.netty.buffer.ByteBufAllocationOperatorImpl;
+import io.github.retrooper.packetevents.impl.netty.buffer.ByteBufOperatorImpl;
 import org.mockito.MockedStatic;
 
 import java.lang.reflect.Field;
@@ -59,7 +63,13 @@ public final class BlockBreakTestFixture implements AutoCloseable {
         PacketEventsSettings settings = new PacketEventsSettings();
         when(api.getSettings()).thenReturn(settings);
 
-        NettyManager nettyManager = new NettyManagerImpl();
+        NettyManager nettyManager = mock(NettyManager.class);
+        ByteBufOperator byteBufOperator = new ByteBufOperatorImpl();
+        ByteBufAllocationOperator allocationOperator = new ByteBufAllocationOperatorImpl();
+        ChannelOperator channelOperator = mock(ChannelOperator.class);
+        when(nettyManager.getChannelOperator()).thenReturn(channelOperator);
+        when(nettyManager.getByteBufOperator()).thenReturn(byteBufOperator);
+        when(nettyManager.getByteBufAllocationOperator()).thenReturn(allocationOperator);
         when(api.getNettyManager()).thenReturn(nettyManager);
 
         player = mock(GrimPlayer.class, RETURNS_DEEP_STUBS);

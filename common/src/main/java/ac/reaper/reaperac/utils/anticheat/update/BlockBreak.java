@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class BlockBreak {
+    private static final boolean DEBUG_BREAK_CANCEL_TRACE =
+            Boolean.getBoolean("reaper.debug.break-cancel-trace");
     public final Vector3i position;
     public final BlockFace face;
     public final int faceId;
@@ -67,12 +69,15 @@ public final class BlockBreak {
     }
 
     private void traceCancel(String reason) {
+        if (!DEBUG_BREAK_CANCEL_TRACE) {
+            return;
+        }
         String state = block.getType().getName();
         if (!isSulfurFamily(state)) {
             return;
         }
         StateType t = block.getType();
-        LogUtil.info("[TRACE][break-cancel] user=" + player.user.getName() + "/" + player.user.getUUID()
+        LogUtil.info("[TRACE][break-cancel] user=<redacted>"
                 + " check=" + resolveCheckName()
                 + " reason=" + reason
                 + " action=" + action

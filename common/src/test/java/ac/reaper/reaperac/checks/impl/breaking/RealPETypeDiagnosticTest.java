@@ -12,6 +12,7 @@ import com.github.retrooper.packetevents.resources.ResourceLocation;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestReporter;
 
 import java.util.Optional;
 import java.util.Set;
@@ -83,7 +84,7 @@ class RealPETypeDiagnosticTest {
     // ---- ItemStack TOOL component checks ----
 
     @Test
-    void stone_pickaxe_itemstack_has_tool_component() {
+    void stone_pickaxe_itemstack_has_tool_component(TestReporter reporter) {
         ItemStack stack = ItemStack.builder()
                 .type(ItemTypes.STONE_PICKAXE)
                 .build();
@@ -96,13 +97,13 @@ class RealPETypeDiagnosticTest {
         assertFalse(tool.getRules().isEmpty(),
                 "TOOL component should have at least one rule");
 
-        System.out.println("[DIAG] STONE_PICKAXE TOOL component:");
-        System.out.println("  defaultMiningSpeed=" + tool.getDefaultMiningSpeed());
-        System.out.println("  rules count=" + tool.getRules().size());
+        reporter.publishEntry("diag", "[DIAG] STONE_PICKAXE TOOL component:");
+        reporter.publishEntry("diag", "  defaultMiningSpeed=" + tool.getDefaultMiningSpeed());
+        reporter.publishEntry("diag", "  rules count=" + tool.getRules().size());
         for (int i = 0; i < tool.getRules().size(); i++) {
             ItemTool.Rule rule = tool.getRules().get(i);
             ResourceLocation tagKey = rule.getBlocks().getTagKey();
-            System.out.println("  rule[" + i + "] tagKey=" + tagKey
+            reporter.publishEntry("diag", "  rule[" + i + "] tagKey=" + tagKey
                     + " speed=" + rule.getSpeed()
                     + " correctForDrops=" + rule.getCorrectForDrops());
         }
@@ -111,7 +112,7 @@ class RealPETypeDiagnosticTest {
     // ---- End-to-end: real PE types through BlockBreakSpeed ----
 
     @Test
-    void sulfur_with_real_stone_pickaxe_stack_damage_is_correct() {
+    void sulfur_with_real_stone_pickaxe_stack_damage_is_correct(TestReporter reporter) {
         ItemStack stack = ItemStack.builder()
                 .type(ItemTypes.STONE_PICKAXE)
                 .build();
@@ -120,9 +121,9 @@ class RealPETypeDiagnosticTest {
         double damage = fixture.computeBlockDamage(stack, StateTypes.SULFUR);
         double predicted = fixture.predictedBreakTimeMs(stack, StateTypes.SULFUR);
 
-        System.out.println("[DIAG] sulfur + real STONE_PICKAXE stack:");
-        System.out.println("  damage/tick=" + damage);
-        System.out.println("  predicted=" + predicted + "ms");
+        reporter.publishEntry("diag", "[DIAG] sulfur + real STONE_PICKAXE stack:");
+        reporter.publishEntry("diag", "  damage/tick=" + damage);
+        reporter.publishEntry("diag", "  predicted=" + predicted + "ms");
 
         assertTrue(predicted < 2000,
                 "Real STONE_PICKAXE on SULFUR must predict < 2000ms, got " + predicted + "ms. "
@@ -130,14 +131,14 @@ class RealPETypeDiagnosticTest {
     }
 
     @Test
-    void sulfur_with_real_iron_pickaxe_stack_damage_is_correct() {
+    void sulfur_with_real_iron_pickaxe_stack_damage_is_correct(TestReporter reporter) {
         ItemStack stack = ItemStack.builder()
                 .type(ItemTypes.IRON_PICKAXE)
                 .build();
         fixture.setHeldItem(stack);
 
         double predicted = fixture.predictedBreakTimeMs(stack, StateTypes.SULFUR);
-        System.out.println("[DIAG] sulfur + real IRON_PICKAXE: predicted=" + predicted + "ms");
+        reporter.publishEntry("diag", "[DIAG] sulfur + real IRON_PICKAXE: predicted=" + predicted + "ms");
 
         assertTrue(predicted < 1000,
                 "Real IRON_PICKAXE on SULFUR must predict < 1000ms, got " + predicted + "ms");

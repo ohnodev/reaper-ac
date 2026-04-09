@@ -91,11 +91,12 @@ public class FastBreak extends Check implements BlockBreakCheck {
 
         if (blockBreak.action == DiggingAction.FINISHED_DIGGING && targetBlockPosition != null) {
             if (!blockBreak.position.equals(targetBlockPosition)) {
-                // Client finished a different block than the last START_DIGGING we tracked — do not reuse
-                // timing/damage from the previous target (caused false FastBreak on e.g. dirt after sulfur).
-                targetBlockPosition = blockBreak.position;
-                maximumBlockDamage = BlockBreakSpeed.getBlockDamage(player, blockBreak.block);
-                lastFinishBreak = startBreak = System.currentTimeMillis();
+                // Mismatched finish must clear current break state; otherwise unrelated starts can reuse
+                // old timing and damage values.
+                targetBlockPosition = null;
+                maximumBlockDamage = 0;
+                lastFinishBreak = 0;
+                startBreak = 0;
                 return;
             }
 

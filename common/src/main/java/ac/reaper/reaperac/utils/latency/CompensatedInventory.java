@@ -628,7 +628,7 @@ public class CompensatedInventory extends Check implements PacketCheck {
      *
      * @return storage slot index, or -1 if the slot is not tracked (body, saddle, etc.)
      */
-    private static int vanillaInvToStorageSlot(int vanillaSlot) {
+    static int vanillaInvToStorageSlot(int vanillaSlot) {
         if (vanillaSlot >= 0 && vanillaSlot < 9) {
             return vanillaSlot + Inventory.HOTBAR_OFFSET; // hotbar 0-8 → storage 36-44
         }

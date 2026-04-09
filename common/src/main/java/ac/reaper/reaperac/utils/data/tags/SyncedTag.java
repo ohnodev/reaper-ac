@@ -76,11 +76,8 @@ public final class SyncedTag<T> {
                         + " (26.2-only runtime; no legacy fallback)");
             }
         }
-        if (!nextValues.isEmpty()) {
-            // Server is sending tag replacement. Replace only if we decoded at least one value.
-            values.clear();
-            values.addAll(nextValues);
-        }
+        values.clear();
+        values.addAll(nextValues);
     }
 
     public static final class Builder<T> {

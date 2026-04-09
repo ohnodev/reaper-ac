@@ -80,7 +80,7 @@ dependencies {
     // PE static init chain needs real Netty buffers, adventure-nbt, and the netty bridge
     testImplementation(libs.netty)
     testImplementation(libs.packetevents.netty.common)
-    testImplementation(libs.adventure.nbt)
+    testImplementation("net.kyori:adventure-nbt:4.25.0")
     // PE 26.2 fork was built against adventure 4.25.0 — force that version at test runtime
     testImplementation("net.kyori:adventure-api:4.25.0")
     testImplementation("net.kyori:adventure-key:4.25.0")
@@ -92,6 +92,8 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+    // FastBreak replay tests initialize heavy PE/static mocks and can OOM with Gradle's default test heap.
+    maxHeapSize = "2g"
 }
 
 publishing.publications.create<MavenPublication>("maven") {
