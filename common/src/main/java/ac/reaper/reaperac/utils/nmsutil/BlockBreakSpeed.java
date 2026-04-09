@@ -68,30 +68,9 @@ public class BlockBreakSpeed {
      * richer TOOL component data, use it to keep modern mining rules accurate.
      */
     private static ItemStack toolStackForMiningSimulation(GrimPlayer player) {
-        ItemStack packetHeld = player.inventory.getPacketTrackedHeldItem();
-        ItemStack nativeKeyHeld = player.inventory.getNativeKeyMainHandStack();
-
-        if (!nativeKeyHeld.isEmpty()) {
-            // Snapshot protocol drift can decode item IDs incorrectly (e.g. diamond_pickaxe -> chainmail_boots).
-            // Prefer native key-derived type when packet-held type disagrees with native.
-            if (packetHeld.isEmpty() || packetHeld.getType() != nativeKeyHeld.getType()) {
-                return nativeKeyHeld;
-            }
-            // If packet-held lacks TOOL metadata but native key says it's a mining tool type, prefer native.
-            if (!packetHeld.hasComponent(ComponentTypes.TOOL)) {
-                ItemType nativeType = nativeKeyHeld.getType();
-                if (nativeType.hasAttribute(ItemTypes.ItemAttribute.PICKAXE)
-                        || nativeType.hasAttribute(ItemTypes.ItemAttribute.AXE)
-                        || nativeType.hasAttribute(ItemTypes.ItemAttribute.SHOVEL)
-                        || nativeType.hasAttribute(ItemTypes.ItemAttribute.HOE)) {
-                    return nativeKeyHeld;
-                }
-            }
-        }
-
-        // Do not fallback to platform inventory for dig-time simulation.
-        // Packet-timed checks must reflect compensated packet inventory only.
-        return packetHeld;
+        return MiningToolUtils.resolveEffectiveToolStack(
+                player.inventory.getPacketTrackedHeldItem(),
+                player.inventory.getNativeKeyMainHandStack());
     }
 
     public static double getBlockDamage(GrimPlayer player, ItemStack tool, StateType block) {

@@ -859,6 +859,8 @@ public class CheckManagerListener extends PacketListenerAbstract {
         }
 
         ItemStack packetHeld = player.inventory.getPacketTrackedHeldItem();
+        ItemStack nativeHeld = player.inventory.getNativeKeyMainHandStack();
+        ItemStack effectiveMiningTool = player.inventory.getEffectiveMiningToolForTrace();
         ItemStack effectiveHeld = player.inventory.getHeldItem();
         ItemStack platformHeld = ItemStack.EMPTY;
         if (player.platformPlayer != null) {
@@ -870,7 +872,8 @@ public class CheckManagerListener extends PacketListenerAbstract {
 
         LogUtil.getLogger().fine(String.format(
                 "[TRACE][dig-held] user=%s action=%s pos=%s seq=%d selected=%d lastSelected=%d packetInvActive=%s "
-                        + "packetHeld=%s(tool=%s,empty=%s) effectiveHeld=%s(tool=%s,empty=%s) platformHeld=%s(tool=%s,empty=%s)",
+                        + "packetHeld=%s(tool=%s,empty=%s) nativeHeld=%s(tool=%s,empty=%s) effectiveMiningTool=%s(tool=%s,empty=%s) "
+                        + "effectiveHeld=%s(tool=%s,empty=%s) platformHeld=%s(tool=%s,empty=%s)",
                 player.user.getName(),
                 blockBreak.action,
                 blockBreak.position,
@@ -881,6 +884,12 @@ public class CheckManagerListener extends PacketListenerAbstract {
                 packetHeld.getType().getName(),
                 packetHeld.hasComponent(com.github.retrooper.packetevents.protocol.component.ComponentTypes.TOOL),
                 packetHeld.isEmpty(),
+                nativeHeld.getType().getName(),
+                nativeHeld.hasComponent(com.github.retrooper.packetevents.protocol.component.ComponentTypes.TOOL),
+                nativeHeld.isEmpty(),
+                effectiveMiningTool.getType().getName(),
+                effectiveMiningTool.hasComponent(com.github.retrooper.packetevents.protocol.component.ComponentTypes.TOOL),
+                effectiveMiningTool.isEmpty(),
                 effectiveHeld.getType().getName(),
                 effectiveHeld.hasComponent(com.github.retrooper.packetevents.protocol.component.ComponentTypes.TOOL),
                 effectiveHeld.isEmpty(),

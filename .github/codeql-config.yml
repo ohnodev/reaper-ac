@@ -1,0 +1,7 @@
+name: "ReaperAC CodeQL Config"
+
+# Exclude vendored PacketEvents from CodeQL analysis.
+# PE uses RSA/ECB/PKCS1Padding as required by the Minecraft protocol spec —
+# this is not a vulnerability in our code, but CodeQL flags it as "RSA without OAEP".
+paths-ignore:
+  - vendor/packetevents

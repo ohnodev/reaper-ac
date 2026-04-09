@@ -1,0 +1,8 @@
+{
+  "V_26_2": {
+    "overworld": 0,
+    "the_nether": 1,
+    "the_end": 2,
+    "overworld_caves": 3
+  }
+}

@@ -59,10 +59,10 @@ jobs:
                   persist-credentials: false
                   fetch-depth: 200
 
-            - name: Set up JDK 21
+            - name: Set up JDK 25
               uses: actions/setup-java@v4
               with:
-                  java-version: '21'
+                  java-version: '25'
                   distribution: 'temurin'
                   server-id: github
                   settings-path: ${{ github.workspace }}
@@ -84,6 +84,9 @@ jobs:
               run: |
                   echo "GRIM_GIT_REPO=${{ github.event.repository.name }}" >> $GITHUB_ENV
                   echo "GRIM_GIT_ORG=${{ github.repository_owner }}" >> $GITHUB_ENV
+
+            - name: Publish PacketEvents to Maven Local
+              run: ./gradlew -p vendor/packetevents clean publishToMavenLocal
 
             - name: Compute version and Build with Gradle
               id: build_with_version

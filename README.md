@@ -19,9 +19,8 @@
 </div>
 
 ReaperAC is an open-source Minecraft anticheat designed to support the latest versions of Minecraft.
-It currently supports minecraft versions 1.8–1.21. Geyser players are fully exempt from the anticheat to prevent false positives.
-This project is considered feature-complete for the 2.0 (open-source) branch. If you would like a bug fix or enhancement and cannot sponsor the work, pull requests are welcome.
-A premium version is planned, which will offer additional subscription-based paid checks, such as heuristics.
+This fork targets **Minecraft 26.2 (Fabric-only)** with a vendored PacketEvents monorepo.
+Geyser players are fully exempt from the anticheat to prevent false positives.
 
 ## Downloads
 
@@ -31,8 +30,8 @@ A premium version is planned, which will offer additional subscription-based pai
 
 ## Requirements & Installation
 
-- Java 17 or higher. *For more details, see [Updating-to-Java-17](https://github.com/GrimAnticheat/Grim/wiki/Updating-to-Java-17).*
-- A Fabric server environment.
+- **Java 25** or higher (required by MC 26.2 / Fabric Loader).
+- A Fabric server environment running Minecraft 26.2.
 
 ## Resources
 
@@ -53,31 +52,49 @@ information.
 
 ## Build From Source
 
-This fork is maintained as **Fabric-only (26.1)**.
+This fork targets **Fabric-only, Minecraft 26.2**, with PacketEvents vendored as a
+Gradle composite build under `vendor/packetevents/`.
 
 ### Prerequisites
 
-- Java 17 or newer available on `PATH` (`java -version`)
+- **Java 25** or newer (`java -version` — required by MC 26.2 / Fabric Loader)
 - Git
 - Internet access for Gradle dependencies
 
-### macOS / Linux (Fabric-only build)
+### Build
+
+The vendored PacketEvents is declared as a Gradle composite build via
+`includeBuild("vendor/packetevents")` in `settings.gradle.kts`, so Gradle
+automatically substitutes PE dependencies with the local source during
+compilation — no manual publish step is needed for most workflows.
+
+However, Fabric Loom's jar-in-jar (JIJ) packaging resolves PE from Maven
+Local (not the composite build), so the PE artifacts must be published there
+before assembling the final Fabric jar.
 
 ```bash
-git clone https://github.com/ohnodev/grim-26-1-official-namespace.git
-cd grim-26-1-official-namespace
-./gradlew :fabric:clean :fabric:build
+git clone https://github.com/ohnodev/reaper-ac.git
+cd reaper-ac
+
+# Publish PE to Maven Local (required for Fabric Loom JIJ packaging)
+./gradlew -p vendor/packetevents clean publishToMavenLocal
+
+# Build the Reaper-AC Fabric jar
+./gradlew :fabric:build -x test
 ```
 
-### Windows (PowerShell, Fabric-only build)
+If you only change code under `common/` or `fabric/` (not PE), you can skip
+the first command and just run `./gradlew :fabric:build -x test`.
+
+CI workflows (`build.yml`, `build-and-publish.yml`, `codeql-analysis.yml`)
+automatically run the PE publish step before the main build.
+
+### Windows (PowerShell)
 
 ```powershell
-git clone https://github.com/ohnodev/grim-26-1-official-namespace.git
-cd grim-26-1-official-namespace
-.\gradlew.bat :fabric:clean :fabric:build
+.\gradlew.bat -p vendor\packetevents clean publishToMavenLocal
+.\gradlew.bat :fabric:build -x test
 ```
-
-These commands intentionally target only the Fabric module in this 26.1 fork.
 
 ### Build artifacts
 
@@ -90,16 +107,16 @@ This fork includes prebuilt Fabric artifacts in `prebuilt/` for direct deploymen
 
 Current prebuilt files:
 
-- `prebuilt/reaperac-fabric-2.3.74-26.2-b567b7e.jar`
-- `prebuilt/reaperac-fabric-2.3.74-26.2-b567b7e.zip`
-- `prebuilt/reaperac-fabric-2.3.74-26.2-b567b7e.jar.sha256`
-- `prebuilt/reaperac-fabric-2.3.74-26.2-b567b7e.zip.sha256`
+- `prebuilt/reaperac-fabric-2.3.74-26.2-e6c7f97.jar`
+- `prebuilt/reaperac-fabric-2.3.74-26.2-e6c7f97.zip`
+- `prebuilt/reaperac-fabric-2.3.74-26.2-e6c7f97.jar.sha256`
+- `prebuilt/reaperac-fabric-2.3.74-26.2-e6c7f97.zip.sha256`
 
 Verify integrity:
 
 ```bash
-sha256sum -c prebuilt/reaperac-fabric-2.3.74-26.2-b567b7e.jar.sha256
-sha256sum -c prebuilt/reaperac-fabric-2.3.74-26.2-b567b7e.zip.sha256
+sha256sum -c prebuilt/reaperac-fabric-2.3.74-26.2-e6c7f97.jar.sha256
+sha256sum -c prebuilt/reaperac-fabric-2.3.74-26.2-e6c7f97.zip.sha256
 ```
 
 To inspect locally produced files after a build:

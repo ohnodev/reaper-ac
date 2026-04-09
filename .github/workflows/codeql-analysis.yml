@@ -30,27 +30,18 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           languages: java-kotlin
+          config-file: ./.github/codeql-config.yml
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
           cache-read-only: false
 
-      - name: Checkout PacketEvents 26.2 bootstrap ref
-        uses: actions/checkout@v4
-        with:
-          repository: ohnodev/packetevents
-          ref: 8111402533ebb85f8244c4050797c5ef1a2a60b0
-          path: packetevents-26.2
-          fetch-depth: 1
-
-      - name: Bootstrap PacketEvents 26.2 to Maven local
-        run: |
-          cd packetevents-26.2
-          ./gradlew publishToMavenLocal -x test -x check
+      - name: Publish PacketEvents to Maven Local
+        run: ./gradlew -p vendor/packetevents clean publishToMavenLocal
 
       - name: Build for CodeQL
-        run: ./gradlew clean :fabric:build -x test -x check
+        run: ./gradlew :fabric:build -x test -x check
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3

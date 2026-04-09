@@ -19,8 +19,9 @@ dependencies {
 
     implementation(libs.fabric.loader)
 
-    // Keep default builds reproducible and mapping-agnostic: compile against PE API.
+    // Compile against PE API; the full PE fabric runtime is JIJ'd for single-jar deployment.
     compileOnly(libs.packetevents.api)
+    include(libs.packetevents.fabric)
 
     compileOnly("org.slf4j:slf4j-api:2.0.17")
     compileOnly("org.apache.logging.log4j:log4j-api:2.24.3")
@@ -28,7 +29,6 @@ dependencies {
     implementation(project(":common"))
 }
 
-// When MAVEN_LOCAL_OVERRIDE is on, prefer mavenLocal first so a locally published PacketEvents wins.
 repositories {
     if (BuildConfig.mavenLocalOverride) {
         mavenLocal()
@@ -40,12 +40,6 @@ repositories {
 
     exclusive("https://repo.grim.ac/snapshots") {
         includeGroup("ac.reaper.reaperac")
-    }
-    maven("https://repo.grim.ac/snapshots") {
-        mavenContent { snapshotsOnly() }
-        content {
-            includeGroup("com.github.retrooper")
-        }
     }
 
     exclusive("https://jitpack.io", { mavenContent { releasesOnly() } }) {

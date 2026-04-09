@@ -1,0 +1,12 @@
+{
+  "V_26_2": [
+    "open_url",
+    "open_file",
+    "run_command",
+    "suggest_command",
+    "show_dialog",
+    "change_page",
+    "copy_to_clipboard",
+    "custom"
+  ]
+}
