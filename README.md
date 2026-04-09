@@ -61,34 +61,38 @@ Gradle composite build under `vendor/packetevents/`.
 - Git
 - Internet access for Gradle dependencies
 
-### Two-step build (PE → Reaper-AC)
+### Build
 
-PacketEvents must be published to Maven Local before building the main jar.
-This is required because the Fabric Loom jar-in-jar mechanism resolves PE
-from Maven Local, while the API is compiled from the vendored source.
+The vendored PacketEvents is declared as a Gradle composite build via
+`includeBuild("vendor/packetevents")` in `settings.gradle.kts`, so Gradle
+automatically substitutes PE dependencies with the local source during
+compilation — no manual publish step is needed for most workflows.
+
+However, Fabric Loom's jar-in-jar (JIJ) packaging resolves PE from Maven
+Local (not the composite build), so the PE artifacts must be published there
+before assembling the final Fabric jar.
 
 ```bash
-git clone https://github.com/ohnodev/grim-26-1-official-namespace.git
-cd grim-26-1-official-namespace
+git clone https://github.com/ohnodev/reaper-ac.git
+cd reaper-ac
 
-# Step 1: Build and publish PacketEvents to Maven Local
-cd vendor/packetevents
-./gradlew clean publishToMavenLocal
-cd ../..
+# Publish PE to Maven Local (required for Fabric Loom JIJ packaging)
+./gradlew -p vendor/packetevents clean publishToMavenLocal
 
-# Step 2: Build the Reaper-AC Fabric jar
+# Build the Reaper-AC Fabric jar
 ./gradlew :fabric:build -x test
 ```
 
-**If you change any PE source code** (under `vendor/packetevents/`), you must
-re-run Step 1 before Step 2. Changes to `common/` or `fabric/` only need Step 2.
+If you only change code under `common/` or `fabric/` (not PE), you can skip
+the first command and just run `./gradlew :fabric:build -x test`.
+
+CI workflows (`build.yml`, `build-and-publish.yml`, `codeql-analysis.yml`)
+automatically run the PE publish step before the main build.
 
 ### Windows (PowerShell)
 
 ```powershell
-cd vendor\packetevents
-.\gradlew.bat clean publishToMavenLocal
-cd ..\..
+.\gradlew.bat -p vendor\packetevents clean publishToMavenLocal
 .\gradlew.bat :fabric:build -x test
 ```
 
