@@ -63,7 +63,8 @@ public class AirLiquidBreak extends Check implements BlockBreakCheck {
 
         if (invalid && flagAndAlert("block=" + block.getName() + ", type=" + blockBreak.action) && shouldModifyPackets()) {
             didLastFlag = true;
-            blockBreak.cancel();
+            blockBreak.cancel("AirLiquidBreak block=" + block.getName() + " action=" + blockBreak.action
+                    + " air=" + block.isAir() + " hardness=" + block.getHardness());
         } else {
             didLastFlag = false;
         }
