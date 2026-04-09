@@ -173,17 +173,7 @@ public final class SynchronizedRegistriesHandler {
             @Nullable Object cacheKey
     ) {
         RegistryEntry<?> registryData = REGISTRY_KEYS.get(registryName);
-        String syncMsg = "[SYNC-REGISTRY-ENTRY] registryName=" + registryName
-                + " elements=" + elements.size()
-                + " known=" + (registryData != null)
-                + " isItemReg=" + registryName.equals(ItemTypes.getRegistry().getRegistryKey())
-                + " user=" + user;
-        System.out.println(syncMsg);
-        PacketEvents.getAPI().getLogger().info(syncMsg);
         if (registryData == null && registryName.equals(ItemTypes.getRegistry().getRegistryKey())) {
-            PacketEvents.getAPI().getLogger().info(
-                    "[SYNC-REGISTRY] Item registry received from server: " + elements.size()
-                            + " elements, user=" + user + " cacheKey=" + cacheKey);
             SimpleRegistry<ItemType> itemRegistry;
             if (FORCE_PER_USER_REGISTRIES || cacheKey == null) {
                 itemRegistry = createSyncedItemRegistry(elements, wrapper);
@@ -195,9 +185,6 @@ public final class SynchronizedRegistriesHandler {
             Object itemCacheKey = cacheKey != null ? cacheKey : wrapper.getServerVersion().toClientVersion();
             ITEM_REGISTRY_ENTRY.computeSyncedRegistry(itemCacheKey, () -> itemRegistry);
             user.putRegistry(itemRegistry);
-            PacketEvents.getAPI().getLogger().info(
-                    "[SYNC-REGISTRY] Item registry stored for user=" + user
-                            + " syncedSize=" + itemRegistry.size());
             return;
         }
         if (registryData == null) {
@@ -220,27 +207,16 @@ public final class SynchronizedRegistriesHandler {
     private static SimpleRegistry<ItemType> createSyncedItemRegistry(List<RegistryElement> elements, PacketWrapper<?> wrapper) {
         ClientVersion version = wrapper.getServerVersion().toClientVersion();
         SimpleRegistry<ItemType> registry = new SimpleRegistry<>(ItemTypes.getRegistry().getRegistryKey());
-        int unknownCount = 0;
         for (int id = 0; id < elements.size(); id++) {
             RegistryElement element = elements.get(id);
             ResourceLocation elementName = element.getId();
             ItemType itemType = ItemTypes.getRegistry().getByName(version, elementName);
             if (itemType != null) {
                 registry.define(elementName, id, itemType);
-                if (id < 30 || elementName.toString().contains("pickaxe") || elementName.toString().contains("sulfur")) {
-                    PacketEvents.getAPI().getLogger().info(
-                            "[SYNC-ITEM-MAP] id=" + id + " name=" + elementName
-                                    + " staticId=" + itemType.getId(version));
-                }
             } else {
-                unknownCount++;
                 PacketEvents.getAPI().getLogger().warning("Unknown item registry entry " + elementName + " for " + version);
             }
         }
-        PacketEvents.getAPI().getLogger().info(
-                "[SYNC-ITEM-MAP] Complete: total=" + elements.size()
-                        + " mapped=" + (elements.size() - unknownCount)
-                        + " unknown=" + unknownCount + " version=" + version);
         return registry;
     }
 

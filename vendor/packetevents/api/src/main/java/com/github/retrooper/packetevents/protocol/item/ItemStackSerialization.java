@@ -123,28 +123,8 @@ public final class ItemStackSerialization {
         }
         int rawTypeId = wrapper.readVarInt();
         ClientVersion version = wrapper.getServerVersion().toClientVersion();
-        IRegistry<ItemType> staticRegistry = ItemTypes.getRegistry();
-        IRegistry<ItemType> registry = wrapper.replaceRegistry(staticRegistry);
-        boolean usingSyncedRegistry = (registry != staticRegistry);
+        IRegistry<ItemType> registry = wrapper.replaceRegistry(ItemTypes.getRegistry());
         ItemType itemType = registry.getByIdOrThrow(version, rawTypeId);
-
-        if (shouldTraceInventoryPacket(wrapper)) {
-            ItemType staticResolved = staticRegistry.getById(version, rawTypeId);
-            String staticName = staticResolved != null ? staticResolved.getName().toString() : "null";
-            String syncedName = itemType != null ? itemType.getName().toString() : "null";
-            if (!syncedName.equals(staticName)) {
-                PacketEvents.getAPI().getLogger().info(
-                        "[ITEM-DECODE-MISMATCH] rawId=" + rawTypeId
-                                + " synced=" + syncedName + " static=" + staticName
-                                + " usingSynced=" + usingSyncedRegistry
-                                + " packet=" + wrapper.getPacketTypeData().getPacketType());
-            }
-            PacketEvents.getAPI().getLogger().info(
-                    "[ITEM-DECODE] rawId=" + rawTypeId + " resolved=" + syncedName
-                            + " usingSynced=" + usingSyncedRegistry
-                            + " count=" + count
-                            + " packet=" + wrapper.getPacketTypeData().getPacketType());
-        }
 
         PatchableComponentMap components = ComponentPatchCodec.readPatchMap(wrapper, itemType, lengthPrefixed);
         logRawItemDecode(wrapper, lengthPrefixed ? "modern-untrusted" : "modern", rawTypeId, itemType, count,

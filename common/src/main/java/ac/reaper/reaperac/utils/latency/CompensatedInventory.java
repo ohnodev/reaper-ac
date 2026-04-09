@@ -3,7 +3,7 @@ package ac.reaper.reaperac.utils.latency;
 import ac.reaper.reaperac.checks.Check;
 import ac.reaper.reaperac.checks.type.PacketCheck;
 import ac.reaper.reaperac.player.GrimPlayer;
-import ac.reaper.reaperac.utils.anticheat.LogUtil;
+
 import ac.reaper.reaperac.utils.anticheat.update.BlockPlace;
 import ac.reaper.reaperac.utils.inventory.EquipmentType;
 import ac.reaper.reaperac.utils.inventory.Inventory;
@@ -306,25 +306,6 @@ public class CompensatedInventory extends Check implements PacketCheck {
             if (slot > 8 || slot < 0) return;
 
             inventory.setSelected(slot);
-            ItemStack packetHeld = getPacketTrackedHeldItem();
-            ItemStack nativeHeld = getNativeKeyMainHandStack();
-            ItemStack effectiveMiningTool = getEffectiveMiningToolForTrace();
-            LogUtil.info(String.format(
-                    "[TRACE][held-item-change] player=%s slot=%d storageSlot=%d slotRole=%s "
-                            + "packetHeld=%s(tool=%s,empty=%s) nativeHeld=%s(tool=%s,empty=%s) effectiveMiningTool=%s(tool=%s,empty=%s)",
-                    player.user.getName(),
-                    slot,
-                    slot + Inventory.HOTBAR_OFFSET,
-                    storageSlotRole(slot + Inventory.HOTBAR_OFFSET),
-                    packetHeld.getType().getName(),
-                    packetHeld.hasComponent(ComponentTypes.TOOL),
-                    packetHeld.isEmpty(),
-                    nativeHeld.getType().getName(),
-                    nativeHeld.hasComponent(ComponentTypes.TOOL),
-                    nativeHeld.isEmpty(),
-                    effectiveMiningTool.getType().getName(),
-                    effectiveMiningTool.hasComponent(ComponentTypes.TOOL),
-                    effectiveMiningTool.isEmpty()));
         } else if (event.getPacketType() == PacketType.Play.Client.CREATIVE_INVENTORY_ACTION) {
             WrapperPlayClientCreativeInventoryAction action = new WrapperPlayClientCreativeInventoryAction(event);
             if (player.gamemode != GameMode.CREATIVE) return;
@@ -480,31 +461,6 @@ public class CompensatedInventory extends Check implements PacketCheck {
                         int slotToSet = vanillaPlayerInventoryIndices ? vanillaInvToStorageSlot(i) : i;
                         if (slotToSet < 0 || slotToSet > 45) continue;
                         inventory.getSlot(slotToSet).set(slots.get(i));
-                        if (slotToSet == Inventory.SLOT_HELMET || slotToSet == Inventory.SLOT_CHESTPLATE || slotToSet == Inventory.SLOT_LEGGINGS
-                                || slotToSet == Inventory.SLOT_BOOTS || slotToSet == Inventory.SLOT_OFFHAND
-                                || (slotToSet >= Inventory.HOTBAR_OFFSET && slotToSet < Inventory.HOTBAR_OFFSET + 9)) {
-                            ItemStack stack = slots.get(i);
-                            ItemStack packetHeld = getPacketTrackedHeldItem();
-                            ItemStack nativeHeld = getNativeKeyMainHandStack();
-                            ItemStack effectiveMiningTool = getEffectiveMiningToolForTrace();
-                            LogUtil.info(String.format(
-                                    "[TRACE][window-items-slot] player=%s windowId=%d slotCount=%d rawSlot=%d appliedSlot=%d vanillaIndexMode=%s rawRole=%s appliedRole=%s "
-                                            + "item=%s hasTOOL=%s selected=%d packetHeld=%s nativeHeld=%s effectiveMiningTool=%s",
-                                    player.user.getName(),
-                                    items.getWindowId(),
-                                    slots.size(),
-                                    i,
-                                    slotToSet,
-                                    vanillaPlayerInventoryIndices,
-                                    vanillaPlayerInventoryIndices ? vanillaInventorySlotRole(i) : storageSlotRole(i),
-                                    storageSlotRole(slotToSet),
-                                    stack.getType().getName(),
-                                    stack.hasComponent(ComponentTypes.TOOL),
-                                    inventory.getSelected(),
-                                    packetHeld.getType().getName(),
-                                    nativeHeld.getType().getName(),
-                                    effectiveMiningTool.getType().getName()));
-                        }
                     }
                     if (items.getCarriedItem().isPresent()) {
                         inventory.setCarried(items.getCarriedItem().get());
@@ -549,26 +505,6 @@ public class CompensatedInventory extends Check implements PacketCheck {
                 if (!isPacketInventoryActive) return;
                 inventory.getInventoryStorage().setItem(storageSlot, item);
 
-                // Focused inventory-sync trace for 1.21.2+ set-player-inventory slot translation.
-                if ((vanillaSlot >= 0 && vanillaSlot <= 8) || (vanillaSlot >= 36 && vanillaSlot <= 40)) {
-                    ItemStack packetHeld = getPacketTrackedHeldItem();
-                    ItemStack nativeHeld = getNativeKeyMainHandStack();
-                    ItemStack effectiveMiningTool = getEffectiveMiningToolForTrace();
-                    LogUtil.info(String.format(
-                            "[TRACE][set-player-inventory] player=%s vanillaSlot=%d storageSlot=%d vanillaRole=%s storageRole=%s "
-                                    + "item=%s hasTOOL=%s selected=%d packetHeld=%s nativeHeld=%s effectiveMiningTool=%s",
-                            player.user.getName(),
-                            vanillaSlot,
-                            storageSlot,
-                            vanillaInventorySlotRole(vanillaSlot),
-                            storageSlotRole(storageSlot),
-                            item.getType().getName(),
-                            item.hasComponent(ComponentTypes.TOOL),
-                            inventory.getSelected(),
-                            packetHeld.getType().getName(),
-                            nativeHeld.getType().getName(),
-                            effectiveMiningTool.getType().getName()));
-                }
             });
         }
 
@@ -613,28 +549,6 @@ public class CompensatedInventory extends Check implements PacketCheck {
                     final int slotToSet = treatAsVanillaPlayerInventoryIndex ? translatedPlayerSlot : slotID;
                     if (slotToSet >= 0 && slotToSet <= 45) {
                         inventory.getSlot(slotToSet).set(item);
-                        if (slotToSet == Inventory.SLOT_HELMET || slotToSet == Inventory.SLOT_CHESTPLATE || slotToSet == Inventory.SLOT_LEGGINGS
-                                || slotToSet == Inventory.SLOT_BOOTS || slotToSet == Inventory.SLOT_OFFHAND
-                                || (slotToSet >= Inventory.HOTBAR_OFFSET && slotToSet < Inventory.HOTBAR_OFFSET + 9)) {
-                            ItemStack packetHeld = getPacketTrackedHeldItem();
-                            ItemStack nativeHeld = getNativeKeyMainHandStack();
-                            ItemStack effectiveMiningTool = getEffectiveMiningToolForTrace();
-                            LogUtil.info(String.format(
-                                    "[TRACE][set-slot-player-inv] player=%s rawSlot=%d appliedSlot=%d vanillaIndexMode=%s rawRole=%s appliedRole=%s "
-                                            + "item=%s hasTOOL=%s selected=%d packetHeld=%s nativeHeld=%s effectiveMiningTool=%s",
-                                    player.user.getName(),
-                                    slotID,
-                                    slotToSet,
-                                    treatAsVanillaPlayerInventoryIndex,
-                                    treatAsVanillaPlayerInventoryIndex ? vanillaInventorySlotRole(slotID) : storageSlotRole(slotID),
-                                    storageSlotRole(slotToSet),
-                                    item.getType().getName(),
-                                    item.hasComponent(ComponentTypes.TOOL),
-                                    inventory.getSelected(),
-                                    packetHeld.getType().getName(),
-                                    nativeHeld.getType().getName(),
-                                    effectiveMiningTool.getType().getName()));
-                        }
                     }
                 } else if (inventoryID == openWindowID) { // Opened inventory (if not valid, client crashes)
                     menu.getSlot(slotID).set(item);
@@ -699,37 +613,4 @@ public class CompensatedInventory extends Check implements PacketCheck {
         return packetHeld;
     }
 
-    private static String vanillaInventorySlotRole(int vanillaSlot) {
-        if (vanillaSlot >= 0 && vanillaSlot <= 8) {
-            return "HOTBAR_" + vanillaSlot;
-        }
-        if (vanillaSlot >= 9 && vanillaSlot <= 35) {
-            return "MAIN_" + (vanillaSlot - 9);
-        }
-        return switch (vanillaSlot) {
-            case 36 -> "ARMOR_FEET";
-            case 37 -> "ARMOR_LEGS";
-            case 38 -> "ARMOR_CHEST";
-            case 39 -> "ARMOR_HEAD";
-            case 40 -> "OFFHAND";
-            default -> "UNTRACKED_" + vanillaSlot;
-        };
-    }
-
-    private static String storageSlotRole(int storageSlot) {
-        if (storageSlot >= Inventory.HOTBAR_OFFSET && storageSlot < Inventory.HOTBAR_OFFSET + 9) {
-            return "HOTBAR_" + (storageSlot - Inventory.HOTBAR_OFFSET);
-        }
-        if (storageSlot >= 9 && storageSlot <= 35) {
-            return "MAIN_" + (storageSlot - 9);
-        }
-        return switch (storageSlot) {
-            case Inventory.SLOT_BOOTS -> "ARMOR_FEET";
-            case Inventory.SLOT_LEGGINGS -> "ARMOR_LEGS";
-            case Inventory.SLOT_CHESTPLATE -> "ARMOR_CHEST";
-            case Inventory.SLOT_HELMET -> "ARMOR_HEAD";
-            case Inventory.SLOT_OFFHAND -> "OFFHAND";
-            default -> "OTHER_" + storageSlot;
-        };
-    }
 }
