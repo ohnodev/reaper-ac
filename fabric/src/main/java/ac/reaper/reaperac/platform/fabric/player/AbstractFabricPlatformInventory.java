@@ -4,6 +4,9 @@ import ac.reaper.reaperac.platform.api.player.PlatformInventory;
 import ac.reaper.reaperac.platform.fabric.GrimACFabricLoaderPlugin;
 import ac.reaper.reaperac.platform.fabric.utils.convert.IFabricConversionUtil;
 import com.github.retrooper.packetevents.protocol.item.ItemStack;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
 
 public abstract class AbstractFabricPlatformInventory implements PlatformInventory {
@@ -57,5 +60,53 @@ public abstract class AbstractFabricPlatformInventory implements PlatformInvento
             items[i] = fabricConversionUtil.fromFabricItemStack(fabricPlatformPlayer.fabricPlayer.inventory.getItem(i));
         }
         return items;
+    }
+
+    @Override
+    public String getNativeMainHandItemKey() {
+        net.minecraft.world.item.ItemStack nativeHeld = fabricPlatformPlayer.fabricPlayer.inventory.getSelectedItem();
+        if (nativeHeld == null || nativeHeld.isEmpty()) {
+            return "minecraft:air";
+        }
+        return BuiltInRegistries.ITEM.getKey(nativeHeld.getItem()).toString();
+    }
+
+    @Override
+    public Float getNativeMainHandDestroySpeed(String blockKey) {
+        net.minecraft.world.item.ItemStack nativeHeld = fabricPlatformPlayer.fabricPlayer.inventory.getSelectedItem();
+        if (nativeHeld == null || nativeHeld.isEmpty()) {
+            return 1.0f;
+        }
+        BlockState state = resolveBlockState(blockKey);
+        if (state == null) {
+            return null;
+        }
+        return nativeHeld.getDestroySpeed(state);
+    }
+
+    @Override
+    public Boolean isNativeMainHandCorrectToolForDrops(String blockKey) {
+        net.minecraft.world.item.ItemStack nativeHeld = fabricPlatformPlayer.fabricPlayer.inventory.getSelectedItem();
+        if (nativeHeld == null || nativeHeld.isEmpty()) {
+            return false;
+        }
+        BlockState state = resolveBlockState(blockKey);
+        if (state == null) {
+            return null;
+        }
+        return nativeHeld.isCorrectToolForDrops(state);
+    }
+
+    private static BlockState resolveBlockState(String blockKey) {
+        if (blockKey == null || blockKey.isBlank()) {
+            return null;
+        }
+        String normalized = blockKey.contains(":") ? blockKey : "minecraft:" + blockKey;
+        for (Block block : BuiltInRegistries.BLOCK) {
+            if (BuiltInRegistries.BLOCK.getKey(block).toString().equals(normalized)) {
+                return block.defaultBlockState();
+            }
+        }
+        return null;
     }
 }

@@ -1,9 +1,11 @@
 package ac.reaper.reaperac.utils.nmsutil;
 
 import ac.reaper.reaperac.player.GrimPlayer;
+import ac.reaper.reaperac.utils.anticheat.LogUtil;
 import ac.reaper.reaperac.utils.data.tags.SyncedTag;
 import ac.reaper.reaperac.utils.data.tags.SyncedTags;
 import ac.reaper.reaperac.utils.enums.FluidTag;
+import ac.reaper.reaperac.utils.latency.CompensatedInventory;
 import com.github.retrooper.packetevents.protocol.attribute.Attributes;
 import com.github.retrooper.packetevents.protocol.component.ComponentTypes;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemTool;
@@ -64,26 +66,38 @@ public class BlockBreakSpeed {
      * richer TOOL component data, use it to keep modern mining rules accurate.
      */
     private static ItemStack toolStackForMiningSimulation(GrimPlayer player) {
-        ItemStack packetHeld = player.inventory.getHeldItem();
-        ItemStack platformHeld = ItemStack.EMPTY;
-        if (player.platformPlayer != null) {
-            ItemStack fromPlatform = player.platformPlayer.getInventory().getItemInHand();
-            if (fromPlatform != null) {
-                platformHeld = fromPlatform;
+        ItemStack packetHeld = player.inventory.getPacketTrackedHeldItem();
+        ItemStack nativeKeyHeld = player.inventory.getNativeKeyMainHandStack();
+
+        if (!nativeKeyHeld.isEmpty()) {
+            // Snapshot protocol drift can decode item IDs incorrectly (e.g. diamond_pickaxe -> chainmail_boots).
+            // Prefer native key-derived type when packet-held type disagrees with native.
+            if (packetHeld.isEmpty() || packetHeld.getType() != nativeKeyHeld.getType()) {
+                return nativeKeyHeld;
+            }
+            // If packet-held lacks TOOL metadata but native key says it's a mining tool type, prefer native.
+            if (!packetHeld.hasComponent(ComponentTypes.TOOL)) {
+                ItemType nativeType = nativeKeyHeld.getType();
+                if (nativeType.hasAttribute(ItemTypes.ItemAttribute.PICKAXE)
+                        || nativeType.hasAttribute(ItemTypes.ItemAttribute.AXE)
+                        || nativeType.hasAttribute(ItemTypes.ItemAttribute.SHOVEL)
+                        || nativeType.hasAttribute(ItemTypes.ItemAttribute.HOE)) {
+                    return nativeKeyHeld;
+                }
             }
         }
 
         if (!packetHeld.isEmpty()) {
-            boolean sameType = !platformHeld.isEmpty() && platformHeld.getType() == packetHeld.getType();
-            boolean platformHasToolData = platformHeld.hasComponent(ComponentTypes.TOOL);
-            boolean packetMissingToolData = !packetHeld.hasComponent(ComponentTypes.TOOL);
-            if (sameType && platformHasToolData && packetMissingToolData) {
-                return platformHeld;
-            }
             return packetHeld;
         }
 
-        return platformHeld;
+        if (!nativeKeyHeld.isEmpty()) {
+            return nativeKeyHeld;
+        }
+
+        // Do not fallback to platform inventory for dig-time simulation.
+        // Packet-timed checks must reflect compensated packet inventory only.
+        return ItemStack.EMPTY;
     }
 
     public static double getBlockDamage(GrimPlayer player, ItemStack tool, StateType block) {
@@ -113,6 +127,70 @@ public class BlockBreakSpeed {
 
         float damage = speedMultiplier / blockHardness;
         damage /= canHarvest ? 30F : 100F;
+
+        // Keep this trace active while diagnosing 26.2 mining mismatches.
+        if (damage > 0 && block.isRequiresCorrectTool()) {
+            double predictedMs = Math.ceil(1.0 / damage) * 50.0;
+            if (predictedMs >= 5000) {
+                CompensatedInventory compensatedInventory = player.inventory;
+                ItemStack packetHeld = ItemStack.EMPTY;
+                if (compensatedInventory != null) {
+                    ItemStack tracked = compensatedInventory.getPacketTrackedHeldItem();
+                    if (tracked != null) {
+                        packetHeld = tracked;
+                    }
+                }
+                ItemStack effectiveHeld = ItemStack.EMPTY;
+                if (compensatedInventory != null) {
+                    ItemStack held = compensatedInventory.getHeldItem();
+                    if (held != null) {
+                        effectiveHeld = held;
+                    }
+                }
+                ItemStack platformHeld = ItemStack.EMPTY;
+                if (player.platformPlayer != null) {
+                    ItemStack fromPlatform = player.platformPlayer.getInventory().getItemInHand();
+                    if (fromPlatform != null) {
+                        platformHeld = fromPlatform;
+                    }
+                }
+                int selected = compensatedInventory != null && compensatedInventory.inventory != null
+                        ? compensatedInventory.inventory.getSelected()
+                        : -1;
+                int lastSelected = player.packetStateData != null ? player.packetStateData.lastSlotSelected : -1;
+                boolean packetInvActive = compensatedInventory != null && compensatedInventory.isPacketInventoryActive;
+                if (player.user != null) {
+                    LogUtil.warn(String.format(
+                            "[TRACE][mining-tool] player=%s block=%s hardness=%.2f predicted=%.0fms speedMul=%.2f canHarvest=%s "
+                                    + "toolArg=%s(hasTOOL=%s,empty=%s) packetHeld=%s(hasTOOL=%s,empty=%s,selected=%d,lastSelected=%d) "
+                                    + "effectiveHeld=%s(hasTOOL=%s,empty=%s,packetInvActive=%s) "
+                                    + "platformHeld=%s(hasTOOL=%s,empty=%s) correctForDrop=%s inferTags=%s",
+                            player.user.getName(),
+                            block.getName(),
+                            blockHardness,
+                            predictedMs,
+                            speedMultiplier,
+                            canHarvest,
+                            toolType != null ? toolType.getName() : "null",
+                            tool.hasComponent(ComponentTypes.TOOL),
+                            tool.isEmpty(),
+                            packetHeld.getType().getName(),
+                            packetHeld.hasComponent(ComponentTypes.TOOL),
+                            packetHeld.isEmpty(),
+                            selected,
+                            lastSelected,
+                            effectiveHeld.getType().getName(),
+                            effectiveHeld.hasComponent(ComponentTypes.TOOL),
+                            effectiveHeld.isEmpty(),
+                            packetInvActive,
+                            platformHeld.getType().getName(),
+                            platformHeld.hasComponent(ComponentTypes.TOOL),
+                            platformHeld.isEmpty(),
+                            toolSpeedData.isCorrectToolForDrop,
+                            inferCorrectToolFromTags(player, toolType, block)));
+                }
+            }
+        }
 
         return damage;
     }
@@ -164,7 +242,33 @@ public class BlockBreakSpeed {
     }
 
     private static ToolSpeedData getModernToolSpeedData(GrimPlayer player, ItemStack tool, StateType block) {
+        // Prefer native platform mining metadata when available.
+        // This keeps 26.2 behavior aligned with vanilla when PacketEvents item components drift.
+        if (player.platformPlayer != null && player.platformPlayer.getInventory() != null) {
+            String blockKey = block.getName();
+            Float nativeSpeed = player.platformPlayer.getInventory().getNativeMainHandDestroySpeed(blockKey);
+            if (nativeSpeed != null) {
+                Boolean nativeCorrect = player.platformPlayer.getInventory().isNativeMainHandCorrectToolForDrops(blockKey);
+                return new ToolSpeedData(nativeSpeed, nativeCorrect != null && nativeCorrect);
+            }
+        }
+
         Optional<ItemTool> toolComponentOpt = tool.getComponent(ComponentTypes.TOOL);
+        if (toolComponentOpt.isEmpty()) {
+            // ItemStacks synthesized from native registry keys may not carry runtime component payloads.
+            // Fall back to ItemType default components for the player's protocol version.
+            try {
+                var components = tool.getType().getComponents(player.getClientVersion());
+                if (components != null) {
+                    ItemTool typeTool = components.get(ComponentTypes.TOOL);
+                    if (typeTool != null) {
+                        toolComponentOpt = Optional.of(typeTool);
+                    }
+                }
+            } catch (IllegalArgumentException ignored) {
+                // Non-release/snapshot client version not supported by PE type component map.
+            }
+        }
         float speedMultiplier = 1.0f;
         boolean isCorrectToolForDrop = false;
         if (toolComponentOpt.isPresent()) {

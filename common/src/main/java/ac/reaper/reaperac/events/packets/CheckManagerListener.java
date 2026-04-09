@@ -2,6 +2,7 @@ package ac.reaper.reaperac.events.packets;
 
 import ac.reaper.reaperac.GrimAPI;
 import ac.reaper.reaperac.player.GrimPlayer;
+import ac.reaper.reaperac.utils.anticheat.LogUtil;
 import ac.reaper.reaperac.utils.anticheat.update.*;
 import ac.reaper.reaperac.utils.blockplace.BlockPlaceResult;
 import ac.reaper.reaperac.utils.blockplace.ConsumesBlockPlace;
@@ -797,6 +798,7 @@ public class CheckManagerListener extends PacketListenerAbstract {
         }
 
         final BlockBreak blockBreak = new BlockBreak(player, packet.getBlockPosition(), packet.getBlockFace(), packet.getBlockFaceId(), action, packet.getSequence(), player.compensatedWorld.getBlock(packet.getBlockPosition()));
+        traceDigHeldItem(player, blockBreak);
 
         player.checkManager.onBlockBreak(blockBreak);
 
@@ -842,5 +844,67 @@ public class CheckManagerListener extends PacketListenerAbstract {
         }
 
         player.compensatedWorld.handleBlockBreakPrediction(packet);
+    }
+
+    private static void traceDigHeldItem(GrimPlayer player, BlockBreak blockBreak) {
+        String state = blockBreak.block.getType().getName();
+        String normalized = state.toLowerCase();
+        if (!normalized.contains("sulfur") && !normalized.contains("cinnabar")) {
+            return;
+        }
+
+        ItemStack packetHeld = player.inventory.getPacketTrackedHeldItem();
+        ItemStack effectiveHeld = player.inventory.getHeldItem();
+        ItemStack platformHeld = ItemStack.EMPTY;
+        if (player.platformPlayer != null) {
+            ItemStack inHand = player.platformPlayer.getInventory().getItemInHand();
+            if (inHand != null) {
+                platformHeld = inHand;
+            }
+        }
+
+        LogUtil.info(String.format(
+                "[TRACE][dig-held] user=%s/%s action=%s pos=%s seq=%d selected=%d lastSelected=%d packetInvActive=%s "
+                        + "packetHeld=%s(hasTOOL=%s,empty=%s) effectiveHeld=%s(hasTOOL=%s,empty=%s) platformHeld=%s(hasTOOL=%s,empty=%s) "
+                        + "packetHotbar=%s platformHotbar=%s",
+                player.user.getName(),
+                player.user.getUUID(),
+                blockBreak.action,
+                blockBreak.position,
+                blockBreak.sequence,
+                player.inventory.inventory.getSelected(),
+                player.packetStateData.lastSlotSelected,
+                player.inventory.isPacketInventoryActive,
+                packetHeld.getType().getName(),
+                packetHeld.hasComponent(com.github.retrooper.packetevents.protocol.component.ComponentTypes.TOOL),
+                packetHeld.isEmpty(),
+                effectiveHeld.getType().getName(),
+                effectiveHeld.hasComponent(com.github.retrooper.packetevents.protocol.component.ComponentTypes.TOOL),
+                effectiveHeld.isEmpty(),
+                platformHeld.getType().getName(),
+                platformHeld.hasComponent(com.github.retrooper.packetevents.protocol.component.ComponentTypes.TOOL),
+                platformHeld.isEmpty(),
+                packetHotbarSnapshot(player),
+                platformHotbarSnapshot(player)));
+    }
+
+    private static String packetHotbarSnapshot(GrimPlayer player) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 9; i++) {
+            if (i > 0) sb.append(',');
+            int storageSlot = Inventory.HOTBAR_OFFSET + i;
+            sb.append(i).append('=').append(player.inventory.inventory.getInventoryStorage().getItem(storageSlot).getType().getName());
+        }
+        return sb.toString();
+    }
+
+    private static String platformHotbarSnapshot(GrimPlayer player) {
+        if (player.platformPlayer == null) return "none";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 9; i++) {
+            if (i > 0) sb.append(',');
+            sb.append(i).append('=').append(player.platformPlayer.getInventory().getStack(i, i).getType().getName());
+        }
+        return sb.toString();
     }
 }
