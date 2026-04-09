@@ -49,7 +49,7 @@ are.
 
 ## Build From Source
 
-This fork targets **Fabric-only, Minecraft 26.2**, with PacketEvents vendored as a
+This fork targets **Minecraft 26.2 Snapshot 2 (Fabric-only)**, with PacketEvents vendored as a
 Gradle composite build under `vendor/packetevents/`.
 
 ### Prerequisites
