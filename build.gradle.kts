@@ -14,7 +14,7 @@ import versioning.VersionUtil
 
 BuildConfig.init(project)
 
-val baseVersion = "2.3.74"
+val baseVersion = "26.2.0"
 group = "ac.reaper.reaperac"
 version = VersionUtil.computeVersion(baseVersion)
 description = "Libre simulation anticheat designed for 1.21 with 1.8–1.21 support, powered by PacketEvents 2.0."
