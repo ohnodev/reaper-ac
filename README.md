@@ -40,6 +40,7 @@ Geyser players are fully exempt from the anticheat to prevent false positives.
 ## Version Policy
 
 - ReaperAC in this repo is **latest-only**.
+- Public release artifacts use the stable `26.2.x` version line (no branch/hash suffixes).
 - We only support the current upstream Minecraft line (currently the 26.2 snapshot line). See [release notes](https://www.minecraft.net/en-us/article/minecraft-26-2-snapshot-2) for the latest snapshot status.
 - Backports are intentionally out of scope; historical support will be handled via tagged releases later.
 
@@ -110,13 +111,13 @@ This fork includes prebuilt Fabric runtime jars in `prebuilt/` for direct deploy
 
 Current prebuilt file (latest):
 
-- `prebuilt/reaperac-fabric-2.3.74-docs_fabric-runtime-requirements-7274ab0.jar`
-- SHA-256: `11c394f60b03c50b3bd317d7eb3e57fe2a3a35b503abf963eb9bc568dfd8c7f4`
+- `prebuilt/reaperac-fabric-26.2.0.jar`
+- SHA-256: `06b56fbc0856f15704b785196b71fd17c48828cd6f05c5728bd92a3032a372b6`
 
 Verify integrity:
 
 ```bash
-sha256sum prebuilt/reaperac-fabric-2.3.74-docs_fabric-runtime-requirements-7274ab0.jar
+sha256sum prebuilt/reaperac-fabric-26.2.0.jar
 ```
 
 Update this checksum in the README whenever the prebuilt jar is rebuilt.
