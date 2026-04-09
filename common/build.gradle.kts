@@ -6,16 +6,8 @@ plugins {
 }
 
 repositories {
-    // Prefer locally published PacketEvents (e.g. cabal PE fork) over remote snapshots when enabled.
     if (BuildConfig.mavenLocalOverride) {
         mavenLocal()
-    }
-    // PacketEvents snapshots: same host but not exclusiveContent-locked so mavenLocal() can still resolve
-    maven("https://repo.grim.ac/snapshots") {
-        mavenContent { snapshotsOnly() }
-        content {
-            includeGroup("com.github.retrooper")
-        }
     }
 
     // ViaVersion

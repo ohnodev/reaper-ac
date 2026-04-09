@@ -2,6 +2,8 @@ package ac.reaper.reaperac.platform.fabric.mc262.player;
 
 import ac.reaper.reaperac.platform.fabric.player.AbstractFabricPlatformInventory;
 import ac.reaper.reaperac.platform.fabric.player.AbstractFabricPlatformPlayer;
+import ac.reaper.reaperac.utils.inventory.Inventory;
+import com.github.retrooper.packetevents.protocol.item.ItemStack;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -14,6 +16,28 @@ import java.util.Locale;
 public class Fabric262PlatformInventory extends AbstractFabricPlatformInventory {
     public Fabric262PlatformInventory(AbstractFabricPlatformPlayer player) {
         super(player);
+    }
+
+    @Override
+    public ItemStack getStack(int bukkitSlot, int vanillaSlot) {
+        // 26.2 path: convert compensated storage slot layout to native player inventory slot layout.
+        final int nativeSlot = switch (vanillaSlot) {
+            case 4 -> 39;  // helmet
+            case 5 -> 38;  // chestplate
+            case 6 -> 37;  // leggings
+            case 7 -> 36;  // boots
+            case 45 -> 40; // offhand
+            default -> {
+                if (vanillaSlot >= Inventory.HOTBAR_OFFSET && vanillaSlot <= 44) {
+                    yield vanillaSlot - Inventory.HOTBAR_OFFSET; // hotbar 36-44 -> native 0-8
+                }
+                if (vanillaSlot >= 9 && vanillaSlot <= 35) {
+                    yield vanillaSlot; // main inventory
+                }
+                yield bukkitSlot;
+            }
+        };
+        return super.getStack(nativeSlot, vanillaSlot);
     }
 
     @Override

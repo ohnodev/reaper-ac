@@ -63,5 +63,6 @@ if (gradle.startParameter.isBuildScan) {
 
 rootProject.name = "reaperac"
 includeBuild("reaper-api")
+includeBuild("vendor/packetevents")
 include("common")
 include("fabric")

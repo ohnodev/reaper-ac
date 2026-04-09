@@ -29,15 +29,6 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
-      - name: Bootstrap PacketEvents 26.2 to Maven local
-        run: |
-          PACKETEVENTS_REF=8111402533ebb85f8244c4050797c5ef1a2a60b0
-          git clone --depth 1 https://github.com/ohnodev/packetevents.git /tmp/packetevents-26.2
-          cd /tmp/packetevents-26.2
-          git fetch --depth 1 origin "$PACKETEVENTS_REF"
-          git checkout --detach "$PACKETEVENTS_REF"
-          ./gradlew publishToMavenLocal -x test -x check
-
       - name: Build
         run: ./gradlew build -x test
 
