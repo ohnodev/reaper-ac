@@ -30,6 +30,7 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           languages: java-kotlin
+          config-file: ./.github/codeql-config.yml
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
