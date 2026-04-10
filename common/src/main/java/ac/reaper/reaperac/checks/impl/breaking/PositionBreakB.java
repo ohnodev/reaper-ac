@@ -11,7 +11,13 @@ import com.github.retrooper.packetevents.protocol.world.BlockFace;
 
 @CheckData(name = "PositionBreakB")
 public class PositionBreakB extends Check implements BlockBreakCheck {
-    private final int releaseFace = player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_8) ? 0 : 255;
+    private final int releaseFace;
+
+    {
+        player.getClientVersion();
+        releaseFace = 0;
+    }
+
     private BlockFace lastFace;
 
     public PositionBreakB(GrimPlayer player) {

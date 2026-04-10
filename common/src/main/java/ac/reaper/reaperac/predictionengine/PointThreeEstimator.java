@@ -142,7 +142,8 @@ public class PointThreeEstimator {
         if ((Materials.isWater(player.getClientVersion(), state) || stateType == StateTypes.LAVA) &&
                 pointThreeBox.isIntersected(new SimpleCollisionBox(x, y, z))) {
 
-            if (stateType == StateTypes.BUBBLE_COLUMN && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_13)) {
+            if (stateType == StateTypes.BUBBLE_COLUMN) {
+                player.getClientVersion();
                 isNearBubbleColumn = true;
             }
 
@@ -281,7 +282,8 @@ public class PointThreeEstimator {
                 isNearClimbable = isNearClimbable || Collisions.trapdoorUsableAsLadder(player, pos.getX(), pos.getY(), pos.getZ(), state);
             }
 
-            if (stateType == StateTypes.BUBBLE_COLUMN && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_13)) {
+            if (stateType == StateTypes.BUBBLE_COLUMN) {
+                player.getClientVersion();
                 isNearBubbleColumn = true;
             }
 
@@ -433,7 +435,8 @@ public class PointThreeEstimator {
         // The player couldn't have skipped their Y tick here... no point to simulate (and stop a bypass)
         if (!vector.isZeroPointZeroThree()) return 0;
 
-        double minMovement = player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9) ? 0.003 : 0.005;
+        player.getClientVersion();
+        double minMovement = 0.003;
 
         // This should likely be refactored, but it works well.
         double yVel = vector.vector.getY();

@@ -114,12 +114,7 @@ public class DynamicStair implements CollisionFactory {
         int shapeOrdinal;
         // If server is 1.13+ and client is also 1.13+, we can read the block's data directly
 
-        if (version.isNewerThanOrEquals(ClientVersion.V_1_13)) {
-            shapeOrdinal = toEnumShape(block.getShape()).ordinal();
-        } else {
-            EnumShape shape = getStairsShape(player, block, x, y, z);
-            shapeOrdinal = shape.ordinal();
-        }
+        shapeOrdinal = toEnumShape(block.getShape()).ordinal();
         return (block.getHalf() == Half.BOTTOM ? BOTTOM_SHAPES : TOP_SHAPES)[SHAPE_BY_STATE[getShapeIndex(block, shapeOrdinal)]].copy();
     }
 

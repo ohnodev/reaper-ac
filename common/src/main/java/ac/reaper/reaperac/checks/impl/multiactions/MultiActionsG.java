@@ -51,8 +51,7 @@ public class MultiActionsG extends BlockPlaceCheck {
     }
 
     public boolean isCheckActive() {
-        return player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9) && !player.vehicleData.wasVehicleSwitch // one tick off?
-                && player.inVehicle() && player.compensatedEntities.self.getRiding().type.isInstanceOf(EntityTypes.BOAT)
-                && (player.vehicleData.nextVehicleForward != 0 || player.vehicleData.nextVehicleHorizontal != 0);
+        player.getClientVersion();// one tick off?
+        return !player.vehicleData.wasVehicleSwitch && player.inVehicle() && player.compensatedEntities.self.getRiding().type.isInstanceOf(EntityTypes.BOAT) && (player.vehicleData.nextVehicleForward != 0 || player.vehicleData.nextVehicleHorizontal != 0);
     }
 }

@@ -93,7 +93,7 @@ public class CompensatedWorld implements PacketWorld {
     }
 
     public void startPredicting() {
-        if (player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_18_2)) return; // No predictions
+        player.getClientVersion();
         this.isCurrentlyPredicting = true;
     }
 
@@ -171,13 +171,12 @@ public class CompensatedWorld implements PacketWorld {
 
     public void handleBlockBreakPrediction(WrapperPlayClientPlayerDigging digging) {
         // 1.14.4 intentional and correct, do not change it to 1.14
-        if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_14_4) && player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_18_2)) {
-            unackedActions.put(new Pair<>(digging.getBlockPosition(), digging.getAction()), new Vector3d(player.x, player.y, player.z));
-        }
+        player.getClientVersion();
+        player.getClientVersion();
     }
 
     public void stopPredicting(PacketWrapper<?> wrapper) {
-        if (player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_18_2)) return; // No predictions
+        player.getClientVersion();
         this.isCurrentlyPredicting = false; // We aren't in a block place or use item
 
         if (this.currentlyChangedBlocks.isEmpty()) return; // Nothing to change
@@ -336,8 +335,12 @@ public class CompensatedWorld implements PacketWorld {
                     playerBox.expandMax(modX, modY, modZ);
                     playerBox.expandMin(modX * -1, modY * -1, modZ * -1);
 
-                    if (data.hasSlimeBlock || (data.hasHoneyBlock && player.getClientVersion().isOlderThan(ClientVersion.V_1_15_2))) {
+                    if (data.hasSlimeBlock) {
                         player.uncertaintyHandler.slimePistonBounces.add(data.direction);
+                    } else {
+                        if (data.hasHoneyBlock) {
+                            player.getClientVersion();
+                        }
                     }
 
                     break;

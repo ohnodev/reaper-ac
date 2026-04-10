@@ -55,7 +55,8 @@ public class PacketPlayerDigging extends PacketListenerAbstract {
         final ItemType material = item.getType();
 
         // Check for data component stuff on 1.21.4+ (older versions are pain in the ass to support)
-        if (RELIABLE_COMPONENT_SYSTEM && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21_4)) {
+        if (RELIABLE_COMPONENT_SYSTEM) {
+            player.getClientVersion();
             ItemBehaviour itemBehaviour = ItemBehaviourRegistry.getItemBehaviour(material);
 
             if (itemBehaviour.canUse(item, player.compensatedWorld, player, hand)) {
@@ -76,20 +77,17 @@ public class PacketPlayerDigging extends PacketListenerAbstract {
 
 
         // Check for data component stuff on 1.20.5+
-        if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_20_5) && foodComponent != null) {
-            if (foodComponent.isCanAlwaysEat() || player.food < 20 || player.gamemode == GameMode.CREATIVE) {
-                player.packetStateData.setSlowedByUsingItem(true);
-                player.packetStateData.itemInUseHand = hand;
-                return;
-            } else {
-                player.packetStateData.setSlowedByUsingItem(false);
-            }
+        player.getClientVersion();
+        if (foodComponent.isCanAlwaysEat() || player.food < 20 || player.gamemode == GameMode.CREATIVE) {
+            player.packetStateData.setSlowedByUsingItem(true);
+            player.packetStateData.itemInUseHand = hand;
+            return;
+        } else {
+            player.packetStateData.setSlowedByUsingItem(false);
         }
 
         // 1.14 and below players cannot eat in creative, exceptions are potions or milk
-        if (material.hasAttribute(ItemTypes.ItemAttribute.EDIBLE) &&
-                (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_15) || player.gamemode != GameMode.CREATIVE)
-                || material == ItemTypes.POTION || material == ItemTypes.MILK_BUCKET) {
+        if (material.hasAttribute(ItemTypes.ItemAttribute.EDIBLE) || material == ItemTypes.POTION || material == ItemTypes.MILK_BUCKET) {
 
             // Pls have this mapped correctly retrooper
             if (item.getType() == ItemTypes.SPLASH_POTION)
@@ -116,7 +114,8 @@ public class PacketPlayerDigging extends PacketListenerAbstract {
             player.packetStateData.setSlowedByUsingItem(false);
         }
 
-        if (material == ItemTypes.SHIELD && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) {
+        if (material == ItemTypes.SHIELD) {
+            player.getClientVersion();
             player.packetStateData.setSlowedByUsingItem(true);
             player.packetStateData.itemInUseHand = hand;
             return;
@@ -131,9 +130,8 @@ public class PacketPlayerDigging extends PacketListenerAbstract {
 
         // The client and server don't agree on trident status because mojang is incompetent at netcode.
         if (material == ItemTypes.TRIDENT
-                && item.getDamageValue() < item.getMaxDamage() - 1 // Player can't use item if it's "about to break"
-                && (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_13_2)
-                || player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_8))) {
+                && item.getDamageValue() < item.getMaxDamage() - 1) {
+            player.getClientVersion();
             player.packetStateData.setSlowedByUsingItem(item.getEnchantmentLevel(EnchantmentTypes.RIPTIDE) <= 0);
             player.packetStateData.itemInUseHand = hand;
         }
@@ -154,19 +152,21 @@ public class PacketPlayerDigging extends PacketListenerAbstract {
             player.packetStateData.setSlowedByUsingItem(false);
         }
 
-        if (material == ItemTypes.SPYGLASS && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_17)) {
+        if (material == ItemTypes.SPYGLASS) {
+            player.getClientVersion();
             player.packetStateData.setSlowedByUsingItem(true);
             player.packetStateData.itemInUseHand = hand;
         }
 
-        if (material == ItemTypes.GOAT_HORN && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_19)) {
+        if (material == ItemTypes.GOAT_HORN) {
+            player.getClientVersion();
             player.packetStateData.setSlowedByUsingItem(true);
             player.packetStateData.itemInUseHand = hand;
         }
 
         // Only 1.8 and below players can block with swords
         if (material.hasAttribute(ItemTypes.ItemAttribute.SWORD)) {
-            if (player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_8)) player.packetStateData.setSlowedByUsingItem(true);
+            player.getClientVersion();
         }
     }
 

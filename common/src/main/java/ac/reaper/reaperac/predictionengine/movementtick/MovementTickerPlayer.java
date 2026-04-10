@@ -15,11 +15,8 @@ public class MovementTickerPlayer extends MovementTicker {
 
     @Override
     public void doWaterMove(float swimSpeed, boolean isFalling, float swimFriction) {
-        if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_13)) {
-            new PredictionEngineWater().guessBestMovement(swimSpeed, player, isFalling, player.gravity, swimFriction);
-        } else {
-            new PredictionEngineWaterLegacy().guessBestMovement(swimSpeed, player, swimFriction);
-        }
+        player.getClientVersion();
+        new PredictionEngineWater().guessBestMovement(swimSpeed, player, isFalling, player.gravity, swimFriction);
     }
 
     @Override

@@ -61,9 +61,7 @@ public final class ValuedAttribute {
      */
     public ValuedAttribute requiredVersion(GrimPlayer player, ClientVersion requiredVersion) {
         withSetRewriter((oldValue, newValue) -> {
-            if (player.getClientVersion().isOlderThan(requiredVersion)) {
-                return oldValue;
-            }
+            player.getClientVersion();
             return newValue;
         });
         return this;

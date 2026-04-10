@@ -23,7 +23,7 @@ public class DynamicCollisionWall extends DynamicConnecting implements Collision
     // https://bugs.mojang.com/browse/MC-9565
     // https://bugs.mojang.com/browse/MC-94016
     private static final CollisionBox[] COLLISION_BOXES = makeShapes(4.0F, 3.0F, 24.0F, 0.0F, 24.0F, false, 1);
-    private static final boolean isNewServer = PacketEvents.getAPI().getServerManager().getVersion().isNewerThan(ServerVersion.V_1_12_2);
+    private static final boolean isNewServer = true;
 
 
     /**
@@ -37,81 +37,57 @@ public class DynamicCollisionWall extends DynamicConnecting implements Collision
 
         boolean sixteen = PacketEvents.getAPI().getServerManager().getVersion().isNewerThan(ServerVersion.V_1_16);
 
-        if (state.getNorth() != North.NONE)
-            north += state.getNorth() == North.LOW || sixteen ? 1 : 2;
-        if (state.getEast() != East.NONE)
-            east += state.getEast() == East.LOW || sixteen ? 1 : 2;
-        if (state.getSouth() != South.NONE)
-            south += state.getSouth() == South.LOW || sixteen ? 1 : 2;
-        if (state.getWest() != West.NONE)
-            west += state.getWest() == West.LOW || sixteen ? 1 : 2;
+        if (state.getNorth() != North.NONE) {
+            state.getNorth();
+            north += 1;
+        }
+        if (state.getEast() != East.NONE) {
+            state.getEast();
+            east += 1;
+        }
+        if (state.getSouth() != South.NONE) {
+            state.getSouth();
+            south += 1;
+        }
+        if (state.getWest() != West.NONE) {
+            state.getWest();
+            west += 1;
+        }
 
         if (state.isUp())
             up = 1;
 
         // On 1.13+ clients the bounding box is much more complicated
-        if (version.isNewerThanOrEquals(ClientVersion.V_1_13)) {
-            ComplexCollisionBox box = new ComplexCollisionBox(5);
+        ComplexCollisionBox box = new ComplexCollisionBox(5);
 
-            // Proper and faster way would be to compute all this beforehand
-            if (up == 1) {
-                box.add(new HexCollisionBox(4, 0, 4, 12, 16, 12));
-            }
-
-            if (north == 1) {
-                box.add(new HexCollisionBox(5, 0, 0.0D, 11, 14, 11));
-            } else if (north == 2) {
-                box.add(new HexCollisionBox(5, 0, 0, 11, 16, 11));
-            }
-            if (south == 1) {
-                box.add(new HexCollisionBox(5, 0, 5, 11, 14, 16));
-            } else if (south == 2) {
-                box.add(new HexCollisionBox(5, 0, 5, 11, 16, 16));
-            }
-            if (west == 1) {
-                box.add(new HexCollisionBox(0, 0, 5, 11, 14, 11));
-            } else if (west == 2) {
-                box.add(new HexCollisionBox(0, 0, 5, 11, 16, 11));
-            }
-            if (east == 1) {
-                box.add(new HexCollisionBox(5, 0, 5, 16, 14, 11));
-            } else if (east == 2) {
-                box.add(new HexCollisionBox(5, 0, 5, 16, 16, 11));
-            }
-            return box;
+        // Proper and faster way would be to compute all this beforehand
+        if (up == 1) {
+            box.add(new HexCollisionBox(4, 0, 4, 12, 16, 12));
         }
-
-        // Magic 1.8 code for walls that I copied over, 1.12 below uses this mess
-        float f = 0.25F;
-        float f1 = 0.75F;
-        float f2 = 0.25F;
-        float f3 = 0.75F;
 
         if (north == 1) {
-            f2 = 0.0F;
+            box.add(new HexCollisionBox(5, 0, 0.0D, 11, 14, 11));
+        } else if (north == 2) {
+            box.add(new HexCollisionBox(5, 0, 0, 11, 16, 11));
         }
-
         if (south == 1) {
-            f3 = 1.0F;
+            box.add(new HexCollisionBox(5, 0, 5, 11, 14, 16));
+        } else if (south == 2) {
+            box.add(new HexCollisionBox(5, 0, 5, 11, 16, 16));
         }
-
         if (west == 1) {
-            f = 0.0F;
+            box.add(new HexCollisionBox(0, 0, 5, 11, 14, 11));
+        } else if (west == 2) {
+            box.add(new HexCollisionBox(0, 0, 5, 11, 16, 11));
         }
-
         if (east == 1) {
-            f1 = 1.0F;
+            box.add(new HexCollisionBox(5, 0, 5, 16, 14, 11));
+        } else if (east == 2) {
+            box.add(new HexCollisionBox(5, 0, 5, 16, 16, 11));
         }
+        return box;
 
-        if (north == 1 && south == 1 && west != 0 && east != 0) {
-            f = 0.3125F;
-            f1 = 0.6875F;
-        } else if (north != 1 && south != 1 && west == 0 && east == 0) {
-            f2 = 0.3125F;
-            f3 = 0.6875F;
-        }
-
-        return new SimpleCollisionBox(f, 0.0F, f2, f1, 1, f3);
+        // Magic 1.8 code for walls that I copied over, 1.12 below uses this mess
     }
 
     /*
@@ -124,7 +100,7 @@ public class DynamicCollisionWall extends DynamicConnecting implements Collision
         boolean isNewClient = version.isNewerThan(ClientVersion.V_1_12_2);
 
         // Fast path for new client + new server
-        if (isNewServer && isNewClient) {
+        if (isNewServer) {
             boolean north = block.getNorth() != North.NONE;
             boolean south = block.getSouth() != South.NONE;
             boolean west = block.getWest() != West.NONE;

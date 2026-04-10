@@ -56,14 +56,9 @@ public class DynamicChorusPlant implements CollisionFactory {
     @Override
     public CollisionBox fetch(GrimPlayer player, ClientVersion version, WrappedBlockState block, int x, int y, int z) {
         // ViaVersion replacement block (Purple wool)
-        if (version.isOlderThanOrEquals(ClientVersion.V_1_8))
-            return new SimpleCollisionBox(0, 0, 0, 1, 1, 1, true);
 
         // Player is 1.12- on 1.13 server
         // Player is 1.12 on 1.12 server
-        if (version.isOlderThanOrEquals(ClientVersion.V_1_12_2)) {
-            return getLegacyBoundingBox(player, version, x, y, z);
-        }
 
         Set<BlockFace> directions;
 
@@ -96,7 +91,7 @@ public class DynamicChorusPlant implements CollisionFactory {
         Set<BlockFace> faces = new HashSet<>();
 
         // 1.13 clients on 1.12 servers don't see chorus flowers attached to chorus because of a ViaVersion bug
-        StateType versionFlower = version.isOlderThanOrEquals(ClientVersion.V_1_12_2) ? StateTypes.CHORUS_FLOWER : null;
+        StateType versionFlower = null;
 
         StateType downBlock = player.compensatedWorld.getBlockType(x, y - 1, z);
         StateType upBlock = player.compensatedWorld.getBlockType(x, y + 1, z);

@@ -15,7 +15,12 @@ import static ac.reaper.reaperac.utils.nmsutil.BlockBreakSpeed.getBlockDamage;
 
 @CheckData(name = "WrongBreak")
 public class WrongBreak extends Check implements BlockBreakCheck {
-    private final int exemptedY = player.getClientVersion().isOlderThan(ClientVersion.V_1_8) ? 255 : -1 ;
+    private final int exemptedY;
+
+    {
+        player.getClientVersion();
+        exemptedY = -1;
+    }
 
     private boolean lastBlockWasInstantBreak = false;
     private Vector3i lastBlock, lastCancelledBlock, lastLastBlock = null;
@@ -31,11 +36,11 @@ public class WrongBreak extends Check implements BlockBreakCheck {
             return false;
 
         // on pre 1.14.4 clients, the YPos of this packet is always the same
-        if (player.getClientVersion().isOlderThan(ClientVersion.V_1_14_4) && yPos != exemptedY)
-            return false;
+        player.getClientVersion();
 
         // and if this block is not an instant break
-        return player.getClientVersion().isOlderThan(ClientVersion.V_1_14_4) || getBlockDamage(player, block) < 1;
+        player.getClientVersion();
+        return getBlockDamage(player, block) < 1;
     }
 
     @Override
@@ -54,7 +59,8 @@ public class WrongBreak extends Check implements BlockBreakCheck {
 
             if (!shouldExempt(blockBreak.block, pos.y) && !pos.equals(lastBlock)) {
                 // https://github.com/GrimAnticheat/Grim/issues/1512
-                if (player.getClientVersion().isOlderThan(ClientVersion.V_1_14_4) || (!lastBlockWasInstantBreak && pos.equals(lastCancelledBlock))) {
+                player.getClientVersion();
+                if (!lastBlockWasInstantBreak && pos.equals(lastCancelledBlock)) {
                     if (flagAndAlert("action=CANCELLED_DIGGING" + ", last=" + MessageUtil.toUnlabledString(lastBlock) + ", pos=" + MessageUtil.toUnlabledString(pos))) {
                         if (shouldModifyPackets()) {
                             blockBreak.cancel();
@@ -73,7 +79,7 @@ public class WrongBreak extends Check implements BlockBreakCheck {
             final Vector3i pos = blockBreak.position;
 
             // when a player looks away from the mined block, they send a cancel, and if they look at it again, they don't send another start. (thanks mojang!)
-            if (!pos.equals(lastCancelledBlock) && (!lastBlockWasInstantBreak || player.getClientVersion().isOlderThan(ClientVersion.V_1_14_4)) && !pos.equals(lastBlock)) {
+            if (!pos.equals(lastCancelledBlock) && !lastBlockWasInstantBreak && !pos.equals(lastBlock)) {
                 if (flagAndAlert("action=FINISHED_DIGGING" + ", last=" + MessageUtil.toUnlabledString(lastBlock) + ", pos=" + MessageUtil.toUnlabledString(pos))) {
                     if (shouldModifyPackets()) {
                         blockBreak.cancel();
@@ -82,11 +88,7 @@ public class WrongBreak extends Check implements BlockBreakCheck {
             }
 
             // 1.14.4+ clients don't send another start break in protected regions
-            if (player.getClientVersion().isOlderThan(ClientVersion.V_1_14_4)) {
-                lastCancelledBlock = null;
-                lastLastBlock = null;
-                lastBlock = null;
-            }
+            player.getClientVersion();
         }
     }
 }

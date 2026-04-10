@@ -77,24 +77,25 @@ public class Post extends Check implements PacketCheck, PostPredictionCheck {
                 }
                 post.clear();
                 sentFlying = false;
-            } else if (PLAYER_ABILITIES.equals(packetType)
-                    || (HELD_ITEM_CHANGE.equals(packetType) && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_8))
-                    || INTERACT_ENTITY.equals(packetType) || PLAYER_BLOCK_PLACEMENT.equals(packetType)
-                    || ATTACK.equals(packetType) || SPECTATE_ENTITY.equals(packetType)
-                    || USE_ITEM.equals(packetType) || PLAYER_DIGGING.equals(packetType)) {
+            } else if (PLAYER_ABILITIES.equals(packetType) || HELD_ITEM_CHANGE.equals(packetType) || INTERACT_ENTITY.equals(packetType) || PLAYER_BLOCK_PLACEMENT.equals(packetType) || ATTACK.equals(packetType) || SPECTATE_ENTITY.equals(packetType) || USE_ITEM.equals(packetType) || PLAYER_DIGGING.equals(packetType)) {
                 if (sentFlying) post.add(event.getPacketType());
-            } else
-                if (CLICK_WINDOW.equals(packetType) && player.getClientVersion().isOlderThan(ClientVersion.V_1_13)) { // 1.13 clicking inventory causes weird animations
-                if (sentFlying) post.add(event.getPacketType()); // Why do 1.13+ players send the click window packet whenever? This doesn't make sense.
-            } else if (ANIMATION.equals(packetType) && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9) && player.getClientVersion().isOlderThan(ClientVersion.V_1_13) && isExemptFromSwingingCheck < player.lastTransactionReceived.get()) { // Exempt when the server sends animations because viaversion
-                if (sentFlying) post.add(event.getPacketType());
-            } else if (ENTITY_ACTION.equals(packetType) // ViaRewind sends START_FALL_FLYING packets async for 1.8 clients on 1.9+ servers
-                    && (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9) || new WrapperPlayClientEntityAction(event).getAction() != WrapperPlayClientEntityAction.Action.START_FLYING_WITH_ELYTRA)) {
-                // https://github.com/GrimAnticheat/Grim/issues/824
-                if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_19_3) && player.inVehicle()) {
-                    return;
+            } else {
+                if (CLICK_WINDOW.equals(packetType)) {
+                    player.getClientVersion();
                 }
-                if (sentFlying) post.add(event.getPacketType());
+                if (ANIMATION.equals(packetType)) {
+                    player.getClientVersion();
+                    player.getClientVersion();
+                } else {
+                    if (ENTITY_ACTION.equals(packetType)) {
+                        player.getClientVersion();
+                        player.getClientVersion();
+                        if (player.inVehicle()) {
+                            return;
+                        }
+                        if (sentFlying) post.add(event.getPacketType());
+                    }
+                }
             }
         }
     }

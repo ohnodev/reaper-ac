@@ -19,18 +19,21 @@ public class PacketPlayerTick extends PacketListenerAbstract {
     public void onPacketReceive(PacketReceiveEvent event) {
         if (event.getPacketType() == PacketType.Play.Client.CLIENT_TICK_END) {
             GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
-            if (player == null || player.getClientVersion().isOlderThan(ClientVersion.V_1_21_2))
+            if (player == null) {
                 return;
+            } else {
+                player.getClientVersion();
+            }
 
             PacketWorldBorder border = player.checkManager.getPacketCheck(PacketWorldBorder.class);
             border.tickBorder();
         } else if (WrapperPlayClientPlayerFlying.isFlying(event.getPacketType())) {
             GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
-            if (player == null || player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21_2))
-                return;
+            if (player != null) {
+                player.getClientVersion();
+            }
+            return;
 
-            PacketWorldBorder border = player.checkManager.getPacketCheck(PacketWorldBorder.class);
-            border.tickBorder();
         }
     }
 

@@ -25,39 +25,14 @@ public class DynamicHitboxPane extends DynamicConnecting implements HitBoxFactor
         boolean east, north, south, west;
 
         // 1.13+ servers on 1.13+ clients send the full fence data
-        if (isModernVersion(version)) {
-            east = block.getEast() != East.FALSE;
-            north = block.getNorth() != North.FALSE;
-            south = block.getSouth() != South.FALSE;
-            west = block.getWest() != West.FALSE;
-        } else {
-            east = connectsTo(player, version, x, y, z, BlockFace.EAST);
-            north = connectsTo(player, version, x, y, z, BlockFace.NORTH);
-            south = connectsTo(player, version, x, y, z, BlockFace.SOUTH);
-            west = connectsTo(player, version, x, y, z, BlockFace.WEST);
-        }
+        east = block.getEast() != East.FALSE;
+        north = block.getNorth() != North.FALSE;
+        south = block.getSouth() != South.FALSE;
+        west = block.getWest() != West.FALSE;
 
-        // On 1.7 and 1.8 clients, and 1.13+ clients on 1.7 and 1.8 servers, the glass pane is + instead of |
-        if (shouldUseOldPaneShape(version, north, south, east, west)) {
-            north = south = east = west = true;
-        }
-
-        return version.isNewerThanOrEquals(ClientVersion.V_1_9)
-                ? getModernCollisionBox(north, east, south, west)
-                : getLegacyCollisionBox(north, east, south, west);
+        return getModernCollisionBox(north, east, south, west);
     }
 
-    private boolean isModernVersion(ClientVersion version) {
-
-        return version.isNewerThanOrEquals(ClientVersion.V_1_13);
-    }
-
-    private boolean shouldUseOldPaneShape(ClientVersion version, boolean north, boolean south, boolean east, boolean west) {
-        if ((north || south || east || west)) return false;
-        if (version.isOlderThanOrEquals(ClientVersion.V_1_8)) return true;
-
-        return false;
-    }
 
     private CollisionBox getModernCollisionBox(boolean north, boolean east, boolean south, boolean west) {
         return COLLISION_BOXES[getAABBIndex(north, east, south, west)].copy();

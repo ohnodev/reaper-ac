@@ -12,7 +12,12 @@ import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPl
 @CheckData(name = "BadPacketsE")
 public class BadPacketsE extends Check implements PacketCheck {
     private int noReminderTicks;
-    private final int maxNoReminderTicks = player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_8) ? 20 : 19;
+    private final int maxNoReminderTicks;
+
+    {
+        player.getClientVersion();
+        maxNoReminderTicks = 19;
+    }
 
     public BadPacketsE(GrimPlayer player) {
         super(player);

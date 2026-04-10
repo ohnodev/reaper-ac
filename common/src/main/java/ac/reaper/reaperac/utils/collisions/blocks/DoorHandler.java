@@ -40,39 +40,9 @@ public class DoorHandler implements CollisionFactory {
         // I hate legacy versions... this is so messy
         //TODO: This needs to be updated to support corrupted door collision
 
-        if (version.isOlderThanOrEquals(ClientVersion.V_1_12_2)) {
-            if (door.getHalf() == Half.LOWER) {
-                WrappedBlockState above = player.compensatedWorld.getBlock(x, y + 1, z);
-
-                facingDirection = door.getFacing();
-                isClosed = !door.isOpen();
-
-                // Doors have to be the same material in 1.12 for their block data to be connected together
-                // For example, if you somehow manage to get a jungle top with an oak bottom, the data isn't shared
-                if (above.getType() == door.getType()) {
-                    isRightHinge = above.getHinge() == Hinge.RIGHT;
-                } else {
-                    // Default missing value
-                    isRightHinge = false;
-                }
-            } else {
-                WrappedBlockState below = player.compensatedWorld.getBlock(x, y - 1, z);
-
-                if (below.getType() == door.getType() && below.getHalf() == Half.LOWER) {
-                    isClosed = !below.isOpen();
-                    facingDirection = below.getFacing();
-                    isRightHinge = door.getHinge() == Hinge.RIGHT;
-                } else {
-                    facingDirection = BlockFace.EAST;
-                    isClosed = true;
-                    isRightHinge = false;
-                }
-            }
-        } else {
-            facingDirection = door.getFacing();
-            isClosed = !door.isOpen();
-            isRightHinge = door.getHinge() == Hinge.RIGHT;
-        }
+        facingDirection = door.getFacing();
+        isClosed = !door.isOpen();
+        isRightHinge = door.getHinge() == Hinge.RIGHT;
 
         return switch (facingDirection) {
             case SOUTH ->

@@ -23,7 +23,8 @@ public class PacketOrderD extends Check implements PacketCheck {
 
     @Override
     public void onPacketReceive(PacketReceiveEvent event) {
-        if (event.getPacketType() == PacketType.Play.Client.INTERACT_ENTITY && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) {
+        if (event.getPacketType() == PacketType.Play.Client.INTERACT_ENTITY) {
+            player.getClientVersion();
             final WrapperPlayClientInteractEntity packet = new WrapperPlayClientInteractEntity(event);
             InteractAction action = packet.getAction();
             if (action != InteractAction.ATTACK) {
@@ -31,15 +32,16 @@ public class PacketOrderD extends Check implements PacketCheck {
                 final int entity = packet.getEntityId();
 
                 if (packet.getHand() == InteractionHand.OFF_HAND) {
-                    if (action == InteractAction.INTERACT || player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_26_1)) {
-                        if (!sentMainhand) {
-                            if (flagAndAlert("Skipped Mainhand") && shouldModifyPackets()) {
-                                event.setCancelled(true);
-                                player.onPacketCancel();
-                            }
-                        }
-                        sentMainhand = false;
+                    if (action != InteractAction.INTERACT) {
+                        player.getClientVersion();
                     }
+                    if (!sentMainhand) {
+                        if (flagAndAlert("Skipped Mainhand") && shouldModifyPackets()) {
+                            event.setCancelled(true);
+                            player.onPacketCancel();
+                        }
+                    }
+                    sentMainhand = false;
 
                     if (action == InteractAction.INTERACT_AT) {
                         if (sneaking != requiredSneaking || entity != requiredEntity) {

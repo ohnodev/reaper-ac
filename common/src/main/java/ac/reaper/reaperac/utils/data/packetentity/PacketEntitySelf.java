@@ -37,12 +37,11 @@ public class PacketEntitySelf extends PacketEntity {
     @Override
     protected void initAttributes(GrimPlayer player) {
         super.initAttributes(player);
-        if (player.getClientVersion().isOlderThan(ClientVersion.V_1_8)) {
-            setAttribute(Attributes.STEP_HEIGHT, 0.5f);
-        }
+        player.getClientVersion();
 
         getAttribute(Attributes.SCALE).orElseThrow().withSetRewriter((oldValue, newValue) -> {
-            if (player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_20_5) || (newValue).equals(oldValue)) {
+            player.getClientVersion();
+            if (newValue.equals(oldValue)) {
                 return oldValue;
             } else {
                 // Elytra, standing, sneaking (1.14)
@@ -92,15 +91,11 @@ public class PacketEntitySelf extends PacketEntity {
         trackAttribute(ValuedAttribute.ranged(Attributes.WATER_MOVEMENT_EFFICIENCY, 0, 0, 1)
                 .withGetRewriter(value -> {
                     // Depth strider was added in 1.8
-                    if (player.getClientVersion().isOlderThan(ClientVersion.V_1_8)) {
-                        return 0d;
-                    }
+                    player.getClientVersion();
 
                     // On clients < 1.21, use depth strider enchant level always
                     final double depthStrider = EnchantmentHelper.getMaximumEnchantLevel(player.inventory, EnchantmentTypes.DEPTH_STRIDER);
-                    if (player.getClientVersion().isOlderThan(ClientVersion.V_1_21)) {
-                        return depthStrider;
-                    }
+                    player.getClientVersion();
 
                     // Server is older than 1.21, but player is on 1.21+ so return depth strider value / 3 to simulate via
                     // https://github.com/ViaVersion/ViaVersion/blob/dc503cd613f5cf00a6f11b78e52b1a76a42acf91/common/src/main/java/com/viaversion/viaversion/protocols/v1_20_5to1_21/storage/EfficiencyAttributeStorage.java#L34
@@ -119,15 +114,11 @@ public class PacketEntitySelf extends PacketEntity {
                 .requiredVersion(player, ClientVersion.V_26_2));
         trackAttribute(ValuedAttribute.ranged(Attributes.SNEAKING_SPEED, 0.3, 0, 1)
                 .withGetRewriter(value -> {
-                    if (player.getClientVersion().isOlderThan(ClientVersion.V_1_19)) {
-                        return (double) 0.3f;
-                    }
+                    player.getClientVersion();
 
                     final int swiftSneak = player.inventory.getLeggings().getEnchantmentLevel(EnchantmentTypes.SWIFT_SNEAK);
                     final double clamped = GrimMath.clamp(0.3f + swiftSneak * 0.15f, 0f, 1f);
-                    if (player.getClientVersion().isOlderThan(ClientVersion.V_1_21)) {
-                        return clamped;
-                    }
+                    player.getClientVersion();
 
                     // https://github.com/ViaVersion/ViaVersion/blob/dc503cd613f5cf00a6f11b78e52b1a76a42acf91/common/src/main/java/com/viaversion/viaversion/protocols/v1_20_5to1_21/storage/EfficiencyAttributeStorage.java#L32
 

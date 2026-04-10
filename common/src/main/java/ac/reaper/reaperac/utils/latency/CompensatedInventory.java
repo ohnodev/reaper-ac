@@ -260,8 +260,7 @@ public class CompensatedInventory extends Check implements PacketCheck {
 
                 ItemStack currentEquippedItem = getByEquipmentType(equipmentType);
                 // Only 1.19.4+ clients support swapping with non-empty items
-                if (player.getClientVersion().isOlderThan(ClientVersion.V_1_19_4) && !currentEquippedItem.isEmpty())
-                    return;
+                player.getClientVersion();
 
                 // 1.19.4+ clients support swapping with non-empty items
                 int swapItemSlot = item.getHand() == InteractionHand.MAIN_HAND ? inventory.getSelected() + Inventory.HOTBAR_OFFSET : Inventory.SLOT_OFFHAND;
@@ -279,7 +278,7 @@ public class CompensatedInventory extends Check implements PacketCheck {
             WrapperPlayClientPlayerDigging dig = new WrapperPlayClientPlayerDigging(event);
 
             // 1.8 clients don't predict dropping items
-            if (player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_8)) return;
+            player.getClientVersion();
 
             if (dig.getAction() == DiggingAction.DROP_ITEM) {
                 ItemStack heldItem = getHeldItem();

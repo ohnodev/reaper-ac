@@ -36,7 +36,7 @@ public enum BlockPlaceResult {
     // The client only predicts one of the individual bed blocks, interestingly
     BED((player, place) -> {
         // 1.12- players don't predict bed places for some reason
-        if (player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_12_2)) return;
+        player.getClientVersion();
 
         BlockFace facing = place.getPlayerFacing();
         if (place.isBlockFaceOpen(facing)) {
@@ -540,8 +540,9 @@ public enum BlockPlaceResult {
         boolean isHead = place.material.getName().contains("head") || place.material.getName().contains("skull");
         boolean isWallSign = !isTorch && !isHead;
 
-        if (isHead && player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_12_2))
-            return; // 1.12- players don't predict head places
+        if (isHead) {
+            player.getClientVersion();
+        }
 
         if (isTorch) {
             dir = StateTypes.WALL_TORCH.createBlockState(CompensatedWorld.blockVersion);
@@ -863,7 +864,8 @@ public enum BlockPlaceResult {
             boolean clickedTop = place.getClickedLocation().getY() > 0.5;
             Half half = clickedTop ? Half.TOP : Half.BOTTOM;
             door.setHalf(half);
-        } else if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) { // 1.9 logic only
+        } else {
+            player.getClientVersion();// 1.9 logic only
             door.setFacing(place.getPlayerFacing().getOppositeFace());
             Half half = direction == BlockFace.UP ? Half.BOTTOM : Half.TOP;
             door.setHalf(half);
@@ -875,20 +877,7 @@ public enum BlockPlaceResult {
         }
 
         // 1.8 has special placing requirements
-        if (player.getClientVersion().isOlderThan(ClientVersion.V_1_9)) {
-            WrappedBlockState dirState = place.getDirectionalState(door.getFacing().getOppositeFace());
-            boolean fullFace = CollisionData.getData(dirState.getType()).getMovementCollisionBox(player, player.getClientVersion(), dirState).isFullBlock();
-            boolean blacklisted = BlockTags.ICE.contains(dirState.getType()) || BlockTags.GLASS_BLOCKS.contains(dirState.getType()) ||
-                    dirState.getType() == StateTypes.TNT || BlockTags.LEAVES.contains(dirState.getType()) ||
-                    dirState.getType() == StateTypes.SNOW || dirState.getType() == StateTypes.CACTUS;
-            boolean whitelisted = dirState.getType() == StateTypes.GLOWSTONE || BlockTags.SLABS.contains(dirState.getType()) ||
-                    BlockTags.STAIRS.contains(dirState.getType());
-
-            // Need a solid block to place a trapdoor on
-            if (!((dirState.getType().isBlocking() && !blacklisted && fullFace) || whitelisted)) {
-                return;
-            }
-        }
+        player.getClientVersion();
 
 
         place.set(door);

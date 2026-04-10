@@ -226,11 +226,7 @@ public class Materials {
     public static boolean isWater(ClientVersion clientVersion, WrappedBlockState state) {
         boolean modern = clientVersion.isNewerThanOrEquals(ClientVersion.V_1_13);
 
-        if (modern && isWaterModern(state.getType())) {
-            return true;
-        }
-
-        if (!modern && isWaterLegacy(state.getType())) {
+        if (isWaterModern(state.getType())) {
             return true;
         }
 
@@ -245,24 +241,17 @@ public class Materials {
             return true;
         }
         boolean modern = clientVersion.isNewerThanOrEquals(ClientVersion.V_1_13);
-        return modern ? WATER_SOURCES.contains(state.getType()) : WATER_SOURCES_LEGACY.contains(state.getType());
+        return WATER_SOURCES.contains(state.getType());
     }
 
     public static boolean isWaterlogged(ClientVersion clientVersion, WrappedBlockState state) {
-        if (clientVersion.isOlderThanOrEquals(ClientVersion.V_1_12_2)) return false;
 
 
         StateType type = state.getType();
 
         // Waterlogged lanterns were added in 1.16.2
-        if (clientVersion.isOlderThan(ClientVersion.V_1_16_2) && (type == StateTypes.LANTERN || type == StateTypes.SOUL_LANTERN))
-            return false;
         // ViaVersion small dripleaf -> fern (not waterlogged)
-        if (clientVersion.isOlderThan(ClientVersion.V_1_17) && type == StateTypes.SMALL_DRIPLEAF)
-            return false;
         // Waterlogged rails were added in 1.17
-        if (clientVersion.isOlderThan(ClientVersion.V_1_17) && BlockTags.RAILS.contains(type))
-            return false;
         // Nice check to see if waterlogged :)
         return state.hasProperty(StateValue.WATERLOGGED) && state.isWaterlogged();
     }
@@ -295,7 +284,7 @@ public class Materials {
 
         // 1.13-1.15 had banners on the blacklist - removed in 1.16, not implemented in 1.12 and below
         if (BlockTags.BANNERS.contains(mat))
-            return ver.isNewerThanOrEquals(ClientVersion.V_1_13) && ver.isOlderThan(ClientVersion.V_1_16);
+            return false;
 
         return false;
     }
@@ -313,9 +302,7 @@ public class Materials {
     }
 
     public static boolean isWaterIgnoringWaterlogged(ClientVersion clientVersion, WrappedBlockState state) {
-        if (clientVersion.isNewerThanOrEquals(ClientVersion.V_1_13))
-            return isWaterModern(state.getType());
-        return isWaterLegacy(state.getType());
+        return isWaterModern(state.getType());
     }
 
     public static boolean isClientSideInteractable(StateType material) {
@@ -344,9 +331,6 @@ public class Materials {
         }
 
         // In 1.7, only oak trapdoors exist so 1.7 players can open every type of trapdoor
-        if (ver.isOlderThan(ClientVersion.V_1_8)) {
-            return true;
-        }
 
         // Copper trapdoors can only be opened in 1.20.3 and above, in older versions they appear as iron trapdoors
         if (COPPER_TRAPDOORS.contains(mat)) {

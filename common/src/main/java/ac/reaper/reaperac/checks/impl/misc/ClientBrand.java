@@ -55,19 +55,5 @@ public class ClientBrand extends Check implements PacketCheck {
                 GrimAPI.INSTANCE.getAlertManager().sendBrand(component, null);
             }
         }
-
-        // https://github.com/MinecraftForge/MinecraftForge/issues/9309
-        // "Forge 40.1.22 1.18.2+ has extended player reach"
-        // quality development from forge devs
-        // inbuilt reach hacks for over a year across 2 (3 if you include 1.19.3/1.20) major versions
-        // Fixed in 1.19.4 possibly? Definitely fixed in 1.20+.
-        final boolean hasReachHacks = brand.contains("forge")
-                && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_18_2)
-                && player.getClientVersion().isOlderThan(ClientVersion.V_1_19_4);
-        if (hasReachHacks && GrimAPI.INSTANCE.getConfigManager().isBlockBlacklistedForgeClients()) {
-            player.disconnect(MessageUtil.miniMessage(MessageUtil.replacePlaceholders(player, GrimAPI.INSTANCE.getConfigManager().getDisconnectBlacklistedForge())));
-        }
-
-        hasBrand = true;
     }
 }

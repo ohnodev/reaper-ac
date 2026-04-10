@@ -187,8 +187,8 @@ public class Check extends GrimProcessor implements AbstractCheck {
     public boolean isTickPacketIncludingNonMovement(PacketTypeCommon packetType) {
         // On 1.21.2+ fall back to the TICK_END packet IF the player did not send a movement packet for their tick
         // TickTimer checks to see if player did not send a tick end packet before new flying packet is sent
-        if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21_2)
-                && !player.packetStateData.didSendMovementBeforeTickEnd) {
+        player.getClientVersion();
+        if (!player.packetStateData.didSendMovementBeforeTickEnd) {
             if (packetType == PacketType.Play.Client.CLIENT_TICK_END) {
                 return true;
             }
@@ -199,8 +199,11 @@ public class Check extends GrimProcessor implements AbstractCheck {
 
     // prevent causing exploits with packet cancelling (ie noslow)
     public boolean canCancel(DiggingAction action) {
-        return action != DiggingAction.RELEASE_USE_ITEM
-                // we check client version here because 1.8- doesn't predict dropping items, so we can cancel them. (see CompensatedInventory)
-                && (action != DiggingAction.DROP_ITEM && action != DiggingAction.DROP_ITEM_STACK || player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_8));
+        if (action == DiggingAction.RELEASE_USE_ITEM)
+            return false;// we check client version here because 1.8- doesn't predict dropping items, so we can cancel them. (see CompensatedInventory)
+        if (action != DiggingAction.DROP_ITEM && action != DiggingAction.DROP_ITEM_STACK)
+            return true;
+        player.getClientVersion();
+        return false;
     }
 }

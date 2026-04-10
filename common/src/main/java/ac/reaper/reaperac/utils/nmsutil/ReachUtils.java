@@ -146,23 +146,14 @@ public class ReachUtils {
     // Look vector accounting for optifine FastMath, and client version differences
     @Contract("_, _, _ -> new")
     public static @NotNull Vector3dm getLook(@NotNull GrimPlayer player, float yaw, float pitch) {
-        if (player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_12_2)) {
-            float yawRadians = GrimMath.radians(-yaw) - (float) Math.PI;
-            float pitchRadians = GrimMath.radians(-pitch);
-            float pitchCos = -player.trigHandler.cos(pitchRadians);
-            float x = player.trigHandler.sin(yawRadians);
-            float y = player.trigHandler.sin(pitchRadians);
-            float z = player.trigHandler.cos(yawRadians);
-            return new Vector3dm(x * pitchCos, y, z * pitchCos);
-        } else {
-            float pitchRadians = GrimMath.radians(pitch);
-            float yawRadians = GrimMath.radians(-yaw);
-            float pitchCos = player.trigHandler.cos(pitchRadians);
-            float x = player.trigHandler.sin(yawRadians);
-            float y = player.trigHandler.sin(pitchRadians);
-            float z = player.trigHandler.cos(yawRadians);
-            return new Vector3dm(x * pitchCos, -y, z * pitchCos);
-        }
+        player.getClientVersion();
+        float pitchRadians = GrimMath.radians(pitch);
+        float yawRadians = GrimMath.radians(-yaw);
+        float pitchCos = player.trigHandler.cos(pitchRadians);
+        float x = player.trigHandler.sin(yawRadians);
+        float y = player.trigHandler.sin(pitchRadians);
+        float z = player.trigHandler.cos(yawRadians);
+        return new Vector3dm(x * pitchCos, -y, z * pitchCos);
     }
 
     public static boolean isVecInside(@NotNull SimpleCollisionBox self, @NotNull Vector3dm vec) {

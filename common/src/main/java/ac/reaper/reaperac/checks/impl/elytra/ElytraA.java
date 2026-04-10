@@ -19,9 +19,7 @@ public class ElytraA extends Check implements PostPredictionCheck {
     }
 
     public void onStartGliding(PacketReceiveEvent event) {
-        if (player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_8)) {
-            return;
-        }
+        player.getClientVersion();
 
         if (player.isGliding && flagAndAlert()) {
             setback = true;
@@ -35,9 +33,7 @@ public class ElytraA extends Check implements PostPredictionCheck {
 
     @Override
     public void onPacketReceive(PacketReceiveEvent event) {
-        if (player.getClientVersion().isOlderThan(ClientVersion.V_1_15) && event.getPacketType() == PacketType.Play.Client.ENTITY_ACTION
-                && new WrapperPlayClientEntityAction(event).getAction() == WrapperPlayClientEntityAction.Action.START_FLYING_WITH_ELYTRA
-        ) onStartGliding(event);
+        player.getClientVersion();
     }
 
     @Override

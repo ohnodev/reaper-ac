@@ -50,21 +50,12 @@ public class DynamicHitboxFence extends DynamicConnecting implements HitBoxFacto
 
         // 1.13+ servers on 1.13+ clients send the full fence data
 
-        if (version.isNewerThanOrEquals(ClientVersion.V_1_13)) {
-            east = block.getEast() != East.FALSE;
-            north = block.getNorth() != North.FALSE;
-            south = block.getSouth() != South.FALSE;
-            west = block.getWest() != West.FALSE;
-        } else {
-            east = connectsTo(player, version, x, y, z, BlockFace.EAST);
-            north = connectsTo(player, version, x, y, z, BlockFace.NORTH);
-            south = connectsTo(player, version, x, y, z, BlockFace.SOUTH);
-            west = connectsTo(player, version, x, y, z, BlockFace.WEST);
-        }
+        east = block.getEast() != East.FALSE;
+        north = block.getNorth() != North.FALSE;
+        south = block.getSouth() != South.FALSE;
+        west = block.getWest() != West.FALSE;
 
-        return version.isNewerThanOrEquals(ClientVersion.V_1_12_2)
-                ? getModernCollisionBox(north, east, south, west)
-                : getLegacyCollisionBox(north, east, south, west);
+        return getModernCollisionBox(north, east, south, west);
 
 
     }

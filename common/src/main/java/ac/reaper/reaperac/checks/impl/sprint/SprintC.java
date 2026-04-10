@@ -21,11 +21,11 @@ public class SprintC extends Check implements PostPredictionCheck {
             ClientVersion version = player.getClientVersion();
 
             // https://bugs.mojang.com/browse/MC-152728
-            if (version.isNewerThanOrEquals(ClientVersion.V_1_14_2) && version != ClientVersion.V_1_21_4) {
+            if (version != ClientVersion.V_1_21_4) {
                 return;
             }
 
-            if (player.isSprinting && (!player.wasTouchingWater || version.isOlderThan(ClientVersion.V_1_13))) {
+            if (player.isSprinting && !player.wasTouchingWater) {
                 if (flaggedLastTick) flagAndAlertWithSetback();
                 flaggedLastTick = true;
             } else {

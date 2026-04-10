@@ -66,9 +66,12 @@ public class MovementCheckRunner extends Check implements PositionCheck {
         // Keep re-teleporting until they load the chunk!
         if (player.getSetbackTeleportUtil().insideUnloadedChunk()) {
             // The player doesn't control this vehicle, we don't care
-            final boolean invalidVehicle = player.inVehicle() && player.getClientVersion().isOlderThan(ClientVersion.V_1_9);
+            if (player.inVehicle()) {
+                player.getClientVersion();
+            }
+            final boolean invalidVehicle = false;
 
-            if (!invalidVehicle && !data.isTeleport()) {
+            if (!data.isTeleport()) {
                 // Teleport the player back to avoid players being able to simply ignore transactions
                 // We shouldn't simulate movement in unloaded chunks
                 player.getSetbackTeleportUtil().executeNonSimulatingForceResync();
@@ -373,24 +376,24 @@ public class MovementCheckRunner extends Check implements PositionCheck {
         SimpleCollisionBox steppingOnBB = GetBoundingBox.getCollisionBoxForPlayer(player, player.x, player.y, player.z).expand(player.getMovementThreshold()).offset(0, -1, 0);
         Collisions.hasMaterial(player, steppingOnBB, (pair) -> {
             WrappedBlockState data = pair.first();
-            if (data.getType() == StateTypes.SLIME_BLOCK && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_8)) {
+            if (data.getType() == StateTypes.SLIME_BLOCK) {
+                player.getClientVersion();
                 player.uncertaintyHandler.isSteppingOnSlime = true;
                 player.uncertaintyHandler.isSteppingOnBouncyBlock = true;
             }
             if (data.getType() == StateTypes.HONEY_BLOCK) {
-                if (player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_14)
-                        && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_8)) {
-                    player.uncertaintyHandler.isSteppingOnBouncyBlock = true;
-                }
+                player.getClientVersion();
                 player.uncertaintyHandler.isSteppingOnHoney = true;
             }
-            if (BlockTags.BEDS.contains(data.getType()) && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_12)) {
+            if (BlockTags.BEDS.contains(data.getType())) {
+                player.getClientVersion();
                 player.uncertaintyHandler.isSteppingOnBouncyBlock = true;
             }
             if (BlockTags.ICE.contains(data.getType())) {
                 player.uncertaintyHandler.isSteppingOnIce = true;
             }
-            if (data.getType() == StateTypes.BUBBLE_COLUMN && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_13)) {
+            if (data.getType() == StateTypes.BUBBLE_COLUMN) {
+                player.getClientVersion();
                 player.uncertaintyHandler.isSteppingNearBubbleColumn = true;
             }
             if (data.getType() == StateTypes.SCAFFOLDING) {
@@ -416,12 +419,10 @@ public class MovementCheckRunner extends Check implements PositionCheck {
         // give them a decent amount of uncertainty and don't ban them for mojang's stupid mistake
         boolean isGlitchy = player.uncertaintyHandler.isNearGlitchyBlock;
 
-        player.uncertaintyHandler.isNearGlitchyBlock = player.getClientVersion().isOlderThan(ClientVersion.V_1_9)
-                && Collisions.hasMaterial(player, expandedBB.copy().expand(0.2),
-                checkData -> BlockTags.ANVIL.contains(checkData.first().getType())
-                        || checkData.first().getType() == StateTypes.CHEST || checkData.first().getType() == StateTypes.TRAPPED_CHEST);
+        player.getClientVersion();
+        player.uncertaintyHandler.isNearGlitchyBlock = false;
 
-        player.uncertaintyHandler.isOrWasNearGlitchyBlock = isGlitchy || player.uncertaintyHandler.isNearGlitchyBlock;
+        player.uncertaintyHandler.isOrWasNearGlitchyBlock = isGlitchy;
         player.uncertaintyHandler.checkForHardCollision();
 
         if (player.isFlying != player.wasFlying)
@@ -431,8 +432,8 @@ public class MovementCheckRunner extends Check implements PositionCheck {
             player.uncertaintyHandler.lastThirtyMillionHardBorder.reset();
         }
 
-        if (player.isFlying && player.getClientVersion().isOlderThan(ClientVersion.V_1_13) && player.compensatedWorld.containsLiquid(player.boundingBox)) {
-            player.uncertaintyHandler.lastUnderwaterFlyingHack.reset();
+        if (player.isFlying) {
+            player.getClientVersion();
         }
 
         boolean couldBeStuckSpeed = Collisions.checkStuckSpeed(player, player.getMovementThreshold());
@@ -500,39 +501,38 @@ public class MovementCheckRunner extends Check implements PositionCheck {
             PlayerBaseTick.updatePlayerPose(player);
         } else {
 
-            if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) {
-                wasChecked = true;
-                // The player and server are both on a version with client controlled entities
-                // If either or both of the client server version has server controlled entities
-                // The player can't use entities (or the server just checks the entities)
-                if (riding.isBoat) {
-                    PlayerBaseTick.doBaseTick(player);
-                    // Speed doesn't affect anything with boat movement
-                    new PredictionEngineBoat(player).guessBestMovement(0.1f, player);
-                } else if (riding instanceof PacketEntityNautilus) {
-                    PlayerBaseTick.doBaseTick(player);
-                    new MovementTickerNautilus(player).livingEntityAIStep();
-                } else if (riding instanceof PacketEntityCamel) {
-                    PlayerBaseTick.doBaseTick(player);
-                    new MovementTickerCamel(player).livingEntityAIStep();
-                } else if (riding instanceof PacketEntityHappyGhast) {
-                    PlayerBaseTick.doBaseTick(player);
-                    new MovementTickerHappyGhast(player).livingEntityAIStep();
-                } else if (riding instanceof PacketEntityHorse) {
-                    PlayerBaseTick.doBaseTick(player);
-                    new MovementTickerHorse(player).livingEntityAIStep();
-                } else if (riding.type == EntityTypes.PIG) {
-                    PlayerBaseTick.doBaseTick(player);
-                    new MovementTickerPig(player).livingEntityAIStep();
-                } else if (riding.type == EntityTypes.STRIDER) {
-                    PlayerBaseTick.doBaseTick(player);
-                    new MovementTickerStrider(player).livingEntityAIStep();
-                    MovementTickerStrider.floatStrider(player);
-                    Collisions.handleInsideBlocks(player);
-                } else {
-                    wasChecked = false;
-                }
-            } // If it isn't any of these cases, the player is on a mob they can't control and therefore is exempt
+            player.getClientVersion();
+            wasChecked = true;
+            // The player and server are both on a version with client controlled entities
+            // If either or both of the client server version has server controlled entities
+            // The player can't use entities (or the server just checks the entities)
+            if (riding.isBoat) {
+                PlayerBaseTick.doBaseTick(player);
+                // Speed doesn't affect anything with boat movement
+                new PredictionEngineBoat(player).guessBestMovement(0.1f, player);
+            } else if (riding instanceof PacketEntityNautilus) {
+                PlayerBaseTick.doBaseTick(player);
+                new MovementTickerNautilus(player).livingEntityAIStep();
+            } else if (riding instanceof PacketEntityCamel) {
+                PlayerBaseTick.doBaseTick(player);
+                new MovementTickerCamel(player).livingEntityAIStep();
+            } else if (riding instanceof PacketEntityHappyGhast) {
+                PlayerBaseTick.doBaseTick(player);
+                new MovementTickerHappyGhast(player).livingEntityAIStep();
+            } else if (riding instanceof PacketEntityHorse) {
+                PlayerBaseTick.doBaseTick(player);
+                new MovementTickerHorse(player).livingEntityAIStep();
+            } else if (riding.type == EntityTypes.PIG) {
+                PlayerBaseTick.doBaseTick(player);
+                new MovementTickerPig(player).livingEntityAIStep();
+            } else if (riding.type == EntityTypes.STRIDER) {
+                PlayerBaseTick.doBaseTick(player);
+                new MovementTickerStrider(player).livingEntityAIStep();
+                MovementTickerStrider.floatStrider(player);
+                Collisions.handleInsideBlocks(player);
+            } else {
+                wasChecked = false;
+            }
         }
 
         // No, don't comment about the sqrt call.  It doesn't matter unless you run sqrt thousands of times a second.

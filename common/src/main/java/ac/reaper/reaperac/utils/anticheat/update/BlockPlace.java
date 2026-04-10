@@ -154,9 +154,7 @@ public class BlockPlace {
                     state.getWest() == West.FALSE;
         }
         else if (currentType == StateTypes.LADDER) {
-            if (player.getClientVersion().isOlderThan(ClientVersion.V_1_13)) {
-                return true;
-            }
+            player.getClientVersion();
             return currentType != heldItem && currentType.isReplaceable();
         }
         // Glow lichen can be replaced if it has an open face, or the player is placing something
@@ -562,28 +560,27 @@ public class BlockPlace {
             //
             // 1.9+ introduced the mechanic where both the client and server must agree upon a block place
             // 1.8 clients will simply not send the place when it fails, thanks mojang.
-            if (player.getClientVersion().isNewerThan(ClientVersion.V_1_8)) {
-                for (PacketEntity entity : player.compensatedEntities.entityMap.values()) {
-                    if (!entity.canHit()) continue;
-                    SimpleCollisionBox interpBox = entity.getPossibleCollisionBoxes();
+            player.getClientVersion();
+            for (PacketEntity entity : player.compensatedEntities.entityMap.values()) {
+                if (!entity.canHit()) continue;
+                SimpleCollisionBox interpBox = entity.getPossibleCollisionBoxes();
 
-                    final double scale = entity.getAttributeValue(Attributes.SCALE);
-                    double width = BoundingBoxSize.getWidth(player, entity) * scale;
-                    double height = BoundingBoxSize.getHeight(player, entity) * scale;
-                    double interpWidth = Math.max(interpBox.maxX - interpBox.minX, interpBox.maxZ - interpBox.minZ);
-                    double interpHeight = interpBox.maxY - interpBox.minY;
+                final double scale = entity.getAttributeValue(Attributes.SCALE);
+                double width = BoundingBoxSize.getWidth(player, entity) * scale;
+                double height = BoundingBoxSize.getHeight(player, entity) * scale;
+                double interpWidth = Math.max(interpBox.maxX - interpBox.minX, interpBox.maxZ - interpBox.minZ);
+                double interpHeight = interpBox.maxY - interpBox.minY;
 
-                    // If not accurate, fall back to desync pos
-                    // This happens due to the lack of an idle packet on 1.9+ clients
-                    // On 1.8 clients this should practically never happen
-                    if (interpWidth - width > 0.05 || interpHeight - height > 0.05) {
-                        Vector3d entityPos = entity.trackedServerPosition.getPos();
-                        interpBox = GetBoundingBox.getPacketEntityBoundingBox(player, entityPos.getX(), entityPos.getY(), entityPos.getZ(), entity);
-                    }
+                // If not accurate, fall back to desync pos
+                // This happens due to the lack of an idle packet on 1.9+ clients
+                // On 1.8 clients this should practically never happen
+                if (interpWidth - width > 0.05 || interpHeight - height > 0.05) {
+                    Vector3d entityPos = entity.trackedServerPosition.getPos();
+                    interpBox = GetBoundingBox.getPacketEntityBoundingBox(player, entityPos.getX(), entityPos.getY(), entityPos.getZ(), entity);
+                }
 
-                    if (box.isIntersected(interpBox)) {
-                        return; // Blocking the block placement
-                    }
+                if (box.isIntersected(interpBox)) {
+                    return; // Blocking the block placement
                 }
             }
         }
@@ -615,7 +612,7 @@ public class BlockPlace {
 
     // We need to now run block
     public void tryCascadeBlockUpdates(Vector3i pos) {
-        if (player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_12_2)) return;
+        player.getClientVersion();
 
         cascadeBlockUpdates(pos);
     }

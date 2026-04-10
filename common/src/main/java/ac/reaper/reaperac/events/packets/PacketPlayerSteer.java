@@ -68,22 +68,24 @@ public class PacketPlayerSteer extends PacketListenerAbstract {
                 sideways--;
             }
 
-            Vec2 inputVector = player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21_5)
-                    ? PredictionEngine.modifyInput(player, new Vec2(forward, sideways).normalized())
-                    : new Vec2(forward * 0.98f, sideways * 0.98f);
+            player.getClientVersion();
+            Vec2 inputVector = PredictionEngine.modifyInput(player, new Vec2(forward, sideways).normalized());
 
             player.vehicleData.nextVehicleForward = inputVector.x();
             player.vehicleData.nextVehicleHorizontal = inputVector.y();
 
             // that's how mojang is dealing with sneaking from now on...
-            if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21_6)) {
-                player.isSneaking = input.isShift();
-            }
+            player.getClientVersion();
+            player.isSneaking = input.isShift();
 
             player.packetStateData.knownInput = new KnownInput(input.isForward(), input.isBackward(), input.isLeft(), input.isRight(), input.isJump(), input.isShift(), input.isSprint());
         } else if (event.getPacketType() == PacketType.Play.Client.PLAYER_ROTATION) {
             GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
-            if (player == null || !player.inVehicle() || player.getClientVersion().isOlderThan(ClientVersion.V_1_21_2)) return;
+            if (player == null || !player.inVehicle()) {
+                return;
+            } else {
+                player.getClientVersion();
+            }
 
             // player_input is not sent every tick, so we need to stick to this packet
             this.tickPlayerWorld(player);
@@ -100,9 +102,8 @@ public class PacketPlayerSteer extends PacketListenerAbstract {
             // Horse and boat have first passenger in control
             // If the player is the first passenger, disregard this attempt to have the server control the entity
             if ((riding.isBoat || riding.isHappyGhast || (riding instanceof JumpableEntity jumpable && jumpable.hasSaddle())) &&
-                    riding.passengers.get(0) == player.compensatedEntities.self &&
-                    // Although if the player has server controlled entities
-                    player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) {
+                    riding.passengers.get(0) == player.compensatedEntities.self) {
+                player.getClientVersion();
                 return;
             }
 

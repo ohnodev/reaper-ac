@@ -23,9 +23,7 @@ public class MultiActionsE extends Check implements PacketCheck {
     public void onPacketReceive(PacketReceiveEvent event) {
         if (!dropping && player.packetStateData.isSlowedByUsingItem() && (player.packetStateData.lastSlotSelected == player.packetStateData.getSlowedByUsingItemSlot() || player.packetStateData.itemInUseHand == InteractionHand.OFF_HAND) && event.getPacketType() == PacketType.Play.Client.ANIMATION) {
             // this is possible to false on 1.7
-            if (player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_7_10)) {
-                return;
-            }
+            player.getClientVersion();
 
             if (flagAndAlert() && shouldModifyPackets()) {
                 event.setCancelled(true);
@@ -37,7 +35,8 @@ public class MultiActionsE extends Check implements PacketCheck {
             dropping = false;
         }
 
-        if (event.getPacketType() == PacketType.Play.Client.PLAYER_DIGGING && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_15)) {
+        if (event.getPacketType() == PacketType.Play.Client.PLAYER_DIGGING) {
+            player.getClientVersion();
             DiggingAction action = new WrapperPlayClientPlayerDigging(event).getAction();
             dropping = action == DiggingAction.DROP_ITEM || action == DiggingAction.DROP_ITEM_STACK;
         }

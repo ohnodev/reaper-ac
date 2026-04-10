@@ -86,70 +86,47 @@ public class FluidTypeFlowing {
         if (type == StateTypes.ICE) return false;
 
         // 1.11 and below clients use a different method to determine solid faces
-        if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_12)) {
-            if (type == StateTypes.PISTON || type == StateTypes.STICKY_PISTON) {
-                return data.getFacing().getOppositeFace() == direction ||
-                        CollisionData.getData(type).getMovementCollisionBox(player, player.getClientVersion(), data, 0, 0, 0).isFullBlock();
-            } else if (type == StateTypes.PISTON_HEAD) {
-                return data.getFacing() == direction;
+        player.getClientVersion();
+        if (type == StateTypes.PISTON || type == StateTypes.STICKY_PISTON) {
+            return data.getFacing().getOppositeFace() == direction ||
+                    CollisionData.getData(type).getMovementCollisionBox(player, player.getClientVersion(), data, 0, 0, 0).isFullBlock();
+        } else if (type == StateTypes.PISTON_HEAD) {
+            return data.getFacing() == direction;
+        }
+
+        player.getClientVersion();
+        player.getClientVersion();
+        player.getClientVersion();
+        if (Materials.isLeaves(type)) {
+            // Leaves don't have solid faces in 1.13, they do in 1.14 and 1.15, and they don't in 1.16 and beyond
+            player.getClientVersion();
+            player.getClientVersion();
+            return false;
+        } else if (type == StateTypes.SNOW) {
+            return data.getLayers() == 8;
+        } else if (Materials.isStairs(type)) {
+            return data.getFacing() == direction;
+        } else if (type == StateTypes.COMPOSTER) {
+            return true;
+        } else if (type == StateTypes.SOUL_SAND) {
+            player.getClientVersion();
+            player.getClientVersion();
+            return true;
+        } else if (type == StateTypes.LADDER) {
+            return data.getFacing().getOppositeFace() == direction;
+        } else if (BlockTags.TRAPDOORS.contains(type)) {
+            return data.getFacing().getOppositeFace() == direction && data.isOpen();
+        } else if (BlockTags.DOORS.contains(type)) {
+            CollisionData collisionData = CollisionData.getData(type);
+
+            if (collisionData.dynamic instanceof DoorHandler) {
+                BlockFace dir = ((DoorHandler) collisionData.dynamic).fetchDirection(player, player.getClientVersion(), data, x, y, z);
+                return dir.getOppositeFace() == direction;
             }
         }
 
-        if (player.getClientVersion().isOlderThan(ClientVersion.V_1_12)) {
-            // No bush, cocoa, wart, reed
-            // No double grass, tall grass, or vine
-            // No button, flower pot, ladder, lever, rail, redstone, redstone wire, skull, torch, trip wire, or trip wire hook
-            // No carpet
-            // No snow
-            // Otherwise, solid
-            return !Materials.isSolidBlockingBlacklist(type, player.getClientVersion());
-        } else if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_12) && player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_13_2)) {
-            // 1.12/1.13 exempts stairs, pistons, sticky pistons, and piston heads.
-            // It also exempts shulker boxes, leaves, trapdoors, stained glass, beacons, cauldrons, glass, glowstone, ice, sea lanterns, and conduits.
-            //
-            // Everything is hardcoded, and I have attempted by best at figuring out things, although it's not perfect
-            // Report bugs on GitHub, as always.  1.13 is an odd version and issues could be lurking here.
-            if (Materials.isStairs(type) || Materials.isLeaves(type)
-                    || Materials.isShulker(type) || Materials.isGlassBlock(type)
-                    || BlockTags.TRAPDOORS.contains(type))
-                return false;
-
-            if (type == StateTypes.BEACON || BlockTags.CAULDRONS.contains(type)
-                    || type == StateTypes.GLOWSTONE || type == StateTypes.SEA_LANTERN || type == StateTypes.CONDUIT)
-                return false;
-
-            if (type == StateTypes.PISTON || type == StateTypes.STICKY_PISTON || type == StateTypes.PISTON_HEAD)
-                return false;
-
-            return type == StateTypes.SOUL_SAND || (CollisionData.getData(type).getMovementCollisionBox(player, player.getClientVersion(), data, x, y, z).isFullBlock());
-        } else {
-            if (Materials.isLeaves(type)) {
-                // Leaves don't have solid faces in 1.13, they do in 1.14 and 1.15, and they don't in 1.16 and beyond
-                return player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_14) && player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_15_2);
-            } else if (type == StateTypes.SNOW) {
-                return data.getLayers() == 8;
-            } else if (Materials.isStairs(type)) {
-                return data.getFacing() == direction;
-            } else if (type == StateTypes.COMPOSTER) {
-                return true;
-            } else if (type == StateTypes.SOUL_SAND) {
-                return player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_12_2) || player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_16);
-            } else if (type == StateTypes.LADDER) {
-                return data.getFacing().getOppositeFace() == direction;
-            } else if (BlockTags.TRAPDOORS.contains(type)) {
-                return data.getFacing().getOppositeFace() == direction && data.isOpen();
-            } else if (BlockTags.DOORS.contains(type)) {
-                CollisionData collisionData = CollisionData.getData(type);
-
-                if (collisionData.dynamic instanceof DoorHandler) {
-                    BlockFace dir = ((DoorHandler) collisionData.dynamic).fetchDirection(player, player.getClientVersion(), data, x, y, z);
-                    return dir.getOppositeFace() == direction;
-                }
-            }
-
-            // Explicitly a full block, therefore it has a full face
-            return (CollisionData.getData(type).getMovementCollisionBox(player, player.getClientVersion(), data, x, y, z).isFullBlock());
-        }
+        // Explicitly a full block, therefore it has a full face
+        return (CollisionData.getData(type).getMovementCollisionBox(player, player.getClientVersion(), data, x, y, z).isFullBlock());
     }
 
     private static Vector3dm normalizeVectorWithoutNaN(Vector3dm vector) {

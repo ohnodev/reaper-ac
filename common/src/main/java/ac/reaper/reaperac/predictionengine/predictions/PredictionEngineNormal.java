@@ -33,12 +33,9 @@ public class PredictionEngineNormal extends PredictionEngine {
         }
 
         float verticalDrag;
-        if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_26_2)) {
-            double airDragMod = player.compensatedEntities.self.getAttributeValue(Attributes.AIR_DRAG_MODIFIER);
-            verticalDrag = MovementTicker.computeModifiedFriction(0.98F, airDragMod);
-        } else {
-            verticalDrag = 0.98F;
-        }
+        player.getClientVersion();
+        double airDragMod = player.compensatedEntities.self.getAttributeValue(Attributes.AIR_DRAG_MODIFIER);
+        verticalDrag = MovementTicker.computeModifiedFriction(0.98F, airDragMod);
 
         vector.setX(vector.getX() * player.friction);
         vector.setY(adjustedY * verticalDrag);
@@ -84,18 +81,18 @@ public class PredictionEngineNormal extends PredictionEngine {
 
         boolean walkingOnPowderSnow = false;
 
-        if (!player.inVehicle() && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_17) &&
-                player.compensatedWorld.getBlockType(player.x, player.y, player.z) == StateTypes.POWDER_SNOW) {
-            ItemStack boots = player.inventory.getBoots();
-            walkingOnPowderSnow = boots != null && boots.getType() == ItemTypes.LEATHER_BOOTS;
+        if (!player.inVehicle()) {
+            player.getClientVersion();
+            if (player.compensatedWorld.getBlockType(player.x, player.y, player.z) == StateTypes.POWDER_SNOW) {
+                ItemStack boots = player.inventory.getBoots();
+                walkingOnPowderSnow = boots != null && boots.getType() == ItemTypes.LEATHER_BOOTS;
+            }
         }
 
         player.isClimbing = Collisions.onClimbable(player, player.x, player.y, player.z);
 
         // Force 1.13.2 and below players to have something to collide with horizontally to climb
-        if (player.lastWasClimbing == 0 && (player.pointThreeEstimator.isNearClimbable() || player.isClimbing) && (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_14)
-                || !Collisions.isEmpty(player, player.boundingBox.copy().expand(
-                player.clientVelocity.getX(), 0, player.clientVelocity.getZ()).expand(0.5, -SimpleCollisionBox.COLLISION_EPSILON, 0.5))) || walkingOnPowderSnow) {
+        if (player.lastWasClimbing == 0 && (player.pointThreeEstimator.isNearClimbable() || player.isClimbing) || walkingOnPowderSnow) {
             Vector3dm ladderVelocity = player.clientVelocity.clone().setY(0.2);
             staticVectorEndOfTick(player, ladderVelocity);
             player.lastWasClimbing = ladderVelocity.getY();

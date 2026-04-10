@@ -26,13 +26,8 @@ public final class PredictionEngineRideableUtils {
 
         // More jumping stuff
         boolean legacyJumpingMechanics = player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_19_3);
-        boolean onGround = legacyJumpingMechanics
-                ? player.clientControlledVerticalCollision
-                : player.lastOnGround;
+        boolean onGround = player.lastOnGround;
         if (onGround) {
-            if (legacyJumpingMechanics) {
-                jumpable.setJumpPower(0.0F);
-            }
 
             jumpable.setJumping(false);
         }

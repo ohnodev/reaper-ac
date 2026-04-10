@@ -124,9 +124,9 @@ public class PacketPlayerRespawn extends PacketListenerAbstract {
 
             player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get() + 1, () -> {
                 // From 1.16 to 1.19, this doesn't get set to false for whatever reason
-                if (player.getClientVersion().isOlderThan(ClientVersion.V_1_16) || player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_20)) {
-                    player.isSneaking = false;
-                }
+                player.getClientVersion();
+                player.getClientVersion();
+                player.isSneaking = false;
 
                 player.lastOnGround = false;
                 player.clientClaimsLastOnGround = false;
@@ -148,20 +148,16 @@ public class PacketPlayerRespawn extends PacketListenerAbstract {
                     player.checkManager.getPostPredictionCheck(ElytraC.class).exempt = true;
 
                     // 1.19.4 uses current sprinting, older versions use last sprinting
-                    if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_19_4)) {
-                        player.isSprinting = false;
-                    } else {
-                        player.lastSprintingForSpeed = false;
-                    }
+                    player.getClientVersion();
+                    player.isSprinting = false;
                 }
 
                 player.checkManager.getPacketCheck(BadPacketsE.class).handleRespawn(); // Reminder ticks reset
                 player.checkManager.getPacketCheck(BadPacketsG.class).handleRespawn();
 
                 // compensate for immediate respawn gamerule
-                if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_15)) {
-                    player.checkManager.getPacketCheck(BadPacketsF.class).exemptNext = true;
-                }
+                player.getClientVersion();
+                player.checkManager.getPacketCheck(BadPacketsF.class).exemptNext = true;
 
                 // EVERYTHING gets reset on a cross dimensional teleport, clear chunks and entities!
                 if (isWorldChange(player, respawn)) {
@@ -179,13 +175,7 @@ public class PacketPlayerRespawn extends PacketListenerAbstract {
                 player.compensatedEntities.self = new PacketEntitySelf(player, player.compensatedEntities.self);
                 player.compensatedEntities.selfTrackedEntity = new TrackerData(0, 0, 0, 0, 0, EntityTypes.PLAYER, player.lastTransactionSent.get());
 
-                if (player.getClientVersion().isOlderThan(ClientVersion.V_1_14)) { // 1.14+ players send a packet for this, listen for it instead
-                    player.isSprinting = false;
-                    player.checkManager.getPacketCheck(BadPacketsF.class).lastSprinting = false; // Pre 1.14 clients set this to false when creating new entity
-                    // TODO: What the fuck viaversion, why do you throw out keep all metadata?
-                    // The server doesn't even use it... what do we do?
-                    player.compensatedEntities.hasSprintingAttributeEnabled = false;
-                }
+                player.getClientVersion();
                 player.pose = Pose.STANDING;
                 player.clientVelocity = new Vector3dm();
                 if (!GrimAPI.INSTANCE.getSpectateManager().isSpectating(player.uuid)) {
@@ -194,7 +184,8 @@ public class PacketPlayerRespawn extends PacketListenerAbstract {
 
                 player.compensatedWorld.setDimension(respawn.getDimensionType(), event.getUser());
 
-                if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_16) && !this.hasFlag(respawn, KEEP_ATTRIBUTES)) {
+                player.getClientVersion();
+                if (!this.hasFlag(respawn, KEEP_ATTRIBUTES)) {
                     // Reset attributes if not kept
                     player.compensatedEntities.self.resetAttributes();
                     player.compensatedEntities.hasSprintingAttributeEnabled = false;
@@ -204,13 +195,8 @@ public class PacketPlayerRespawn extends PacketListenerAbstract {
     }
 
     private boolean isWorldChange(GrimPlayer player, WrapperPlayServerRespawn respawn) {
-        if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_16)) {
+        player.getClientVersion();
+        return !Objects.equals(respawn.getWorldName().orElse(null), player.worldName);
 
-            return !Objects.equals(respawn.getWorldName().orElse(null), player.worldName);
-        }
-
-        ClientVersion version = PacketEvents.getAPI().getServerManager().getVersion().toClientVersion();
-        return respawn.getDimensionType().getId(version) != player.dimensionType.getId(version)
-                || !Objects.equals(respawn.getDimensionType().getName(), player.dimensionType.getName());
     }
 }

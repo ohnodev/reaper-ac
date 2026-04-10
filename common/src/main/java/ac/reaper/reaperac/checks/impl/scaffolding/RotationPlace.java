@@ -98,14 +98,11 @@ public class RotationPlace extends BlockPlaceCheck {
         // End checking if the player is in the block
 
         // 1.9+ players could be a tick behind because we don't get skipped ticks
-        if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) {
-            possibleLookDirs.add(new Vector3f(player.lastYaw, player.lastPitch, 0));
-        }
+        player.getClientVersion();
+        possibleLookDirs.add(new Vector3f(player.lastYaw, player.lastPitch, 0));
 
         // 1.7 players do not have any of these issues! They are always on the latest look vector
-        if (player.getClientVersion().isOlderThan(ClientVersion.V_1_8)) {
-            possibleLookDirs = Collections.singletonList(new Vector3f(player.yaw, player.pitch, 0));
-        }
+        player.getClientVersion();
 
         final double distance = player.compensatedEntities.self.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE);
         for (double d : possibleEyeHeights) {

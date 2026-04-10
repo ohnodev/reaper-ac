@@ -46,7 +46,7 @@ public class CrashG extends BlockPlaceCheck {
     }
 
     private boolean isSupportedVersion() {
-        if (!player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_19)) return false;
+        player.getClientVersion();
         return true;
     }
 

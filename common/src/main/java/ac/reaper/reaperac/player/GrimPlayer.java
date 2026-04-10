@@ -295,19 +295,11 @@ public class GrimPlayer implements ReaperUser {
         uncertaintyHandler = new UncertaintyHandler(this); // must be after checkmanager
         pointThreeEstimator = new PointThreeEstimator(this);
 
-        if (getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_14)) {
-            final float scale = (float) compensatedEntities.self.getAttributeValue(Attributes.SCALE);
-            possibleEyeHeights[2] = new double[]{0.4 * scale, 1.62 * scale, 1.27 * scale}; // Elytra, standing, sneaking (1.14)
-            possibleEyeHeights[1] = new double[]{1.27 * scale, 1.62 * scale, 0.4 * scale}; // sneaking (1.14), standing, Elytra
-            possibleEyeHeights[0] = new double[]{1.62 * scale, 1.27 * scale, 0.4 * scale}; // standing, sneaking (1.14), Elytra
-        } else if (getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) { // standing, sneaking Elytra
-            possibleEyeHeights[2] = new double[]{0.4, 1.62, 1.54}; // Elytra, standing, sneaking (1.13)
-            possibleEyeHeights[1] = new double[]{1.54, 1.62, 0.4}; // sneaking (1.9-1.13), standing, Elytra
-            possibleEyeHeights[0] = new double[]{1.62, 1.54, 0.4}; // standing, sneaking (1.9-1.13), Elytra
-        } else {
-            possibleEyeHeights[1] = new double[]{(double) (1.62f - 0.08f), (double) (1.62f)}; // sneaking, standing
-            possibleEyeHeights[0] = new double[]{(double) (1.62f), (double) (1.62f - 0.08f)}; // standing, sneaking
-        }
+        getClientVersion();
+        final float scale = (float) compensatedEntities.self.getAttributeValue(Attributes.SCALE);
+        possibleEyeHeights[2] = new double[]{0.4 * scale, 1.62 * scale, 1.27 * scale}; // Elytra, standing, sneaking (1.14)
+        possibleEyeHeights[1] = new double[]{1.27 * scale, 1.62 * scale, 0.4 * scale}; // sneaking (1.14), standing, Elytra
+        possibleEyeHeights[0] = new double[]{1.62 * scale, 1.27 * scale, 0.4 * scale}; // standing, sneaking (1.14), Elytra
 
         // reload last
         reload();
@@ -498,8 +490,8 @@ public class GrimPlayer implements ReaperUser {
     }
 
     public double getEyeHeight() {
-        return getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9) ? pose.eyeHeight
-                : isSneaking ? 1.54f : 1.62f;
+        getClientVersion();
+        return pose.eyeHeight;
     }
 
     private final AtomicBoolean hasDisconnected = new AtomicBoolean(false);
@@ -650,19 +642,15 @@ public class GrimPlayer implements ReaperUser {
 
     public double[] getPossibleEyeHeights() { // We don't return sleeping eye height
         // 1.8 Players once again ruin my clean switch-case
-        if (this.getClientVersion().isOlderThan(ClientVersion.V_1_9)) {
-            return this.isSneaking ? this.possibleEyeHeights[1] : this.possibleEyeHeights[0];
-        } else {
-            // 1.8 players just have their pose set to standing all the time
-            return switch (pose) {
-                case FALL_FLYING, // Elytra gliding
-                     SPIN_ATTACK, // Riptide trident
-                     SWIMMING -> // Swimming (includes crawling in 1.14+)
-                        this.possibleEyeHeights[2]; // [swimming/gliding/riptide height, standing height, sneaking height]
-                case NINE_CROUCHING, CROUCHING -> this.possibleEyeHeights[1]; // [sneaking height, standing height, swimming/gliding/riptide height]
-                default -> this.possibleEyeHeights[0]; // [standing height, sneaking height, swimming/gliding/riptide height]
-            };
-        }
+        this.getClientVersion();// 1.8 players just have their pose set to standing all the time
+        return switch (pose) {
+            case FALL_FLYING, // Elytra gliding
+                 SPIN_ATTACK, // Riptide trident
+                 SWIMMING -> // Swimming (includes crawling in 1.14+)
+                    this.possibleEyeHeights[2]; // [swimming/gliding/riptide height, standing height, sneaking height]
+            case NINE_CROUCHING, CROUCHING -> this.possibleEyeHeights[1]; // [sneaking height, standing height, swimming/gliding/riptide height]
+            default -> this.possibleEyeHeights[0]; // [standing height, sneaking height, swimming/gliding/riptide height]
+        };
     }
 
     @Override
@@ -714,19 +702,17 @@ public class GrimPlayer implements ReaperUser {
         if (data != null) {
             // If we actually need to check vehicle movement
 
-            if (getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) {
-                // And if the vehicle is a type of vehicle that we track
-                if (EntityTypes.isTypeInstanceOf(data.getEntityType(), EntityTypes.BOAT) ||
-                        EntityTypes.isTypeInstanceOf(data.getEntityType(), EntityTypes.ABSTRACT_HORSE) ||
-                        data.getEntityType() == EntityTypes.PIG ||
-                        data.getEntityType() == EntityTypes.STRIDER ||
-                        EntityTypes.isTypeInstanceOf(data.getEntityType(), EntityTypes.CAMEL) ||
-                        data.getEntityType() == EntityTypes.HAPPY_GHAST ||
-                        EntityTypes.isTypeInstanceOf(data.getEntityType(), EntityTypes.ABSTRACT_NAUTILUS)) {
-                    // We need to set its velocity otherwise it will jump a bit on us, flagging the anticheat
-                    // The server does override this with some vehicles. This is intentional.
-                    user.writePacket(new WrapperPlayServerEntityVelocity(vehicleID, new Vector3d()));
-                }
+            getClientVersion();// And if the vehicle is a type of vehicle that we track
+            if (EntityTypes.isTypeInstanceOf(data.getEntityType(), EntityTypes.BOAT) ||
+                    EntityTypes.isTypeInstanceOf(data.getEntityType(), EntityTypes.ABSTRACT_HORSE) ||
+                    data.getEntityType() == EntityTypes.PIG ||
+                    data.getEntityType() == EntityTypes.STRIDER ||
+                    EntityTypes.isTypeInstanceOf(data.getEntityType(), EntityTypes.CAMEL) ||
+                    data.getEntityType() == EntityTypes.HAPPY_GHAST ||
+                    EntityTypes.isTypeInstanceOf(data.getEntityType(), EntityTypes.ABSTRACT_NAUTILUS)) {
+                // We need to set its velocity otherwise it will jump a bit on us, flagging the anticheat
+                // The server does override this with some vehicles. This is intentional.
+                user.writePacket(new WrapperPlayServerEntityVelocity(vehicleID, new Vector3d()));
             }
         }
 
@@ -761,8 +747,8 @@ public class GrimPlayer implements ReaperUser {
             this.vehicleData.wasVehicleSwitch = true;
             // Pre-1.14 players desync sprinting attribute when in vehicle to be false, sprinting itself doesn't change
             // 1.21.5 introduced this again! (only in minecarts?)
-            if (getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_14) ||
-                    (getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21_5) && EntityTypes.MINECART == entityType)) {
+            getClientVersion();
+            if (EntityTypes.MINECART == entityType) {
                 compensatedEntities.hasSprintingAttributeEnabled = false;
             }
         });
@@ -775,7 +761,7 @@ public class GrimPlayer implements ReaperUser {
             return true;
 
         // if the server or client doesn't support glider components return false
-        if (getClientVersion().isOlderThan(ClientVersion.V_1_21_2)) return false;
+        getClientVersion();
 
         // PacketEvents mappings are wrong
         return isGlider(inventory.getHelmet(), EquipmentSlot.CHEST_PLATE)
@@ -795,7 +781,8 @@ public class GrimPlayer implements ReaperUser {
     }
 
     public void resyncPose() {
-        if (getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_14) && platformPlayer != null) {
+        getClientVersion();
+        if (platformPlayer != null) {
             platformPlayer.setSneaking(!platformPlayer.isSneaking());
         }
     }
@@ -803,7 +790,8 @@ public class GrimPlayer implements ReaperUser {
     public boolean canPlaceGameMasterBlocks() {
         // This check was added in 1.11
         // 1.11+ players must be in creative and have a permission level at or above 2
-        return getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_10) || canUseGameMasterBlocks();
+        getClientVersion();
+        return canUseGameMasterBlocks();
     }
 
     public boolean canUseGameMasterBlocks() {
@@ -821,7 +809,8 @@ public class GrimPlayer implements ReaperUser {
 
     @Contract(pure = true)
     public boolean canSkipTicks() {
-        return getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9) && !supportsEndTick();
+        getClientVersion();
+        return !supportsEndTick();
     }
 
     @Override

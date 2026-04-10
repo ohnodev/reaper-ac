@@ -161,13 +161,9 @@ public class PacketWorldBorder extends Check implements PacketCheck {
     private static final boolean SERVER_TICK_BASED = PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_21_11);
 
     private BorderExtent createMovingExtent(double from, double to, long speed) {
-        if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21_11)) { // tick-based
-            long durationTicks = SERVER_TICK_BASED ? speed : (speed / 50);
-            return new TickBasedMovingBorderExtent(from, to, durationTicks);
-        } else { // real-time based
-            long durationMs = SERVER_TICK_BASED ? (speed * 50) : speed;
-            return new RealTimeMovingBorderExtent(from, to, durationMs);
-        }
+        player.getClientVersion();// tick-based
+        long durationTicks = SERVER_TICK_BASED ? speed : (speed / 50);
+        return new TickBasedMovingBorderExtent(from, to, durationTicks);
     }
 
 }

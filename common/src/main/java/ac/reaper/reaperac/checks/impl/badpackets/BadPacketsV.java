@@ -22,7 +22,8 @@ public class BadPacketsV extends Check implements PacketCheck {
     public void onPacketReceive(PacketReceiveEvent event) {
         if (!player.canSkipTicks() && isTickPacket(event.getPacketType())) {
             if (event.getPacketType() == PacketType.Play.Client.PLAYER_POSITION || event.getPacketType() == PacketType.Play.Client.PLAYER_POSITION_AND_ROTATION) {
-                int positionAtLeastEveryNTicks = player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_8) ? 20 : 19;
+                player.getClientVersion();
+                int positionAtLeastEveryNTicks = 19;
 
                 if (noReminderTicks < positionAtLeastEveryNTicks && !player.uncertaintyHandler.lastTeleportTicks.hasOccurredSince(1)) {
                     final double deltaSq = new WrapperPlayClientPlayerFlying(event).getLocation().getPosition()

@@ -26,8 +26,8 @@ public class MultiActionsC extends Check implements PacketCheck {
             verbose.add("sprinting");
         }
 
-        if (player.isSneaking && player.getClientVersion().isOlderThan(ClientVersion.V_1_15)) {
-            verbose.add("sneaking");
+        if (player.isSneaking) {
+            player.getClientVersion();
         }
 
         if (player.supportsEndTick() && player.packetStateData.knownInput.moving()) {

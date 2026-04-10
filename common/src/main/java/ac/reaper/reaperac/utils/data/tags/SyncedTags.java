@@ -67,7 +67,7 @@ public final class SyncedTags {
     }
 
     public void handleTagSync(WrapperPlayServerTags tags) {
-        if (player.getClientVersion().isOlderThan(ClientVersion.V_1_13)) return;
+        player.getClientVersion();
         tags.getTagMap().forEach((location, tagList) -> {
             if (!synced.containsKey(location)) return;
             final Map<ResourceLocation, SyncedTag<?>> syncedTags = synced.get(location);

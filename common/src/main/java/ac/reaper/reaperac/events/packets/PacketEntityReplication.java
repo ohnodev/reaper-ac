@@ -191,17 +191,11 @@ public class PacketEntityReplication extends Check implements PacketCheck {
             //
             // Set to 24 so ViaVersion blocks it
             // 24 is the levitation effect
-            if (player.getClientVersion().isOlderThan(ClientVersion.V_1_9) && type.getId(player.getClientVersion()) > 23) {
-                event.setCancelled(true);
-                return;
-            }
+            player.getClientVersion();
 
             // ViaVersion dolphin's grace also messes us up, set it to a potion effect that doesn't exist on 1.12
             // Effect 31 is bad omen
-            if (player.getClientVersion().isOlderThan(ClientVersion.V_1_13) && type.getId(player.getClientVersion()) == 30) {
-                event.setCancelled(true);
-                return;
-            }
+            player.getClientVersion();
 
             if (isDirectlyAffectingPlayer(player, effect.getEntityId())) player.sendTransaction();
 
@@ -269,9 +263,7 @@ public class PacketEntityReplication extends Check implements PacketCheck {
 
             if (slot.getWindowId() == 0) {
                 Runnable task = () -> {
-                    if (slot.getSlot() - 36 == player.packetStateData.lastSlotSelected && (
-                            !player.inventory.getHeldItem().is(slot.getItem().getType()) || player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_8)
-                    ) || slot.getSlot() == 45 && !player.inventory.getOffHand().is(slot.getItem().getType())) {
+                    if (slot.getSlot() - 36 == player.packetStateData.lastSlotSelected && !player.inventory.getHeldItem().is(slot.getItem().getType()) || slot.getSlot() == 45 && !player.inventory.getOffHand().is(slot.getItem().getType())) {
                         InteractionHand hand = slot.getSlot() == 45 ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
                         if (hand == player.packetStateData.itemInUseHand) {
                             player.packetStateData.setSlowedByUsingItem(false);
@@ -291,30 +283,24 @@ public class PacketEntityReplication extends Check implements PacketCheck {
 
             if (items.getWindowId() == 0) { // Player inventory
                 Runnable task = () -> {
-                    if (player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_8)) {
-                        player.packetStateData.setSlowedByUsingItem(false);
-                        if (player.isResetItemUsageOnItemUpdate()) {
+                    player.getClientVersion();
+                    if (items.getItems().size() > 45 && !player.inventory.getOffHand().is(items.getItems().get(45).getType())) {
+                        if (player.packetStateData.itemInUseHand == InteractionHand.OFF_HAND) {
+                            player.packetStateData.setSlowedByUsingItem(false);
+                        }
+
+                        if (player.isResetItemUsageOnItemUpdate() && GrimAPI.INSTANCE.getItemResetHandler().getItemUsageHand(player.platformPlayer) == InteractionHand.OFF_HAND) {
                             GrimAPI.INSTANCE.getItemResetHandler().resetItemUsage(player.platformPlayer);
                         }
-                    } else {
-                        if (items.getItems().size() > 45 && !player.inventory.getOffHand().is(items.getItems().get(45).getType())) {
-                            if (player.packetStateData.itemInUseHand == InteractionHand.OFF_HAND) {
-                                player.packetStateData.setSlowedByUsingItem(false);
-                            }
+                    }
 
-                            if (player.isResetItemUsageOnItemUpdate() && GrimAPI.INSTANCE.getItemResetHandler().getItemUsageHand(player.platformPlayer) == InteractionHand.OFF_HAND) {
-                                GrimAPI.INSTANCE.getItemResetHandler().resetItemUsage(player.platformPlayer);
-                            }
+                    if (!player.inventory.getHeldItem().is(items.getItems().get(player.packetStateData.lastSlotSelected + 36).getType())) {
+                        if (player.packetStateData.itemInUseHand == InteractionHand.MAIN_HAND) {
+                            player.packetStateData.setSlowedByUsingItem(false);
                         }
 
-                        if (!player.inventory.getHeldItem().is(items.getItems().get(player.packetStateData.lastSlotSelected + 36).getType())) {
-                            if (player.packetStateData.itemInUseHand == InteractionHand.MAIN_HAND) {
-                                player.packetStateData.setSlowedByUsingItem(false);
-                            }
-
-                            if (player.isResetItemUsageOnItemUpdate() && GrimAPI.INSTANCE.getItemResetHandler().getItemUsageHand(player.platformPlayer) == InteractionHand.MAIN_HAND) {
-                                GrimAPI.INSTANCE.getItemResetHandler().resetItemUsage(player.platformPlayer);
-                            }
+                        if (player.isResetItemUsageOnItemUpdate() && GrimAPI.INSTANCE.getItemResetHandler().getItemUsageHand(player.platformPlayer) == InteractionHand.MAIN_HAND) {
+                            GrimAPI.INSTANCE.getItemResetHandler().resetItemUsage(player.platformPlayer);
                         }
                     }
                 };
@@ -447,10 +433,8 @@ public class PacketEntityReplication extends Check implements PacketCheck {
                 // This is broken and causes the client to interpolate like (0, 4) and (1, 3) instead of (1, 7)
                 // This causes impossible hits, so grim must replace this with a teleport entity packet
                 // Not ideal, but neither is 1.8 players on a 1.9+ server.
-                if ((Math.abs(deltaX) >= 3.9375 || Math.abs(deltaY) >= 3.9375 || Math.abs(deltaZ) >= 3.9375) && player.getClientVersion().isOlderThan(ClientVersion.V_1_9)) {
-                    player.user.writePacket(new WrapperPlayServerEntityTeleport(entityId, new Vector3d(data.getX() + deltaX, data.getY() + deltaY, data.getZ() + deltaZ), yaw == null ? data.getXRot() : yaw, pitch == null ? data.getYRot() : pitch, false));
-                    event.setCancelled(true);
-                    return;
+                if ((Math.abs(deltaX) >= 3.9375 || Math.abs(deltaY) >= 3.9375 || Math.abs(deltaZ) >= 3.9375)) {
+                    player.getClientVersion();
                 }
 
                 data.setX(data.getX() + deltaX);

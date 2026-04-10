@@ -27,12 +27,10 @@ public class PistonHeadCollision implements CollisionFactory {
         // 1.11 and 1.12 clients differentiate short and long piston collision boxes - but I can never get long heads in multiplayer
         // They show up in the debug world, but my client crashes every time I join the debug world in multiplayer in these two version
         // So just group together 1.9-1.12 into all having long pistons
-        if (version.isOlderThanOrEquals(ClientVersion.V_1_12_2)) longAmount = 4;
 
 
         // 1.8 and 1.7 clients always have "short" piston collision boxes
         // Apply last to overwrite other long amount setters
-        if (version.isOlderThan(ClientVersion.V_1_9)) longAmount = 0;
 
 
         return switch (block.getFacing()) {
@@ -45,10 +43,6 @@ public class PistonHeadCollision implements CollisionFactory {
             case SOUTH -> {
                 // SOUTH piston is glitched in 1.7 and 1.8, fixed in 1.9
                 // Don't bother with short piston boxes as 1.7/1.8 clients don't have them
-                if (version.isOlderThanOrEquals(ClientVersion.V_1_8))
-                    yield new ComplexCollisionBox(2,
-                            new HexCollisionBox(0, 0, 12, 16, 16, 16),
-                            new HexCollisionBox(4, 6, 0, 12, 10, 12));
 
                 yield new ComplexCollisionBox(2,
                         new HexCollisionBox(0, 0, 12, 16, 16, 16),
@@ -57,10 +51,6 @@ public class PistonHeadCollision implements CollisionFactory {
             case WEST -> {
                 // WEST piston is glitched in 1.7 and 1.8, fixed in 1.9
                 // Don't bother with short piston boxes as 1.7/1.8 clients don't have them
-                if (version.isOlderThanOrEquals(ClientVersion.V_1_8))
-                    yield new ComplexCollisionBox(2,
-                            new HexCollisionBox(0, 0, 0, 4, 16, 16),
-                            new HexCollisionBox(6, 4, 4, 10, 12, 16));
 
                 yield new ComplexCollisionBox(2,
                         new HexCollisionBox(0, 0, 0, 4, 16, 16),

@@ -192,11 +192,7 @@ public class SetbackTeleportUtil extends Check implements PostPredictionCheck {
             position = position.withX(position.getX() + collide.getX());
             position = position.withY(position.getY() + collide.getY());
             // TODO: Is this even needed? Can't reproduce any phasing on vanilla 1.8 when being setback.
-            if (player.getClientVersion().isOlderThan(ClientVersion.V_1_9)) {
-                // 1.8 players need the collision epsilon to not phase into blocks when being setback
-                // Due to simulation, this will not allow a flight bypass by sending a billion invalid movements
-                position = position.withY(position.getY() + SimpleCollisionBox.COLLISION_EPSILON);
-            }
+            player.getClientVersion();
             position = position.withZ(position.getZ() + collide.getZ());
 
             if (clientVel.getX() != collide.getX()) clientVel.setX(0);
@@ -401,9 +397,7 @@ public class SetbackTeleportUtil extends Check implements PostPredictionCheck {
 
     public void addSentTeleport(Location position, @Nullable Vector3d velocity, int transaction, RelativeFlag flags, boolean plugin, int teleportId) {
         // Clients below 1.21.2 do not have this.
-        if (player.getClientVersion().isOlderThan(ClientVersion.V_1_21_2)) {
-            velocity = null;
-        }
+        player.getClientVersion();
 
         TeleportData data = new TeleportData(new Vector3d(position.getX(), position.getY(), position.getZ()), velocity, flags, transaction, teleportId);
         pendingTeleports.add(data);

@@ -74,11 +74,11 @@ public class PacketSelfMetadataListener extends PacketListenerAbstract {
 
                     if (zeroBitField instanceof Byte) {
                         byte field = (byte) zeroBitField;
-                        boolean isGliding = (field & 0x80) == 0x80 && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9);
+                        boolean isGliding = (field & 0x80) == 0x80;
                         boolean isSwimming = (field & 0x10) == 0x10;
                         boolean isSprinting = (field & 0x8) == 0x8;
 
-                        if (!hasSendTransaction) player.sendTransaction();
+                        player.sendTransaction();
                         hasSendTransaction = true;
 
                         player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get(), () -> {
@@ -146,63 +146,61 @@ public class PacketSelfMetadataListener extends PacketListenerAbstract {
                 }
 
 
-                if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) {
-                    EntityData<?> riptide = WatchableIndexUtil.getIndex(entityMetadata.getEntityMetadata(), 8);
+                player.getClientVersion();
+                EntityData<?> riptide = WatchableIndexUtil.getIndex(entityMetadata.getEntityMetadata(), 8);
 
-                    // This one only present if it changed
-                    if (riptide != null && riptide.getValue() instanceof Byte) {
-                        boolean isRiptiding = (((byte) riptide.getValue()) & 0x04) == 0x04;
+                // This one only present if it changed
+                if (riptide != null && riptide.getValue() instanceof Byte) {
+                    boolean isRiptiding = (((byte) riptide.getValue()) & 0x04) == 0x04;
 
-                        if (!hasSendTransaction) player.sendTransaction();
-                        hasSendTransaction = true;
+                    if (!hasSendTransaction) player.sendTransaction();
+                    hasSendTransaction = true;
 
-                        player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get(),
-                                () -> player.isRiptidePose = isRiptiding);
+                    player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get(),
+                            () -> player.isRiptidePose = isRiptiding);
 
-                        // 1.9 eating:
-                        // - Client: I am starting to eat
-                        // - Client: I am no longer eating
-                        // - Server: Got that, you are eating!
-                        // - Client: Okay, starting to eat (no response packet because server caused this)
-                        // - Server: I got that you aren't eating, you are not eating!
-                        // - Client: Okay, I am no longer eating (no response packet because server caused this)
-                        //
-                        // 1.8 eating:
-                        // - Client: I am starting to eat
-                        // - Client: I am no longer eating
-                        // - Server: Okay, I will not make you eat or stop eating because it makes sense that the server doesn't control a player's eating.
-                        //
-                        // This was added for stuff like shields, but IMO it really should be all client sided
-                        if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) {
-                            boolean isActive = (((byte) riptide.getValue()) & 1) > 0;
-                            boolean isOffhand = (((byte) riptide.getValue()) & 2) > 0;
+                    // 1.9 eating:
+                    // - Client: I am starting to eat
+                    // - Client: I am no longer eating
+                    // - Server: Got that, you are eating!
+                    // - Client: Okay, starting to eat (no response packet because server caused this)
+                    // - Server: I got that you aren't eating, you are not eating!
+                    // - Client: Okay, I am no longer eating (no response packet because server caused this)
+                    //
+                    // 1.8 eating:
+                    // - Client: I am starting to eat
+                    // - Client: I am no longer eating
+                    // - Server: Okay, I will not make you eat or stop eating because it makes sense that the server doesn't control a player's eating.
+                    //
+                    // This was added for stuff like shields, but IMO it really should be all client sided
+                    player.getClientVersion();
+                    boolean isActive = (((byte) riptide.getValue()) & 1) > 0;
+                    boolean isOffhand = (((byte) riptide.getValue()) & 2) > 0;
 
-                            // Player might have gotten this packet
-                            player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get(),
-                                    () -> player.packetStateData.setSlowedByUsingItem(false));
+                    // Player might have gotten this packet
+                    player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get(),
+                            () -> player.packetStateData.setSlowedByUsingItem(false));
 
-                            int markedTransaction = player.lastTransactionSent.get();
+                    int markedTransaction = player.lastTransactionSent.get();
 
-                            // Player has gotten this packet
-                            player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get() + 1, () -> {
-                                // If the player hasn't overridden this packet by using or stopping using an item
-                                // Vanilla update order: Receive this -> process new interacts
-                                // Grim update order: Process new interacts -> receive this
-                                if (player.packetStateData.slowedByUsingItemTransaction < markedTransaction) {
-                                    PacketPlayerDigging.handleUseItem(player, isOffhand ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
-                                    // The above line is a hack to fake activate use item
-                                    player.packetStateData.setSlowedByUsingItem(isActive);
+                    // Player has gotten this packet
+                    player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get() + 1, () -> {
+                        // If the player hasn't overridden this packet by using or stopping using an item
+                        // Vanilla update order: Receive this -> process new interacts
+                        // Grim update order: Process new interacts -> receive this
+                        if (player.packetStateData.slowedByUsingItemTransaction < markedTransaction) {
+                            PacketPlayerDigging.handleUseItem(player, isOffhand ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
+                            // The above line is a hack to fake activate use item
+                            player.packetStateData.setSlowedByUsingItem(isActive);
 
-                                    if (isActive) {
-                                        player.packetStateData.itemInUseHand = isOffhand ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
-                                    }
-                                }
-                            });
-
-                            // Yes, we do have to use a transaction for eating as otherwise it can desync much easier
-                            event.getTasksAfterSend().add(player::sendTransaction);
+                            if (isActive) {
+                                player.packetStateData.itemInUseHand = isOffhand ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
+                            }
                         }
-                    }
+                    });
+
+                    // Yes, we do have to use a transaction for eating as otherwise it can desync much easier
+                    event.getTasksAfterSend().add(player::sendTransaction);
                 }
             }
         }

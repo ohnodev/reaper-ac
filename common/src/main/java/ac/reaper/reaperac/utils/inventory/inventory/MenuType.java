@@ -61,11 +61,6 @@ public enum MenuType {
 
         ServerVersion version = PacketEvents.getAPI().getServerManager().getVersion();
         // versions under 1.20.3
-        if (version.isOlderThan(ServerVersion.V_1_20_3)) { // TODO: Can this be moved to the static block?
-            if (id >= 7) {
-                id++;
-            }
-        }
 
         if (id >= MENU_BY_ID_ARRAY.length) {
             return UNKNOWN;

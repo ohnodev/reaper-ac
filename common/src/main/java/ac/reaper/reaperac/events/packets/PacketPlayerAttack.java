@@ -45,9 +45,8 @@ public class PacketPlayerAttack extends PacketListenerAbstract {
                 if (interact.getAction() == WrapperPlayClientInteractEntity.InteractAction.INTERACT) {
                     // Interacting with a horse in versions 1.13- will cause the client to
                     // set the player's rotation to the horse's rotation
-                    if (player.compensatedEntities.getEntity(entityId) instanceof PacketEntityHorse
-                            && player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_13)) {
-                        player.packetStateData.horseInteractCausedForcedRotation = true;
+                    if (player.compensatedEntities.getEntity(entityId) instanceof PacketEntityHorse) {
+                        player.getClientVersion();
                     }
                 }
             }
@@ -96,34 +95,26 @@ public class PacketPlayerAttack extends PacketListenerAbstract {
         ItemStack heldItem = player.inventory.getHeldItem();
         PacketEntity entity = player.compensatedEntities.getEntity(entityId);
 
-        if (entity != null && (!entity.isLivingEntity || entity.type == EntityTypes.PLAYER || entity.type == EntityTypes.PAINTING
-                || entity.type == EntityTypes.ENDER_DRAGON && player.getClientVersion().isOlderThan(ClientVersion.V_1_21_2))) {
-            int knockbackLevel = player.getClientVersion().isOlderThan(ClientVersion.V_1_21) && heldItem != null
-                    ? heldItem.getEnchantmentLevel(EnchantmentTypes.KNOCKBACK)
-                    : 0;
-            final boolean hasNegativeKB = knockbackLevel < 0;
+        if (entity != null && (!entity.isLivingEntity || entity.type == EntityTypes.PLAYER || entity.type == EntityTypes.PAINTING)) {
+            player.getClientVersion();
+            int knockbackLevel = 0;
+            final boolean hasNegativeKB = false;
 
-            final boolean isLegacyPlayer = player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_8);
+            final boolean isLegacyPlayer = false;
             // assume cooldown is full on 1.8 servers
-            final boolean sufficientCooldownProgress = isLegacyPlayer || player.attackCooldown.getMinimumProgress() > 0.9F;
-
-            if (!isLegacyPlayer) {
-                knockbackLevel = Math.max(knockbackLevel, 0);
-            }
+            final boolean sufficientCooldownProgress = player.attackCooldown.getMinimumProgress() > 0.9F;
 
             // 1.8 players who are packet sprinting WILL get slowed
             // 1.9+ players who are packet sprinting might not, based on attack cooldown
             // Players with knockback enchantments always get slowed
 
-            if (player.lastSprinting && !hasNegativeKB && sufficientCooldownProgress || knockbackLevel > 0) {
+            if (player.lastSprinting && !hasNegativeKB && sufficientCooldownProgress) {
                 player.minAttackSlow++;
                 player.maxAttackSlow++;
 
                 // Players cannot slow themselves twice in one tick without a knockback sword
-                if (knockbackLevel == 0) {
-                    player.maxAttackSlow = player.minAttackSlow = 1;
-                }
-            } else if (!isLegacyPlayer && player.lastSprinting) {
+                player.maxAttackSlow = player.minAttackSlow = 1;
+            } else if (player.lastSprinting) {
                 // 1.9+ players who have attack speed cannot slow themselves twice in one tick because their attack cooldown gets reset on swing.
                 if (player.maxAttackSlow > 0 && player.compensatedEntities.self.getAttributeValue(Attributes.ATTACK_SPEED) < 16) return; // 16 is a reasonable limit
 
@@ -139,9 +130,10 @@ public class PacketPlayerAttack extends PacketListenerAbstract {
 
     private boolean isInvalidEntity(PacketReceiveEvent event, GrimPlayer player, int entityId) {
         // The entity does not exist
-        if (!player.compensatedEntities.entityMap.containsKey(entityId) && !player.compensatedEntities.serverPositionsMap.containsKey(entityId)
-                // the list of entities used to raytrace isn't the same as the list of entities in the world in pre-1.14 (wtf mojang)
-                && (!player.compensatedEntities.entitiesRemovedThisTick.contains(entityId) || player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_14))) {
+        if (!player.compensatedEntities.entityMap.containsKey(entityId) && !player.compensatedEntities.serverPositionsMap.containsKey(entityId)) {
+            if (player.compensatedEntities.entitiesRemovedThisTick.contains(entityId)) {
+                player.getClientVersion();
+            }
             final BadPacketsW badPacketsW = player.checkManager.getCheck(BadPacketsW.class);
             if (badPacketsW.flagAndAlert("entityId=" + entityId) && badPacketsW.shouldModifyPackets()) {
                 event.setCancelled(true);

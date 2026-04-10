@@ -33,7 +33,7 @@ public class MovementTickerRideable extends MovementTickerLivingVehicle {
     @Override
     public void livingEntityTravel() {
         super.livingEntityTravel();
-        if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_17))
-            Collisions.handleInsideBlocks(player);
+        player.getClientVersion();
+        Collisions.handleInsideBlocks(player);
     }
 }

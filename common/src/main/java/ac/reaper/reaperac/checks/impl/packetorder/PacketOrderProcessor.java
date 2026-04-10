@@ -116,9 +116,7 @@ public final class PacketOrderProcessor extends Check implements PacketCheck {
             closingInventory = true;
         }
 
-        if (!player.cameraEntity.isSelf() || isTickPacket(packetType)
-                || player.getClientVersion().isOlderThan(ClientVersion.V_1_21_2)
-                && !player.compensatedWorld.isChunkLoaded(GrimMath.floor(player.x) >> 4, GrimMath.floor(player.z) >> 4)) {
+        if (!player.cameraEntity.isSelf() || isTickPacket(packetType)) {
             openingInventory = false;
             swapping = false;
             dropping = false;
@@ -139,6 +137,10 @@ public final class PacketOrderProcessor extends Check implements PacketCheck {
             startingToGlide = false;
             jumpingWithMount = false;
             stabbing = false;
+        } else {
+            if (player.getClientVersion().isOlderThan(ClientVersion.V_1_21_2)) {
+                player.compensatedWorld.isChunkLoaded(GrimMath.floor(player.x) >> 4, GrimMath.floor(player.z) >> 4);
+            }
         }
     }
 
