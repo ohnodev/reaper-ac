@@ -2,7 +2,6 @@ package ac.reaper.reaperac.utils.nmsutil;
 
 import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.utils.math.Vector3dm;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 

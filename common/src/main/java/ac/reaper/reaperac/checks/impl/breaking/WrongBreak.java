@@ -6,7 +6,6 @@ import ac.reaper.reaperac.checks.type.BlockBreakCheck;
 import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.utils.anticheat.MessageUtil;
 import ac.reaper.reaperac.utils.anticheat.update.BlockBreak;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.player.DiggingAction;
 import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
 import com.github.retrooper.packetevents.util.Vector3i;

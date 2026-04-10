@@ -4,9 +4,7 @@ import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.predictionengine.predictions.PredictionEngineLava;
 import ac.reaper.reaperac.predictionengine.predictions.PredictionEngineNormal;
 import ac.reaper.reaperac.predictionengine.predictions.PredictionEngineWater;
-import ac.reaper.reaperac.predictionengine.predictions.PredictionEngineWaterLegacy;
 import ac.reaper.reaperac.utils.nmsutil.BlockProperties;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 
 public class MovementTickerPlayer extends MovementTicker {
     public MovementTickerPlayer(GrimPlayer player) {

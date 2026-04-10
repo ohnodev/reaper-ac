@@ -4,9 +4,6 @@ import ac.reaper.reaperac.checks.Check;
 import ac.reaper.reaperac.checks.type.PostPredictionCheck;
 import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.utils.anticheat.update.PredictionComplete;
-import ac.reaper.reaperac.utils.collisions.datatypes.SimpleCollisionBox;
-import ac.reaper.reaperac.utils.data.packetentity.PacketEntity;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 
 public class GhostBlockDetector extends Check implements PostPredictionCheck {
 

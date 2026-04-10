@@ -4,10 +4,8 @@ import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.predictionengine.predictions.rideable.PredictionEngineRideableLava;
 import ac.reaper.reaperac.predictionengine.predictions.rideable.PredictionEngineRideableNormal;
 import ac.reaper.reaperac.predictionengine.predictions.rideable.PredictionEngineRideableWater;
-import ac.reaper.reaperac.predictionengine.predictions.rideable.PredictionEngineRideableWaterLegacy;
 import ac.reaper.reaperac.utils.math.Vector3dm;
 import ac.reaper.reaperac.utils.nmsutil.BlockProperties;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 
 public class MovementTickerLivingVehicle extends MovementTicker {
     protected Vector3dm movementInput = new Vector3dm();

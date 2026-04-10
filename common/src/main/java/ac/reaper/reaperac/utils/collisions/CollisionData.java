@@ -39,7 +39,6 @@ import com.github.retrooper.packetevents.protocol.world.states.enums.Type;
 import com.github.retrooper.packetevents.protocol.world.states.enums.VerticalDirection;
 import com.github.retrooper.packetevents.protocol.world.states.type.StateType;
 import com.github.retrooper.packetevents.protocol.world.states.type.StateTypes;
-import com.viaversion.viaversion.api.Via;
 
 import java.util.Arrays;
 import java.util.HashSet;

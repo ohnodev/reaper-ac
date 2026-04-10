@@ -5,7 +5,6 @@ import ac.reaper.reaperac.checks.CheckData;
 import ac.reaper.reaperac.checks.type.BlockBreakCheck;
 import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.utils.anticheat.update.BlockBreak;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.player.InteractionHand;
 
 @CheckData(name = "MultiActionsB", description = "Breaking blocks while using an item", experimental = true)

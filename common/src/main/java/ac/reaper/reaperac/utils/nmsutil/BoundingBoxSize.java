@@ -6,7 +6,6 @@ import ac.reaper.reaperac.utils.data.packetentity.*;
 import ac.reaper.reaperac.utils.math.GrimMath;
 import com.github.retrooper.packetevents.protocol.entity.type.EntityType;
 import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.util.Vector3d;
 import lombok.experimental.UtilityClass;
 

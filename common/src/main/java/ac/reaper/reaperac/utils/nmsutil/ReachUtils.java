@@ -6,7 +6,6 @@ import ac.reaper.reaperac.utils.data.Pair;
 import ac.reaper.reaperac.utils.math.GrimMath;
 import ac.reaper.reaperac.utils.math.Vector3dm;
 import ac.reaper.reaperac.utils.math.VectorUtils;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.world.BlockFace;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.Contract;

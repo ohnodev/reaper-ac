@@ -5,7 +5,6 @@ import ac.reaper.reaperac.utils.data.packetentity.PacketEntityHorse;
 import ac.reaper.reaperac.utils.math.Vector3dm;
 import ac.reaper.reaperac.utils.nmsutil.Collisions;
 import com.github.retrooper.packetevents.protocol.attribute.Attributes;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 
 public class MovementTickerHorse extends MovementTickerLivingVehicle {
 

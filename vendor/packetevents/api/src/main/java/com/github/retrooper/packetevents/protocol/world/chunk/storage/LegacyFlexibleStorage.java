@@ -18,8 +18,6 @@
 
 package com.github.retrooper.packetevents.protocol.world.chunk.storage;
 
-import java.util.Arrays;
-
 public class LegacyFlexibleStorage extends BaseStorage {
     private final long[] data;
     private final int bitsPerEntry;

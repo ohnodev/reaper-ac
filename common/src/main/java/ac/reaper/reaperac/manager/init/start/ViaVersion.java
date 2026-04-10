@@ -3,7 +3,6 @@ package ac.reaper.reaperac.manager.init.start;
 import ac.reaper.reaperac.GrimAPI;
 import ac.reaper.reaperac.utils.anticheat.LogUtil;
 import ac.reaper.reaperac.utils.reflection.ReflectionUtils;
-import com.viaversion.viaversion.api.Via;
 
 public class ViaVersion implements StartableInitable {
     public static final boolean isAvailable = ReflectionUtils.hasClass("com.viaversion.viaversion.api.Via");

@@ -1,15 +1,12 @@
 package ac.reaper.reaperac.predictionengine.predictions;
 
 import ac.reaper.reaperac.player.GrimPlayer;
-import ac.reaper.reaperac.utils.collisions.datatypes.SimpleCollisionBox;
 import ac.reaper.reaperac.utils.data.VectorData;
 import ac.reaper.reaperac.utils.enums.FluidTag;
 import ac.reaper.reaperac.utils.math.GrimMath;
 import ac.reaper.reaperac.utils.math.Vector3dm;
-import ac.reaper.reaperac.utils.nmsutil.Collisions;
 import ac.reaper.reaperac.utils.nmsutil.FluidFallingAdjustedMovement;
 import ac.reaper.reaperac.utils.nmsutil.ReachUtils;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 
 import java.util.HashSet;
 import java.util.Set;

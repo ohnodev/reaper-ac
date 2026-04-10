@@ -7,7 +7,6 @@ import ac.reaper.reaperac.predictionengine.blockeffects.impl.BlockEffectsResolve
 import ac.reaper.reaperac.predictionengine.blockeffects.impl.BlockEffectsResolverV1_21_2;
 import ac.reaper.reaperac.predictionengine.blockeffects.impl.BlockEffectsResolverV1_21_4;
 import ac.reaper.reaperac.predictionengine.blockeffects.impl.BlockEffectsResolverV1_21_5;
-import ac.reaper.reaperac.predictionengine.blockeffects.impl.BlockEffectsResolverV1_21_6;
 import ac.reaper.reaperac.utils.chunks.Column;
 import ac.reaper.reaperac.utils.collisions.CollisionData;
 import ac.reaper.reaperac.utils.collisions.datatypes.CollisionBox;

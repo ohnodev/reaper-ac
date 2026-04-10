@@ -1,7 +1,6 @@
 package ac.reaper.reaperac.manager.init.start;
 
 import ac.reaper.reaperac.events.packets.*;
-import ac.reaper.reaperac.events.packets.worldreader.BasePacketWorldReader;
 import ac.reaper.reaperac.events.packets.worldreader.PacketWorldReaderEighteen;
 import ac.reaper.reaperac.utils.anticheat.LogUtil;
 import com.github.retrooper.packetevents.PacketEvents;

@@ -3,7 +3,6 @@ package io.github.retrooper.packetevents.factory.fabric;
 import com.github.retrooper.packetevents.manager.registry.RegistryManager;
 import io.github.retrooper.packetevents.manager.AbstractFabricPlayerManager;
 import io.github.retrooper.packetevents.util.LazyHolder;
-import io.github.retrooper.packetevents.impl.netty.manager.player.PlayerManagerAbstract;
 import io.github.retrooper.packetevents.loader.ChainLoadData;
 
 public class FabricPacketEventsAPIManagerFactory {

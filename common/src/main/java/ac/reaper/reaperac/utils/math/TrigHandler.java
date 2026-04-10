@@ -1,7 +1,6 @@
 package ac.reaper.reaperac.utils.math;
 
 import ac.reaper.reaperac.player.GrimPlayer;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import lombok.Getter;
 
 public class TrigHandler {

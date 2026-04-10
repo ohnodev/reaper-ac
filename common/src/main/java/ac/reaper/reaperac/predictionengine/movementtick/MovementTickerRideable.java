@@ -3,7 +3,6 @@ package ac.reaper.reaperac.predictionengine.movementtick;
 import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.utils.data.packetentity.PacketEntityRideable;
 import ac.reaper.reaperac.utils.nmsutil.Collisions;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 
 public class MovementTickerRideable extends MovementTickerLivingVehicle {
 

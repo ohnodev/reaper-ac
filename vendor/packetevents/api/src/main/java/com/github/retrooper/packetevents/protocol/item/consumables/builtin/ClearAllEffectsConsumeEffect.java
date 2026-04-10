@@ -19,7 +19,6 @@
 package com.github.retrooper.packetevents.protocol.item.consumables.builtin;
 
 import com.github.retrooper.packetevents.protocol.item.consumables.ConsumeEffect;
-import com.github.retrooper.packetevents.protocol.item.consumables.ConsumeEffectType;
 import com.github.retrooper.packetevents.protocol.item.consumables.ConsumeEffectTypes;
 import com.github.retrooper.packetevents.wrapper.PacketWrapper;
 

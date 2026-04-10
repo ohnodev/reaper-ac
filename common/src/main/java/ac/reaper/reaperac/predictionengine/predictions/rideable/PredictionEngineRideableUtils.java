@@ -7,7 +7,6 @@ import ac.reaper.reaperac.utils.data.Pair;
 import ac.reaper.reaperac.utils.data.VectorData;
 import ac.reaper.reaperac.utils.data.packetentity.JumpableEntity;
 import ac.reaper.reaperac.utils.math.Vector3dm;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import lombok.experimental.UtilityClass;
 
 import java.util.ArrayList;

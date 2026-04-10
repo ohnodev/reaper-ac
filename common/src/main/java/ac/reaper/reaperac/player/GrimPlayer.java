@@ -21,7 +21,6 @@ import ac.reaper.reaperac.predictionengine.EntityFluidInteraction;
 import ac.reaper.reaperac.predictionengine.MovementCheckRunner;
 import ac.reaper.reaperac.predictionengine.PointThreeEstimator;
 import ac.reaper.reaperac.predictionengine.UncertaintyHandler;
-import ac.reaper.reaperac.manager.AttackCooldownHandler;
 import ac.reaper.reaperac.utils.anticheat.LogUtil;
 import ac.reaper.reaperac.utils.anticheat.MessageUtil;
 import ac.reaper.reaperac.utils.anticheat.update.BlockBreak;
