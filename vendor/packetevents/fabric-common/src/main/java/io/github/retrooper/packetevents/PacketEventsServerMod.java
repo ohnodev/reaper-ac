@@ -18,7 +18,6 @@
 
 package io.github.retrooper.packetevents;
 
-import com.github.retrooper.packetevents.PacketEvents;
 import io.github.retrooper.packetevents.factory.fabric.FabricPacketEventsAPI;
 import io.github.retrooper.packetevents.impl.netty.manager.player.PlayerManagerAbstract;
 import java.util.function.Supplier;

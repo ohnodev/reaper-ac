@@ -4,9 +4,7 @@ import ac.reaper.reaperac.checks.Check;
 import ac.reaper.reaperac.checks.CheckData;
 import ac.reaper.reaperac.checks.type.PacketCheck;
 import ac.reaper.reaperac.player.GrimPlayer;
-import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.player.DiggingAction;
@@ -32,8 +30,7 @@ public class PacketOrderB extends Check implements PacketCheck {
     // INTERACT -> INTERACT -> ANIMATION -> ANIMATION
     // I will simply disable this check for 1.8- clients on 1.9+ servers as I can't be bothered to find a way around this.
     // Stop supporting such old clients on modern servers!
-    private final boolean exempt = player.getClientVersion().isOlderThan(ClientVersion.V_1_9)
-            && PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_9);
+    private final boolean exempt = player.getClientVersion().isOlderThan(ClientVersion.V_1_9);
 
     private boolean sentAnimationSinceLastAttack = player.getClientVersion().isNewerThan(ClientVersion.V_1_8);
     private boolean sentAttack, sentAnimation, sentSlotSwitch;

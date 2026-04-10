@@ -73,10 +73,7 @@ public class PacketPlayerDigging extends PacketListenerAbstract {
         final FoodProperties foodComponent = item.getComponentOr(ComponentTypes.FOOD, null);
 
         // The food component can override the consumable component, as it provides conditions for using the item
-        if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21_2) && consumable != null && foodComponent == null) {
-            player.packetStateData.setSlowedByUsingItem(true);
-            player.packetStateData.itemInUseHand = hand;
-        }
+
 
         // Check for data component stuff on 1.20.5+
         if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_20_5) && foodComponent != null) {
@@ -97,10 +94,6 @@ public class PacketPlayerDigging extends PacketListenerAbstract {
             // Pls have this mapped correctly retrooper
             if (item.getType() == ItemTypes.SPLASH_POTION)
                 return;
-            // 1.8 splash potion
-            if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThan(ServerVersion.V_1_9) && item.getLegacyData() > 16384) {
-                return;
-            }
 
             // Eatable items that don't require any hunger to eat
             if (material == ItemTypes.POTION || material == ItemTypes.MILK_BUCKET
@@ -173,10 +166,7 @@ public class PacketPlayerDigging extends PacketListenerAbstract {
 
         // Only 1.8 and below players can block with swords
         if (material.hasAttribute(ItemTypes.ItemAttribute.SWORD)) {
-            if (player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_8))
-                player.packetStateData.setSlowedByUsingItem(true);
-            else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThan(ServerVersion.V_1_9)) // ViaVersion stuff
-                player.packetStateData.setSlowedByUsingItem(false);
+            if (player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_8)) player.packetStateData.setSlowedByUsingItem(true);
         }
     }
 
@@ -192,12 +182,10 @@ public class PacketPlayerDigging extends PacketListenerAbstract {
                 player.packetStateData.setSlowedByUsingItem(false);
                 player.packetStateData.slowedByUsingItemTransaction = player.lastTransactionReceived.get();
 
-                if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13)) {
-                    ItemStack hand = player.inventory.getItemInHand(player.packetStateData.itemInUseHand);
+                ItemStack hand = player.inventory.getItemInHand(player.packetStateData.itemInUseHand);
 
-                    if (hand.getType() == ItemTypes.TRIDENT && hand.getEnchantmentLevel(EnchantmentTypes.RIPTIDE) > 0) {
-                        player.packetStateData.tryingToRiptide = true;
-                    }
+                if (hand.getType() == ItemTypes.TRIDENT && hand.getEnchantmentLevel(EnchantmentTypes.RIPTIDE) > 0) {
+                    player.packetStateData.tryingToRiptide = true;
                 }
             }
         }
@@ -246,8 +234,7 @@ public class PacketPlayerDigging extends PacketListenerAbstract {
             final GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
             if (player == null) return;
 
-            if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_8)
-                    && player.gamemode == GameMode.SPECTATOR)
+            if (player.gamemode == GameMode.SPECTATOR)
                 return;
 
             final InteractionHand hand = SERVER_HAS_OFFHAND && event.getPacketType() == PacketType.Play.Client.USE_ITEM

@@ -27,7 +27,6 @@ import ac.reaper.reaperac.utils.nmsutil.Collisions;
 import ac.reaper.reaperac.utils.nmsutil.GetBoundingBox;
 import ac.reaper.reaperac.utils.nmsutil.ReachUtils;
 import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.player.GameMode;
 import com.github.retrooper.packetevents.protocol.teleport.RelativeFlag;
@@ -231,11 +230,8 @@ public class SetbackTeleportUtil extends Check implements PostPredictionCheck {
                 int vehicleId = player.getRidingVehicleId();
                 if (player.compensatedEntities.serverPlayerVehicle != null) {
                     // Dismount player from vehicle
-                    if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_9)) {
-                        player.user.sendPacket(new WrapperPlayServerSetPassengers(vehicleId, new int[2]));
-                    } else {
-                        player.user.sendPacket(new WrapperPlayServerAttachEntity(vehicleId, -1, false));
-                    }
+
+                    player.user.sendPacket(new WrapperPlayServerSetPassengers(vehicleId, new int[2]));
 
                     // Stop the player from being able to teleport vehicles and simply re-enter them to continue,
                     // therefore, teleport the entity
@@ -255,9 +251,6 @@ public class SetbackTeleportUtil extends Check implements PostPredictionCheck {
             }
 
             double y = position.getY();
-            if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_7_10)) {
-                y += 1.62; // 1.7 teleport offset if grim ever supports 1.7 again
-            }
 
             // Send a transaction now to make sure there's always transactions around teleport
             player.sendTransaction();

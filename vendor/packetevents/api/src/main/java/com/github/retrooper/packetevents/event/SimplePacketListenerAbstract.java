@@ -20,9 +20,6 @@ package com.github.retrooper.packetevents.event;
 
 import com.github.retrooper.packetevents.event.simple.*;
 
-import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Map;
 
 public abstract class SimplePacketListenerAbstract extends PacketListenerCommon {
     public SimplePacketListenerAbstract(PacketListenerPriority priority) {

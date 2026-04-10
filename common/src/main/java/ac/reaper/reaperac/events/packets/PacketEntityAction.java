@@ -6,11 +6,9 @@ import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.utils.data.Pair;
 import ac.reaper.reaperac.utils.data.packetentity.JumpableEntity;
 import ac.reaper.reaperac.utils.data.packetentity.PacketEntity;
-import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketListenerAbstract;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientEntityAction;
 
@@ -42,8 +40,6 @@ public class PacketEntityAction extends PacketListenerAbstract {
                     player.isSneaking = false;
                     break;
                 case START_FLYING_WITH_ELYTRA:
-                    if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThan(ServerVersion.V_1_9)) return;
-
                     if (player.onGround || player.lastOnGround) {
                         player.getSetbackTeleportUtil().executeNonSimulatingForceResync();
 

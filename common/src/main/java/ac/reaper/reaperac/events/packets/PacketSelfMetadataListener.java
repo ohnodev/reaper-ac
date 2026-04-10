@@ -3,11 +3,9 @@ package ac.reaper.reaperac.events.packets;
 import ac.reaper.reaperac.GrimAPI;
 import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.utils.nmsutil.WatchableIndexUtil;
-import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketListenerAbstract;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.entity.data.EntityData;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
@@ -61,14 +59,13 @@ public class PacketSelfMetadataListener extends PacketListenerAbstract {
                 // to the player on old servers... because the player just overrides this pose the very next tick
                 //
                 // It makes no sense to me why mojang is doing this, it has to be a bug.
-                if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_14)) {
-                    List<EntityData<?>> metadataStuff = entityMetadata.getEntityMetadata();
 
-                    // Remove the pose metadata from the list
-                    metadataStuff.removeIf(element -> element.getIndex() == 6);
-                    entityMetadata.setEntityMetadata(metadataStuff);
-                    event.markForReEncode(true);
-                }
+                List<EntityData<?>> metadataStuff = entityMetadata.getEntityMetadata();
+
+                // Remove the pose metadata from the list
+                metadataStuff.removeIf(element -> element.getIndex() == 6);
+                entityMetadata.setEntityMetadata(metadataStuff);
+                event.markForReEncode(true);
 
                 EntityData<?> watchable = WatchableIndexUtil.getIndex(entityMetadata.getEntityMetadata(), 0);
 
@@ -96,68 +93,61 @@ public class PacketSelfMetadataListener extends PacketListenerAbstract {
                     }
                 }
 
-                if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_9)) {
-                    EntityData<?> gravity = WatchableIndexUtil.getIndex(entityMetadata.getEntityMetadata(), 5);
 
-                    if (gravity != null) {
-                        Object gravityObject = gravity.getValue();
+                EntityData<?> gravity = WatchableIndexUtil.getIndex(entityMetadata.getEntityMetadata(), 5);
 
-                        if (gravityObject instanceof Boolean) {
-                            if (!hasSendTransaction) player.sendTransaction();
-                            hasSendTransaction = true;
+                if (gravity != null) {
+                    Object gravityObject = gravity.getValue();
 
-                            player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get(), () -> {
-                                // Vanilla uses hasNoGravity, which is a bad name IMO
-                                // hasGravity > hasNoGravity
-                                player.playerEntityHasGravity = !((Boolean) gravityObject);
-                            });
-                        }
-                    }
-                }
-
-                if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_17)) {
-                    EntityData<?> frozen = WatchableIndexUtil.getIndex(entityMetadata.getEntityMetadata(), 7);
-
-                    if (frozen != null) {
-                        if (!hasSendTransaction) player.sendTransaction();
-                        hasSendTransaction = true;
-                        player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get(),
-                                () -> player.powderSnowFrozenTicks = (int) frozen.getValue());
-                    }
-                }
-
-                if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_14)) {
-                    int id;
-
-                    if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_14_4)) {
-                        id = 12; // Added in 1.14 with an initial ID of 12
-                    } else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_16_5)) {
-                        id = 13; // 1.15 changed this to 13
-                    } else {
-                        id = 14; // 1.17 changed this to 14
-                    }
-
-                    EntityData<?> bedObject = WatchableIndexUtil.getIndex(entityMetadata.getEntityMetadata(), id);
-                    if (bedObject != null) {
+                    if (gravityObject instanceof Boolean) {
                         if (!hasSendTransaction) player.sendTransaction();
                         hasSendTransaction = true;
 
                         player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get(), () -> {
-                            Optional<Vector3i> bed = (Optional<Vector3i>) bedObject.getValue();
-                            if (bed.isPresent()) {
-                                player.isInBed = true;
-                                Vector3i bedPos = bed.get();
-                                player.bedPosition = new Vector3d(bedPos.getX() + 0.5, bedPos.getY(), bedPos.getZ() + 0.5);
-                            } else { // Run when we know the player is not in bed 100%
-                                player.isInBed = false;
-                            }
+                            // Vanilla uses hasNoGravity, which is a bad name IMO
+                            // hasGravity > hasNoGravity
+                            player.playerEntityHasGravity = !((Boolean) gravityObject);
                         });
                     }
                 }
 
-                if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13) &&
-                        player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) {
-                    EntityData<?> riptide = WatchableIndexUtil.getIndex(entityMetadata.getEntityMetadata(), PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_17) ? 8 : 7);
+
+                EntityData<?> frozen = WatchableIndexUtil.getIndex(entityMetadata.getEntityMetadata(), 7);
+
+                if (frozen != null) {
+                    if (!hasSendTransaction) player.sendTransaction();
+                    hasSendTransaction = true;
+                    player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get(),
+                            () -> player.powderSnowFrozenTicks = (int) frozen.getValue());
+                }
+
+
+                int id;
+
+
+
+                id = 14; // 1.17 changed this to 14
+
+                EntityData<?> bedObject = WatchableIndexUtil.getIndex(entityMetadata.getEntityMetadata(), id);
+                if (bedObject != null) {
+                    if (!hasSendTransaction) player.sendTransaction();
+                    hasSendTransaction = true;
+
+                    player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get(), () -> {
+                        Optional<Vector3i> bed = (Optional<Vector3i>) bedObject.getValue();
+                        if (bed.isPresent()) {
+                            player.isInBed = true;
+                            Vector3i bedPos = bed.get();
+                            player.bedPosition = new Vector3d(bedPos.getX() + 0.5, bedPos.getY(), bedPos.getZ() + 0.5);
+                        } else { // Run when we know the player is not in bed 100%
+                            player.isInBed = false;
+                        }
+                    });
+                }
+
+
+                if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) {
+                    EntityData<?> riptide = WatchableIndexUtil.getIndex(entityMetadata.getEntityMetadata(), 8);
 
                     // This one only present if it changed
                     if (riptide != null && riptide.getValue() instanceof Byte) {
@@ -183,7 +173,7 @@ public class PacketSelfMetadataListener extends PacketListenerAbstract {
                         // - Server: Okay, I will not make you eat or stop eating because it makes sense that the server doesn't control a player's eating.
                         //
                         // This was added for stuff like shields, but IMO it really should be all client sided
-                        if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9) && PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_9)) {
+                        if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) {
                             boolean isActive = (((byte) riptide.getValue()) & 1) > 0;
                             boolean isOffhand = (((byte) riptide.getValue()) & 2) > 0;
 

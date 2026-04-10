@@ -17,12 +17,9 @@ import ac.reaper.reaperac.utils.nmsutil.EntityTypeTags;
 import ac.reaper.reaperac.utils.nmsutil.FluidFallingAdjustedMovement;
 import ac.reaper.reaperac.utils.nmsutil.GetBoundingBox;
 import ac.reaper.reaperac.utils.nmsutil.MainSupportingBlockPosFinder;
-import ac.reaper.reaperac.utils.viaversion.ViaVersionUtil;
 import ac.reaper.reaperac.utils.team.EntityPredicates;
 import ac.reaper.reaperac.utils.team.EntityTeam;
 import ac.reaper.reaperac.utils.team.TeamHandler;
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.attribute.Attributes;
 import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
@@ -32,7 +29,6 @@ import com.github.retrooper.packetevents.protocol.world.states.defaulttags.Block
 import com.github.retrooper.packetevents.protocol.world.states.type.StateType;
 import com.github.retrooper.packetevents.protocol.world.states.type.StateTypes;
 import com.github.retrooper.packetevents.util.Vector3d;
-import com.viaversion.viaversion.api.Via;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -64,12 +60,8 @@ public class MovementTicker {
     }
 
     public static void handleEntityCollisions(GrimPlayer player) {
-        // 1.7 and 1.8 do not have player collision
-        final boolean serverSupported = PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_9);
-        boolean hasEntityPushing = !(player.getClientVersion().isOlderThan(ClientVersion.V_1_9)
-                // Check that ViaVersion disables all collisions on a 1.8 server for 1.9+ clients
-                || (!serverSupported
-                && (!ViaVersionUtil.isAvailable || Via.getConfig().isPreventCollision())));
+        // Check that ViaVersion disables all collisions on a 1.8 server for 1.9+ clients
+        boolean hasEntityPushing = !player.getClientVersion().isOlderThan(ClientVersion.V_1_9);
         if (!hasEntityPushing) return;
 
         int possibleCollidingEntities = 0;
@@ -95,10 +87,8 @@ public class MovementTicker {
 
                 // Filters out entities that can't be pushed/collided because of team collision rules
                 // Also handles 1.9+ player on 1.8- server with ViaVersion prevent-collision disabled.
-                if (serverSupported) {
-                    final EntityTeam entityTeam = teamHandler != null ? teamHandler.getEntityTeam(entity) : null;
-                    if (!EntityPredicates.canBePushedBy(entityTeam, playerTeam)) continue;
-                }
+                final EntityTeam entityTeam = teamHandler != null ? teamHandler.getEntityTeam(entity) : null;
+                if (!EntityPredicates.canBePushedBy(entityTeam, playerTeam)) continue;
 
                 possibleCollidingEntities++;
             }

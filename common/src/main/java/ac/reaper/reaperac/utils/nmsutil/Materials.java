@@ -1,7 +1,5 @@
 package ac.reaper.reaperac.utils.nmsutil;
 
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.item.type.ItemType;
 import com.github.retrooper.packetevents.protocol.item.type.ItemTypes;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
@@ -252,8 +250,7 @@ public class Materials {
 
     public static boolean isWaterlogged(ClientVersion clientVersion, WrappedBlockState state) {
         if (clientVersion.isOlderThanOrEquals(ClientVersion.V_1_12_2)) return false;
-        if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThan(ServerVersion.V_1_13))
-            return false;
+
 
         StateType type = state.getType();
 

@@ -22,9 +22,6 @@ import ac.reaper.reaperac.utils.collisions.datatypes.NoCollisionBox;
 import ac.reaper.reaperac.utils.collisions.datatypes.SimpleCollisionBox;
 import ac.reaper.reaperac.utils.data.packetentity.PacketEntityStrider;
 import ac.reaper.reaperac.utils.nmsutil.Materials;
-import ac.reaper.reaperac.utils.viaversion.ViaVersionUtil;
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.item.ItemStack;
 import com.github.retrooper.packetevents.protocol.item.type.ItemTypes;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
@@ -539,14 +536,7 @@ public enum CollisionData implements CollisionFactory {
 
     SNOW((player, version, data, x, y, z) -> {
         int layers = data.getLayers();
-        if (layers == 1 && version.isNewerThanOrEquals(ClientVersion.V_1_13)) {
-            if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13)
-                    || !ViaVersionUtil.isAvailable || !Via.getConfig().isSnowCollisionFix()) {
-                return NoCollisionBox.INSTANCE;
-            }
-
-            layers++;
-        }
+        if (layers == 1 && version.isNewerThanOrEquals(ClientVersion.V_1_13)) return NoCollisionBox.INSTANCE;
 
         return new SimpleCollisionBox(0, 0, 0, 1, (layers - 1) * 0.125, 1);
     }, StateTypes.SNOW),

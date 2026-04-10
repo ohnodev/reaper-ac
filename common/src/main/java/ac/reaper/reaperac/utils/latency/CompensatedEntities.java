@@ -9,8 +9,6 @@ import ac.reaper.reaperac.utils.data.packetentity.*;
 import ac.reaper.reaperac.utils.data.packetentity.dragon.PacketEntityEnderDragon;
 import ac.reaper.reaperac.utils.nmsutil.BoundingBoxSize;
 import ac.reaper.reaperac.utils.nmsutil.WatchableIndexUtil;
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.attribute.Attribute;
 import com.github.retrooper.packetevents.protocol.attribute.Attributes;
 import com.github.retrooper.packetevents.protocol.entity.data.EntityData;
@@ -244,19 +242,12 @@ public class CompensatedEntities {
 
         if (entity.isAgeable) {
             int id;
-            if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_8_8)) {
-                id = 12;
-            } else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_9_4)) {
-                id = 11;
-            } else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_13_2)) {
-                id = 12;
-            } else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_14_4)) {
-                id = 14;
-            } else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_16_5)) {
-                id = 15;
-            } else {
-                id = 16;
-            }
+
+
+
+
+
+            id = 16;
 
             // 1.14 good
             EntityData<?> ageableObject = WatchableIndexUtil.getIndex(watchableObjects, id);
@@ -273,19 +264,12 @@ public class CompensatedEntities {
 
         if (entity instanceof PacketEntitySizeable sizeable) {
             int id;
-            if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_8_8)) {
-                id = 16;
-            } else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_9_4)) {
-                id = 11;
-            } else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_13_2)) {
-                id = 12;
-            } else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_14_4)) {
-                id = 14;
-            } else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_16_5)) {
-                id = 15;
-            } else {
-                id = 16;
-            }
+
+
+
+
+
+            id = 16;
 
             EntityData<?> sizeObject = WatchableIndexUtil.getIndex(watchableObjects, id);
             if (sizeObject != null) {
@@ -299,19 +283,7 @@ public class CompensatedEntities {
         }
 
         if (entity instanceof PacketEntityShulker shulker) {
-            int id;
-
-            if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_9_4)) {
-                id = 11;
-            } else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_13_2)) {
-                id = 12;
-            } else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_14_4)) {
-                id = 14;
-            } else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_16_5)) {
-                id = 15;
-            } else {
-                id = 16;
-            }
+            int id = 16;
 
             EntityData<?> shulkerAttached = WatchableIndexUtil.getIndex(watchableObjects, id);
 
@@ -336,26 +308,9 @@ public class CompensatedEntities {
 
         if (entity instanceof PacketEntityRideable rideable) {
             int offset = 0;
-            if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_8_8)) {
-                if (entity.type == EntityTypes.PIG) {
-                    EntityData<?> pigSaddle = WatchableIndexUtil.getIndex(watchableObjects, 16);
-                    if (pigSaddle != null) {
-                        rideable.hasSaddle = ((byte) pigSaddle.getValue()) != 0;
-                    }
-                }
-            } else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_9_4)) {
-                offset = 5;
-            } else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_13_2)) {
-                offset = 4;
-            } else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_14_4)) {
-                offset = 2;
-            } else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_16_5)) {
-                offset = 1;
-            }
 
             if (entity.type == EntityTypes.PIG) {
-                if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_21_5))
-                    offset = 1;
+                offset = 1;
 
                 EntityData<?> pigSaddle = WatchableIndexUtil.getIndex(watchableObjects, 17 - offset);
                 if (pigSaddle != null) {
@@ -387,51 +342,26 @@ public class CompensatedEntities {
         }
 
         if (entity instanceof PacketEntityHorse horse) {
-            if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_9_4)) {
-                int offset = 0;
+            int offset = 0;
+            EntityData<?> horseByte = WatchableIndexUtil.getIndex(watchableObjects, 17 - offset);
+            if (horseByte != null) {
+                byte info = (byte) horseByte.getValue();
 
-                if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_9_4)) {
-                    offset = 5;
-                } else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_13_2)) {
-                    offset = 4;
-                } else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_14_4)) {
-                    offset = 2;
-                } else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_16_5)) {
-                    offset = 1;
-                }
+                horse.isTame = (info & 0x02) != 0;
+                horse.hasSaddle = (info & 0x04) != 0;
+                horse.isRearing = (info & 0x20) != 0;
+            }
 
-                EntityData<?> horseByte = WatchableIndexUtil.getIndex(watchableObjects, 17 - offset);
-                if (horseByte != null) {
-                    byte info = (byte) horseByte.getValue();
+            // track camel dashing
 
-                    horse.isTame = (info & 0x02) != 0;
-                    horse.hasSaddle = (info & 0x04) != 0;
-                    horse.isRearing = (info & 0x20) != 0;
-                }
+            if (entity instanceof PacketEntityCamel camel) {
+                EntityData<?> entityData = WatchableIndexUtil.getIndex(watchableObjects, 18);
+                if (entityData != null) {
+                    camel.setDashing((boolean) entityData.getValue());
 
-                // track camel dashing
-                if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_20)) {
-                    if (entity instanceof PacketEntityCamel camel) {
-                        EntityData<?> entityData = WatchableIndexUtil.getIndex(watchableObjects, 18);
-                        if (entityData != null) {
-                            camel.setDashing((boolean) entityData.getValue());
-
-                            // TODO there is: if (!this.firstTick && DASH.equals(accessor)) {
-                            // !firstTick condition
-                            camel.setDashCooldown(camel.getDashCooldown() == 0 ? 55 : camel.getDashCooldown());
-                        }
-                    }
-                }
-            } else {
-                EntityData<?> horseByte = WatchableIndexUtil.getIndex(watchableObjects, 16);
-                if (horseByte != null) {
-                    int info = (int) horseByte.getValue();
-
-                    horse.isTame = (info & 0x02) != 0;
-                    // TODO: Check this
-                    horse.hasSaddle = (info & 0x04) != 0;
-                    // horse.hasSaddle = (info & 0x08) != 0; // 0x08 should be hasChest
-                    horse.isRearing = (info & 0x40) != 0;
+                    // TODO there is: if (!this.firstTick && DASH.equals(accessor)) {
+                    // !firstTick condition
+                    camel.setDashCooldown(camel.getDashCooldown() == 0 ? 55 : camel.getDashCooldown());
                 }
             }
         }
@@ -447,28 +377,21 @@ public class CompensatedEntities {
             }
         }
 
-        if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_9_4)) {
-            EntityData<?> gravity = WatchableIndexUtil.getIndex(watchableObjects, 5);
 
-            if (gravity != null) {
-                Object gravityObject = gravity.getValue();
+        EntityData<?> gravity = WatchableIndexUtil.getIndex(watchableObjects, 5);
 
-                if (gravityObject instanceof Boolean) {
-                    // Vanilla uses hasNoGravity, which is a bad name IMO
-                    // hasGravity > hasNoGravity
-                    entity.hasGravity = !((Boolean) gravityObject);
-                }
+        if (gravity != null) {
+            Object gravityObject = gravity.getValue();
+
+            if (gravityObject instanceof Boolean) {
+                // Vanilla uses hasNoGravity, which is a bad name IMO
+                // hasGravity > hasNoGravity
+                entity.hasGravity = !((Boolean) gravityObject);
             }
         }
 
         if (entity.type == EntityTypes.FIREWORK_ROCKET) {
             int offset = 0;
-            if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_12_2)) {
-                offset = 2;
-            } else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_16_5)) {
-                offset = 1;
-            }
-
             EntityData<?> fireworkWatchableObject = WatchableIndexUtil.getIndex(watchableObjects, 9 - offset);
             if (fireworkWatchableObject == null) return;
 
@@ -487,16 +410,7 @@ public class CompensatedEntities {
         }
 
         if (entity instanceof PacketEntityHook hook) {
-            int index;
-            if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_9_4)) {
-                index = 5;
-            } else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_14_4)) {
-                index = 6;
-            } else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_16_5)) {
-                index = 7;
-            } else {
-                index = 8;
-            }
+            int index = 8;
 
             EntityData<?> hookWatchableObject = WatchableIndexUtil.getIndex(watchableObjects, index);
             if (hookWatchableObject == null) return;
@@ -506,18 +420,7 @@ public class CompensatedEntities {
         }
 
         if (entity instanceof PacketEntityArmorStand) {
-            int index;
-            if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_9_4)) {
-                index = 10;
-            } else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_13_2)) {
-                index = 11;
-            } else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_14_4)) {
-                index = 13;
-            } else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_16_5)) {
-                index = 14;
-            } else {
-                index = 15;
-            }
+            int index = 15;
 
             EntityData<?> armorStandByte = WatchableIndexUtil.getIndex(watchableObjects, index);
             if (armorStandByte != null) {
@@ -525,27 +428,6 @@ public class CompensatedEntities {
 
                 entity.isBaby = (info & 0x01) != 0; // technically this is IsSmall which is a different tag, but it has the same effect for us
                 ((PacketEntityArmorStand) entity).isMarker = (info & 0x10) != 0;
-            }
-        }
-
-        if (entity instanceof PacketEntityGuardian && PacketEvents.getAPI().getServerManager().getVersion().isOlderThan(ServerVersion.V_1_11)) {
-            int index;
-            int isElderlyBitMask;
-            if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThan(ServerVersion.V_1_9)) {
-                index = 16;
-                isElderlyBitMask = 0x04; // the wiki is wrong 0x02 is not "Is Elderly"
-            } else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThan(ServerVersion.V_1_10)) {
-                index = 11;
-                isElderlyBitMask = 0x04;
-            } else {
-                index = 12;
-                isElderlyBitMask = 0x04;
-            }
-
-            EntityData<?> guardianByte = WatchableIndexUtil.getIndex(watchableObjects, index);
-            if (guardianByte != null) {
-                int info = (Integer) guardianByte.getValue(); // wiki says this is a byte but testing on 1.8 shows it's an integer
-                ((PacketEntityGuardian) entity).isElder = (info & isElderlyBitMask) != 0;
             }
         }
     }
@@ -558,5 +440,4 @@ public class CompensatedEntities {
             entity.setItemBySlot(equipmentItem.getSlot(), equipmentItem.getItem());
         }
     }
-
 }

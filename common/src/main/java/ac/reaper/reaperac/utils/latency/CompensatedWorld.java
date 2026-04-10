@@ -19,7 +19,6 @@ import ac.reaper.reaperac.utils.nmsutil.Collisions;
 import ac.reaper.reaperac.utils.nmsutil.GetBoundingBox;
 import ac.reaper.reaperac.utils.nmsutil.Materials;
 import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.player.DiggingAction;
@@ -187,28 +186,17 @@ public class CompensatedWorld implements PacketWorld {
         this.currentlyChangedBlocks = new LinkedList<>(); // Reset variable without changing original
 
         // We don't need to simulate any packets, it is native to the version we are on
-        if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_19)) {
-            // Pull the confirmation ID out of the packet
-            int confirmationId = 0;
-            if (wrapper instanceof WrapperPlayClientPlayerBlockPlacement) {
-                confirmationId = ((WrapperPlayClientPlayerBlockPlacement) wrapper).getSequence();
-            } else if (wrapper instanceof WrapperPlayClientUseItem) {
-                confirmationId = ((WrapperPlayClientUseItem) wrapper).getSequence();
-            } else if (wrapper instanceof WrapperPlayClientPlayerDigging) {
-                confirmationId = ((WrapperPlayClientPlayerDigging) wrapper).getSequence();
-            }
-
-            serverIsCurrentlyProcessingThesePredictions.put(confirmationId, toApplyBlocks);
-        } else {
-            // ViaVersion is updated and runs tasks with bukkit which is correct
-            // So we must wait for the bukkit thread to start ticking so via can "confirm" it.
-            //
-            // no need to support Folia on this one because Folia is 1.19+ only
-            GrimAPI.INSTANCE.getScheduler().getGlobalRegionScheduler().run(GrimAPI.INSTANCE.getReaperPlugin(), () -> {
-                // And then we jump back to the netty thread to simulate that Via sent the confirmation
-                player.runSafely(() -> applyBlockChanges(toApplyBlocks));
-            });
+        // Pull the confirmation ID out of the packet
+        int confirmationId = 0;
+        if (wrapper instanceof WrapperPlayClientPlayerBlockPlacement) {
+            confirmationId = ((WrapperPlayClientPlayerBlockPlacement) wrapper).getSequence();
+        } else if (wrapper instanceof WrapperPlayClientUseItem) {
+            confirmationId = ((WrapperPlayClientUseItem) wrapper).getSequence();
+        } else if (wrapper instanceof WrapperPlayClientPlayerDigging) {
+            confirmationId = ((WrapperPlayClientPlayerDigging) wrapper).getSequence();
         }
+
+        serverIsCurrentlyProcessingThesePredictions.put(confirmationId, toApplyBlocks);
     }
 
     public static long chunkPositionToLong(int x, int z) {
@@ -309,24 +297,13 @@ public class CompensatedWorld implements PacketWorld {
             WrappedBlockState otherDoor = getBlock(blockX,
                     blockY + (data.getHalf() == Half.LOWER ? 1 : -1), blockZ);
 
-            if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13)) {
-                if (BlockTags.DOORS.contains(otherDoor.getType())) {
-                    otherDoor.setOpen(!otherDoor.isOpen());
-                    updateBlock(blockX, blockY + (data.getHalf() == Half.LOWER ? 1 : -1), blockZ, otherDoor.getGlobalId());
-                }
-                data.setOpen(!data.isOpen());
-                updateBlock(blockX, blockY, blockZ, data.getGlobalId());
-            } else {
-                // 1.12 attempts to change the bottom half of the door first
-                if (data.getHalf() == Half.LOWER) {
-                    data.setOpen(!data.isOpen());
-                    updateBlock(blockX, blockY, blockZ, data.getGlobalId());
-                } else if (BlockTags.DOORS.contains(otherDoor.getType()) && otherDoor.getHalf() == Half.LOWER) {
-                    // Then tries setting the first bit of whatever is below it, disregarding its type
-                    otherDoor.setOpen(!otherDoor.isOpen());
-                    updateBlock(blockX, blockY - 1, blockZ, otherDoor.getGlobalId());
-                }
+
+            if (BlockTags.DOORS.contains(otherDoor.getType())) {
+                otherDoor.setOpen(!otherDoor.isOpen());
+                updateBlock(blockX, blockY + (data.getHalf() == Half.LOWER ? 1 : -1), blockZ, otherDoor.getGlobalId());
             }
+            data.setOpen(!data.isOpen());
+            updateBlock(blockX, blockY, blockZ, data.getGlobalId());
         } else if (Materials.isClientSideOpenableTrapdoor(type, player.getClientVersion()) || BlockTags.FENCE_GATES.contains(type)) {
             // Take 12 most significant bytes -> the material ID.  Combine them with the new block magic data.
             data.setOpen(!data.isOpen());
@@ -489,38 +466,35 @@ public class CompensatedWorld implements PacketWorld {
             BlockFace badTwo = needed.getCCW();
 
             boolean isPowered = false;
-            if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13)) {
-                switch (needed) {
-                    case DOWN:
-                        isPowered = true;
-                        break;
-                    case NORTH:
-                        isPowered = block.getNorth() == North.TRUE;
-                        if (isPowered && (badOne == BlockFace.NORTH || badTwo == BlockFace.NORTH)) {
-                            return 0;
-                        }
-                        break;
-                    case SOUTH:
-                        isPowered = block.getSouth() == South.TRUE;
-                        if (isPowered && (badOne == BlockFace.SOUTH || badTwo == BlockFace.SOUTH)) {
-                            return 0;
-                        }
-                        break;
-                    case WEST:
-                        isPowered = block.getWest() == West.TRUE;
-                        if (isPowered && (badOne == BlockFace.WEST || badTwo == BlockFace.WEST)) {
-                            return 0;
-                        }
-                        break;
-                    case EAST:
-                        isPowered = block.getEast() == East.TRUE;
-                        if (isPowered && (badOne == BlockFace.EAST || badTwo == BlockFace.EAST)) {
-                            return 0;
-                        }
-                        break;
-                }
-            } else {
-                isPowered = true; // whatever, just go off the block's power to see if it connects
+
+            switch (needed) {
+                case DOWN:
+                    isPowered = true;
+                    break;
+                case NORTH:
+                    isPowered = block.getNorth() == North.TRUE;
+                    if (isPowered && (badOne == BlockFace.NORTH || badTwo == BlockFace.NORTH)) {
+                        return 0;
+                    }
+                    break;
+                case SOUTH:
+                    isPowered = block.getSouth() == South.TRUE;
+                    if (isPowered && (badOne == BlockFace.SOUTH || badTwo == BlockFace.SOUTH)) {
+                        return 0;
+                    }
+                    break;
+                case WEST:
+                    isPowered = block.getWest() == West.TRUE;
+                    if (isPowered && (badOne == BlockFace.WEST || badTwo == BlockFace.WEST)) {
+                        return 0;
+                    }
+                    break;
+                case EAST:
+                    isPowered = block.getEast() == East.TRUE;
+                    if (isPowered && (badOne == BlockFace.EAST || badTwo == BlockFace.EAST)) {
+                        return 0;
+                    }
+                    break;
             }
 
             return isPowered ? block.getPower() : 0;
@@ -699,7 +673,7 @@ public class CompensatedWorld implements PacketWorld {
 
     public void setDimension(DimensionType dimension, User user) {
         // No world height NBT
-        if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThan(ServerVersion.V_1_17)) return;
+
 
         minHeight = dimension.getMinY();
         maxHeight = minHeight + dimension.getHeight();

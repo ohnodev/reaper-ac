@@ -5,8 +5,6 @@ import ac.reaper.reaperac.utils.collisions.CollisionData;
 import ac.reaper.reaperac.utils.collisions.datatypes.CollisionBox;
 import ac.reaper.reaperac.utils.collisions.datatypes.HitBoxFactory;
 import ac.reaper.reaperac.utils.collisions.datatypes.SimpleCollisionBox;
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.world.BlockFace;
 import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
@@ -50,15 +48,15 @@ public class DynamicHitboxPane extends DynamicConnecting implements HitBoxFactor
     }
 
     private boolean isModernVersion(ClientVersion version) {
-        return PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13)
-                && version.isNewerThanOrEquals(ClientVersion.V_1_13);
+
+        return version.isNewerThanOrEquals(ClientVersion.V_1_13);
     }
 
     private boolean shouldUseOldPaneShape(ClientVersion version, boolean north, boolean south, boolean east, boolean west) {
-        return (!north && !south && !east && !west) &&
-                (version.isOlderThanOrEquals(ClientVersion.V_1_8) ||
-                        (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_8_8) &&
-                                version.isNewerThanOrEquals(ClientVersion.V_1_13)));
+        if ((north || south || east || west)) return false;
+        if (version.isOlderThanOrEquals(ClientVersion.V_1_8)) return true;
+
+        return false;
     }
 
     private CollisionBox getModernCollisionBox(boolean north, boolean east, boolean south, boolean west) {

@@ -29,7 +29,7 @@ public final class SyncedTags {
     public static final ResourceLocation NEEDS_STONE_TOOL = ResourceLocation.minecraft("needs_stone_tool");
     public static final ResourceLocation SWORD_EFFICIENT = ResourceLocation.minecraft("sword_efficient");
     private static final ServerVersion VERSION = PacketEvents.getAPI().getServerManager().getVersion();
-    private static final ResourceLocation BLOCK = VERSION.isNewerThanOrEquals(ServerVersion.V_1_21) ? ResourceLocation.minecraft("block") : ResourceLocation.minecraft("blocks");
+    private static final ResourceLocation BLOCK = ResourceLocation.minecraft("block");
     private final GrimPlayer player;
     private final Map<ResourceLocation, Map<ResourceLocation, SyncedTag<?>>> synced;
 

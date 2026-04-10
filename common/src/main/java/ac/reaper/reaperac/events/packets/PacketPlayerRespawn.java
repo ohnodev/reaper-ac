@@ -16,7 +16,6 @@ import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketListenerAbstract;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
@@ -58,20 +57,6 @@ public class PacketPlayerRespawn extends PacketListenerAbstract {
     }
 
     private boolean hasFlag(WrapperPlayServerRespawn respawn, byte flag) {
-        // This packet was added in 1.16
-        if (flag == KEEP_ATTRIBUTES) {
-            // On versions older than 1.15, via does not keep all attributes.
-            // https://github.com/ViaVersion/ViaVersion/blob/master/common/src/main/java/com/viaversion/viaversion/protocols/v1_15_2to1_16/rewriter/EntityPacketRewriter1_16.java#L124
-            if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThan(ServerVersion.V_1_15)) {
-                return false;
-            }
-        } else if (flag == KEEP_TRACKED_DATA) {
-            // But for metadata, via DOES keep all data
-            if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThan(ServerVersion.V_1_15)) {
-                return true;
-            }
-        }
-
         return (respawn.getKeptData() & flag) != 0;
     }
 
@@ -82,12 +67,6 @@ public class PacketPlayerRespawn extends PacketListenerAbstract {
 
             GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
             if (player == null) return;
-            //
-            if (player.packetStateData.lastFood == health.getFood()
-                    && player.packetStateData.lastHealth == health.getHealth()
-                    && player.packetStateData.lastSaturation == health.getFoodSaturation()
-                    && PacketEvents.getAPI().getServerManager().getVersion().isOlderThan(ServerVersion.V_1_9))
-                return;
 
             player.packetStateData.lastFood = health.getFood();
             player.packetStateData.lastHealth = health.getHealth();
@@ -120,8 +99,6 @@ public class PacketPlayerRespawn extends PacketListenerAbstract {
             player.dimensionType = joinGame.getDimensionType();
             player.worldName = joinGame.getWorldName();
 
-            if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThan(ServerVersion.V_1_17))
-                return;
             player.compensatedWorld.setDimension(joinGame.getDimensionType(), event.getUser());
         }
 
@@ -214,9 +191,8 @@ public class PacketPlayerRespawn extends PacketListenerAbstract {
                 if (!GrimAPI.INSTANCE.getSpectateManager().isSpectating(player.uuid)) {
                     player.gamemode = respawn.getGameMode();
                 }
-                if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_17)) {
-                    player.compensatedWorld.setDimension(respawn.getDimensionType(), event.getUser());
-                }
+
+                player.compensatedWorld.setDimension(respawn.getDimensionType(), event.getUser());
 
                 if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_16) && !this.hasFlag(respawn, KEEP_ATTRIBUTES)) {
                     // Reset attributes if not kept
@@ -228,7 +204,8 @@ public class PacketPlayerRespawn extends PacketListenerAbstract {
     }
 
     private boolean isWorldChange(GrimPlayer player, WrapperPlayServerRespawn respawn) {
-        if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_16) && PacketEvents.getAPI().getServerManager().getVersion().isNewerThan(ServerVersion.V_1_16)) {
+        if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_16)) {
+
             return !Objects.equals(respawn.getWorldName().orElse(null), player.worldName);
         }
 

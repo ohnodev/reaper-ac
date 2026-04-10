@@ -37,8 +37,6 @@ import ac.reaper.reaperac.utils.nmsutil.BoundingBoxSize;
 import ac.reaper.reaperac.utils.nmsutil.Collisions;
 import ac.reaper.reaperac.utils.nmsutil.GetBoundingBox;
 import ac.reaper.reaperac.utils.nmsutil.Riptide;
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.attribute.Attributes;
 import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
 import com.github.retrooper.packetevents.protocol.item.ItemStack;
@@ -68,9 +66,7 @@ public class MovementCheckRunner extends Check implements PositionCheck {
         // Keep re-teleporting until they load the chunk!
         if (player.getSetbackTeleportUtil().insideUnloadedChunk()) {
             // The player doesn't control this vehicle, we don't care
-            final boolean invalidVehicle = player.inVehicle() &&
-                    (PacketEvents.getAPI().getServerManager().getVersion().isOlderThan(ServerVersion.V_1_9) ||
-                            player.getClientVersion().isOlderThan(ClientVersion.V_1_9));
+            final boolean invalidVehicle = player.inVehicle() && player.getClientVersion().isOlderThan(ClientVersion.V_1_9);
 
             if (!invalidVehicle && !data.isTeleport()) {
                 // Teleport the player back to avoid players being able to simply ignore transactions
@@ -456,7 +452,7 @@ public class MovementCheckRunner extends Check implements PositionCheck {
             // Dead players can't cheat, if you find a way how they could, open an issue
             player.predictedVelocity = new VectorData(new Vector3dm(), VectorData.VectorType.Dead);
             player.clientVelocity = new Vector3dm();
-        } else if (player.disableGrim || (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_8) && player.gamemode == GameMode.SPECTATOR) || player.isFlying || (player.isExemptElytra() && player.isGliding)) {
+        } else if (player.disableGrim || player.gamemode == GameMode.SPECTATOR || player.isFlying || player.isExemptElytra() && player.isGliding) {
             // We could technically check spectator but what's the point...
             // Added complexity to analyze a gamemode used mainly by moderators
             //
@@ -502,39 +498,42 @@ public class MovementCheckRunner extends Check implements PositionCheck {
             new MovementTickerPlayer(player).livingEntityAIStep();
             PlayerBaseTick.updatePowderSnow(player);
             PlayerBaseTick.updatePlayerPose(player);
-        } else if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_9) && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) {
-            wasChecked = true;
-            // The player and server are both on a version with client controlled entities
-            // If either or both of the client server version has server controlled entities
-            // The player can't use entities (or the server just checks the entities)
-            if (riding.isBoat) {
-                PlayerBaseTick.doBaseTick(player);
-                // Speed doesn't affect anything with boat movement
-                new PredictionEngineBoat(player).guessBestMovement(0.1f, player);
-            } else if (riding instanceof PacketEntityNautilus) {
-                PlayerBaseTick.doBaseTick(player);
-                new MovementTickerNautilus(player).livingEntityAIStep();
-            } else if (riding instanceof PacketEntityCamel) {
-                PlayerBaseTick.doBaseTick(player);
-                new MovementTickerCamel(player).livingEntityAIStep();
-            } else if (riding instanceof PacketEntityHappyGhast) {
-                PlayerBaseTick.doBaseTick(player);
-                new MovementTickerHappyGhast(player).livingEntityAIStep();
-            } else if (riding instanceof PacketEntityHorse) {
-                PlayerBaseTick.doBaseTick(player);
-                new MovementTickerHorse(player).livingEntityAIStep();
-            } else if (riding.type == EntityTypes.PIG) {
-                PlayerBaseTick.doBaseTick(player);
-                new MovementTickerPig(player).livingEntityAIStep();
-            } else if (riding.type == EntityTypes.STRIDER) {
-                PlayerBaseTick.doBaseTick(player);
-                new MovementTickerStrider(player).livingEntityAIStep();
-                MovementTickerStrider.floatStrider(player);
-                Collisions.handleInsideBlocks(player);
-            } else {
-                wasChecked = false;
-            }
-        } // If it isn't any of these cases, the player is on a mob they can't control and therefore is exempt
+        } else {
+
+            if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) {
+                wasChecked = true;
+                // The player and server are both on a version with client controlled entities
+                // If either or both of the client server version has server controlled entities
+                // The player can't use entities (or the server just checks the entities)
+                if (riding.isBoat) {
+                    PlayerBaseTick.doBaseTick(player);
+                    // Speed doesn't affect anything with boat movement
+                    new PredictionEngineBoat(player).guessBestMovement(0.1f, player);
+                } else if (riding instanceof PacketEntityNautilus) {
+                    PlayerBaseTick.doBaseTick(player);
+                    new MovementTickerNautilus(player).livingEntityAIStep();
+                } else if (riding instanceof PacketEntityCamel) {
+                    PlayerBaseTick.doBaseTick(player);
+                    new MovementTickerCamel(player).livingEntityAIStep();
+                } else if (riding instanceof PacketEntityHappyGhast) {
+                    PlayerBaseTick.doBaseTick(player);
+                    new MovementTickerHappyGhast(player).livingEntityAIStep();
+                } else if (riding instanceof PacketEntityHorse) {
+                    PlayerBaseTick.doBaseTick(player);
+                    new MovementTickerHorse(player).livingEntityAIStep();
+                } else if (riding.type == EntityTypes.PIG) {
+                    PlayerBaseTick.doBaseTick(player);
+                    new MovementTickerPig(player).livingEntityAIStep();
+                } else if (riding.type == EntityTypes.STRIDER) {
+                    PlayerBaseTick.doBaseTick(player);
+                    new MovementTickerStrider(player).livingEntityAIStep();
+                    MovementTickerStrider.floatStrider(player);
+                    Collisions.handleInsideBlocks(player);
+                } else {
+                    wasChecked = false;
+                }
+            } // If it isn't any of these cases, the player is on a mob they can't control and therefore is exempt
+        }
 
         // No, don't comment about the sqrt call.  It doesn't matter unless you run sqrt thousands of times a second.
         double offset = player.predictedVelocity.vector.distance(player.actualMovement);

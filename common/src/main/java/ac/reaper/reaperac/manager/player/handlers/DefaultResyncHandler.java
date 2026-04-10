@@ -6,8 +6,6 @@ import ac.reaper.reaperac.platform.api.player.BlockTranslator;
 import ac.reaper.reaperac.platform.api.world.PlatformChunk;
 import ac.reaper.reaperac.platform.api.world.PlatformWorld;
 import ac.reaper.reaperac.player.GrimPlayer;
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.util.Vector3i;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerAcknowledgeBlockChanges;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerBlockChange;
@@ -123,9 +121,8 @@ public record DefaultResyncHandler(GrimPlayer player) implements ResyncHandler {
 
             player.runSafely(() -> {
                 player.user.sendPacket(new WrapperPlayServerBlockChange(new Vector3i(x, y, z), blockId));
-                if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_19)) { // Via will handle this for us pre-1.19
-                    player.user.sendPacket(new WrapperPlayServerAcknowledgeBlockChanges(sequence)); // Make 1.19 clients apply the changes
-                }
+                // Via will handle this for us pre-1.19
+                player.user.sendPacket(new WrapperPlayServerAcknowledgeBlockChanges(sequence)); // Make 1.19 clients apply the changes
             });
 
         });

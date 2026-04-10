@@ -40,18 +40,12 @@ public enum MenuType {
     private static final MenuType[] MENU_BY_ID_ARRAY;
 
     static {
-        ServerVersion version = PacketEvents.getAPI().getServerManager().getVersion();
         MenuType[] menuTypes = MenuType.values();
 
         int menuIdLimit;
 
-        if (version.isOlderThan(ServerVersion.V_1_20_3)) {
-            // versions under 1.20.3
-            menuIdLimit = 23;
-        } else {
-            // 1.20.3 & greater
-            menuIdLimit = menuTypes.length - 1; // Don't iterate the UNKNOWN menu type
-        }
+        // 1.20.3 & greater
+        menuIdLimit = menuTypes.length - 1; // Don't iterate the UNKNOWN menu type
 
         MENU_BY_ID_ARRAY = new MenuType[menuIdLimit];
 

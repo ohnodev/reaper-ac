@@ -44,10 +44,8 @@ import ac.reaper.reaperac.utils.nmsutil.BlockProperties;
 import ac.reaper.reaperac.utils.nmsutil.Collisions;
 import ac.reaper.reaperac.utils.nmsutil.GetBoundingBox;
 import ac.reaper.reaperac.utils.nmsutil.Materials;
-import ac.reaper.reaperac.utils.viaversion.ViaVersionUtil;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.netty.channel.ChannelHelper;
 import com.github.retrooper.packetevents.protocol.ConnectionState;
 import com.github.retrooper.packetevents.protocol.attribute.Attributes;
@@ -478,11 +476,8 @@ public class GrimPlayer implements ReaperUser {
         try {
 
             PacketWrapper<?> packet;
-            if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_17)) {
-                packet = new WrapperPlayServerPing(transactionID);
-            } else {
-                packet = new WrapperPlayServerWindowConfirmation((byte) 0, transactionID, false);
-            }
+
+            packet = new WrapperPlayServerPing(transactionID);
 
             if (async) {
                 runSafely(() -> {
@@ -554,7 +549,7 @@ public class GrimPlayer implements ReaperUser {
             GrimAPI.INSTANCE.getPlayerDataManager().remove(user);
         }
 
-        if (viaPacketTracker == null && ViaVersionUtil.isAvailable && uuid != null) {
+        if (viaPacketTracker == null && uuid != null) {
             UserConnection connection = Via.getManager().getConnectionManager().getConnectedClient(uuid);
             viaPacketTracker = connection != null ? connection.getPacketTracker() : null;
             this.viaUserConnection = connection;
@@ -718,7 +713,8 @@ public class GrimPlayer implements ReaperUser {
 
         if (data != null) {
             // If we actually need to check vehicle movement
-            if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_9) && getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) {
+
+            if (getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) {
                 // And if the vehicle is a type of vehicle that we track
                 if (EntityTypes.isTypeInstanceOf(data.getEntityType(), EntityTypes.BOAT) ||
                         EntityTypes.isTypeInstanceOf(data.getEntityType(), EntityTypes.ABSTRACT_HORSE) ||
@@ -779,8 +775,7 @@ public class GrimPlayer implements ReaperUser {
             return true;
 
         // if the server or client doesn't support glider components return false
-        if (getClientVersion().isOlderThan(ClientVersion.V_1_21_2)
-                || PacketEvents.getAPI().getServerManager().getVersion().isOlderThan(ServerVersion.V_1_21_2)) return false;
+        if (getClientVersion().isOlderThan(ClientVersion.V_1_21_2)) return false;
 
         // PacketEvents mappings are wrong
         return isGlider(inventory.getHelmet(), EquipmentSlot.CHEST_PLATE)
@@ -821,7 +816,7 @@ public class GrimPlayer implements ReaperUser {
 
     @Contract(pure = true)
     public boolean supportsEndTick() {
-        return getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21_2) && PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_21_2);
+        return getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21_2);
     }
 
     @Contract(pure = true)

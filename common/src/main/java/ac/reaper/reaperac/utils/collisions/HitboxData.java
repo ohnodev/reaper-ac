@@ -13,8 +13,6 @@ import ac.reaper.reaperac.utils.collisions.datatypes.NoCollisionBox;
 import ac.reaper.reaperac.utils.collisions.datatypes.OffsetCollisionBox;
 import ac.reaper.reaperac.utils.collisions.datatypes.SimpleCollisionBox;
 import ac.reaper.reaperac.utils.nmsutil.Materials;
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.world.BlockFace;
 import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
@@ -53,7 +51,8 @@ public enum HitboxData implements HitBoxFactory {
             return new SimpleCollisionBox(0, 0, 0, 1, 1, 1, true);
         }
 
-        if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13) && data.isUp()) {
+
+        if (data.isUp()) {
             boxes.add(new HexCollisionBox(0, 15, 0, 16, 16, 16));
         }
 

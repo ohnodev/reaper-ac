@@ -7,8 +7,6 @@ import ac.reaper.reaperac.utils.collisions.datatypes.HexCollisionBox;
 import ac.reaper.reaperac.utils.collisions.datatypes.NoCollisionBox;
 import ac.reaper.reaperac.utils.collisions.datatypes.SimpleCollisionBox;
 import ac.reaper.reaperac.utils.nmsutil.Materials;
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.world.BlockFace;
 import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
@@ -73,8 +71,8 @@ public class DynamicConnecting {
         if (BlockTags.STAIRS.contains(target)) {
             // 1.12 clients generate their own data, 1.13 clients use the server's data
             // 1.11- versions don't allow fences to connect to the back sides of stairs
-            if (v.isOlderThan(ClientVersion.V_1_12) || (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_11) && v.isNewerThanOrEquals(ClientVersion.V_1_13)))
-                return false;
+            if (v.isOlderThan(ClientVersion.V_1_12)) return false;
+
             return targetBlock.getFacing().getOppositeFace() == direction;
         } else if (canConnectToGate(fence) && BlockTags.FENCE_GATES.contains(target)) {
             // 1.4-1.11 clients don't check for fence gate direction

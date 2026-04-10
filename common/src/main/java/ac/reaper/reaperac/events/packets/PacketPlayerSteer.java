@@ -8,11 +8,9 @@ import ac.reaper.reaperac.utils.data.KnownInput;
 import ac.reaper.reaperac.utils.data.packetentity.JumpableEntity;
 import ac.reaper.reaperac.utils.data.packetentity.PacketEntity;
 import ac.reaper.reaperac.utils.math.Vec2;
-import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketListenerAbstract;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerInput;
@@ -104,9 +102,7 @@ public class PacketPlayerSteer extends PacketListenerAbstract {
             if ((riding.isBoat || riding.isHappyGhast || (riding instanceof JumpableEntity jumpable && jumpable.hasSaddle())) &&
                     riding.passengers.get(0) == player.compensatedEntities.self &&
                     // Although if the player has server controlled entities
-                    player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9) &&
-                    // or the server controls the entities, then this is vanilla logic so allow it
-                    PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_9)) {
+                    player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) {
                 return;
             }
 

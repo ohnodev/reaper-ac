@@ -5,7 +5,6 @@ import ac.reaper.reaperac.events.packets.worldreader.BasePacketWorldReader;
 import ac.reaper.reaperac.events.packets.worldreader.PacketWorldReaderEighteen;
 import ac.reaper.reaperac.utils.anticheat.LogUtil;
 import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 
 public class PacketManager implements StartableInitable {
     @Override
@@ -27,15 +26,9 @@ public class PacketManager implements StartableInitable {
         PacketEvents.getAPI().getEventManager().registerListener(new PacketPlayerSteer());
         // Packet payload capture/audit listeners are intentionally disabled in production.
 
-        if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13)) {
-            PacketEvents.getAPI().getEventManager().registerListener(new PacketServerTags());
-        }
+        PacketEvents.getAPI().getEventManager().registerListener(new PacketServerTags());
 
-        if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_18)) {
-            PacketEvents.getAPI().getEventManager().registerListener(new PacketWorldReaderEighteen());
-        } else {
-            PacketEvents.getAPI().getEventManager().registerListener(new BasePacketWorldReader());
-        }
+        PacketEvents.getAPI().getEventManager().registerListener(new PacketWorldReaderEighteen());
         PacketEvents.getAPI().getEventManager().registerListener(new PacketSpawnerSanitizer());
 
         PacketEvents.getAPI().getEventManager().registerListener(new ProxyAlertMessenger());

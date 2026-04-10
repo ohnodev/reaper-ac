@@ -4,9 +4,7 @@ import ac.reaper.reaperac.checks.Check;
 import ac.reaper.reaperac.checks.CheckData;
 import ac.reaper.reaperac.checks.type.PacketCheck;
 import ac.reaper.reaperac.player.GrimPlayer;
-import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientChatCommand;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientChatCommandUnsigned;
@@ -57,7 +55,7 @@ public class ChatB extends Check implements PacketCheck {
 
     // returns whether the packet should be cancelled
     public boolean checkChatMessage(String message) {
-        if (message.isEmpty() || !message.trim().equals(message) || message.startsWith("/") && PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_19)) {
+        if (message.isEmpty() || !message.trim().equals(message) || message.startsWith("/")) {
             if (flagAndAlert("message=" + message) && shouldModifyPackets()) {
                 player.onPacketCancel();
                 return true;

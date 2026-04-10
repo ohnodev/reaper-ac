@@ -7,7 +7,6 @@ import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.utils.anticheat.update.BlockBreak;
 import ac.reaper.reaperac.utils.math.GrimMath;
 import ac.reaper.reaperac.utils.nmsutil.BlockBreakSpeed;
-import ac.reaper.reaperac.utils.viaversion.ViaVersionUtil;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
@@ -53,12 +52,10 @@ public class FastBreak extends Check implements BlockBreakCheck {
     @Override
     public void onBlockBreak(BlockBreak blockBreak) {
         if (blockBreak.action == DiggingAction.START_DIGGING) {
-            if (!ViaVersionUtil.isAvailable) {
-                // Exempt all blocks that do not exist in the player version
-                final WrappedBlockState defaultState = WrappedBlockState.getDefaultState(player.getClientVersion(), blockBreak.block.getType());
-                if (defaultState.getType() == StateTypes.AIR || EXEMPT_STATES.contains(defaultState.getType())) {
-                    return;
-                }
+            // Exempt all blocks that do not exist in the player version
+            final WrappedBlockState defaultState = WrappedBlockState.getDefaultState(player.getClientVersion(), blockBreak.block.getType());
+            if (defaultState.getType() == StateTypes.AIR || EXEMPT_STATES.contains(defaultState.getType())) {
+                return;
             }
             // If client is older than the server, fetch block client actually sees from via
             // otherwise just return the server-side block (since if client is >= server version the block is guaranteed to exist in client version)

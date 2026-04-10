@@ -6,8 +6,6 @@ import ac.reaper.reaperac.utils.data.attribute.ValuedAttribute;
 import ac.reaper.reaperac.utils.math.GrimMath;
 import ac.reaper.reaperac.utils.math.Vector3dm;
 import ac.reaper.reaperac.utils.nmsutil.JumpPower;
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.attribute.Attributes;
 import com.github.retrooper.packetevents.protocol.entity.type.EntityType;
 import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
@@ -33,17 +31,8 @@ public class PacketEntityHorse extends PacketEntityTrackXRot implements Jumpable
         this.trackEntityEquipment = true;
         setAttribute(Attributes.STEP_HEIGHT, 1.0f);
 
-        final boolean preAttribute = player.getClientVersion().isOlderThan(ClientVersion.V_1_20_5);
         // This was horse.jump_strength pre-attribute
-        trackAttribute(ValuedAttribute.ranged(Attributes.JUMP_STRENGTH, 0.7, 0, preAttribute ? 2 : 32)
-                .withSetRewriter((oldValue, newValue) -> {
-                    // Seems viabackwards doesn't rewrite this (?)
-                    if (preAttribute && PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_20_5)) {
-                        return oldValue;
-                    }
-                    // Modern player OR an old server setting legacy horse.jump_strength attribute
-                    return newValue;
-                }));
+        trackAttribute(ValuedAttribute.ranged(Attributes.JUMP_STRENGTH, 0.7, 0, 32));
         trackAttribute(ValuedAttribute.ranged(Attributes.MOVEMENT_SPEED, 0.225f, 0, 1024));
 
         if (EntityTypes.isTypeInstanceOf(type, EntityTypes.CHESTED_HORSE)) {
@@ -56,14 +45,8 @@ public class PacketEntityHorse extends PacketEntityTrackXRot implements Jumpable
         }
     }
 
-    private static final boolean HAS_SADDLE_SENT_BY_SERVER = PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_21_4);
-
     @Override
     public boolean hasSaddle() {
-        if (HAS_SADDLE_SENT_BY_SERVER) {
-            return this.hasSaddle;
-        }
-
         return hasItemInSlot(EquipmentSlot.SADDLE);
     }
 

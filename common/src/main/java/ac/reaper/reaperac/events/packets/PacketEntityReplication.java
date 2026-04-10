@@ -11,11 +11,8 @@ import ac.reaper.reaperac.utils.data.packetentity.DashableEntity;
 import ac.reaper.reaperac.utils.data.packetentity.PacketEntity;
 import ac.reaper.reaperac.utils.data.packetentity.PacketEntityHook;
 import ac.reaper.reaperac.utils.data.packetentity.PacketEntityTrackXRot;
-import ac.reaper.reaperac.utils.viaversion.ViaVersionUtil;
-import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.entity.EntityPositionData;
 import com.github.retrooper.packetevents.protocol.entity.data.EntityData;
 import com.github.retrooper.packetevents.protocol.entity.type.EntityType;
@@ -194,14 +191,14 @@ public class PacketEntityReplication extends Check implements PacketCheck {
             //
             // Set to 24 so ViaVersion blocks it
             // 24 is the levitation effect
-            if (player.getClientVersion().isOlderThan(ClientVersion.V_1_9) && ViaVersionUtil.isAvailable && type.getId(player.getClientVersion()) > 23) {
+            if (player.getClientVersion().isOlderThan(ClientVersion.V_1_9) && type.getId(player.getClientVersion()) > 23) {
                 event.setCancelled(true);
                 return;
             }
 
             // ViaVersion dolphin's grace also messes us up, set it to a potion effect that doesn't exist on 1.12
             // Effect 31 is bad omen
-            if (player.getClientVersion().isOlderThan(ClientVersion.V_1_13) && ViaVersionUtil.isAvailable && type.getId(player.getClientVersion()) == 30) {
+            if (player.getClientVersion().isOlderThan(ClientVersion.V_1_13) && type.getId(player.getClientVersion()) == 30) {
                 event.setCancelled(true);
                 return;
             }
@@ -341,36 +338,8 @@ public class PacketEntityReplication extends Check implements PacketCheck {
             int[] passengers = mount.getPassengers();
 
             handleMountVehicle(event, vehicleID, passengers);
-        } else if (event.getPacketType() == PacketType.Play.Server.ATTACH_ENTITY) {
-            WrapperPlayServerAttachEntity attach = new WrapperPlayServerAttachEntity(event);
-
-            // This packet was replaced by the mount packet on 1.9+ servers - to support multiple passengers on one vehicle
-            if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_9))
-                return;
-
-            // If this is mounting rather than leashing
-            if (!attach.isLeash()) {
-                // Alright, let's convert this to the 1.9+ format to make it easier for grim
-                int vehicleID = attach.getHoldingId();
-                int attachID = attach.getAttachedId();
-                TrackerData trackerData = player.compensatedEntities.getTrackedEntity(attachID);
-
-                if (trackerData != null) {
-                    // 1.8 sends a vehicle ID of -1 to dismount the entity from its vehicle
-                    // This is opposite of the 1.9+ format, which sends the vehicle ID and then an empty array.
-                    if (vehicleID == -1) { // Dismounting
-                        vehicleID = trackerData.getLegacyPointEightMountedUpon();
-                        handleMountVehicle(event, vehicleID, new int[]{}); // The vehicle is empty
-                    } else { // Mounting
-                        trackerData.setLegacyPointEightMountedUpon(vehicleID);
-                        handleMountVehicle(event, vehicleID, new int[]{attachID});
-                    }
-                } else {
-                    // I don't think we can recover from this... warn and move on as this shouldn't happen.
-                    LogUtil.warn("Server sent an invalid attach entity packet for entity " + attach.getHoldingId() + " with passenger " + attach.getAttachedId() + "! The client ignores this.");
-                }
-            }
-        } else if (event.getPacketType() == PacketType.Play.Server.DESTROY_ENTITIES) {
+        } else if (event.getPacketType() == PacketType.Play.Server.ATTACH_ENTITY) return;
+          else if (event.getPacketType() == PacketType.Play.Server.DESTROY_ENTITIES) {
             WrapperPlayServerDestroyEntities destroy = new WrapperPlayServerDestroyEntities(event);
 
             int[] destroyEntityIds = destroy.getEntityIds();
@@ -471,20 +440,14 @@ public class PacketEntityReplication extends Check implements PacketCheck {
                 // As we don't want vehicles to fly, we need to replace it with a teleport if it is player vehicle
                 //
                 // Don't bother with client controlled vehicles though
-                boolean vanillaVehicleFlight = player.compensatedEntities.serverPlayerVehicle != null
-                        && player.compensatedEntities.serverPlayerVehicle == entityId
-                        && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)
-                        // TODO: https://discord.com/channels/721686193061888071/721686193515003966/1310659538831020123
-                        // Why does the server now send an entity rel move packet matching the player's vehicle movement every time?
-                        && PacketEvents.getAPI().getServerManager().getVersion().isOlderThan(ServerVersion.V_1_21_2)
-                        && PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_9);
+
+                // Why does the server now send an entity rel move packet matching the player's vehicle movement every time?
 
                 // ViaVersion sends two relative packets when moving more than 4 blocks
                 // This is broken and causes the client to interpolate like (0, 4) and (1, 3) instead of (1, 7)
                 // This causes impossible hits, so grim must replace this with a teleport entity packet
                 // Not ideal, but neither is 1.8 players on a 1.9+ server.
-                if (vanillaVehicleFlight ||
-                        ((Math.abs(deltaX) >= 3.9375 || Math.abs(deltaY) >= 3.9375 || Math.abs(deltaZ) >= 3.9375) && player.getClientVersion().isOlderThan(ClientVersion.V_1_9) && PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_9))) {
+                if ((Math.abs(deltaX) >= 3.9375 || Math.abs(deltaY) >= 3.9375 || Math.abs(deltaZ) >= 3.9375) && player.getClientVersion().isOlderThan(ClientVersion.V_1_9)) {
                     player.user.writePacket(new WrapperPlayServerEntityTeleport(entityId, new Vector3d(data.getX() + deltaX, data.getY() + deltaY, data.getZ() + deltaZ), yaw == null ? data.getXRot() : yaw, pitch == null ? data.getYRot() : pitch, false));
                     event.setCancelled(true);
                     return;

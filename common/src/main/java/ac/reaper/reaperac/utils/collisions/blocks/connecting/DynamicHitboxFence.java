@@ -6,8 +6,6 @@ import ac.reaper.reaperac.utils.collisions.datatypes.CollisionBox;
 import ac.reaper.reaperac.utils.collisions.datatypes.ComplexCollisionBox;
 import ac.reaper.reaperac.utils.collisions.datatypes.HitBoxFactory;
 import ac.reaper.reaperac.utils.collisions.datatypes.SimpleCollisionBox;
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.world.BlockFace;
 import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
@@ -51,8 +49,8 @@ public class DynamicHitboxFence extends DynamicConnecting implements HitBoxFacto
         boolean west;
 
         // 1.13+ servers on 1.13+ clients send the full fence data
-        if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13)
-                && version.isNewerThanOrEquals(ClientVersion.V_1_13)) {
+
+        if (version.isNewerThanOrEquals(ClientVersion.V_1_13)) {
             east = block.getEast() != East.FALSE;
             north = block.getNorth() != North.FALSE;
             south = block.getSouth() != South.FALSE;

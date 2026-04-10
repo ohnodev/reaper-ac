@@ -19,8 +19,6 @@ import ac.reaper.reaperac.utils.latency.CompensatedWorld;
 import ac.reaper.reaperac.utils.math.Location;
 import ac.reaper.reaperac.utils.math.Vector3dm;
 import ac.reaper.reaperac.utils.math.VectorUtils;
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.potion.PotionTypes;
 import com.github.retrooper.packetevents.protocol.world.Direction;
@@ -47,7 +45,6 @@ import java.util.function.Predicate;
 public final class Collisions {
     public static final double COLLISION_EPSILON = 1.0E-7;
 
-    private static final boolean IS_FOURTEEN = PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_14); // Optimization for chunks with empty block count
     private static final List<List<Axis>> allAxisCombinations = Arrays.asList(
             Arrays.asList(Axis.Y, Axis.X, Axis.Z),
             Arrays.asList(Axis.Y, Axis.Z, Axis.X),
@@ -302,7 +299,7 @@ public final class Collisions {
 
                     BaseChunk section = sections[sectionIndex];
 
-                    if (section == null || (IS_FOURTEEN && section.isEmpty())) { // Check for empty on 1.13+ servers
+                    if (section == null || section.isEmpty()) { // Check for empty on 1.13+ servers
                         // empty
                         // skip to next section
                         y = (y & ~15) + 15; // increment by 15: iterator loop increments by the extra one
@@ -780,7 +777,7 @@ public final class Collisions {
                 for (int y = minYIterate; y <= maxYIterate; ++y) {
                     BaseChunk section = sections[(y >> 4) - minSection];
 
-                    if (section == null || (IS_FOURTEEN && section.isEmpty())) { // Check for empty on 1.13+ servers
+                    if (section == null || section.isEmpty()) { // Check for empty on 1.13+ servers
                         // empty
                         // skip to next section
                         y = (y & ~(15)) + 15; // increment by 15: iterator loop increments by the extra one
@@ -845,7 +842,7 @@ public final class Collisions {
                 for (int y = minYIterate; y <= maxYIterate; ++y) {
                     BaseChunk section = sections[(y >> 4) - minSection];
 
-                    if (section == null || (IS_FOURTEEN && section.isEmpty())) { // Check for empty on 1.13+ servers
+                    if (section == null || section.isEmpty()) { // Check for empty on 1.13+ servers
                         // empty
                         // skip to next section
                         y = (y & ~(15)) + 15; // increment by 15: iterator loop increments by the extra one

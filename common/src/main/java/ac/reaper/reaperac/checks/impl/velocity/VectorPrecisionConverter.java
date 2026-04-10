@@ -15,9 +15,7 @@ public class VectorPrecisionConverter {
     private static final ServerVersion SERVER_VERSION = PacketEvents.getAPI().getServerManager().getVersion();
 
     public static Vector3d convert(ClientVersion version, Vector3d vector) {
-        if (version.isNewerThanOrEquals(ClientVersion.V_1_21_9) && SERVER_VERSION.isOlderThanOrEquals(ServerVersion.V_1_21_8)) {
-            return VectorPrecisionConverter.legacyToLp(vector);
-        } else if (version.isOlderThanOrEquals(ClientVersion.V_1_21_7) && SERVER_VERSION.isNewerThanOrEquals(ServerVersion.V_1_21_9)) {
+        if (version.isOlderThanOrEquals(ClientVersion.V_1_21_7)) {
             return VectorPrecisionConverter.lpToLegacy(vector);
         }
 

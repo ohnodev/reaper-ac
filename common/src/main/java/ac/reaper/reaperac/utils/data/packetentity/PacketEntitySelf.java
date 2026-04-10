@@ -6,8 +6,6 @@ import ac.reaper.reaperac.utils.collisions.datatypes.SimpleCollisionBox;
 import ac.reaper.reaperac.utils.data.attribute.ValuedAttribute;
 import ac.reaper.reaperac.utils.inventory.EnchantmentHelper;
 import ac.reaper.reaperac.utils.math.GrimMath;
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.attribute.Attributes;
 import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
 import com.github.retrooper.packetevents.protocol.item.enchantment.type.EnchantmentTypes;
@@ -70,8 +68,7 @@ public class PacketEntitySelf extends PacketEntity {
         trackAttribute(movementSpeed);
         trackAttribute(ValuedAttribute.ranged(Attributes.ATTACK_DAMAGE, 2, 0, 2048)); // NOTE: Not synced to client currently.
         trackAttribute(ValuedAttribute.ranged(Attributes.ATTACK_SPEED, 4, 0, 1024)
-                .requiredVersion(player, ClientVersion.V_1_9)
-                .withGetRewriter(value -> PacketEvents.getAPI().getServerManager().getVersion().isOlderThan(ServerVersion.V_1_9) ? 20 : value));
+                .requiredVersion(player, ClientVersion.V_1_9));
         trackAttribute(ValuedAttribute.ranged(Attributes.JUMP_STRENGTH, 0.42f, 0, 32)
                 .requiredVersion(player, ClientVersion.V_1_20_5));
         trackAttribute(ValuedAttribute.ranged(Attributes.BLOCK_BREAK_SPEED, 1.0, 0, 1024)
@@ -85,10 +82,7 @@ public class PacketEntitySelf extends PacketEntity {
         trackAttribute(ValuedAttribute.ranged(Attributes.BLOCK_INTERACTION_RANGE, 4.5, 0, 64)
                 .withGetRewriter(value -> {
                     // Server versions older than 1.20.5 don't send the attribute, if the player is in creative then assume legacy max reach distance.
-                    if (player.gamemode == GameMode.CREATIVE
-                            && (PacketEvents.getAPI().getServerManager().getVersion().isOlderThan(ServerVersion.V_1_20_5)
-                                // Clients below 1.20.5 also don't have the attribute.
-                                || player.getClientVersion().isOlderThan(ClientVersion.V_1_20_5))) {
+                    if (player.gamemode == GameMode.CREATIVE) {
                         return 5.0;
                     }
                     // < 1.20.5 is unchanged due to requiredVersion, otherwise controlled by the server
@@ -110,9 +104,6 @@ public class PacketEntitySelf extends PacketEntity {
 
                     // Server is older than 1.21, but player is on 1.21+ so return depth strider value / 3 to simulate via
                     // https://github.com/ViaVersion/ViaVersion/blob/dc503cd613f5cf00a6f11b78e52b1a76a42acf91/common/src/main/java/com/viaversion/viaversion/protocols/v1_20_5to1_21/storage/EfficiencyAttributeStorage.java#L34
-                    if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThan(ServerVersion.V_1_21)) {
-                        return depthStrider / 3;
-                    }
 
                     // We are on a version that fully supports this value!
                     return value;
@@ -139,9 +130,6 @@ public class PacketEntitySelf extends PacketEntity {
                     }
 
                     // https://github.com/ViaVersion/ViaVersion/blob/dc503cd613f5cf00a6f11b78e52b1a76a42acf91/common/src/main/java/com/viaversion/viaversion/protocols/v1_20_5to1_21/storage/EfficiencyAttributeStorage.java#L32
-                    if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThan(ServerVersion.V_1_21)) {
-                        return clamped;
-                    }
 
                     // We are on a version that fully supports this value!
                     return value;

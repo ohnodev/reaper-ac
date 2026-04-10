@@ -12,10 +12,8 @@ import ac.reaper.reaperac.utils.inventory.inventory.MenuType;
 import ac.reaper.reaperac.utils.inventory.inventory.NotImplementedMenu;
 import ac.reaper.reaperac.utils.lists.CorrectingPlayerInventoryStorage;
 import ac.reaper.reaperac.utils.nmsutil.MiningToolUtils;
-import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.item.ItemStack;
 import com.github.retrooper.packetevents.protocol.item.type.ItemType;
 import com.github.retrooper.packetevents.protocol.item.type.ItemTypes;
@@ -96,7 +94,8 @@ public class CompensatedInventory extends Check implements PacketCheck {
             return packetSlot - 36;
         }
         // 45 is offhand is packet, it is 40 in bukkit
-        if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_9) && packetSlot == 45) {
+
+        if (packetSlot == 45) {
             return 40;
         }
         return -1;
@@ -187,8 +186,7 @@ public class CompensatedInventory extends Check implements PacketCheck {
     }
 
     public ItemStack getOffHand() {
-        if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThan(ServerVersion.V_1_9))
-            return ItemStack.EMPTY;
+
         ItemStack item = isPacketInventoryActive || player.platformPlayer == null ? inventory.getOffhand() :
                 player.platformPlayer.getInventory().getItemInOffHand();
         return item == null ? ItemStack.EMPTY : item;
@@ -310,9 +308,7 @@ public class CompensatedInventory extends Check implements PacketCheck {
             WrapperPlayClientCreativeInventoryAction action = new WrapperPlayClientCreativeInventoryAction(event);
             if (player.gamemode != GameMode.CREATIVE) return;
 
-            boolean valid = action.getSlot() >= 1 &&
-                    (PacketEvents.getAPI().getServerManager().getVersion().isNewerThan(ServerVersion.V_1_8) ?
-                            action.getSlot() <= 45 : action.getSlot() < 45);
+            boolean valid = action.getSlot() >= 1 && action.getSlot() <= 45;
 
             if (valid) {
                 inventory.getSlot(action.getSlot()).set(action.getItemStack());
@@ -380,12 +376,7 @@ public class CompensatedInventory extends Check implements PacketCheck {
 
             MenuType menuType = MenuType.getMenuType(open.getType());
 
-            AbstractContainerMenu newMenu;
-            if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_14)) {
-                newMenu = MenuType.getMenuFromID(player, inventory, menuType);
-            } else {
-                newMenu = MenuType.getMenuFromString(player, inventory, open.getLegacyType(), open.getLegacySlots(), open.getHorseId());
-            }
+            AbstractContainerMenu newMenu = MenuType.getMenuFromID(player, inventory, menuType);
 
             packetSendingInventorySize = newMenu instanceof NotImplementedMenu ? UNSUPPORTED_INVENTORY_CASE : newMenu.getSlots().size();
 
@@ -448,7 +439,7 @@ public class CompensatedInventory extends Check implements PacketCheck {
                 player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get(), () -> {
                     if (!isPacketInventoryActive) return;
                     for (int i = 0; i < slots.size(); i++) {
-                        if (i < 0 || i > 45) continue;
+                        if (i > 45) continue;
                         inventory.getSlot(i).set(slots.get(i));
                     }
                     if (items.getCarriedItem().isPresent()) {

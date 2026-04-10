@@ -5,8 +5,6 @@ import ac.reaper.reaperac.utils.collisions.datatypes.CollisionBox;
 import ac.reaper.reaperac.utils.collisions.datatypes.CollisionFactory;
 import ac.reaper.reaperac.utils.collisions.datatypes.ComplexCollisionBox;
 import ac.reaper.reaperac.utils.collisions.datatypes.SimpleCollisionBox;
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.world.BlockFace;
 import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
@@ -69,19 +67,14 @@ public class DynamicChorusPlant implements CollisionFactory {
 
         Set<BlockFace> directions;
 
-        if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13)) {
-            // Player is 1.13 on 1.13 server
-            directions = new HashSet<>();
-            if (block.getWest() == West.TRUE) directions.add(BlockFace.WEST);
-            if (block.getEast() == East.TRUE) directions.add(BlockFace.EAST);
-            if (block.getNorth() == North.TRUE) directions.add(BlockFace.NORTH);
-            if (block.getSouth() == South.TRUE) directions.add(BlockFace.SOUTH);
-            if (block.isUp()) directions.add(BlockFace.UP);
-            if (block.isDown()) directions.add(BlockFace.DOWN);
-        } else {
-            // Player is 1.13 on 1.12 server
-            directions = getLegacyStates(player, version, x, y, z);
-        }
+        // Player is 1.13 on 1.13 server
+        directions = new HashSet<>();
+        if (block.getWest() == West.TRUE) directions.add(BlockFace.WEST);
+        if (block.getEast() == East.TRUE) directions.add(BlockFace.EAST);
+        if (block.getNorth() == North.TRUE) directions.add(BlockFace.NORTH);
+        if (block.getSouth() == South.TRUE) directions.add(BlockFace.SOUTH);
+        if (block.isUp()) directions.add(BlockFace.UP);
+        if (block.isDown()) directions.add(BlockFace.DOWN);
         // Player is 1.13+ on 1.13+ server
         return modernShapes[getAABBIndex(directions)].copy();
     }

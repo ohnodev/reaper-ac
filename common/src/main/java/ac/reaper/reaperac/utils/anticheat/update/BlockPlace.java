@@ -17,8 +17,6 @@ import ac.reaper.reaperac.utils.nmsutil.BoundingBoxSize;
 import ac.reaper.reaperac.utils.nmsutil.GetBoundingBox;
 import ac.reaper.reaperac.utils.nmsutil.Materials;
 import ac.reaper.reaperac.utils.nmsutil.ReachUtils;
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.attribute.Attributes;
 import com.github.retrooper.packetevents.protocol.item.ItemStack;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
@@ -145,7 +143,8 @@ public class BlockPlace {
             if (baseReplaceable) return true;
             if (heldItem != currentType) return false;
 
-            if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13) && !state.isUp()) {
+
+            if (!state.isUp()) {
                 return true;
             }
 
@@ -434,7 +433,7 @@ public class BlockPlace {
 
     public void setFaceId(int face) {
         this.faceId = face;
-        this.face = PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_9) ? BlockFace.getBlockFaceByValue(faceId) : BlockFace.getLegacyBlockFaceByValue(faceId);
+        this.face = BlockFace.getBlockFaceByValue(faceId);
     }
 
     private List<BlockFace> getNearestLookingDirections() {
@@ -601,10 +600,8 @@ public class BlockPlace {
         }
 
         // Check for waterlogged
-        if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13)) {
-            if (state.hasProperty(StateValue.WATERLOGGED)) { // waterloggable
-                state.setWaterlogged(existingState.getType() == StateTypes.WATER && existingState.getLevel() == 0);
-            }
+        if (state.hasProperty(StateValue.WATERLOGGED)) { // waterloggable
+            state.setWaterlogged(existingState.getType() == StateTypes.WATER && existingState.getLevel() == 0);
         }
 
         player.inventory.onBlockPlace(this);

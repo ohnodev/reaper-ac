@@ -12,12 +12,10 @@ import ac.reaper.reaperac.utils.inventory.Inventory;
 import ac.reaper.reaperac.utils.latency.CompensatedWorld;
 import ac.reaper.reaperac.utils.math.VectorUtils;
 import ac.reaper.reaperac.utils.nmsutil.*;
-import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketListenerAbstract;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.ConnectionState;
 import com.github.retrooper.packetevents.protocol.item.ItemStack;
 import com.github.retrooper.packetevents.protocol.item.type.ItemType;
@@ -67,7 +65,7 @@ public class CheckManagerListener extends PacketListenerAbstract {
             // Powder snow, lava, and water all behave like placing normal blocks after checking for waterlogging (replace clicked always false though)
             // If we hit a waterloggable block, then the bucket is directly placed
             // Otherwise, use the face to determine where to place the bucket
-            if (Materials.isPlaceableWaterBucket(blockPlace.itemStack.getType()) && PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13)) {
+            if (Materials.isPlaceableWaterBucket(blockPlace.itemStack.getType())) {
                 blockPlace.replaceClicked = true; // See what's in the existing place
                 WrappedBlockState existing = blockPlace.getExistingBlockData();
                 if (existing.hasProperty(StateValue.WATERLOGGED) && !existing.isWaterlogged()) {
@@ -186,23 +184,6 @@ public class CheckManagerListener extends PacketListenerAbstract {
     }
 
     private static void handleBlockPlaceOrUseItem(PacketWrapper<?> packet, GrimPlayer player) {
-        // Legacy "use item" packet
-        if (packet instanceof WrapperPlayClientPlayerBlockPlacement place &&
-                PacketEvents.getAPI().getServerManager().getVersion().isOlderThan(ServerVersion.V_1_9)) {
-
-            if (player.gamemode == GameMode.SPECTATOR || player.gamemode == GameMode.ADVENTURE)
-                return;
-
-            if (place.getFace() == BlockFace.OTHER) {
-                ItemStack placedWith = player.inventory.getHeldItem();
-                if (place.getHand() == InteractionHand.OFF_HAND) {
-                    placedWith = player.inventory.getOffHand();
-                }
-
-                handleUseItem(player, placedWith, place.getHand(), place.getSequence());
-                return;
-            }
-        }
 
         if (packet instanceof WrapperPlayClientUseItem place) {
             if (player.gamemode == GameMode.SPECTATOR || player.gamemode == GameMode.ADVENTURE)
@@ -308,13 +289,11 @@ public class CheckManagerListener extends PacketListenerAbstract {
                 type = ItemTypes.WATER_BUCKET;
             }
 
-            if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13)) {
-                WrappedBlockState existing = blockPlace.getExistingBlockData();
-                if (existing.hasProperty(StateValue.WATERLOGGED)) { // waterloggable
-                    existing.setWaterlogged(false);
-                    blockPlace.set(existing);
-                    placed = true;
-                }
+            WrappedBlockState existing = blockPlace.getExistingBlockData();
+            if (existing.hasProperty(StateValue.WATERLOGGED)) { // waterloggable
+                existing.setWaterlogged(false);
+                blockPlace.set(existing);
+                placed = true;
             }
 
             // Therefore, not waterlogged and is a fluid, and is therefore a source block
@@ -505,14 +484,14 @@ public class CheckManagerListener extends PacketListenerAbstract {
             }
 
             // This is the use item packet
-            if (packet.getFace() == BlockFace.OTHER && PacketEvents.getAPI().getServerManager().getVersion().isOlderThan(ServerVersion.V_1_9)) {
+            if (packet.getFace() == BlockFace.OTHER) {
                 player.placeUseItemPackets.add(new BlockPlaceSnapshot(packet, player.isSneaking));
             } else {
                 // Anti-air place
                 BlockPlace blockPlace = new BlockPlace(player, packet.getHand(), packet.getBlockPosition(), packet.getFaceId(), packet.getFace(), placedWith, WorldRayTrace.getNearestBlockHitResult(player, null, true, false, false), packet.getSequence());
                 blockPlace.cursor = packet.getCursorPosition();
 
-                if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_11) && player.getClientVersion().isOlderThan(ClientVersion.V_1_11)) {
+                if (player.getClientVersion().isOlderThan(ClientVersion.V_1_11)) {
                     // ViaRewind is stupid and divides the byte by 15 to get the float
                     // We must undo this to get the correct block place... why?
                     if (packet.getCursorPosition().getX() * 15 % 1 == 0 && packet.getCursorPosition().getY() * 15 % 1 == 0 && packet.getCursorPosition().getZ() * 15 % 1 == 0) {
@@ -537,7 +516,7 @@ public class CheckManagerListener extends PacketListenerAbstract {
                     Vector3i facePos = new Vector3i(packet.getBlockPosition().getX() + packet.getFace().getModX(), packet.getBlockPosition().getY() + packet.getFace().getModY(), packet.getBlockPosition().getZ() + packet.getFace().getModZ());
 
                     // Ends the client prediction introduced in 1.19+
-                    if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_19) && PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_19)) {
+                    if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_19)) {
                         player.user.sendPacket(new WrapperPlayServerAcknowledgeBlockChanges(packet.getSequence()));
                     } else { // The client isn't smart enough to revert changes
                         player.resyncPosition(packet.getBlockPosition());
@@ -655,15 +634,8 @@ public class CheckManagerListener extends PacketListenerAbstract {
             // Mark that we want this packet to be cancelled from reaching the server
             // Additionally, only yaw/pitch matters: https://github.com/GrimAnticheat/Grim/issues/1275#issuecomment-1872444018
             // 1.9+ isn't impacted by this packet as much.
-            if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_9)) {
-                if (player.isCancelDuplicatePacket()) {
-                    player.packetStateData.cancelDuplicatePacket = true;
-                }
-            } else {
-                // Override location to force it to use the last real position of the player. Prevents position-related bypasses like nofall.
-                flying.setLocation(new Location(player.filterMojangStupidityOnMojangStupidity.getX(), player.filterMojangStupidityOnMojangStupidity.getY(), player.filterMojangStupidityOnMojangStupidity.getZ(), location.getYaw(), location.getPitch()));
-                event.markForReEncode(true);
-            }
+            flying.setLocation(new Location(player.filterMojangStupidityOnMojangStupidity.getX(), player.filterMojangStupidityOnMojangStupidity.getY(), player.filterMojangStupidityOnMojangStupidity.getZ(), location.getYaw(), location.getPitch()));
+            event.markForReEncode(true);
 
             player.packetStateData.lastPacketWasOnePointSeventeenDuplicate = true;
 

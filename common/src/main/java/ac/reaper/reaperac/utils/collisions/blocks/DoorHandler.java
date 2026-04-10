@@ -5,8 +5,6 @@ import ac.reaper.reaperac.utils.collisions.datatypes.CollisionBox;
 import ac.reaper.reaperac.utils.collisions.datatypes.CollisionFactory;
 import ac.reaper.reaperac.utils.collisions.datatypes.HexCollisionBox;
 import ac.reaper.reaperac.utils.collisions.datatypes.NoCollisionBox;
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.world.BlockFace;
 import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
@@ -41,8 +39,8 @@ public class DoorHandler implements CollisionFactory {
         // For 1.13, ViaVersion should just use the 1.12 block data
         // I hate legacy versions... this is so messy
         //TODO: This needs to be updated to support corrupted door collision
-        if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_12_2)
-                || version.isOlderThanOrEquals(ClientVersion.V_1_12_2)) {
+
+        if (version.isOlderThanOrEquals(ClientVersion.V_1_12_2)) {
             if (door.getHalf() == Half.LOWER) {
                 WrappedBlockState above = player.compensatedWorld.getBlock(x, y + 1, z);
 

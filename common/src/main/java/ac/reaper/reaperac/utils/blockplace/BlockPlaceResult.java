@@ -9,8 +9,6 @@ import ac.reaper.reaperac.utils.latency.CompensatedWorld;
 import ac.reaper.reaperac.utils.math.Vector3dm;
 import ac.reaper.reaperac.utils.nmsutil.Dripstone;
 import ac.reaper.reaperac.utils.nmsutil.Materials;
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.item.type.ItemType;
 import com.github.retrooper.packetevents.protocol.item.type.ItemTypes;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
@@ -951,23 +949,11 @@ public enum BlockPlaceResult {
                 door.setOpen(true);
             }
 
-            if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13)) { // Only works on 1.13+
-                door.setHinge(hinge);
-            }
-
+            door.setHinge(hinge);
             door.setHalf(Half.LOWER);
             place.set(door);
-
-            if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13)) { // Only works on 1.13+
-                door.setHalf(Half.UPPER);
-                place.setAbove(door);
-            } else {
-                // We have to create a new door just for upper... due to neither door having complete info
-                // Lol, I have to use strings as PacketEvents wasn't designed around one material having two sets of data
-                // This is 1.12 only, but the server is also 1.12
-                WrappedBlockState above = WrappedBlockState.getByString(CompensatedWorld.blockVersion, "minecraft:" + place.material.getName().toLowerCase(Locale.ROOT) + "[half=upper,hinge=" + hinge.toString().toLowerCase(Locale.ROOT) + "]");
-                place.setAbove(above);
-            }
+            door.setHalf(Half.UPPER);
+            place.setAbove(door);
         }
     }, ItemTags.DOORS),
 
