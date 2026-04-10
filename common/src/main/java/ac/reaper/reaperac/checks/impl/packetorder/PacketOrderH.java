@@ -22,11 +22,7 @@ public class PacketOrderH extends Check implements PostPredictionCheck {
     public void onPacketReceive(PacketReceiveEvent event) {
         if (event.getPacketType() == PacketType.Play.Client.ENTITY_ACTION) {
             switch (new WrapperPlayClientEntityAction(event).getAction()) {
-                case START_SPRINTING, STOP_SPRINTING -> {
-                    player.getClientVersion();
-                }
                 case START_SNEAKING, STOP_SNEAKING -> {
-                    player.getClientVersion();
                     if (player.packetOrderProcessor.isSprinting()) {
                         if (!player.canSkipTicks()) {
                             flagAndAlert();

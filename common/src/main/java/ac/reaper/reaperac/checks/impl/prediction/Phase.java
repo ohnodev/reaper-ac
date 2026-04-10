@@ -34,7 +34,6 @@ public class Phase extends Check implements PostPredictionCheck {
 
             for (SimpleCollisionBox box : boxes) {
                 if (newBB.isIntersected(box) && !oldBB.isIntersected(box)) {
-                    player.getClientVersion();
                     flagAndAlertWithSetback();
                     return;
                 }

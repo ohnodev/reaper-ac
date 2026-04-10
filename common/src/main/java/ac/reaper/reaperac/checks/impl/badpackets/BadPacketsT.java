@@ -25,7 +25,6 @@ public class BadPacketsT extends Check implements PacketCheck {
         // 1.7 and 1.8 seem to have different hitbox "expansion" values than 1.9+
         // https://github.com/GrimAnticheat/Grim/pull/1274#issuecomment-1872458702
         // https://github.com/GrimAnticheat/Grim/pull/1274#issuecomment-1872533497
-        player.getClientVersion();
         double expansion = 0;
         maxHorizontalDisplacement = 0.3001 + expansion;
         minVerticalDisplacement = -0.0001 - expansion;

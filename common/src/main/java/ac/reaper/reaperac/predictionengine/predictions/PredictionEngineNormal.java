@@ -32,10 +32,8 @@ public class PredictionEngineNormal extends PredictionEngine {
             adjustedY -= player.gravity;
         }
 
-        float verticalDrag;
-        player.getClientVersion();
         double airDragMod = player.compensatedEntities.self.getAttributeValue(Attributes.AIR_DRAG_MODIFIER);
-        verticalDrag = MovementTicker.computeModifiedFriction(0.98F, airDragMod);
+        float verticalDrag = MovementTicker.computeModifiedFriction(0.98F, airDragMod);
 
         vector.setX(vector.getX() * player.friction);
         vector.setY(adjustedY * verticalDrag);
@@ -82,7 +80,6 @@ public class PredictionEngineNormal extends PredictionEngine {
         boolean walkingOnPowderSnow = false;
 
         if (!player.inVehicle()) {
-            player.getClientVersion();
             if (player.compensatedWorld.getBlockType(player.x, player.y, player.z) == StateTypes.POWDER_SNOW) {
                 ItemStack boots = player.inventory.getBoots();
                 walkingOnPowderSnow = boots != null && boots.getType() == ItemTypes.LEATHER_BOOTS;

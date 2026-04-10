@@ -12,12 +12,6 @@ import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPl
 @CheckData(name = "BadPacketsE")
 public class BadPacketsE extends Check implements PacketCheck {
     private int noReminderTicks;
-    private final int maxNoReminderTicks;
-
-    {
-        player.getClientVersion();
-        maxNoReminderTicks = 19;
-    }
 
     public BadPacketsE(GrimPlayer player) {
         super(player);
@@ -29,7 +23,7 @@ public class BadPacketsE extends Check implements PacketCheck {
                 event.getPacketType() == PacketType.Play.Client.PLAYER_POSITION) {
             noReminderTicks = 0;
         } else if (WrapperPlayClientPlayerFlying.isFlying(event.getPacketType()) && !player.packetStateData.lastPacketWasTeleport) {
-            if (++noReminderTicks > maxNoReminderTicks) {
+            if (++noReminderTicks > 19) {
                 flagAndAlert("ticks=" + noReminderTicks);
             }
         } else if (event.getPacketType() == PacketType.Play.Client.STEER_VEHICLE

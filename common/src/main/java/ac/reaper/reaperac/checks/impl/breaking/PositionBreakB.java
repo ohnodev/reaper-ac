@@ -11,12 +11,6 @@ import com.github.retrooper.packetevents.protocol.world.BlockFace;
 
 @CheckData(name = "PositionBreakB")
 public class PositionBreakB extends Check implements BlockBreakCheck {
-    private final int releaseFace;
-
-    {
-        player.getClientVersion();
-        releaseFace = 0;
-    }
 
     private BlockFace lastFace;
 
@@ -37,7 +31,7 @@ public class PositionBreakB extends Check implements BlockBreakCheck {
         }
 
         if (blockBreak.action == DiggingAction.CANCELLED_DIGGING) {
-            lastFace = blockBreak.faceId == releaseFace ? null : blockBreak.face;
+            lastFace = blockBreak.faceId == 0 ? null : blockBreak.face;
         }
     }
 }

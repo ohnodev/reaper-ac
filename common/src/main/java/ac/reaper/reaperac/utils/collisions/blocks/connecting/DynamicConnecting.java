@@ -64,9 +64,6 @@ public class DynamicConnecting {
         // 1.9-1.11 clients don't have BARRIER exemption
         // https://bugs.mojang.com/browse/MC-9565
         if (target == StateTypes.BARRIER) {
-            player.getClientVersion();
-            player.getClientVersion();
-            player.getClientVersion();
             return false;
         }
 

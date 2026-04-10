@@ -49,11 +49,7 @@ public class DynamicCollisionPane extends DynamicConnecting implements Collision
     public boolean checkCanConnect(GrimPlayer player, WrappedBlockState state, StateType one, StateType two, BlockFace direction) {
         if (BlockTags.GLASS_PANES.contains(one) || one == StateTypes.IRON_BARS)
             return true;
-        else {
-            if (one == StateTypes.CHAIN) {
-                player.getClientVersion();
-            }
+        else
             return CollisionData.getData(one).getMovementCollisionBox(player, player.getClientVersion(), state, 0, 0, 0).isSideFullBlock(direction);
-        }
     }
 }

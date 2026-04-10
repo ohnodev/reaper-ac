@@ -74,7 +74,6 @@ public class PacketEntity extends TypedPacketEntity {
         initAttributes(player);
         this.trackedServerPosition = new TrackedPosition();
         this.trackedServerPosition.setPos(new Vector3d(x, y, z));
-        player.getClientVersion();
         final Vector3d pos = trackedServerPosition.getPos();
         this.newPacketLocation = new ReachInterpolationData(player, new SimpleCollisionBox(pos.x, pos.y, pos.z, pos.x, pos.y, pos.z, false), trackedServerPosition, this);
     }
@@ -128,35 +127,18 @@ public class PacketEntity extends TypedPacketEntity {
                 // This only matters for 1.9+ clients, but it won't hurt 1.8 clients either... align for imprecision
                 final double scale = trackedServerPosition.getScale();
                 Vector3d vec3d;
-                player.getClientVersion();
                 vec3d = trackedServerPosition.withDelta(TrackedPosition.pack(relX, scale), TrackedPosition.pack(relY, scale), TrackedPosition.pack(relZ, scale));
                 trackedServerPosition.setPos(vec3d);
             } else {
                 trackedServerPosition.setPos(new Vector3d(relX, relY, relZ));
-                // ViaVersion desync's here for teleports
-                // It simply teleports the entity with its position divided by 32... ignoring the offset this causes.
-                // Thanks a lot ViaVersion!  Please don't fix this, or it will be a pain to support.
-                player.getClientVersion();
             }
         }
         this.oldPacketLocation = newPacketLocation;
         // BUG FIX LOGIC for https://bugs.mojang.com/browse/MC-255263
         // 1. We MUST check !hasPos. If hasPos is true, we must let standard interpolation (4-arg) run.
         // 2. The 3-arg constructor is for versions where the client FREEZES (targets current pos) when rot only packets come in
-        // Logic for versions that FREEZE (Target = Current)
-        // 1.21.5 -> 1.21.8 (regression)
-        // 1.15 -> 1.20.1 (Old bug)
-        if (!hasPos) {
-            player.getClientVersion();
-        }
         // This naturally fixes the "Slowdown"/Interpolation Reset in 1.20.2-1.21.4 and 1.21.9+ resetting the lerp timer
         this.newPacketLocation = new ReachInterpolationData(player, oldPacketLocation.getPossibleLocationCombined(), trackedServerPosition, this);
-
-        // In versions < 1.16.2 when the client receives non-relative teleport for an entity
-        // And they move less by the thresholds given, the entity does not move client side
-        if (hasPos && !relative) {
-            player.getClientVersion();
-        }
     }
 
     // Remove the possibility of the old packet location

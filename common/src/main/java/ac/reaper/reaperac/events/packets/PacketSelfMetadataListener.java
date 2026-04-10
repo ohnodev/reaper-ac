@@ -145,8 +145,6 @@ public class PacketSelfMetadataListener extends PacketListenerAbstract {
                     });
                 }
 
-
-                player.getClientVersion();
                 EntityData<?> riptide = WatchableIndexUtil.getIndex(entityMetadata.getEntityMetadata(), 8);
 
                 // This one only present if it changed
@@ -173,7 +171,6 @@ public class PacketSelfMetadataListener extends PacketListenerAbstract {
                     // - Server: Okay, I will not make you eat or stop eating because it makes sense that the server doesn't control a player's eating.
                     //
                     // This was added for stuff like shields, but IMO it really should be all client sided
-                    player.getClientVersion();
                     boolean isActive = (((byte) riptide.getValue()) & 1) > 0;
                     boolean isOffhand = (((byte) riptide.getValue()) & 2) > 0;
 

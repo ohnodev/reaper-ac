@@ -19,8 +19,6 @@ public class ElytraA extends Check implements PostPredictionCheck {
     }
 
     public void onStartGliding(PacketReceiveEvent event) {
-        player.getClientVersion();
-
         if (player.isGliding && flagAndAlert()) {
             setback = true;
             if (shouldModifyPackets()) {
@@ -29,11 +27,6 @@ public class ElytraA extends Check implements PostPredictionCheck {
                 player.resyncPose();
             }
         }
-    }
-
-    @Override
-    public void onPacketReceive(PacketReceiveEvent event) {
-        player.getClientVersion();
     }
 
     @Override

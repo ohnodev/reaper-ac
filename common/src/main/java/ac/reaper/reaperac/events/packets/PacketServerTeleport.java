@@ -61,7 +61,6 @@ public class PacketServerTeleport extends PacketListenerAbstract {
             // The added complexity isn't worth a feature that I have never seen used
             //
             // If you do actually need this make an issue on GitHub with an explanation for why
-            player.getClientVersion();
             if (player.inVehicle()) {
                 boolean relativeX = teleport.isRelativeFlag(RelativeFlag.X),
                         relativeY = teleport.isRelativeFlag(RelativeFlag.Y),
@@ -115,7 +114,6 @@ public class PacketServerTeleport extends PacketListenerAbstract {
             }
 
             // 1.21.2+ client ignore teleports if player is inside vehicle, ABSOLUTE CINEMA MOJANG
-            player.getClientVersion();
             if (player.compensatedEntities.serverPlayerVehicle != null) {
                 pos = player.getSetbackTeleportUtil().lastKnownGoodPosition.getPos();
             }

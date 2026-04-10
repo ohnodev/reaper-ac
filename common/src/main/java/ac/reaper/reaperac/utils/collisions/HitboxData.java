@@ -47,9 +47,6 @@ public enum HitboxData implements HitBoxFactory {
         if (data.getNorth() == North.TRUE) boxes.add(new HexCollisionBox(0, 0, 0, 16, 16, 1));
         if (data.getSouth() == South.TRUE) boxes.add(new HexCollisionBox(0, 0, 15, 16, 16, 16));
 
-        player.getClientVersion();
-
-
         if (data.isUp()) {
             boxes.add(new HexCollisionBox(0, 15, 0, 16, 16, 16));
         }
@@ -146,8 +143,7 @@ public enum HitboxData implements HitBoxFactory {
                     default -> NoCollisionBox.INSTANCE;
                 };
             case CEILING:
-                // ViaVersion shows lever
-                player.getClientVersion();
+
                 // x axis
                 if (facing == BlockFace.EAST || facing == BlockFace.WEST) {
                     return powered ? new HexCollisionBox(6.0, 15.0, 5.0, 10.0, 16.0, 11.0) : new HexCollisionBox(6.0, 14.0, 5.0, 10.0, 16.0, 11.0);
@@ -155,8 +151,6 @@ public enum HitboxData implements HitBoxFactory {
                     return powered ? new HexCollisionBox(5.0, 15.0, 6.0, 11.0, 16.0, 10.0) : new HexCollisionBox(5.0, 14.0, 6.0, 11.0, 16.0, 10.0);
                 }
             case FLOOR:
-                // ViaVersion shows lever
-                player.getClientVersion();
                 // x axis
                 if (facing == BlockFace.EAST || facing == BlockFace.WEST) {
                     return powered ? new HexCollisionBox(6.0, 0.0, 5.0, 10.0, 1.0, 11.0) : new HexCollisionBox(6.0, 0.0, 5.0, 10.0, 2.0, 11.0);
@@ -237,7 +231,6 @@ public enum HitboxData implements HitBoxFactory {
     }, StateTypes.BREWING_STAND),
 
     SMALL_FLOWER((player, item, version, data, isTargetBlock, x, y, z) -> {
-        player.getClientVersion();
         return new OffsetCollisionBox(data.getType(), 0.3125D, 0.0D, 0.3125D, 0.6875D, 0.625D, 0.6875D);
     },
             BlockTags.SMALL_FLOWERS.getStates().toArray(new StateType[0])),

@@ -39,17 +39,7 @@ public class PacketPlayerAttack extends PacketListenerAbstract {
 
             if (interact.getAction() == WrapperPlayClientInteractEntity.InteractAction.ATTACK) {
                 onAttack(event, player, entityId);
-            } else {
-                if (isInvalidEntity(event, player, entityId)) return;
-
-                if (interact.getAction() == WrapperPlayClientInteractEntity.InteractAction.INTERACT) {
-                    // Interacting with a horse in versions 1.13- will cause the client to
-                    // set the player's rotation to the horse's rotation
-                    if (player.compensatedEntities.getEntity(entityId) instanceof PacketEntityHorse) {
-                        player.getClientVersion();
-                    }
-                }
-            }
+            } else if (isInvalidEntity(event, player, entityId)) return;
         }
 
         if (event.getPacketType() == PacketType.Play.Client.PLAYER_DIGGING) {
@@ -96,12 +86,7 @@ public class PacketPlayerAttack extends PacketListenerAbstract {
         PacketEntity entity = player.compensatedEntities.getEntity(entityId);
 
         if (entity != null && (!entity.isLivingEntity || entity.type == EntityTypes.PLAYER || entity.type == EntityTypes.PAINTING)) {
-            player.getClientVersion();
-            int knockbackLevel = 0;
             final boolean hasNegativeKB = false;
-
-            final boolean isLegacyPlayer = false;
-            // assume cooldown is full on 1.8 servers
             final boolean sufficientCooldownProgress = player.attackCooldown.getMinimumProgress() > 0.9F;
 
             // 1.8 players who are packet sprinting WILL get slowed
@@ -131,9 +116,6 @@ public class PacketPlayerAttack extends PacketListenerAbstract {
     private boolean isInvalidEntity(PacketReceiveEvent event, GrimPlayer player, int entityId) {
         // The entity does not exist
         if (!player.compensatedEntities.entityMap.containsKey(entityId) && !player.compensatedEntities.serverPositionsMap.containsKey(entityId)) {
-            if (player.compensatedEntities.entitiesRemovedThisTick.contains(entityId)) {
-                player.getClientVersion();
-            }
             final BadPacketsW badPacketsW = player.checkManager.getCheck(BadPacketsW.class);
             if (badPacketsW.flagAndAlert("entityId=" + entityId) && badPacketsW.shouldModifyPackets()) {
                 event.setCancelled(true);

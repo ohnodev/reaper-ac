@@ -71,31 +71,29 @@ public class Post extends Check implements PacketCheck, PostPredictionCheck {
         } else {
             // 1.13+ clients can click inventory outside tick loop, so we can't post check those two packets on 1.13+
             PacketTypeCommon packetType = event.getPacketType();
+
             if (isTransaction(packetType) && player.packetStateData.lastTransactionPacketWasValid) {
                 if (sentFlying && !post.isEmpty()) {
                     flags.add(post.getFirst().toString().toLowerCase(Locale.ROOT).replace("_", " ") + " v" + player.getClientVersion().getReleaseName());
                 }
                 post.clear();
                 sentFlying = false;
-            } else if (PLAYER_ABILITIES.equals(packetType) || HELD_ITEM_CHANGE.equals(packetType) || INTERACT_ENTITY.equals(packetType) || PLAYER_BLOCK_PLACEMENT.equals(packetType) || ATTACK.equals(packetType) || SPECTATE_ENTITY.equals(packetType) || USE_ITEM.equals(packetType) || PLAYER_DIGGING.equals(packetType)) {
+            } else if (
+                    PLAYER_ABILITIES.equals(packetType) ||
+                    HELD_ITEM_CHANGE.equals(packetType) ||
+                    INTERACT_ENTITY.equals(packetType) ||
+                    PLAYER_BLOCK_PLACEMENT.equals(packetType) ||
+                    ATTACK.equals(packetType) ||
+                    SPECTATE_ENTITY.equals(packetType) ||
+                    USE_ITEM.equals(packetType) ||
+                    PLAYER_DIGGING.equals(packetType)) {
                 if (sentFlying) post.add(event.getPacketType());
-            } else {
-                if (CLICK_WINDOW.equals(packetType)) {
-                    player.getClientVersion();
+            }
+            else if (!ANIMATION.equals(packetType) && ENTITY_ACTION.equals(packetType)) {
+                if (player.inVehicle()) {
+                    return;
                 }
-                if (ANIMATION.equals(packetType)) {
-                    player.getClientVersion();
-                    player.getClientVersion();
-                } else {
-                    if (ENTITY_ACTION.equals(packetType)) {
-                        player.getClientVersion();
-                        player.getClientVersion();
-                        if (player.inVehicle()) {
-                            return;
-                        }
-                        if (sentFlying) post.add(event.getPacketType());
-                    }
-                }
+                if (sentFlying) post.add(event.getPacketType());
             }
         }
     }

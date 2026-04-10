@@ -28,11 +28,8 @@ public class BadPacketsL extends Check implements PacketCheck {
                 return;
 
             // 1.8 and above clients always send digging packets that aren't used for digging at 0, 0, 0, facing DOWN
-            // 1.7 and below clients do the same, except use SOUTH for RELEASE_USE_ITEM
-            player.getClientVersion();
-            final int expectedFace = 0;
 
-            if (packet.getBlockFaceId() != expectedFace
+            if (packet.getBlockFaceId() != 0
                     || packet.getBlockPosition().getX() != 0
                     || packet.getBlockPosition().getY() != 0
                     || packet.getBlockPosition().getZ() != 0

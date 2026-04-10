@@ -22,16 +22,13 @@ public class JumpPower {
             jumpPower += 0.1f * (jumpBoost.getAsInt() + 1);
         }
 
-        player.getClientVersion();
         if (jumpPower <= 1.0E-5f)
             return;
 
-        player.getClientVersion();
         vector.setY(Math.max(jumpPower, vector.getY()));
 
         if (player.isSprinting) {
             float radRotation = GrimMath.radians(player.yaw);
-            player.getClientVersion();
             vector.add(-player.trigHandler.sin(radRotation) * 0.2, 0.0, player.trigHandler.cos(radRotation) * 0.2);
         }
     }

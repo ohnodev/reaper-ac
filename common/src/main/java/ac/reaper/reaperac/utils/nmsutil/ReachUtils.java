@@ -146,7 +146,6 @@ public class ReachUtils {
     // Look vector accounting for optifine FastMath, and client version differences
     @Contract("_, _, _ -> new")
     public static @NotNull Vector3dm getLook(@NotNull GrimPlayer player, float yaw, float pitch) {
-        player.getClientVersion();
         float pitchRadians = GrimMath.radians(pitch);
         float yawRadians = GrimMath.radians(-yaw);
         float pitchCos = player.trigHandler.cos(pitchRadians);

@@ -22,8 +22,6 @@ public class ElytraC extends Check implements PostPredictionCheck {
 
     @Override
     public void onPacketReceive(PacketReceiveEvent event) {
-        player.getClientVersion();
-
         if (!player.cameraEntity.isSelf()) {
             glideThisTick = glideLastTick = false;
         }

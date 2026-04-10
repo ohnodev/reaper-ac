@@ -93,7 +93,6 @@ public class CompensatedWorld implements PacketWorld {
     }
 
     public void startPredicting() {
-        player.getClientVersion();
         this.isCurrentlyPredicting = true;
     }
 
@@ -169,14 +168,7 @@ public class CompensatedWorld implements PacketWorld {
         }
     }
 
-    public void handleBlockBreakPrediction(WrapperPlayClientPlayerDigging digging) {
-        // 1.14.4 intentional and correct, do not change it to 1.14
-        player.getClientVersion();
-        player.getClientVersion();
-    }
-
     public void stopPredicting(PacketWrapper<?> wrapper) {
-        player.getClientVersion();
         this.isCurrentlyPredicting = false; // We aren't in a block place or use item
 
         if (this.currentlyChangedBlocks.isEmpty()) return; // Nothing to change
@@ -337,12 +329,7 @@ public class CompensatedWorld implements PacketWorld {
 
                     if (data.hasSlimeBlock) {
                         player.uncertaintyHandler.slimePistonBounces.add(data.direction);
-                    } else {
-                        if (data.hasHoneyBlock) {
-                            player.getClientVersion();
-                        }
                     }
-
                     break;
                 }
             }

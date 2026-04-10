@@ -87,7 +87,6 @@ public class PacketOrderB extends Check implements PacketCheck {
 
     private void onAttack(PacketReceiveEvent event) {
         if (player.gamemode == GameMode.SPECTATOR) {
-            player.getClientVersion();
             return;
         }
 

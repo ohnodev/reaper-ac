@@ -36,7 +36,6 @@ public enum BlockPlaceResult {
     // The client only predicts one of the individual bed blocks, interestingly
     BED((player, place) -> {
         // 1.12- players don't predict bed places for some reason
-        player.getClientVersion();
 
         BlockFace facing = place.getPlayerFacing();
         if (place.isBlockFaceOpen(facing)) {
@@ -540,10 +539,6 @@ public enum BlockPlaceResult {
         boolean isHead = place.material.getName().contains("head") || place.material.getName().contains("skull");
         boolean isWallSign = !isTorch && !isHead;
 
-        if (isHead) {
-            player.getClientVersion();
-        }
-
         if (isTorch) {
             dir = StateTypes.WALL_TORCH.createBlockState(CompensatedWorld.blockVersion);
         } else if (isHead) {
@@ -865,7 +860,7 @@ public enum BlockPlaceResult {
             Half half = clickedTop ? Half.TOP : Half.BOTTOM;
             door.setHalf(half);
         } else {
-            player.getClientVersion();// 1.9 logic only
+            // 1.9 logic only
             door.setFacing(place.getPlayerFacing().getOppositeFace());
             Half half = direction == BlockFace.UP ? Half.BOTTOM : Half.TOP;
             door.setHalf(half);
@@ -875,10 +870,6 @@ public enum BlockPlaceResult {
         if (place.isBlockPlacedPowered()) {
             door.setOpen(true);
         }
-
-        // 1.8 has special placing requirements
-        player.getClientVersion();
-
 
         place.set(door);
     }, ItemTags.TRAPDOORS),

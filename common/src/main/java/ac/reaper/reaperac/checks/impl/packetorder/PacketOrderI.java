@@ -93,11 +93,7 @@ public class PacketOrderI extends Check implements PostPredictionCheck {
                         return;
                     }
                 case CANCELLED_DIGGING, FINISHED_DIGGING:
-                    if (exemptPlacingWhileDigging) {
-                        return;
-                    } else {
-                        player.getClientVersion();
-                    }
+                    if (exemptPlacingWhileDigging) return;
                     digging = true;
             }
         }

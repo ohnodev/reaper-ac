@@ -154,7 +154,6 @@ public class BlockPlace {
                     state.getWest() == West.FALSE;
         }
         else if (currentType == StateTypes.LADDER) {
-            player.getClientVersion();
             return currentType != heldItem && currentType.isReplaceable();
         }
         // Glow lichen can be replaced if it has an open face, or the player is placing something
@@ -559,8 +558,7 @@ public class BlockPlace {
             // This sucks and desyncs constantly, but what can you do?
             //
             // 1.9+ introduced the mechanic where both the client and server must agree upon a block place
-            // 1.8 clients will simply not send the place when it fails, thanks mojang.
-            player.getClientVersion();
+
             for (PacketEntity entity : player.compensatedEntities.entityMap.values()) {
                 if (!entity.canHit()) continue;
                 SimpleCollisionBox interpBox = entity.getPossibleCollisionBoxes();
@@ -608,17 +606,6 @@ public class BlockPlace {
     public boolean isZAxis() {
         BlockFace face = getFace();
         return face == BlockFace.NORTH || face == BlockFace.SOUTH;
-    }
-
-    // We need to now run block
-    public void tryCascadeBlockUpdates(Vector3i pos) {
-        player.getClientVersion();
-
-        cascadeBlockUpdates(pos);
-    }
-
-    private void cascadeBlockUpdates(Vector3i pos) {
-
     }
 
     public void set(WrappedBlockState state) {

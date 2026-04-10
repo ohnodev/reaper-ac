@@ -128,7 +128,7 @@ public final class Collisions {
             if (!disallowStepping && stepUpHeight > 0.0F && movingIntoGround && (collisionResult.getX() != desiredX || collisionResult.getZ() != desiredZ)) {
                 player.uncertaintyHandler.isStepMovement = true;
                 // 1.21 significantly refactored this
-                player.getClientVersion();
+
                 SimpleCollisionBox startingOffsetBox = movingIntoGroundReal ? player.boundingBox.copy().offset(0.0, collisionResult.getY(), 0.0) : player.boundingBox.copy();
                 SimpleCollisionBox offsetByHorizAndStepBox = startingOffsetBox.copy().expandToCoordinate(desiredX, stepUpHeight, desiredZ);
                 if (!movingIntoGroundReal) {
@@ -191,7 +191,7 @@ public final class Collisions {
     public static boolean addWorldBorder(GrimPlayer player, SimpleCollisionBox wantedBB, List<SimpleCollisionBox> listOfBlocks, boolean onlyCheckCollide) {
         // Worldborders were added in 1.8
         // Don't add to border unless the player is colliding with it and is near it
-        player.getClientVersion();
+
         PacketWorldBorder border = player.checkManager.getPacketCheck(PacketWorldBorder.class);
 
         double minX = Math.floor(border.getMinX());
@@ -366,7 +366,7 @@ public final class Collisions {
             double z = vec3.getZ();
 
             if (!overrideVersion) {
-                player.getClientVersion();
+
             }
             double maxStepDown = -player.getMaxUpStep();
 
@@ -414,13 +414,13 @@ public final class Collisions {
     public static boolean isAboveGround(GrimPlayer player) {
         // https://bugs.mojang.com/browse/MC-2404
         if (player.lastOnGround) return true;
-        player.getClientVersion();
+
         return player.fallDistance < player.getMaxUpStep() && !isEmpty(player, player.boundingBox.copy().offset(0.0, player.fallDistance - player.getMaxUpStep(), 0.0));
     }
 
     public static void handleInsideBlocks(GrimPlayer player) {
         // Mojang rewrote this whole logic in 1.21.2 (see Collisions#applyEffectsFromBlocks)
-        player.getClientVersion();
+
         return;
         // Use the bounding box for after the player's movement is applied
     }
@@ -435,25 +435,25 @@ public final class Collisions {
         }
 
         if (blockType == StateTypes.SWEET_BERRY_BUSH) {
-            player.getClientVersion();
+
             player.stuckSpeedMultiplier = new Vector3dm(0.8f, 0.75, 0.8f);
         }
 
         if (blockType == StateTypes.POWDER_SNOW && blockX == Math.floor(player.x) && blockY == Math.floor(player.y) && blockZ == Math.floor(player.z)) {
-            player.getClientVersion();
+
             player.stuckSpeedMultiplier = new Vector3dm(0.9f, 1.5, 0.9f);
         }
 
         if (blockType == StateTypes.SOUL_SAND) {
-            player.getClientVersion();
+
         }
 
         if (blockType == StateTypes.LAVA) {
-            player.getClientVersion();
+
         }
 
         if (blockType == StateTypes.BUBBLE_COLUMN) {
-            player.getClientVersion();
+
             if (magic) {
                 WrappedBlockState blockAbove = player.compensatedWorld.getBlock(blockX, blockY + 1, blockZ);
 
@@ -491,7 +491,7 @@ public final class Collisions {
         }
 
         if (blockType == StateTypes.HONEY_BLOCK) {
-            player.getClientVersion();
+
             if (isSlidingDown(player.clientVelocity, player, blockX, blockY, blockZ)) {
                 if (getOldDeltaY(player, player.clientVelocity.getY()) < -0.13D) {
                     double d0 = -0.05 / getOldDeltaY(player, player.clientVelocity.getY());
@@ -510,7 +510,7 @@ public final class Collisions {
 
     // Implementation of Collisions#handleInsideBlocks for >= 1.21.2
     public static void applyEffectsFromBlocks(GrimPlayer player) {
-        player.getClientVersion();
+
 
         // Reset stuck speed so it can update
         if (player.stuckSpeedMultiplier.getX() < 0.99) {
@@ -523,7 +523,6 @@ public final class Collisions {
         Vector3d from = new Vector3d(player.lastX, player.lastY, player.lastZ);
         Vector3d to = new Vector3d(player.x, player.y, player.z);
 
-        ClientVersion clientVersion = player.getClientVersion();
         player.finalMovementsThisTick.addAll(player.movementThisTick);
         player.movementThisTick.clear();
 
@@ -546,10 +545,6 @@ public final class Collisions {
         }
     }
 
-    public static void resolveBlockEffects(GrimPlayer player, Vector3d from, Vector3d to) {
-        Collisions.resolveBlockEffects(player, List.of(new GrimPlayer.Movement(from, to)));
-    }
-
     public static void resolveBlockEffects(GrimPlayer player, List<GrimPlayer.Movement> movements) {
         ClientVersion version = player.getClientVersion();
         BlockEffectsResolver resolver;
@@ -568,12 +563,10 @@ public final class Collisions {
     }
 
     private static double getOldDeltaY(GrimPlayer player, double value) {
-        player.getClientVersion();
         return value / 0.98F + 0.08;
     }
 
     private static double getNewDeltaY(GrimPlayer player, double value) {
-        player.getClientVersion();
         return (value - 0.08) * 0.98F;
     }
 
@@ -616,12 +609,12 @@ public final class Collisions {
                     }
 
                     if (blockType == StateTypes.SWEET_BERRY_BUSH) {
-                        player.getClientVersion();
+
                         return true;
                     }
 
                     if (blockType == StateTypes.POWDER_SNOW && i == Math.floor(player.x) && j == Math.floor(player.y) && k == Math.floor(player.z)) {
-                        player.getClientVersion();
+
                         return true;
                     }
                 }
@@ -639,7 +632,7 @@ public final class Collisions {
                     if (doesBlockSuffocate(player, x, y, z)) {
                         // Mojang re-added soul sand pushing by checking if the player is actually in the block
                         // (This is why from 1.14-1.15 soul sand didn't push)
-                        player.getClientVersion();
+
                         WrappedBlockState data = player.compensatedWorld.getBlock(x, y, z);
                         CollisionBox box = CollisionData.getData(data.getType()).getMovementCollisionBox(player, player.getClientVersion(), data, x, y, z);
 
@@ -671,28 +664,19 @@ public final class Collisions {
         if (mat == StateTypes.FARMLAND)
             return player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_16);
         // 1.14-1.15 doesn't push with soul sand, the rest of the versions do
-        if (mat == StateTypes.SOUL_SAND) {
-            player.getClientVersion();
+        if (mat == StateTypes.SOUL_SAND)
             return true;
-        }
-        // 1.13 and below exempt piston bases, while 1.14+ look to see if they are a full block or not
-        if ((mat == StateTypes.PISTON || mat == StateTypes.STICKY_PISTON)) {
-            player.getClientVersion();
-        }
         // 1.13 and below exempt ICE and FROSTED_ICE, 1.14 have them push
         if (mat == StateTypes.ICE || mat == StateTypes.FROSTED_ICE)
             return player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_14);
         // I believe leaves and glass are consistently exempted across all versions
         if (BlockTags.LEAVES.contains(mat) || BlockTags.GLASS_BLOCKS.contains(mat)) return false;
         // 1.16 players are pushed by dirt paths, 1.8 players don't have this block, so it gets converted to a full block
-        if (mat == StateTypes.DIRT_PATH) {
-            player.getClientVersion();
+        if (mat == StateTypes.DIRT_PATH)
             return true;
-        }
         // Only 1.14+ players are pushed by beacons
         if (mat == StateTypes.BEACON)
             return player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_14);
-
         // Thank god I already have the solid blocking blacklist written, but all these are exempt
         if (Materials.isSolidBlockingBlacklist(mat, player.getClientVersion())) return false;
 
@@ -848,7 +832,7 @@ public final class Collisions {
         WrappedBlockState blockState = player.compensatedWorld.getBlock(x, y, z);
         StateType blockMaterial = blockState.getType();
 
-        player.getClientVersion();
+
         if (player.isGliding && BlockTags.CAN_GLIDE_THROUGH.contains(blockMaterial)) {
             return false;
         }
@@ -864,7 +848,7 @@ public final class Collisions {
 
         // ViaVersion replacement block -> sweet berry bush to vines
         if (blockMaterial == StateTypes.SWEET_BERRY_BUSH) {
-            player.getClientVersion();
+
         }
 
         return trapdoorUsableAsLadder(player, x, y, z, blockState);
@@ -873,7 +857,7 @@ public final class Collisions {
     public static boolean trapdoorUsableAsLadder(GrimPlayer player, double x, double y, double z, WrappedBlockState blockData) {
         if (!BlockTags.TRAPDOORS.contains(blockData.getType())) return false;
         // Feature implemented in 1.9
-        player.getClientVersion();
+
 
         if (blockData.isOpen()) {
             WrappedBlockState blockBelow = player.compensatedWorld.getBlock(x, y - 1, z);

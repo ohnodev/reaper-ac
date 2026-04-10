@@ -44,20 +44,17 @@ public class MovementTicker {
     }
 
     public static float getAirDrag(GrimPlayer player) {
-        player.getClientVersion();
         double airDragMod = player.compensatedEntities.self.getAttributeValue(Attributes.AIR_DRAG_MODIFIER);
         return computeModifiedFriction(0.91f, airDragMod);
     }
 
     public static float getBlockFrictionModified(GrimPlayer player, float blockFriction) {
-        player.getClientVersion();
         double frictionMod = player.compensatedEntities.self.getAttributeValue(Attributes.FRICTION_MODIFIER);
         return computeModifiedFriction(blockFriction, frictionMod);
     }
 
     public static void handleEntityCollisions(GrimPlayer player) {
         // Check that ViaVersion disables all collisions on a 1.8 server for 1.9+ clients
-        player.getClientVersion();
         boolean hasEntityPushing = true;
         if (!hasEntityPushing) return;
 
@@ -123,7 +120,6 @@ public class MovementTicker {
             player.clientVelocity = new Vector3dm();
         }
 
-        player.getClientVersion();
         boolean xAxis = !GrimMath.equal(inputVel.getX(), collide.getX());
         boolean zAxis = !GrimMath.equal(inputVel.getZ(), collide.getZ());
 
@@ -197,7 +193,6 @@ public class MovementTicker {
             // If the client supports slime blocks
             // And the block is a slime block
             // Or the block is honey and was replaced by viaversion
-            player.getClientVersion();
             if (onBlock == StateTypes.SLIME_BLOCK) {
                 if (player.isSneaking) { // Slime blocks use shifting instead of sneaking
                     player.clientVelocity.setY(0);
@@ -208,9 +203,6 @@ public class MovementTicker {
                     }
                 }
             } else {
-                if (onBlock == StateTypes.HONEY_BLOCK) {
-                    player.getClientVersion();
-                }
                 if (BlockTags.BEDS.contains(onBlock)) {
                     if (player.clientVelocity.getY() < 0.0) {
                         player.clientVelocity.setY(-player.clientVelocity.getY() * 0.6600000262260437 *
@@ -229,7 +221,6 @@ public class MovementTicker {
         if (collide.lengthSquared() <= 1e-7 && inputVel.lengthSquared() - collide.lengthSquared() >= 1e-7) {
             collide = new Vector3dm();
         } else {
-            player.getClientVersion();
             Vector3d from = new Vector3d(player.lastX, player.lastY, player.lastZ);
             Vector3d to = new Vector3d(player.x, player.y, player.z);
 
@@ -241,11 +232,6 @@ public class MovementTicker {
 
         float f = BlockProperties.getBlockSpeedFactor(player, player.mainSupportingBlockData, new Vector3d(player.x, player.y, player.z));
         player.clientVelocity.multiply(f, 1, f);
-
-        player.getClientVersion();
-        return;
-
-        // Reset stuck speed so it can update
     }
 
     public void livingEntityAIStep() {
@@ -281,15 +267,6 @@ public class MovementTicker {
                 player.uncertaintyHandler.yNegativeUncertainty = player.flySpeed * -5;
             }
         }
-
-        // Work around a bug introduced in 1.14 where a player colliding with an X and Z wall maintains X momentum
-        player.getClientVersion();
-        player.getClientVersion();
-        return;
-
-        // YXZ or YZX collision order
-        // Except 0.03 causing apparent XZY or ZXY collision order
-        // Meaning we should scan upwards!
     }
 
     public void playerEntityTravel() {
@@ -328,7 +305,6 @@ public class MovementTicker {
 
         boolean isFalling = player.actualMovement.getY() <= 0.0;
         if (isFalling && player.compensatedEntities.getSlowFallingAmplifier().isPresent()) {
-            player.getClientVersion();
             playerGravity = Math.min(playerGravity, 0.01);
             // Set fall distance to 0 if the player has slow falling
             player.fallDistance = 0;
@@ -349,14 +325,12 @@ public class MovementTicker {
             swimFriction = player.isSprinting ? 0.9F : isSkeletonHorse ? 0.96F : 0.8F;
             float swimSpeed = 0.02F;
 
-            player.getClientVersion();
 
             if (!player.lastOnGround) {
                 player.depthStriderLevel *= 0.5F;
             }
 
             if (player.depthStriderLevel > 0.0F) {
-                player.getClientVersion();
                 final float divisor = 1.0F;
                 swimFriction += (0.54600006F - swimFriction) * player.depthStriderLevel / divisor;
                 swimSpeed += (player.speed - swimSpeed) * player.depthStriderLevel / divisor;
@@ -373,7 +347,6 @@ public class MovementTicker {
 
             // 1.13 and below players can't climb ladders while touching water
             // yes, 1.13 players cannot climb ladders underwater
-            player.getClientVersion();
             if (player.isClimbing) {
                 player.lastWasClimbing = FluidFallingAdjustedMovement.getFluidFallingAdjustedMovement(player, playerGravity, isFalling, player.clientVelocity.clone().setY(0.2D * 0.8F)).getY();
             }
@@ -386,7 +359,7 @@ public class MovementTicker {
                 doLavaMove();
 
                 // Lava movement changed in 1.16
-                player.getClientVersion();
+
                 if (player.getFluidHeight(FluidTag.LAVA) <= 0.4D) {
                     player.clientVelocity = player.clientVelocity.multiply(0.5D, 0.800000011920929D, 0.5D);
                     player.clientVelocity = FluidFallingAdjustedMovement.getFluidFallingAdjustedMovement(player, playerGravity, isFalling, player.clientVelocity);
@@ -398,7 +371,6 @@ public class MovementTicker {
                     player.clientVelocity.add(0.0D, -playerGravity / 4.0D, 0.0D);
 
             } else if (player.isGliding) {
-                player.getClientVersion();
                 if (Collisions.onClimbable(player, player.lastX, player.lastY, player.lastZ)) {
                     float blockFriction = BlockProperties.getFriction(player, player.mainSupportingBlockData, new Vector3d(player.lastX, player.lastY, player.lastZ));
                     float airDrag = getAirDrag(player);
@@ -432,7 +404,6 @@ public class MovementTicker {
     }
 
     private void floatInWaterWhileRidden() {
-        player.getClientVersion();
         if (!player.inVehicle()) return;
 
         PacketEntity vehicle = player.getVehicle();

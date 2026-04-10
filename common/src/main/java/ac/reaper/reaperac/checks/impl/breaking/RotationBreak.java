@@ -96,11 +96,7 @@ public class RotationBreak extends Check implements BlockBreakCheck {
         ));
 
         // 1.9+ players could be a tick behind because we don't get skipped ticks
-        player.getClientVersion();
         possibleLookDirs.add(new Vector3f(player.lastYaw, player.lastPitch, 0));
-
-        // 1.7 players do not have any of these issues! They are always on the latest look vector
-        player.getClientVersion();
 
         final double distance = player.compensatedEntities.self.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE);
         for (double d : possibleEyeHeights) {

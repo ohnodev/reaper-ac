@@ -211,7 +211,6 @@ public class CheckManagerListener extends PacketListenerAbstract {
 
                 // Right-clicking a trapdoor/door/etc.
                 StateType placedAgainst = blockPlace.getPlacedAgainstMaterial();
-                player.getClientVersion();
                 if (Materials.isClientSideInteractable(placedAgainst)) {
                     player.checkManager.onPostFlyingBlockPlace(blockPlace);
                     Vector3i location = blockPlace.position;
@@ -489,8 +488,6 @@ public class CheckManagerListener extends PacketListenerAbstract {
                 BlockPlace blockPlace = new BlockPlace(player, packet.getHand(), packet.getBlockPosition(), packet.getFaceId(), packet.getFace(), placedWith, WorldRayTrace.getNearestBlockHitResult(player, null, true, false, false), packet.getSequence());
                 blockPlace.cursor = packet.getCursorPosition();
 
-                player.getClientVersion();
-
                 player.checkManager.onBlockPlace(blockPlace);
 
                 if (event.isCancelled() || blockPlace.isCancelled() || player.getSetbackTeleportUtil().shouldBlockMovement()) { // The player tried placing blocks in air/water
@@ -503,7 +500,6 @@ public class CheckManagerListener extends PacketListenerAbstract {
                     Vector3i facePos = new Vector3i(packet.getBlockPosition().getX() + packet.getFace().getModX(), packet.getBlockPosition().getY() + packet.getFace().getModY(), packet.getBlockPosition().getZ() + packet.getFace().getModZ());
 
                     // Ends the client prediction introduced in 1.19+
-                    player.getClientVersion();
                     player.user.sendPacket(new WrapperPlayServerAcknowledgeBlockChanges(packet.getSequence()));
 
                     // Stop inventory desync from cancelling place
@@ -591,12 +587,7 @@ public class CheckManagerListener extends PacketListenerAbstract {
     }
 
     private static boolean isMojangStupid(GrimPlayer player, PacketReceiveEvent event, WrapperPlayClientPlayerFlying flying) {
-        // Teleports are not stupidity packets.
-        if (player.packetStateData.lastPacketWasTeleport) return false;
-        // Mojang has become less stupid!
-        player.getClientVersion();
-        return false;
-
+        return false; // we are so back
     }
 
     private static void handleFlying(GrimPlayer player, double x, double y, double z, float yaw, float pitch, boolean hasPosition, boolean hasLook, boolean onGround, TeleportAcceptData teleportData, PacketReceiveEvent event) {
@@ -749,7 +740,6 @@ public class CheckManagerListener extends PacketListenerAbstract {
                                 BlockModification.Cause.START_DIGGING
                         )
                 );
-                player.getClientVersion();
                 if (Materials.isWaterSource(player.getClientVersion(), blockBreak.block)) {
                     // Vanilla uses a method to grab water flowing, but as you can't break flowing water
                     // We can simply treat all waterlogged blocks or source blocks as source blocks
@@ -760,8 +750,6 @@ public class CheckManagerListener extends PacketListenerAbstract {
                 player.compensatedWorld.stopPredicting(packet);
             }
         }
-
-        player.compensatedWorld.handleBlockBreakPrediction(packet);
     }
 
     private static void traceDigHeldItem(GrimPlayer player, BlockBreak blockBreak) {

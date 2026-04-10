@@ -20,7 +20,6 @@ public class PredictionEngineElytra extends PredictionEngine {
         double length = lookVector.length();
 
         // Mojang changed from using their math to using regular java math in 1.18.2 elytra movement
-        player.getClientVersion();
         double vertCosRotation = Math.cos(pitchRadians);
         vertCosRotation = (float) (vertCosRotation * vertCosRotation * Math.min(1.0D, length / 0.4D));
 
@@ -29,7 +28,6 @@ public class PredictionEngineElytra extends PredictionEngine {
         // Yeah, slow falling needs a refactor in grim.
         double recalculatedGravity = player.compensatedEntities.self.getAttributeValue(Attributes.GRAVITY);
         if (player.clientVelocity.getY() <= 0 && player.compensatedEntities.getSlowFallingAmplifier().isPresent()) {
-            player.getClientVersion();
             recalculatedGravity = Math.min(recalculatedGravity, 0.01);
         }
 

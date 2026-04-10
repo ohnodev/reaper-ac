@@ -123,9 +123,6 @@ public class PacketPlayerRespawn extends PacketListenerAbstract {
             }
 
             player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get() + 1, () -> {
-                // From 1.16 to 1.19, this doesn't get set to false for whatever reason
-                player.getClientVersion();
-                player.getClientVersion();
                 player.isSneaking = false;
 
                 player.lastOnGround = false;
@@ -146,17 +143,11 @@ public class PacketPlayerRespawn extends PacketListenerAbstract {
                     player.playerEntityHasGravity = true;
                     player.packetStateData.knownInput = KnownInput.DEFAULT;
                     player.checkManager.getPostPredictionCheck(ElytraC.class).exempt = true;
-
-                    // 1.19.4 uses current sprinting, older versions use last sprinting
-                    player.getClientVersion();
                     player.isSprinting = false;
                 }
 
                 player.checkManager.getPacketCheck(BadPacketsE.class).handleRespawn(); // Reminder ticks reset
                 player.checkManager.getPacketCheck(BadPacketsG.class).handleRespawn();
-
-                // compensate for immediate respawn gamerule
-                player.getClientVersion();
                 player.checkManager.getPacketCheck(BadPacketsF.class).exemptNext = true;
 
                 // EVERYTHING gets reset on a cross dimensional teleport, clear chunks and entities!
@@ -175,7 +166,6 @@ public class PacketPlayerRespawn extends PacketListenerAbstract {
                 player.compensatedEntities.self = new PacketEntitySelf(player, player.compensatedEntities.self);
                 player.compensatedEntities.selfTrackedEntity = new TrackerData(0, 0, 0, 0, 0, EntityTypes.PLAYER, player.lastTransactionSent.get());
 
-                player.getClientVersion();
                 player.pose = Pose.STANDING;
                 player.clientVelocity = new Vector3dm();
                 if (!GrimAPI.INSTANCE.getSpectateManager().isSpectating(player.uuid)) {
@@ -184,7 +174,6 @@ public class PacketPlayerRespawn extends PacketListenerAbstract {
 
                 player.compensatedWorld.setDimension(respawn.getDimensionType(), event.getUser());
 
-                player.getClientVersion();
                 if (!this.hasFlag(respawn, KEEP_ATTRIBUTES)) {
                     // Reset attributes if not kept
                     player.compensatedEntities.self.resetAttributes();
@@ -195,8 +184,6 @@ public class PacketPlayerRespawn extends PacketListenerAbstract {
     }
 
     private boolean isWorldChange(GrimPlayer player, WrapperPlayServerRespawn respawn) {
-        player.getClientVersion();
         return !Objects.equals(respawn.getWorldName().orElse(null), player.worldName);
-
     }
 }

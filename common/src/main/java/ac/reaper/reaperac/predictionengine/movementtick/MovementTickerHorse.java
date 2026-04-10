@@ -32,7 +32,6 @@ public class MovementTickerHorse extends MovementTickerLivingVehicle {
     @Override
     public void livingEntityAIStep() {
         super.livingEntityAIStep();
-        player.getClientVersion();
         Collisions.handleInsideBlocks(player);
     }
 

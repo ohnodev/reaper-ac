@@ -29,29 +29,17 @@ public class BadPacketsU extends Check implements PacketCheck {
 
                 // This packet is always sent at (-1, -1, -1) at (0, 0, 0) on the block
                 // except y gets wrapped?
-                player.getClientVersion();
-                final int expectedY = 4095;
 
-                if (packet.getItemStack().isPresent() && isEmpty(packet.getItemStack().get())) {
-                    player.getClientVersion();
-                }// ViaVersion can sometimes cause this part of the check to false
-                final boolean failedItemCheck = false;
+                final int expectedY = 4095;
 
                 final Vector3i pos = packet.getBlockPosition();
                 final Vector3f cursor = packet.getCursorPosition();
 
-                if (failedItemCheck
-                        || pos.x != -1
-                        || pos.y != expectedY
-                        || pos.z != -1
-                        || cursor.x != 0
-                        || cursor.y != 0
-                        || cursor.z != 0
-                        || packet.getSequence() != 0
+                if (pos.x != -1 || pos.y != expectedY || pos.z != -1 || cursor.x != 0 || cursor.y != 0 || cursor.z != 0 || packet.getSequence() != 0
                 ) {
                     final String verbose = String.format(
                             "xyz=%s, %s, %s, cursor=%s, %s, %s, item=%s, sequence=%s",
-                            pos.x, pos.y, pos.z, cursor.x, cursor.y, cursor.z, !failedItemCheck, packet.getSequence()
+                            pos.x, pos.y, pos.z, cursor.x, cursor.y, cursor.z, true, packet.getSequence()
                     );
                     if (flagAndAlert(verbose) && shouldModifyPackets()) {
                         player.onPacketCancel();

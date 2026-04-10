@@ -27,8 +27,6 @@ public class NoSlow extends Check implements PostPredictionCheck {
 
         // If the player was using an item for certain, and their predicted velocity had a flipped item
         if (player.packetStateData.isSlowedByUsingItem()) {
-            // 1.8 users are not slowed the first tick they use an item, strangely
-            player.getClientVersion();
 
             if (bestOffset > offsetToFlag) {
                 if (flaggedLastTick) {

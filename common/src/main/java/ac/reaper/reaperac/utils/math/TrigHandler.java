@@ -29,9 +29,7 @@ public class TrigHandler {
     }
 
     public Vector3dm getShitMathMovement(Vector3dm wantedMovement, float f, float f2) {
-        player.getClientVersion();
         float f3 = OptifineFastMath.sin(GrimMath.radians(f2));
-        player.getClientVersion();
         float f4 = OptifineFastMath.cos(GrimMath.radians(f2));
 
         float bestTheoreticalX = (float) (f3 * wantedMovement.getZ() + f4 * wantedMovement.getX()) / (f3 * f3 + f4 * f4) / f;
@@ -82,7 +80,6 @@ public class TrigHandler {
         if (isVanillaMath) {
             return VanillaMath.sin(value);
         } else {
-            player.getClientVersion();
             return OptifineFastMath.sin(value);
         }
     }
@@ -91,7 +88,6 @@ public class TrigHandler {
         if (isVanillaMath) {
             return VanillaMath.cos(value);
         } else {
-            player.getClientVersion();
             return OptifineFastMath.cos(value);
         }
     }

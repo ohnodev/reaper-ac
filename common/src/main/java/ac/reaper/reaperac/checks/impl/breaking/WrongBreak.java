@@ -15,12 +15,6 @@ import static ac.reaper.reaperac.utils.nmsutil.BlockBreakSpeed.getBlockDamage;
 
 @CheckData(name = "WrongBreak")
 public class WrongBreak extends Check implements BlockBreakCheck {
-    private final int exemptedY;
-
-    {
-        player.getClientVersion();
-        exemptedY = -1;
-    }
 
     private boolean lastBlockWasInstantBreak = false;
     private Vector3i lastBlock, lastCancelledBlock, lastLastBlock = null;
@@ -36,10 +30,10 @@ public class WrongBreak extends Check implements BlockBreakCheck {
             return false;
 
         // on pre 1.14.4 clients, the YPos of this packet is always the same
-        player.getClientVersion();
+
 
         // and if this block is not an instant break
-        player.getClientVersion();
+
         return getBlockDamage(player, block) < 1;
     }
 
@@ -57,17 +51,17 @@ public class WrongBreak extends Check implements BlockBreakCheck {
         if (blockBreak.action == DiggingAction.CANCELLED_DIGGING) {
             final Vector3i pos = blockBreak.position;
 
-            if (!shouldExempt(blockBreak.block, pos.y) && !pos.equals(lastBlock)) {
-                // https://github.com/GrimAnticheat/Grim/issues/1512
-                player.getClientVersion();
-                if (!lastBlockWasInstantBreak && pos.equals(lastCancelledBlock)) {
+            if (!shouldExempt(blockBreak.block, pos.y) &&
+                    !pos.equals(lastBlock) &&
+                    !lastBlockWasInstantBreak &&
+                    pos.equals(lastCancelledBlock)) {
+
                     if (flagAndAlert("action=CANCELLED_DIGGING" + ", last=" + MessageUtil.toUnlabledString(lastBlock) + ", pos=" + MessageUtil.toUnlabledString(pos))) {
                         if (shouldModifyPackets()) {
                             blockBreak.cancel();
                         }
                     }
                 }
-            }
 
             lastCancelledBlock = pos;
             lastLastBlock = null;
@@ -86,9 +80,6 @@ public class WrongBreak extends Check implements BlockBreakCheck {
                     }
                 }
             }
-
-            // 1.14.4+ clients don't send another start break in protected regions
-            player.getClientVersion();
         }
     }
 }

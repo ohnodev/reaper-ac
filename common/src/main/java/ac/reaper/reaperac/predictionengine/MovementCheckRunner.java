@@ -65,11 +65,6 @@ public class MovementCheckRunner extends Check implements PositionCheck {
         // This teleport wasn't valid as the player STILL hasn't loaded this damn chunk.
         // Keep re-teleporting until they load the chunk!
         if (player.getSetbackTeleportUtil().insideUnloadedChunk()) {
-            // The player doesn't control this vehicle, we don't care
-            if (player.inVehicle()) {
-                player.getClientVersion();
-            }
-            final boolean invalidVehicle = false;
 
             if (!data.isTeleport()) {
                 // Teleport the player back to avoid players being able to simply ignore transactions
@@ -377,23 +372,19 @@ public class MovementCheckRunner extends Check implements PositionCheck {
         Collisions.hasMaterial(player, steppingOnBB, (pair) -> {
             WrappedBlockState data = pair.first();
             if (data.getType() == StateTypes.SLIME_BLOCK) {
-                player.getClientVersion();
                 player.uncertaintyHandler.isSteppingOnSlime = true;
                 player.uncertaintyHandler.isSteppingOnBouncyBlock = true;
             }
             if (data.getType() == StateTypes.HONEY_BLOCK) {
-                player.getClientVersion();
                 player.uncertaintyHandler.isSteppingOnHoney = true;
             }
             if (BlockTags.BEDS.contains(data.getType())) {
-                player.getClientVersion();
                 player.uncertaintyHandler.isSteppingOnBouncyBlock = true;
             }
             if (BlockTags.ICE.contains(data.getType())) {
                 player.uncertaintyHandler.isSteppingOnIce = true;
             }
             if (data.getType() == StateTypes.BUBBLE_COLUMN) {
-                player.getClientVersion();
                 player.uncertaintyHandler.isSteppingNearBubbleColumn = true;
             }
             if (data.getType() == StateTypes.SCAFFOLDING) {
@@ -419,7 +410,6 @@ public class MovementCheckRunner extends Check implements PositionCheck {
         // give them a decent amount of uncertainty and don't ban them for mojang's stupid mistake
         boolean isGlitchy = player.uncertaintyHandler.isNearGlitchyBlock;
 
-        player.getClientVersion();
         player.uncertaintyHandler.isNearGlitchyBlock = false;
 
         player.uncertaintyHandler.isOrWasNearGlitchyBlock = isGlitchy;
@@ -430,10 +420,6 @@ public class MovementCheckRunner extends Check implements PositionCheck {
 
         if (!player.inVehicle() && (Math.abs(player.x) == 2.9999999E7D || Math.abs(player.z) == 2.9999999E7D)) {
             player.uncertaintyHandler.lastThirtyMillionHardBorder.reset();
-        }
-
-        if (player.isFlying) {
-            player.getClientVersion();
         }
 
         boolean couldBeStuckSpeed = Collisions.checkStuckSpeed(player, player.getMovementThreshold());
@@ -501,7 +487,6 @@ public class MovementCheckRunner extends Check implements PositionCheck {
             PlayerBaseTick.updatePlayerPose(player);
         } else {
 
-            player.getClientVersion();
             wasChecked = true;
             // The player and server are both on a version with client controlled entities
             // If either or both of the client server version has server controlled entities

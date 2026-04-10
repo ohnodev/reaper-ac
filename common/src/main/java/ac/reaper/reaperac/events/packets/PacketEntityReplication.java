@@ -186,17 +186,6 @@ public class PacketEntityReplication extends Check implements PacketCheck {
 
             PotionType type = effect.getPotionType();
 
-            // ViaVersion tries faking levitation effects and fails badly lol, flagging the anticheat
-            // Block other effects just in case ViaVersion gets any ideas
-            //
-            // Set to 24 so ViaVersion blocks it
-            // 24 is the levitation effect
-            player.getClientVersion();
-
-            // ViaVersion dolphin's grace also messes us up, set it to a potion effect that doesn't exist on 1.12
-            // Effect 31 is bad omen
-            player.getClientVersion();
-
             if (isDirectlyAffectingPlayer(player, effect.getEntityId())) player.sendTransaction();
 
             player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get(), () -> {
@@ -283,7 +272,6 @@ public class PacketEntityReplication extends Check implements PacketCheck {
 
             if (items.getWindowId() == 0) { // Player inventory
                 Runnable task = () -> {
-                    player.getClientVersion();
                     if (items.getItems().size() > 45 && !player.inventory.getOffHand().is(items.getItems().get(45).getType())) {
                         if (player.packetStateData.itemInUseHand == InteractionHand.OFF_HAND) {
                             player.packetStateData.setSlowedByUsingItem(false);
@@ -428,14 +416,6 @@ public class PacketEntityReplication extends Check implements PacketCheck {
                 // Don't bother with client controlled vehicles though
 
                 // Why does the server now send an entity rel move packet matching the player's vehicle movement every time?
-
-                // ViaVersion sends two relative packets when moving more than 4 blocks
-                // This is broken and causes the client to interpolate like (0, 4) and (1, 3) instead of (1, 7)
-                // This causes impossible hits, so grim must replace this with a teleport entity packet
-                // Not ideal, but neither is 1.8 players on a 1.9+ server.
-                if ((Math.abs(deltaX) >= 3.9375 || Math.abs(deltaY) >= 3.9375 || Math.abs(deltaZ) >= 3.9375)) {
-                    player.getClientVersion();
-                }
 
                 data.setX(data.getX() + deltaX);
                 data.setY(data.getY() + deltaY);

@@ -68,14 +68,12 @@ public class PacketPlayerSteer extends PacketListenerAbstract {
                 sideways--;
             }
 
-            player.getClientVersion();
             Vec2 inputVector = PredictionEngine.modifyInput(player, new Vec2(forward, sideways).normalized());
 
             player.vehicleData.nextVehicleForward = inputVector.x();
             player.vehicleData.nextVehicleHorizontal = inputVector.y();
 
             // that's how mojang is dealing with sneaking from now on...
-            player.getClientVersion();
             player.isSneaking = input.isShift();
 
             player.packetStateData.knownInput = new KnownInput(input.isForward(), input.isBackward(), input.isLeft(), input.isRight(), input.isJump(), input.isShift(), input.isSprint());
@@ -83,8 +81,6 @@ public class PacketPlayerSteer extends PacketListenerAbstract {
             GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
             if (player == null || !player.inVehicle()) {
                 return;
-            } else {
-                player.getClientVersion();
             }
 
             // player_input is not sent every tick, so we need to stick to this packet
@@ -103,7 +99,6 @@ public class PacketPlayerSteer extends PacketListenerAbstract {
             // If the player is the first passenger, disregard this attempt to have the server control the entity
             if ((riding.isBoat || riding.isHappyGhast || (riding instanceof JumpableEntity jumpable && jumpable.hasSaddle())) &&
                     riding.passengers.get(0) == player.compensatedEntities.self) {
-                player.getClientVersion();
                 return;
             }
 

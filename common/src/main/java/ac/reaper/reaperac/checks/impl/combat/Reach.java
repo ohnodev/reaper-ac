@@ -26,7 +26,6 @@ import ac.reaper.reaperac.utils.data.packetentity.PacketEntitySizeable;
 import ac.reaper.reaperac.utils.data.packetentity.dragon.PacketEntityEnderDragonPart;
 import ac.reaper.reaperac.utils.math.Vector3dm;
 import ac.reaper.reaperac.utils.nmsutil.ReachUtils;
-import ac.reaper.reaperac.utils.viaversion.ViaVersionUtil;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
@@ -114,14 +113,6 @@ public class Reach extends Check implements PacketCheck {
         // Dead entities cause false flags (https://github.com/GrimAnticheat/Grim/issues/546)
         if (entity.isDead) return;
 
-        // TODO: Remove when in front of via
-        if (entity.type == EntityTypes.ARMOR_STAND) {
-            player.getClientVersion();
-        }
-        // Prevents Happy Ghast Reach false on 1.21.6+ servers with ViaBackwards set up
-        if (entity.type == EntityTypes.HAPPY_GHAST) {
-            player.getClientVersion();
-        }
         if (player.gamemode == GameMode.CREATIVE || player.gamemode == GameMode.SPECTATOR)
             return;
         if (player.inVehicle()) return;
@@ -134,16 +125,13 @@ public class Reach extends Check implements PacketCheck {
         float maxReach = 0f;
         float hitboxMargin = 0f;
 
-        boolean clientAttackRangeExists = player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21_11);
-        boolean clientAndServerAgrees = ATTACK_RANGE_COMPONENT_EXISTS;
-
         boolean viaVersionAvailable = false;
-        if (USE_1_8_HITBOX_MARGIN && ViaVersionUtil.isAvailable) {
+        if (USE_1_8_HITBOX_MARGIN) {
             viaVersionAvailable = Via.getConfig().getValues().containsKey("use-1_8-hitbox-margin") && Via.getConfig().use1_8HitboxMargin();
         }
 
         boolean clientAndViaVersion = viaVersionAvailable;
-        if (clientAndServerAgrees || clientAndViaVersion) {
+        if (ATTACK_RANGE_COMPONENT_EXISTS || clientAndViaVersion) {
             ItemAttackRange startRange = startStack.getComponentOr(ComponentTypes.ATTACK_RANGE, null);
             ItemAttackRange currentRange = currentStack.getComponentOr(ComponentTypes.ATTACK_RANGE, null);
 
@@ -263,11 +251,11 @@ public class Reach extends Check implements PacketCheck {
             possibleLookDirs.add(ReachUtils.getLook(player, player.lastYaw, player.pitch));
 
             // 1.9+ players could be a tick behind because we don't get skipped ticks
-            player.getClientVersion();
+
             possibleLookDirs.add(ReachUtils.getLook(player, player.lastYaw, player.lastPitch));
 
             // 1.7 players do not have any of these issues! They are always on the latest look vector
-            player.getClientVersion();
+
         }
 
         // +3 would be 3 + 3 = 6, which is the pre-1.20.5 behaviour, preventing "Missed Hitbox"
@@ -330,7 +318,7 @@ public class Reach extends Check implements PacketCheck {
             maxReach = player.compensatedEntities.self.getAttributeValue(Attributes.ENTITY_INTERACTION_RANGE);
             // 1.7 and 1.8 players get a bit of extra hitbox (this is why you should use 1.8 on cross version servers)
             // Yes, this is vanilla and not uncertainty.  All reach checks have this or they are wrong.
-            player.getClientVersion();
+
         }
 
         // This is better than adding to the reach, as 0.03 can cause a player to miss their target

@@ -7,7 +7,6 @@ import ac.reaper.reaperac.utils.anticheat.update.BlockBreak;
 import ac.reaper.reaperac.utils.anticheat.update.BlockPlace;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientUseItem;
 
 @CheckData(name = "CrashG", description = "Sent negative sequence id")
@@ -19,7 +18,7 @@ public class CrashG extends BlockPlaceCheck {
 
     @Override
     public void onPacketReceive(final PacketReceiveEvent event) {
-        if (event.getPacketType() == PacketType.Play.Client.USE_ITEM && isSupportedVersion()) {
+        if (event.getPacketType() == PacketType.Play.Client.USE_ITEM) {
             WrapperPlayClientUseItem use = new WrapperPlayClientUseItem(event);
             if (use.getSequence() < 0) {
                 flagAndAlert();
@@ -31,7 +30,7 @@ public class CrashG extends BlockPlaceCheck {
 
     @Override
     public void onBlockBreak(BlockBreak blockBreak) {
-        if (blockBreak.sequence < 0 && isSupportedVersion()) {
+        if (blockBreak.sequence < 0) {
             flagAndAlert();
             blockBreak.cancel();
         }
@@ -39,15 +38,10 @@ public class CrashG extends BlockPlaceCheck {
 
     @Override
     public void onBlockPlace(BlockPlace place) {
-        if (place.sequence < 0 && isSupportedVersion()) {
+        if (place.sequence < 0) {
             flagAndAlert();
             place.resync();
         }
-    }
-
-    private boolean isSupportedVersion() {
-        player.getClientVersion();
-        return true;
     }
 
 }

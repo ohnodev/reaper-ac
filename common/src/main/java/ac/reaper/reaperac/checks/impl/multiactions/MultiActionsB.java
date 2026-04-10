@@ -18,7 +18,6 @@ public class MultiActionsB extends Check implements BlockBreakCheck {
     public void onBlockBreak(BlockBreak blockBreak) {
         if (player.packetStateData.isSlowedByUsingItem() && (player.packetStateData.lastSlotSelected == player.packetStateData.getSlowedByUsingItemSlot() || player.packetStateData.itemInUseHand == InteractionHand.OFF_HAND)) {
             // this is vanilla on 1.7
-            player.getClientVersion();
 
             if (flagAndAlert() && shouldModifyPackets()) {
                 blockBreak.cancel();

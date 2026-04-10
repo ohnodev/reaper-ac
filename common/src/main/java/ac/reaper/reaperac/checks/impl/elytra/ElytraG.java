@@ -24,7 +24,6 @@ public class ElytraG extends Check implements PostPredictionCheck {
         if (event.getPacketType() == PacketType.Play.Client.ENTITY_ACTION
                 && new WrapperPlayClientEntityAction(event).getAction() == WrapperPlayClientEntityAction.Action.START_FLYING_WITH_ELYTRA
         ) {
-            player.getClientVersion();
             if (player.compensatedEntities.self.hasPotionEffect(PotionTypes.LEVITATION) && flagAndAlert()) {
                 setback = true;
                 if (shouldModifyPackets()) {

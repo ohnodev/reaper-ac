@@ -100,7 +100,6 @@ public class PredictionEngineWater extends PredictionEngine {
     public Set<VectorData> fetchPossibleStartTickVectors(GrimPlayer player) {
         // "hacky" climbing where player enters ladder within 0.03 movement (WHY DOES 0.03 EXIST???)
         if (player.lastWasClimbing == 0 && player.pointThreeEstimator.isNearClimbable()) {
-            player.getClientVersion();
             player.lastWasClimbing = FluidFallingAdjustedMovement.getFluidFallingAdjustedMovement(player, playerGravity, isFalling, player.clientVelocity.clone().setY(0.2D * 0.8F)).getY();
         }
 

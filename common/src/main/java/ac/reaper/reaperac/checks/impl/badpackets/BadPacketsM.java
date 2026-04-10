@@ -44,21 +44,18 @@ public class BadPacketsM extends Check implements PacketCheck {
     @Override
     public void onPacketSend(PacketSendEvent event) {
         if (event.getPacketType() == PacketType.Play.Server.CHANGE_GAME_STATE) {
-            player.getClientVersion();
             if (new WrapperPlayServerChangeGameState(event).getReason() == WrapperPlayServerChangeGameState.Reason.WIN_GAME) {
                 player.addRealTimeTaskNow(() -> exempt++);
             }
         }
 
         if (event.getPacketType() == PacketType.Play.Server.DEATH_COMBAT_EVENT) {
-            player.getClientVersion();
             if (new WrapperPlayServerDeathCombatEvent(event).getPlayerId() == player.entityID) {
                 player.addRealTimeTaskNow(() -> exempt++);
             }
         }
 
         if (event.getPacketType() == PacketType.Play.Server.COMBAT_EVENT) {
-            player.getClientVersion();
             try {
                 WrapperPlayServerCombatEvent packet = new WrapperPlayServerCombatEvent(event);
                 if (packet.getCombat() == Combat.ENTITY_DEAD && packet.getPlayerId() == player.entityID) {

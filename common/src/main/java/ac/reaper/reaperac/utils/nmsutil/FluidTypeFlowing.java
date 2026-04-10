@@ -85,8 +85,6 @@ public class FluidTypeFlowing {
         if (isSame(player, x, y, z, originalX, y, originalZ)) return false;
         if (type == StateTypes.ICE) return false;
 
-        // 1.11 and below clients use a different method to determine solid faces
-        player.getClientVersion();
         if (type == StateTypes.PISTON || type == StateTypes.STICKY_PISTON) {
             return data.getFacing().getOppositeFace() == direction ||
                     CollisionData.getData(type).getMovementCollisionBox(player, player.getClientVersion(), data, 0, 0, 0).isFullBlock();
@@ -94,13 +92,8 @@ public class FluidTypeFlowing {
             return data.getFacing() == direction;
         }
 
-        player.getClientVersion();
-        player.getClientVersion();
-        player.getClientVersion();
         if (Materials.isLeaves(type)) {
             // Leaves don't have solid faces in 1.13, they do in 1.14 and 1.15, and they don't in 1.16 and beyond
-            player.getClientVersion();
-            player.getClientVersion();
             return false;
         } else if (type == StateTypes.SNOW) {
             return data.getLayers() == 8;
@@ -109,8 +102,6 @@ public class FluidTypeFlowing {
         } else if (type == StateTypes.COMPOSTER) {
             return true;
         } else if (type == StateTypes.SOUL_SAND) {
-            player.getClientVersion();
-            player.getClientVersion();
             return true;
         } else if (type == StateTypes.LADDER) {
             return data.getFacing().getOppositeFace() == direction;

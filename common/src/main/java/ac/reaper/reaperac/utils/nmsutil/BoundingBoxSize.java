@@ -36,17 +36,14 @@ public final class BoundingBoxSize {
         } else if (type == EntityTypes.ARMADILLO || type == EntityTypes.BEE || type == EntityTypes.PUFFERFISH || type == EntityTypes.SALMON || type == EntityTypes.SNOW_GOLEM || type == EntityTypes.CAVE_SPIDER) {
             return 0.7f;
         } else if (type == EntityTypes.WITHER_SKELETON) {
-            player.getClientVersion();
             return 0.7f;
         } else if (type == EntityTypes.WITHER_SKULL || type == EntityTypes.SHULKER_BULLET) {
             return 0.3125f;
         } else if (type == EntityTypes.HOGLIN || type == EntityTypes.ZOGLIN) {
             return 1.3964844f;
         } else if (type == EntityTypes.SKELETON_HORSE || type == EntityTypes.ZOMBIE_HORSE || type == EntityTypes.HORSE || type == EntityTypes.DONKEY || type == EntityTypes.MULE) {
-            player.getClientVersion();
             return 1.3964844f;
         } else if (EntityTypes.isTypeInstanceOf(type, EntityTypes.BOAT)) {
-            player.getClientVersion();
             return 1.375f;
         } else if (EntityTypes.isTypeInstanceOf(type, EntityTypes.ABSTRACT_NAUTILUS)) {
             return 0.875f;
@@ -55,7 +52,7 @@ public final class BoundingBoxSize {
         } else if (type == EntityTypes.CHICKEN || type == EntityTypes.ENDERMITE || type == EntityTypes.SILVERFISH || type == EntityTypes.VEX || type == EntityTypes.TADPOLE) {
             return 0.4f;
         } else if (type == EntityTypes.RABBIT) {
-            player.getClientVersion();
+
             return 0.4f;
         } else if (type == EntityTypes.CREAKING || type == EntityTypes.STRIDER || type == EntityTypes.COW || type == EntityTypes.SHEEP || type == EntityTypes.MOOSHROOM || type == EntityTypes.PIG || type == EntityTypes.LLAMA || type == EntityTypes.DOLPHIN || type == EntityTypes.WITHER || type == EntityTypes.TRADER_LLAMA || type == EntityTypes.WARDEN || type == EntityTypes.GOAT) {
             return 0.9f;
@@ -63,7 +60,6 @@ public final class BoundingBoxSize {
             if (packetEntity instanceof PacketEntitySizeable sizeable) {
                 return 0.9f + sizeable.size * 0.2f;
             }
-
             return 1.5f;
         } else if (packetEntity instanceof PacketEntityGuardian packetEntityGuardian) { // TODO: 2.35 * guardian?
             return packetEntityGuardian.isElder ? 1.9975f : 0.85f;
@@ -83,9 +79,7 @@ public final class BoundingBoxSize {
             return 1.4f;
         } else if (type == EntityTypes.MAGMA_CUBE) {
             if (packetEntity instanceof PacketEntitySizeable sizeable) {
-                float size = sizeable.size;
-                player.getClientVersion();
-                return 0.52f * size;
+                return 0.52f * sizeable.size;
             }
 
             return 0.98f;
@@ -101,18 +95,14 @@ public final class BoundingBoxSize {
             return 1f;
         } else if (type == EntityTypes.SLIME) {
             if (packetEntity instanceof PacketEntitySizeable sizeable) {
-                float size = sizeable.size;
-                player.getClientVersion();
-                return 0.52f * size;
+                return 0.52f * sizeable.size;
             }
-
             return 0.3125f;
         } else if (type == EntityTypes.SMALL_FIREBALL) {
             return 0.3125f;
         } else if (type == EntityTypes.SPIDER) {
             return 1.4f;
         } else if (type == EntityTypes.SQUID || type == EntityTypes.GLOW_SQUID) {
-            player.getClientVersion();
             return 0.8f;
         } else if (type == EntityTypes.TURTLE) {
             return 1.2f;
@@ -152,7 +142,6 @@ public final class BoundingBoxSize {
 
                 if (!entity.passengers.isEmpty()) {
                     int i = entity.passengers.indexOf(player.compensatedEntities.self);
-
                     if (i == 0) {
                         f = 0.2f;
                     } else if (i == 1) {
@@ -254,7 +243,6 @@ public final class BoundingBoxSize {
         } else if (type == EntityTypes.EVOKER_FANGS || type == EntityTypes.VEX) {
             return 0.8f;
         } else if (type == EntityTypes.SQUID || type == EntityTypes.GLOW_SQUID) {
-            player.getClientVersion();
             return 0.8f;
         } else if (type == EntityTypes.PARROT || type == EntityTypes.BAT || type == EntityTypes.PIG || type == EntityTypes.SPIDER) {
             return 0.9f;
@@ -281,7 +269,6 @@ public final class BoundingBoxSize {
         } else if (type == EntityTypes.HOGLIN || type == EntityTypes.ZOGLIN) {
             return 1.4f;
         } else if (type == EntityTypes.COW) {
-            player.getClientVersion();
             return 1.4f;
         } else if (type == EntityTypes.STRIDER) {
             return 1.7f;
@@ -312,7 +299,6 @@ public final class BoundingBoxSize {
         } else if (type == EntityTypes.HORSE) {
             return 1.6f;
         } else if (type == EntityTypes.IRON_GOLEM) {
-            player.getClientVersion();
             return 2.7f;
         } else if (type == EntityTypes.CREAKING) {
             return 2.7f;
@@ -323,7 +309,6 @@ public final class BoundingBoxSize {
         } else if (type == EntityTypes.MAGMA_CUBE) {
             if (packetEntity instanceof PacketEntitySizeable sizeable) {
                 float size = sizeable.size;
-                player.getClientVersion();
                 return 0.52f * size;
             }
 
@@ -333,7 +318,6 @@ public final class BoundingBoxSize {
         } else if (type == EntityTypes.MULE) {
             return 1.6f;
         } else if (type == EntityTypes.MOOSHROOM) {
-            player.getClientVersion();
             return 1.4f;
         } else if (type == EntityTypes.OCELOT) {
             return 0.7f;
@@ -352,7 +336,6 @@ public final class BoundingBoxSize {
         } else if (type == EntityTypes.PUFFERFISH) {
             return 0.7f;
         } else if (type == EntityTypes.RABBIT) {
-            player.getClientVersion();
             return 0.5f;
         } else if (type == EntityTypes.RAVAGER) {
             return 2.2f;
@@ -365,14 +348,12 @@ public final class BoundingBoxSize {
         } else if (type == EntityTypes.SILVERFISH) {
             return 0.3f;
         } else if (type == EntityTypes.SKELETON) {
-            player.getClientVersion();
             return 1.99f;
         } else if (type == EntityTypes.SKELETON_HORSE) {
             return 1.6f;
         } else if (type == EntityTypes.SLIME) {
             if (packetEntity instanceof PacketEntitySizeable sizeable) {
                 float size = sizeable.size;
-                player.getClientVersion();
                 return 0.52f * size;
             }
 
@@ -388,10 +369,9 @@ public final class BoundingBoxSize {
         } else if (type == EntityTypes.WITHER) {
             return 3.5f;
         } else if (type == EntityTypes.WITHER_SKELETON) {
-            player.getClientVersion();
             return 2.4f;
         } else if (type == EntityTypes.WOLF) {
-            player.getClientVersion();
+
             return 0.85f;
         } else if (type == EntityTypes.ZOMBIE_HORSE) {
             return 1.6f;
@@ -414,9 +394,6 @@ public final class BoundingBoxSize {
         } else if (type == EntityTypes.FALLING_BLOCK) {
             return 0.98F;
         } else {
-            if (type == EntityTypes.VILLAGER) {
-                player.getClientVersion();
-            }
             if (type == EntityTypes.FIREWORK_ROCKET) {
                 return 0.25F;
             } else if (type == EntityTypes.COPPER_GOLEM) {

@@ -18,7 +18,6 @@ public class MovementTickerLivingVehicle extends MovementTicker {
 
     @Override
     public void doWaterMove(float swimSpeed, boolean isFalling, float swimFriction) {
-        player.getClientVersion();
         new PredictionEngineRideableWater(movementInput).guessBestMovement(swimSpeed, player, isFalling, player.gravity, swimFriction);
     }
 

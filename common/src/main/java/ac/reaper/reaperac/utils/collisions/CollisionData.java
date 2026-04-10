@@ -833,7 +833,6 @@ public enum CollisionData implements CollisionFactory {
     }, BlockTags.WALL_HANGING_SIGNS.getStates().toArray(new StateType[0])),
 
     DRIED_GHAST((player, version, data, x, y, z) -> {
-        player.getClientVersion();
         return new HexCollisionBox(3.0, 0.0, 3.0, 13.0, 10.0, 13.0);
         // ViaVersion replacement block - chorus plant (down: true, up: false, east: false, south: false, west: false)
     }, StateTypes.DRIED_GHAST),

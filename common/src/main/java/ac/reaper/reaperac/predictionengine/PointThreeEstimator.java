@@ -143,7 +143,6 @@ public class PointThreeEstimator {
                 pointThreeBox.isIntersected(new SimpleCollisionBox(x, y, z))) {
 
             if (stateType == StateTypes.BUBBLE_COLUMN) {
-                player.getClientVersion();
                 isNearBubbleColumn = true;
             }
 
@@ -283,7 +282,6 @@ public class PointThreeEstimator {
             }
 
             if (stateType == StateTypes.BUBBLE_COLUMN) {
-                player.getClientVersion();
                 isNearBubbleColumn = true;
             }
 
@@ -435,7 +433,6 @@ public class PointThreeEstimator {
         // The player couldn't have skipped their Y tick here... no point to simulate (and stop a bypass)
         if (!vector.isZeroPointZeroThree()) return 0;
 
-        player.getClientVersion();
         double minMovement = 0.003;
 
         // This should likely be refactored, but it works well.

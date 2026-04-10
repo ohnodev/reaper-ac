@@ -56,7 +56,6 @@ public class PacketPlayerDigging extends PacketListenerAbstract {
 
         // Check for data component stuff on 1.21.4+ (older versions are pain in the ass to support)
         if (RELIABLE_COMPONENT_SYSTEM) {
-            player.getClientVersion();
             ItemBehaviour itemBehaviour = ItemBehaviourRegistry.getItemBehaviour(material);
 
             if (itemBehaviour.canUse(item, player.compensatedWorld, player, hand)) {
@@ -70,14 +69,12 @@ public class PacketPlayerDigging extends PacketListenerAbstract {
         }
 
         // Check for data component stuff on 1.21.2+
-        final ItemConsumable consumable = item.getComponentOr(ComponentTypes.CONSUMABLE, null);
         final FoodProperties foodComponent = item.getComponentOr(ComponentTypes.FOOD, null);
 
         // The food component can override the consumable component, as it provides conditions for using the item
 
 
         // Check for data component stuff on 1.20.5+
-        player.getClientVersion();
         if (foodComponent.isCanAlwaysEat() || player.food < 20 || player.gamemode == GameMode.CREATIVE) {
             player.packetStateData.setSlowedByUsingItem(true);
             player.packetStateData.itemInUseHand = hand;
@@ -115,7 +112,6 @@ public class PacketPlayerDigging extends PacketListenerAbstract {
         }
 
         if (material == ItemTypes.SHIELD) {
-            player.getClientVersion();
             player.packetStateData.setSlowedByUsingItem(true);
             player.packetStateData.itemInUseHand = hand;
             return;
@@ -131,7 +127,6 @@ public class PacketPlayerDigging extends PacketListenerAbstract {
         // The client and server don't agree on trident status because mojang is incompetent at netcode.
         if (material == ItemTypes.TRIDENT
                 && item.getDamageValue() < item.getMaxDamage() - 1) {
-            player.getClientVersion();
             player.packetStateData.setSlowedByUsingItem(item.getEnchantmentLevel(EnchantmentTypes.RIPTIDE) <= 0);
             player.packetStateData.itemInUseHand = hand;
         }
@@ -153,20 +148,13 @@ public class PacketPlayerDigging extends PacketListenerAbstract {
         }
 
         if (material == ItemTypes.SPYGLASS) {
-            player.getClientVersion();
             player.packetStateData.setSlowedByUsingItem(true);
             player.packetStateData.itemInUseHand = hand;
         }
 
         if (material == ItemTypes.GOAT_HORN) {
-            player.getClientVersion();
             player.packetStateData.setSlowedByUsingItem(true);
             player.packetStateData.itemInUseHand = hand;
-        }
-
-        // Only 1.8 and below players can block with swords
-        if (material.hasAttribute(ItemTypes.ItemAttribute.SWORD)) {
-            player.getClientVersion();
         }
     }
 

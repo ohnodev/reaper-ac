@@ -192,7 +192,6 @@ public class SetbackTeleportUtil extends Check implements PostPredictionCheck {
             position = position.withX(position.getX() + collide.getX());
             position = position.withY(position.getY() + collide.getY());
             // TODO: Is this even needed? Can't reproduce any phasing on vanilla 1.8 when being setback.
-            player.getClientVersion();
             position = position.withZ(position.getZ() + collide.getZ());
 
             if (clientVel.getX() != collide.getX()) clientVel.setX(0);
@@ -396,8 +395,6 @@ public class SetbackTeleportUtil extends Check implements PostPredictionCheck {
     }
 
     public void addSentTeleport(Location position, @Nullable Vector3d velocity, int transaction, RelativeFlag flags, boolean plugin, int teleportId) {
-        // Clients below 1.21.2 do not have this.
-        player.getClientVersion();
 
         TeleportData data = new TeleportData(new Vector3d(position.getX(), position.getY(), position.getZ()), velocity, flags, transaction, teleportId);
         pendingTeleports.add(data);

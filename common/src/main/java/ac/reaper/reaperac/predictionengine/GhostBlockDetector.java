@@ -16,17 +16,7 @@ public class GhostBlockDetector extends Check implements PostPredictionCheck {
 
     public static boolean isGhostBlock(GrimPlayer player) {
         // Player is on glitchy block (1.8 client on anvil/wooden chest)
-        if (player.uncertaintyHandler.isOrWasNearGlitchyBlock) {
-            return true;
-        }
-
-        // Boats are moved client sided by 1.7/1.8 players, and have a mind of their own
-        // Simply setback, don't ban, if a player gets a violation by a boat.
-        // Note that we allow setting back to the ground for this one, to try and mitigate
-        // the effect that this buggy behavior has on players
-        player.getClientVersion();
-
-        return false;
+        return player.uncertaintyHandler.isOrWasNearGlitchyBlock;
     }
 
     // Must process data first to get rid of false positives from ghost blocks
