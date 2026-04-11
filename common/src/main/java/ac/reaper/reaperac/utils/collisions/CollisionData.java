@@ -76,9 +76,7 @@ public enum CollisionData implements CollisionFactory {
 
     }, StateTypes.BREWING_STAND),
 
-    BAMBOO((player, version, block, x, y, z) -> {
-        return new HexOffsetCollisionBox(block.getType(), 6.5D, 0.0D, 6.5D, 9.5D, 16.0D, 9.5D);
-    }, StateTypes.BAMBOO),
+    BAMBOO((player, version, block, x, y, z) -> new HexOffsetCollisionBox(block.getType(), 6.5D, 0.0D, 6.5D, 9.5D, 16.0D, 9.5D), StateTypes.BAMBOO),
 
     COMPOSTER((player, version, block, x, y, z) -> {
         double height = 0.125;
@@ -196,10 +194,7 @@ public enum CollisionData implements CollisionFactory {
 
     COCOA_BEANS((player, version, data, x, y, z) -> getCocoa(data.getAge(), data.getFacing()), StateTypes.COCOA),
 
-    STONE_CUTTER((player, version, data, x, y, z) -> {
-
-        return new HexCollisionBox(0.0D, 0.0D, 0.0D, 16.0D, 9.0D, 16.0D);
-    }, StateTypes.STONECUTTER),
+    STONE_CUTTER((player, version, data, x, y, z) -> new HexCollisionBox(0.0D, 0.0D, 0.0D, 16.0D, 9.0D, 16.0D), StateTypes.STONECUTTER),
 
     CORAL_FAN(NoCollisionBox.INSTANCE, BlockTags.CORALS.getStates().toArray(new StateType[0])),
 
@@ -467,10 +462,8 @@ public enum CollisionData implements CollisionFactory {
 
     }, StateTypes.END_PORTAL_FRAME),
 
-    CARPET((player, version, data, x, y, z) -> {
-
-        return new SimpleCollisionBox(0.0F, 0.0F, 0.0F, 1.0F, 0.0625F, 1.0F, false);
-    }, BlockTags.WOOL_CARPETS.getStates().toArray(new StateType[0])),
+    CARPET(new SimpleCollisionBox(0.0F, 0.0F, 0.0F, 1.0F, 0.0625F, 1.0F, false),
+            BlockTags.WOOL_CARPETS.getStates().toArray(new StateType[0])),
 
     MOSS_CARPET(CARPET, StateTypes.MOSS_CARPET),
 
@@ -485,20 +478,14 @@ public enum CollisionData implements CollisionFactory {
     DAYLIGHT(new SimpleCollisionBox(0.0F, 0.0F, 0.0F, 1.0F, 0.375, 1.0F, false),
             StateTypes.DAYLIGHT_DETECTOR),
 
-    FARMLAND((player, version, data, x, y, z) -> {
-        return new HexCollisionBox(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
-    }, StateTypes.FARMLAND),
+    FARMLAND(new HexCollisionBox(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D), StateTypes.FARMLAND),
 
-    GRASS_PATH((player, version, data, x, y, z) -> {
-        return new HexCollisionBox(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
-
-        // TODO, replace this hacky patch for 1.16.5 with versioned state types later. DIRT_PATH is new name for GRASS_PATH
-    }, StateTypes.DIRT_PATH, StateTypes.GRASS_PATH),
+    GRASS_PATH(new HexCollisionBox(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D),
+            StateTypes.DIRT_PATH, StateTypes.GRASS_PATH),
 
     LILYPAD(new HexCollisionBox(1.0D, 0.0D, 1.0D, 15.0D, 1.5D, 15.0D), StateTypes.LILY_PAD),
 
     BED((player, version, data, x, y, z) -> {
-        // It's all the same box on 1.14 clients
 
         ComplexCollisionBox baseBox = new ComplexCollisionBox(3, new HexCollisionBox(0.0D, 3.0D, 0.0D, 16.0D, 9.0D, 16.0D));
 
@@ -527,7 +514,6 @@ public enum CollisionData implements CollisionFactory {
     }, BlockTags.BEDS.getStates().toArray(new StateType[0])),
 
     TRAPDOOR(new TrapDoorHandler(), BlockTags.TRAPDOORS.getStates().toArray(new StateType[0])),
-
 
     DIODES(new SimpleCollisionBox(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F, false),
             StateTypes.REPEATER, StateTypes.COMPARATOR),
@@ -580,11 +566,7 @@ public enum CollisionData implements CollisionFactory {
         return new HexCollisionBox(1.0D, 0.0D, 1.0D, 15.0D, 7.0D, 15.0D);
     }, StateTypes.TURTLE_EGG),
 
-    CONDUIT((player, version, data, x, y, z) -> {
-        // ViaVersion replacement block - Beacon
-
-        return new HexCollisionBox(5.0D, 5.0D, 5.0D, 11.0D, 11.0D, 11.0D);
-    }, StateTypes.CONDUIT),
+    CONDUIT(new HexCollisionBox(5.0D, 5.0D, 5.0D, 11.0D, 11.0D, 11.0D), StateTypes.CONDUIT),
 
     POT(new HexCollisionBox(5.0D, 0.0D, 5.0D, 11.0D, 6.0D, 11.0D),
             BlockTags.FLOWER_POTS.getStates().toArray(new StateType[0])),
@@ -667,14 +649,11 @@ public enum CollisionData implements CollisionFactory {
     }, StateTypes.WALL_TORCH, StateTypes.REDSTONE_WALL_TORCH, StateTypes.COPPER_WALL_TORCH),
 
     // 1.17 blocks
-    CANDLE((player, version, data, x, y, z) -> {
-        return switch (data.getCandles()) {
-            case 1 -> new HexCollisionBox(7.0, 0.0, 7.0, 9.0, 6.0, 9.0);
-            case 2 -> new HexCollisionBox(5.0, 0.0, 6.0, 11.0, 6.0, 9.0);
-            case 3 -> new HexCollisionBox(5.0, 0.0, 6.0, 10.0, 6.0, 11.0);
-            default -> new HexCollisionBox(5.0, 0.0, 5.0, 11.0, 6.0, 10.0);
-        };
-
+    CANDLE((player, version, data, x, y, z) -> switch (data.getCandles()) {
+        case 1 -> new HexCollisionBox(7.0, 0.0, 7.0, 9.0, 6.0, 9.0);
+        case 2 -> new HexCollisionBox(5.0, 0.0, 6.0, 11.0, 6.0, 9.0);
+        case 3 -> new HexCollisionBox(5.0, 0.0, 6.0, 10.0, 6.0, 11.0);
+        default -> new HexCollisionBox(5.0, 0.0, 5.0, 11.0, 6.0, 10.0);
     }, BlockTags.CANDLES.getStates().toArray(new StateType[0])),
 
     CANDLE_CAKE((player, version, data, x, y, z) -> {
@@ -686,9 +665,7 @@ public enum CollisionData implements CollisionFactory {
 
     SCULK_SENSOR(new HexCollisionBox(0.0, 0.0, 0.0, 16.0, 8.0, 16.0), StateTypes.SCULK_SENSOR, StateTypes.CALIBRATED_SCULK_SENSOR),
 
-    DECORATED_POT((player, version, data, x, y, z) -> {
-        return new HexCollisionBox(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0);
-    }, StateTypes.DECORATED_POT),
+    DECORATED_POT((player, version, data, x, y, z) -> new HexCollisionBox(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0), StateTypes.DECORATED_POT),
 
     BIG_DRIPLEAF((player, version, data, x, y, z) -> {
         Tilt tilt = data.getTilt();
@@ -761,9 +738,7 @@ public enum CollisionData implements CollisionFactory {
 
     LARGE_AMETHYST_BUD((player, version, data, x, y, z) -> getAmethystBox(data.getFacing(), 5, 3), StateTypes.LARGE_AMETHYST_BUD),
 
-    MUD_BLOCK((player, version, data, x, y, z) -> {
-        return new HexCollisionBox(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D);
-    }, StateTypes.MUD),
+    MUD_BLOCK((player, version, data, x, y, z) -> new HexCollisionBox(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D), StateTypes.MUD),
 
     MANGROVE_PROPAGULE_BLOCK((player, version, data, x, y, z) -> {
         if (!data.isHanging()) {
@@ -778,13 +753,9 @@ public enum CollisionData implements CollisionFactory {
         };
     }, StateTypes.MANGROVE_PROPAGULE),
 
-    SCULK_SHRIKER((player, version, data, x, y, z) -> {
-        return new HexCollisionBox(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
-    }, StateTypes.SCULK_SHRIEKER),
+    SCULK_SHRIKER((player, version, data, x, y, z) -> new HexCollisionBox(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), StateTypes.SCULK_SHRIEKER),
 
-    SNIFFER_EGG((player, version, data, x, y, z) -> {
-        return new HexCollisionBox(1.0D, 0.0D, 2.0D, 15.0D, 16.0D, 14.0D);
-    }, StateTypes.SNIFFER_EGG),
+    SNIFFER_EGG((player, version, data, x, y, z) -> new HexCollisionBox(1.0D, 0.0D, 2.0D, 15.0D, 16.0D, 14.0D), StateTypes.SNIFFER_EGG),
 
     PITCHER_CROP((player, version, data, x, y, z) -> {
         final SimpleCollisionBox COLLISION_SHAPE_BULB = new HexCollisionBox(5.0D, -1.0D, 5.0D, 11.0D, 3.0D, 11.0D);
@@ -808,21 +779,15 @@ public enum CollisionData implements CollisionFactory {
         // ViaVersion replacement block - chorus plant (down: true, up: false, east: false, south: false, west: false)
     }, StateTypes.DRIED_GHAST),
 
-    SHELF((player, version, data, x, y, z) -> {
-
-        return switch (data.getFacing()) {
-            case NORTH -> new ComplexCollisionBox(3, new HexCollisionBox(0, 12, 11, 16, 16, 13), new HexCollisionBox(0, 0, 13, 16, 16, 16), new HexCollisionBox(0, 0, 11, 16, 4, 13));
-            case SOUTH -> new ComplexCollisionBox(3, new HexCollisionBox(0, 12, 3, 16, 16, 5), new HexCollisionBox(0, 0, 0, 16, 16, 3), new HexCollisionBox(0, 0, 3, 16, 4, 5));
-            case WEST -> new ComplexCollisionBox(3, new HexCollisionBox(11, 12, 0, 13, 16, 16), new HexCollisionBox(13, 0, 0, 16, 16, 16), new HexCollisionBox(11, 0, 0, 13, 4, 16));
-            case EAST -> new ComplexCollisionBox(3, new HexCollisionBox(3, 12, 0, 5, 16, 16), new HexCollisionBox(0, 0, 0, 3, 16, 16), new HexCollisionBox(3, 0, 0, 5, 4, 16));
-            default -> throw new IllegalStateException("Unexpected value: " + data.getFacing());
-        };
+    SHELF((player, version, data, x, y, z) -> switch (data.getFacing()) {
+        case NORTH -> new ComplexCollisionBox(3, new HexCollisionBox(0, 12, 11, 16, 16, 13), new HexCollisionBox(0, 0, 13, 16, 16, 16), new HexCollisionBox(0, 0, 11, 16, 4, 13));
+        case SOUTH -> new ComplexCollisionBox(3, new HexCollisionBox(0, 12, 3, 16, 16, 5), new HexCollisionBox(0, 0, 0, 16, 16, 3), new HexCollisionBox(0, 0, 3, 16, 4, 5));
+        case WEST -> new ComplexCollisionBox(3, new HexCollisionBox(11, 12, 0, 13, 16, 16), new HexCollisionBox(13, 0, 0, 16, 16, 16), new HexCollisionBox(11, 0, 0, 13, 4, 16));
+        case EAST -> new ComplexCollisionBox(3, new HexCollisionBox(3, 12, 0, 5, 16, 16), new HexCollisionBox(0, 0, 0, 3, 16, 16), new HexCollisionBox(3, 0, 0, 5, 4, 16));
+        default -> throw new IllegalStateException("Unexpected value: " + data.getFacing());
     }, BlockTags.WOODEN_SHELVES.getStates().toArray(new StateType[0])),
 
-    COPPER_GOLEM_STATUE((player, version, data, x, y, z) -> {
-
-        return new HexCollisionBox(3, 0, 3, 13, 14, 13);
-    }, BlockTags.COPPER_GOLEM_STATUES.getStates().toArray(new StateType[0])),
+    COPPER_GOLEM_STATUE((player, version, data, x, y, z) -> new HexCollisionBox(3, 0, 3, 13, 14, 13), BlockTags.COPPER_GOLEM_STATUES.getStates().toArray(new StateType[0])),
 
     DEFAULT(new SimpleCollisionBox(0, 0, 0, 1, 1, 1, true), StateTypes.STONE);
 
