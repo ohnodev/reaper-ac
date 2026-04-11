@@ -740,7 +740,7 @@ public enum CollisionData implements CollisionFactory {
         };
     }, StateTypes.MANGROVE_PROPAGULE),
 
-    SCULK_SHRIKER((player, version, data, x, y, z) -> new HexCollisionBox(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), StateTypes.SCULK_SHRIEKER),
+    SCULK_SHRIEKER((player, version, data, x, y, z) -> new HexCollisionBox(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), StateTypes.SCULK_SHRIEKER),
 
     SNIFFER_EGG((player, version, data, x, y, z) -> new HexCollisionBox(1.0D, 0.0D, 2.0D, 15.0D, 16.0D, 14.0D), StateTypes.SNIFFER_EGG),
 
