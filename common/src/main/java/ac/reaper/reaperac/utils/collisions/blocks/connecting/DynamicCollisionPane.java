@@ -33,8 +33,6 @@ public class DynamicCollisionPane extends DynamicConnecting implements Collision
         south = block.getSouth() != South.FALSE;
         west = block.getWest() != West.FALSE;
 
-        // On 1.7 and 1.8 clients, and 1.13+ clients on 1.7 and 1.8 servers, the glass pane is + instead of |
-
         return COLLISION_BOXES[getAABBIndex(north, east, south, west)].copy();
     }
 

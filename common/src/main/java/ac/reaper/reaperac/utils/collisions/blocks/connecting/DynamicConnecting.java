@@ -54,28 +54,14 @@ public class DynamicConnecting {
         StateType target = targetBlock.getType();
         StateType fence = currBlock.getType();
 
-        if (!BlockTags.FENCES.contains(target) && isBlacklisted(target, fence, v))
-            return false;
+        if (!BlockTags.FENCES.contains(target) && isBlacklisted(target, fence, v)) return false;
 
-        // 1.12+ clients can connect to TnT while previous versions can't
-        if (target == StateTypes.TNT)
-            return v.isNewerThanOrEquals(ClientVersion.V_1_12);
-
-        // 1.9-1.11 clients don't have BARRIER exemption
-        // https://bugs.mojang.com/browse/MC-9565
-        if (target == StateTypes.BARRIER) {
-            return false;
-        }
+        if (target == StateTypes.TNT) return true;
+        if (target == StateTypes.BARRIER) return false;
 
         if (BlockTags.STAIRS.contains(target)) {
-            // 1.12 clients generate their own data, 1.13 clients use the server's data
-            // 1.11- versions don't allow fences to connect to the back sides of stairs
-
             return targetBlock.getFacing().getOppositeFace() == direction;
         } else if (canConnectToGate(fence) && BlockTags.FENCE_GATES.contains(target)) {
-            // 1.4-1.11 clients don't check for fence gate direction
-            // https://bugs.mojang.com/browse/MC-94016
-
             BlockFace f1 = targetBlock.getFacing();
             BlockFace f2 = f1.getOppositeFace();
             return direction != f1 && direction != f2;

@@ -86,8 +86,6 @@ public class DynamicCollisionWall extends DynamicConnecting implements Collision
             box.add(new HexCollisionBox(5, 0, 5, 16, 16, 11));
         }
         return box;
-
-        // Magic 1.8 code for walls that I copied over, 1.12 below uses this mess
     }
 
     /*

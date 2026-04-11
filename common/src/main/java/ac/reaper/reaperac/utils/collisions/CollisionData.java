@@ -127,7 +127,6 @@ public enum CollisionData implements CollisionFactory {
 
         return new SimpleCollisionBox(0, 0.5, 0, 1, 1, 1, false);
         // 1.13 can handle double slabs as it's in the block data
-        // 1.12 has double slabs as a separate block, no block data to differentiate it
     }, BlockTags.SLABS.getStates().toArray(new StateType[0])),
 
     SKULL(new SimpleCollisionBox(0.25F, 0.0F, 0.25F, 0.75F, 0.5F, 0.75F, false),
@@ -265,7 +264,6 @@ public enum CollisionData implements CollisionFactory {
     }, StateTypes.BELL),
 
     SCAFFOLDING((player, version, data, x, y, z) -> {
-        // ViaVersion replacement block - hay block
 
         if (player.lastY > y + 1 - 1e-5 && !player.isSneaking) {
             return new ComplexCollisionBox(5,
@@ -292,11 +290,8 @@ public enum CollisionData implements CollisionFactory {
         };
     }, StateTypes.LADDER),
 
-    CAMPFIRE((player, version, data, x, y, z) -> {
-        // ViaVersion replacement block - slab if not lit or fire if lit
-
-        return new HexCollisionBox(0.0D, 0.0D, 0.0D, 16.0D, 7.0D, 16.0D);
-    }, StateTypes.CAMPFIRE, StateTypes.SOUL_CAMPFIRE),
+    CAMPFIRE((player, version, data, x, y, z) ->
+            new HexCollisionBox(0.0D, 0.0D, 0.0D, 16.0D, 7.0D, 16.0D), StateTypes.CAMPFIRE, StateTypes.SOUL_CAMPFIRE),
 
     LANTERN((player, version, data, x, y, z) -> {
 
@@ -524,26 +519,23 @@ public enum CollisionData implements CollisionFactory {
 
     END_ROD((player, version, data, x, y, z) -> getEndRod(data.getFacing()), Materials.getRods().toArray(new StateType[0])),
 
-    CAULDRON((player, version, data, x, y, z) -> {
-        // changed in 19w13a, 1.14 Snapshot
-        return new ComplexCollisionBox(15,
-                new SimpleCollisionBox(0.0, 0.0, 0.0, 0.125, 1.0, 0.25, false),
-                new SimpleCollisionBox(0.0, 0.0, 0.75, 0.125, 1.0, 1.0, false),
-                new SimpleCollisionBox(0.125, 0.0, 0.0, 0.25, 1.0, 0.125, false),
-                new SimpleCollisionBox(0.125, 0.0, 0.875, 0.25, 1.0, 1.0, false),
-                new SimpleCollisionBox(0.75, 0.0, 0.0, 1.0, 1.0, 0.125, false),
-                new SimpleCollisionBox(0.75, 0.0, 0.875, 1.0, 1.0, 1.0, false),
-                new SimpleCollisionBox(0.875, 0.0, 0.125, 1.0, 1.0, 0.25, false),
-                new SimpleCollisionBox(0.875, 0.0, 0.75, 1.0, 1.0, 0.875, false),
-                new SimpleCollisionBox(0.0, 0.1875, 0.25, 1.0, 0.25, 0.75, false),
-                new SimpleCollisionBox(0.125, 0.1875, 0.125, 0.875, 0.25, 0.25, false),
-                new SimpleCollisionBox(0.125, 0.1875, 0.75, 0.875, 0.25, 0.875, false),
-                new SimpleCollisionBox(0.25, 0.1875, 0.0, 0.75, 1.0, 0.125, false),
-                new SimpleCollisionBox(0.25, 0.1875, 0.875, 0.75, 1.0, 1.0, false),
-                new SimpleCollisionBox(0.0, 0.25, 0.25, 0.125, 1.0, 0.75, false),
-                new SimpleCollisionBox(0.875, 0.25, 0.25, 1.0, 1.0, 0.75, false)
-        );
-    }, BlockTags.CAULDRONS.getStates().toArray(new StateType[0])),
+    CAULDRON((player, version, data, x, y, z) -> new ComplexCollisionBox(15,
+            new SimpleCollisionBox(0.0, 0.0, 0.0, 0.125, 1.0, 0.25, false),
+            new SimpleCollisionBox(0.0, 0.0, 0.75, 0.125, 1.0, 1.0, false),
+            new SimpleCollisionBox(0.125, 0.0, 0.0, 0.25, 1.0, 0.125, false),
+            new SimpleCollisionBox(0.125, 0.0, 0.875, 0.25, 1.0, 1.0, false),
+            new SimpleCollisionBox(0.75, 0.0, 0.0, 1.0, 1.0, 0.125, false),
+            new SimpleCollisionBox(0.75, 0.0, 0.875, 1.0, 1.0, 1.0, false),
+            new SimpleCollisionBox(0.875, 0.0, 0.125, 1.0, 1.0, 0.25, false),
+            new SimpleCollisionBox(0.875, 0.0, 0.75, 1.0, 1.0, 0.875, false),
+            new SimpleCollisionBox(0.0, 0.1875, 0.25, 1.0, 0.25, 0.75, false),
+            new SimpleCollisionBox(0.125, 0.1875, 0.125, 0.875, 0.25, 0.25, false),
+            new SimpleCollisionBox(0.125, 0.1875, 0.75, 0.875, 0.25, 0.875, false),
+            new SimpleCollisionBox(0.25, 0.1875, 0.0, 0.75, 1.0, 0.125, false),
+            new SimpleCollisionBox(0.25, 0.1875, 0.875, 0.75, 1.0, 1.0, false),
+            new SimpleCollisionBox(0.0, 0.25, 0.25, 0.125, 1.0, 0.75, false),
+            new SimpleCollisionBox(0.875, 0.25, 0.25, 1.0, 1.0, 0.75, false)
+    ), BlockTags.CAULDRONS.getStates().toArray(new StateType[0])),
 
     CACTUS(new SimpleCollisionBox(0.0625, 0, 0.0625,
             1 - 0.0625, 1 - 0.0625, 1 - 0.0625, false), StateTypes.CACTUS),
@@ -644,11 +636,9 @@ public enum CollisionData implements CollisionFactory {
         case SOUTH -> new HexCollisionBox(5.5D, 3.0D, 0.0D, 10.5D, 13.0D, 5.0D);
         case WEST -> new HexCollisionBox(11.0D, 3.0D, 5.5D, 16.0D, 13.0D, 10.5D);
         case EAST -> new HexCollisionBox(0.0D, 3.0D, 5.5D, 5.0D, 13.0D, 10.5D);
-        // 1.13 separates wall and normal torches, 1.12 does not
         default -> new HexCollisionBox(6.0D, 0.0D, 6.0D, 10.0D, 10.0D, 10.0D);
     }, StateTypes.WALL_TORCH, StateTypes.REDSTONE_WALL_TORCH, StateTypes.COPPER_WALL_TORCH),
 
-    // 1.17 blocks
     CANDLE((player, version, data, x, y, z) -> switch (data.getCandles()) {
         case 1 -> new HexCollisionBox(7.0, 0.0, 7.0, 9.0, 6.0, 9.0);
         case 2 -> new HexCollisionBox(5.0, 0.0, 6.0, 11.0, 6.0, 9.0);
@@ -705,10 +695,7 @@ public enum CollisionData implements CollisionFactory {
 
         // If fall distance greater than 2.5, 0.899999 box
         if (player.fallDistance > 2.5) {
-            // TODO: this is technically incorrect (1.21.4)
-            return player.getClientVersion() == ClientVersion.V_1_21_4 ?
-                    new SimpleCollisionBox(0, 0, 0, 1, 1, 1, true)
-                    : new SimpleCollisionBox(0.0, 0.0, 0.0, 1.0, 0.9, 1.0, false);
+            return new SimpleCollisionBox(0.0, 0.0, 0.0, 1.0, 0.9, 1.0, false);
         }
 
         ItemStack boots = player.inventory.getBoots();
@@ -774,10 +761,8 @@ public enum CollisionData implements CollisionFactory {
         default -> NoCollisionBox.INSTANCE;
     }, BlockTags.WALL_HANGING_SIGNS.getStates().toArray(new StateType[0])),
 
-    DRIED_GHAST((player, version, data, x, y, z) -> {
-        return new HexCollisionBox(3.0, 0.0, 3.0, 13.0, 10.0, 13.0);
-        // ViaVersion replacement block - chorus plant (down: true, up: false, east: false, south: false, west: false)
-    }, StateTypes.DRIED_GHAST),
+    DRIED_GHAST((player, version, data, x, y, z) ->
+            new HexCollisionBox(3.0, 0.0, 3.0, 13.0, 10.0, 13.0), StateTypes.DRIED_GHAST),
 
     SHELF((player, version, data, x, y, z) -> switch (data.getFacing()) {
         case NORTH -> new ComplexCollisionBox(3, new HexCollisionBox(0, 12, 11, 16, 16, 13), new HexCollisionBox(0, 0, 13, 16, 16, 16), new HexCollisionBox(0, 0, 11, 16, 4, 13));
@@ -839,8 +824,6 @@ public enum CollisionData implements CollisionFactory {
     }
 
     private static CollisionBox getPicklesBox(int pickles) {
-        // ViaVersion replacement block (West facing cocoa beans)
-
         return switch (pickles) {
             case 1 -> new HexCollisionBox(6.0D, 0.0D, 6.0D, 10.0D, 6.0D, 10.0D);
             case 2 -> new HexCollisionBox(3.0D, 0.0D, 3.0D, 13.0D, 6.0D, 13.0D);
@@ -851,9 +834,6 @@ public enum CollisionData implements CollisionFactory {
     }
 
     public static CollisionBox getCocoa(int age, BlockFace direction) {
-        // From 1.9 - 1.10, the large cocoa block is the same as the medium one
-        // https://bugs.mojang.com/browse/MC-94274
-
         switch (direction) {
             case EAST:
                 switch (age) {

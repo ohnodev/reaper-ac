@@ -33,10 +33,6 @@ public class DoorHandler implements CollisionFactory {
         boolean isClosed;
         boolean isRightHinge;
 
-        // 1.12 stores block data for the top door in the bottom block data
-        // ViaVersion can't send 1.12 clients the 1.13 complete data
-        // For 1.13, ViaVersion should just use the 1.12 block data
-        // I hate legacy versions... this is so messy
         //TODO: This needs to be updated to support corrupted door collision
 
         facingDirection = door.getFacing();
