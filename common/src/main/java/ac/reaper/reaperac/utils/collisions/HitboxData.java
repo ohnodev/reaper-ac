@@ -328,7 +328,6 @@ public enum HitboxData implements HitBoxFactory {
         final SimpleCollisionBox FULL_UPPER_SHAPE = new HexCollisionBox(3.0D, 0.0D, 3.0D, 13.0D, 15.0D, 13.0D);
         final SimpleCollisionBox FULL_LOWER_SHAPE = new HexCollisionBox(3.0D, -1.0D, 3.0D, 13.0D, 16.0D, 13.0D);
         final SimpleCollisionBox COLLISION_SHAPE_BULB = new HexCollisionBox(5.0D, -1.0D, 5.0D, 11.0D, 3.0D, 11.0D);
-        final SimpleCollisionBox COLLISION_SHAPE_CROP = new HexCollisionBox(3.0D, -1.0D, 3.0D, 13.0D, 5.0D, 13.0D);
         final SimpleCollisionBox[] UPPER_SHAPE_BY_AGE = new SimpleCollisionBox[]{new HexCollisionBox(3.0D, 0.0D, 3.0D, 13.0D, 11.0D, 13.0D), FULL_UPPER_SHAPE};
         final SimpleCollisionBox[] LOWER_SHAPE_BY_AGE = new SimpleCollisionBox[]{COLLISION_SHAPE_BULB, new HexCollisionBox(3.0D, -1.0D, 3.0D, 13.0D, 14.0D, 13.0D), FULL_LOWER_SHAPE, FULL_LOWER_SHAPE, FULL_LOWER_SHAPE};
 
@@ -359,7 +358,7 @@ public enum HitboxData implements HitBoxFactory {
 
     // Hitbox/Outline is Same as Collision
     COCOA_BEANS((player, item, version, data, isTargetBlock, x, y, z) ->
-            CollisionData.getCocoa(version, data.getAge(), data.getFacing()), StateTypes.COCOA),
+            CollisionData.getCocoa(data.getAge(), data.getFacing()), StateTypes.COCOA),
 
     // Easier to just use no collision box
     // Redstone wire is very complex with its collision shapes and has many de-syncs
@@ -434,16 +433,16 @@ public enum HitboxData implements HitBoxFactory {
 
     // Then your enum entries become:
     TWISTING_VINES_BLOCK((player, item, version, data, isTargetBlock, x, y, z) ->
-            getVineCollisionBox(version, false, true), StateTypes.TWISTING_VINES),
+            getVineCollisionBox(false, true), StateTypes.TWISTING_VINES),
 
     WEEPING_VINES_BLOCK((player, item, version, data, isTargetBlock, x, y, z) ->
-            getVineCollisionBox(version, true, true), StateTypes.WEEPING_VINES),
+            getVineCollisionBox(true, true), StateTypes.WEEPING_VINES),
 
     TWISTING_VINES((player, item, version, data, isTargetBlock, x, y, z) ->
-            getVineCollisionBox(version, false, false), StateTypes.TWISTING_VINES_PLANT),
+            getVineCollisionBox(false, false), StateTypes.TWISTING_VINES_PLANT),
 
     WEEPING_VINES((player, item, version, data, isTargetBlock, x, y, z) ->
-            getVineCollisionBox(version, true, false), StateTypes.WEEPING_VINES_PLANT),
+            getVineCollisionBox(true, false), StateTypes.WEEPING_VINES_PLANT),
 
     TALL_PLANT(new SimpleCollisionBox(0, 0, 0, 1, 1, 1, true), StateTypes.TALL_GRASS, StateTypes.LARGE_FERN),
 
@@ -597,7 +596,7 @@ public enum HitboxData implements HitBoxFactory {
         };
     }
 
-    private static CollisionBox getVineCollisionBox(ClientVersion version, boolean isWeeping, boolean isBlock) {
+    private static CollisionBox getVineCollisionBox(boolean isWeeping, boolean isBlock) {
         return isWeeping
                 ? isBlock
                 ? new SimpleCollisionBox(0.25, 0.5625, 0.25, 0.75, 1, 0.75)

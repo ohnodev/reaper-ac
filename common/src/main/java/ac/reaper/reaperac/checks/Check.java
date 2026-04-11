@@ -94,18 +94,6 @@ public class Check extends GrimProcessor implements AbstractCheck {
         return true;
     }
 
-    public final boolean flagWithSetback() {
-        return flagWithSetback("");
-    }
-
-    public final boolean flagWithSetback(String verbose) {
-        if (flag(verbose)) {
-            setbackIfAboveSetbackVL();
-            return true;
-        }
-        return false;
-    }
-
     public final boolean flagAndAlertWithSetback() {
         return flagAndAlertWithSetback("");
     }

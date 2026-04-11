@@ -194,7 +194,7 @@ public enum CollisionData implements CollisionFactory {
         return new SimpleCollisionBox(eatenPosition, 0, 0.0625, 1 - 0.0625, height, 1 - 0.0625, false);
     }, StateTypes.CAKE),
 
-    COCOA_BEANS((player, version, data, x, y, z) -> getCocoa(version, data.getAge(), data.getFacing()), StateTypes.COCOA),
+    COCOA_BEANS((player, version, data, x, y, z) -> getCocoa(data.getAge(), data.getFacing()), StateTypes.COCOA),
 
     STONE_CUTTER((player, version, data, x, y, z) -> {
 
@@ -536,7 +536,7 @@ public enum CollisionData implements CollisionFactory {
             0.625, 0.625, 0.625, false),
             StateTypes.STRUCTURE_VOID),
 
-    END_ROD((player, version, data, x, y, z) -> getEndRod(version, data.getFacing()), Materials.getRods().toArray(new StateType[0])),
+    END_ROD((player, version, data, x, y, z) -> getEndRod(data.getFacing()), Materials.getRods().toArray(new StateType[0])),
 
     CAULDRON((player, version, data, x, y, z) -> {
         // changed in 19w13a, 1.14 Snapshot
@@ -570,7 +570,7 @@ public enum CollisionData implements CollisionFactory {
     SOULSAND(new SimpleCollisionBox(0, 0, 0, 1, 0.875, 1, false),
             StateTypes.SOUL_SAND),
 
-    PICKLE((player, version, data, x, y, z) -> getPicklesBox(version, data.getPickles()), StateTypes.SEA_PICKLE),
+    PICKLE((player, version, data, x, y, z) -> getPicklesBox(data.getPickles()), StateTypes.SEA_PICKLE),
 
     TURTLEEGG((player, version, data, x, y, z) -> {
         if (data.getEggs() == 1) {
@@ -753,13 +753,13 @@ public enum CollisionData implements CollisionFactory {
             new HexCollisionBox(0.0, 8.0, 0.0, 16.0, 16.0, 16.0),
             new HexCollisionBox(6.0, 0.0, 6.0, 10.0, 8.0, 10.0)), StateTypes.AZALEA, StateTypes.FLOWERING_AZALEA),
 
-    AMETHYST_CLUSTER((player, version, data, x, y, z) -> getAmethystBox(version, data.getFacing(), 7, 3), StateTypes.AMETHYST_CLUSTER),
+    AMETHYST_CLUSTER((player, version, data, x, y, z) -> getAmethystBox(data.getFacing(), 7, 3), StateTypes.AMETHYST_CLUSTER),
 
-    SMALL_AMETHYST_BUD((player, version, data, x, y, z) -> getAmethystBox(version, data.getFacing(), 3, 4), StateTypes.SMALL_AMETHYST_BUD),
+    SMALL_AMETHYST_BUD((player, version, data, x, y, z) -> getAmethystBox(data.getFacing(), 3, 4), StateTypes.SMALL_AMETHYST_BUD),
 
-    MEDIUM_AMETHYST_BUD((player, version, data, x, y, z) -> getAmethystBox(version, data.getFacing(), 4, 3), StateTypes.MEDIUM_AMETHYST_BUD),
+    MEDIUM_AMETHYST_BUD((player, version, data, x, y, z) -> getAmethystBox(data.getFacing(), 4, 3), StateTypes.MEDIUM_AMETHYST_BUD),
 
-    LARGE_AMETHYST_BUD((player, version, data, x, y, z) -> getAmethystBox(version, data.getFacing(), 5, 3), StateTypes.LARGE_AMETHYST_BUD),
+    LARGE_AMETHYST_BUD((player, version, data, x, y, z) -> getAmethystBox(data.getFacing(), 5, 3), StateTypes.LARGE_AMETHYST_BUD),
 
     MUD_BLOCK((player, version, data, x, y, z) -> {
         return new HexCollisionBox(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D);
@@ -855,7 +855,7 @@ public enum CollisionData implements CollisionFactory {
         this.materials = mList.toArray(new StateType[0]);
     }
 
-    private static CollisionBox getAmethystBox(ClientVersion version, BlockFace facing, int param_0, int param_1) {
+    private static CollisionBox getAmethystBox(BlockFace facing, int param_0, int param_1) {
 
         return switch (facing) {
             case DOWN ->
@@ -873,7 +873,7 @@ public enum CollisionData implements CollisionFactory {
         };
     }
 
-    private static CollisionBox getPicklesBox(ClientVersion version, int pickles) {
+    private static CollisionBox getPicklesBox(int pickles) {
         // ViaVersion replacement block (West facing cocoa beans)
 
         return switch (pickles) {
@@ -885,7 +885,7 @@ public enum CollisionData implements CollisionFactory {
         };
     }
 
-    public static CollisionBox getCocoa(ClientVersion version, int age, BlockFace direction) {
+    public static CollisionBox getCocoa(int age, BlockFace direction) {
         // From 1.9 - 1.10, the large cocoa block is the same as the medium one
         // https://bugs.mojang.com/browse/MC-94274
 
@@ -930,9 +930,7 @@ public enum CollisionData implements CollisionFactory {
         return NoCollisionBox.INSTANCE;
     }
 
-    private static CollisionBox getEndRod(ClientVersion version, BlockFace face) {
-        // ViaVersion replacement block - torch
-
+    private static CollisionBox getEndRod(BlockFace face) {
         return switch (face) {
             case NORTH, SOUTH -> new HexCollisionBox(6.0D, 6.0D, 0.0D, 10.0D, 10.0D, 16.0D);
             case EAST, WEST -> new HexCollisionBox(0.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D);
