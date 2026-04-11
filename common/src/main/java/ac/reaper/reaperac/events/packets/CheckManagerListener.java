@@ -408,11 +408,9 @@ public class CheckManagerListener extends PacketListenerAbstract {
                     }
                 }
             }
-
-            player.packetStateData.lastPacketWasOnePointSeventeenDuplicate = isMojangStupid(player, event, flying);
         }
 
-        if (player.inVehicle() ? event.getPacketType() == PacketType.Play.Client.VEHICLE_MOVE : WrapperPlayClientPlayerFlying.isFlying(event.getPacketType()) && !player.packetStateData.lastPacketWasOnePointSeventeenDuplicate) {
+        if (player.inVehicle() ? event.getPacketType() == PacketType.Play.Client.VEHICLE_MOVE : WrapperPlayClientPlayerFlying.isFlying(event.getPacketType())) {
             // Update knockback and explosions immediately, before anything can setback
             int kbEntityId = player.inVehicle() ? player.getRidingVehicleId() : player.entityID;
 
@@ -438,8 +436,7 @@ public class CheckManagerListener extends PacketListenerAbstract {
         if (WrapperPlayClientPlayerFlying.isFlying(event.getPacketType())) {
             WrapperPlayClientPlayerFlying flying = new WrapperPlayClientPlayerFlying(event);
             Location pos = flying.getLocation();
-            boolean ignoreRotation = player.packetStateData.lastPacketWasOnePointSeventeenDuplicate && player.isIgnoreDuplicatePacketRotation();
-            handleFlying(player, pos.getX(), pos.getY(), pos.getZ(), ignoreRotation ? 0 : pos.getYaw(), ignoreRotation ? 0 : pos.getPitch(), flying.hasPositionChanged(), flying.hasRotationChanged() && !ignoreRotation, flying.isOnGround(), teleportData, event);
+            handleFlying(player, pos.getX(), pos.getY(), pos.getZ(), pos.getYaw(), pos.getPitch(), flying.hasPositionChanged(), flying.hasRotationChanged(), flying.isOnGround(), teleportData, event);
         }
 
         if (event.getPacketType() == PacketType.Play.Client.VEHICLE_MOVE && player.inVehicle()) {
@@ -555,7 +552,6 @@ public class CheckManagerListener extends PacketListenerAbstract {
         }
 
         // Finally, remove the packet state variables on this packet
-        player.packetStateData.lastPacketWasOnePointSeventeenDuplicate = false;
         player.packetStateData.lastPacketWasTeleport = false;
     }
 
@@ -582,11 +578,6 @@ public class CheckManagerListener extends PacketListenerAbstract {
             PacketDecodeUtils.logSuppressedDecode("CheckManagerListener(send)", event.getPacketType(), ex);
         }
     }
-
-    private static boolean isMojangStupid(GrimPlayer player, PacketReceiveEvent event, WrapperPlayClientPlayerFlying flying) {
-        return false; // we are so back
-    }
-
     private static void handleFlying(GrimPlayer player, double x, double y, double z, float yaw, float pitch, boolean hasPosition, boolean hasLook, boolean onGround, TeleportAcceptData teleportData, PacketReceiveEvent event) {
         long now = System.currentTimeMillis();
 
@@ -600,8 +591,7 @@ public class CheckManagerListener extends PacketListenerAbstract {
         // If the last packet wasn't stupid, then ignore this logic
         // If it was stupid, only change the look if it's different
         // Otherwise, reach and fireworks can false
-        if (hasLook && (!player.packetStateData.lastPacketWasOnePointSeventeenDuplicate ||
-                player.yaw != yaw || player.pitch != pitch)) {
+        if (hasLook) {
             player.lastYaw = player.yaw;
             player.lastPitch = player.pitch;
         }
@@ -656,11 +646,9 @@ public class CheckManagerListener extends PacketListenerAbstract {
             final PositionUpdate update = new PositionUpdate(new Vector3d(player.x, player.y, player.z), position, onGround, teleportData.getSetback(), teleportData.getTeleportData(), teleportData.isTeleport());
 
             // Stupidity doesn't care about 0.03
-            if (!player.packetStateData.lastPacketWasOnePointSeventeenDuplicate) {
-                player.filterMojangStupidityOnMojangStupidity = clampVector;
-            }
+            player.filterMojangStupidityOnMojangStupidity = clampVector;
 
-            if (!player.inVehicle() && !player.packetStateData.lastPacketWasOnePointSeventeenDuplicate) {
+            if (!player.inVehicle()) {
                 player.lastX = player.x;
                 player.lastY = player.y;
                 player.lastZ = player.z;

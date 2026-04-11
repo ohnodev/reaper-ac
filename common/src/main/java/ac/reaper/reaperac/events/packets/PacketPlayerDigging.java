@@ -179,8 +179,7 @@ public class PacketPlayerDigging extends PacketListenerAbstract {
         if (WrapperPlayClientPlayerFlying.isFlying(event.getPacketType()) || event.getPacketType() == PacketType.Play.Client.CLIENT_TICK_END) {
             final GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
             if (player != null && player.packetStateData.isSlowedByUsingItem()
-                    && !player.packetStateData.lastPacketWasTeleport
-                    && !player.packetStateData.lastPacketWasOnePointSeventeenDuplicate) {
+                    && !player.packetStateData.lastPacketWasTeleport) {
                 boolean slotChanged = player.packetStateData.itemInUseHand != InteractionHand.OFF_HAND
                         && player.packetStateData.getSlowedByUsingItemSlot() != player.packetStateData.lastSlotSelected;
                 if (slotChanged || player.inventory.getItemInHand(player.packetStateData.itemInUseHand).isEmpty()) {

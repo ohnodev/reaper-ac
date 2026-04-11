@@ -176,7 +176,7 @@ public class Check extends GrimProcessor implements AbstractCheck {
     public boolean isTickPacket(PacketTypeCommon packetType) {
         if (isTickPacketIncludingNonMovement(packetType)) {
             if (isFlying(packetType)) {
-                return !player.packetStateData.lastPacketWasTeleport && !player.packetStateData.lastPacketWasOnePointSeventeenDuplicate;
+                return !player.packetStateData.lastPacketWasTeleport;
             }
             return true;
         }

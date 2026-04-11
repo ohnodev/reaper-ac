@@ -9,7 +9,7 @@ import lombok.Getter;
 public class PacketStateData {
     public boolean packetPlayerOnGround = false;
     public boolean lastPacketWasTeleport = false;
-    public boolean cancelDuplicatePacket, lastPacketWasOnePointSeventeenDuplicate = false;
+    public boolean cancelDuplicatePacket = false;
     public boolean lastTransactionPacketWasValid = false;
     public int lastSlotSelected;
     public InteractionHand itemInUseHand = InteractionHand.MAIN_HAND;
