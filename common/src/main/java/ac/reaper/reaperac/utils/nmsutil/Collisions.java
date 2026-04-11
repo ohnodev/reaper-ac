@@ -364,9 +364,6 @@ public final class Collisions {
             double x = vec3.getX();
             double z = vec3.getZ();
 
-            if (!overrideVersion) {
-
-            }
             double maxStepDown = -player.getMaxUpStep();
 
             while (x != 0.0 && isEmpty(player, player.boundingBox.copy().offset(x, maxStepDown, 0.0))) {
@@ -441,14 +438,6 @@ public final class Collisions {
         if (blockType == StateTypes.POWDER_SNOW && blockX == Math.floor(player.x) && blockY == Math.floor(player.y) && blockZ == Math.floor(player.z)) {
 
             player.stuckSpeedMultiplier = new Vector3dm(0.9f, 1.5, 0.9f);
-        }
-
-        if (blockType == StateTypes.SOUL_SAND) {
-
-        }
-
-        if (blockType == StateTypes.LAVA) {
-
         }
 
         if (blockType == StateTypes.BUBBLE_COLUMN) {
@@ -843,11 +832,6 @@ public final class Collisions {
 
         if (player.tagManager.block(SyncedTags.CLIMBABLE).contains(blockMaterial)) {
             return true;
-        }
-
-        // ViaVersion replacement block -> sweet berry bush to vines
-        if (blockMaterial == StateTypes.SWEET_BERRY_BUSH) {
-
         }
 
         return trapdoorUsableAsLadder(player, x, y, z, blockState);
