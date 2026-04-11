@@ -55,15 +55,13 @@ public enum HitboxData implements HitBoxFactory {
     }, StateTypes.VINE),
 
     RAILS((player, item, version, data, isTargetBlock, x, y, z) -> switch (data.getShape()) {
-        case ASCENDING_NORTH, ASCENDING_SOUTH, ASCENDING_EAST, ASCENDING_WEST -> {
-            yield new HexCollisionBox(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
-        }
+        case ASCENDING_NORTH, ASCENDING_SOUTH, ASCENDING_EAST, ASCENDING_WEST ->
+                new HexCollisionBox(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
         default -> new HexCollisionBox(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D);
     }, BlockTags.RAILS.getStates().toArray(new StateType[0])),
 
-    END_PORTAL((player, item, version, data, isTargetBlock, x, y, z) -> {
-        return new HexCollisionBox(0.0D, 6.0D, 0.0D, 16.0D, 12.0D, 16.0D);
-    }, StateTypes.END_PORTAL),
+    END_PORTAL((player, item, version, data, isTargetBlock, x, y, z) ->
+            new HexCollisionBox(0.0D, 6.0D, 0.0D, 16.0D, 12.0D, 16.0D), StateTypes.END_PORTAL),
 
     FENCE_GATE((player, item, version, data, isTargetBlock, x, y, z) -> {
         // This technically should be taken from the block data/made multi-version/run block updates... but that's too far even for me
@@ -81,10 +79,12 @@ public enum HitboxData implements HitBoxFactory {
         }
 
         if (isInWall) {
-            return isXAxis ? new HexCollisionBox(6.0D, 0.0D, 0.0D, 10.0D, 13.0D, 16.0D) : new HexCollisionBox(0.0D, 0.0D, 6.0D, 16.0D, 13.0D, 10.0D);
+            return isXAxis ? new HexCollisionBox(6.0D, 0.0D, 0.0D, 10.0D, 13.0D, 16.0D) :
+                    new HexCollisionBox(0.0D, 0.0D, 6.0D, 16.0D, 13.0D, 10.0D);
         }
 
-        return isXAxis ? new HexCollisionBox(6.0D, 0.0D, 0.0D, 10.0D, 16.0D, 16.0D) : new HexCollisionBox(0.0D, 0.0D, 6.0D, 16.0D, 16.0D, 10.0D);
+        return isXAxis ? new HexCollisionBox(6.0D, 0.0D, 0.0D, 10.0D, 16.0D, 16.0D) :
+                new HexCollisionBox(0.0D, 0.0D, 6.0D, 16.0D, 16.0D, 10.0D);
     }, BlockTags.FENCE_GATES.getStates().toArray(new StateType[0])),
 
 
@@ -133,30 +133,38 @@ public enum HitboxData implements HitBoxFactory {
             case WALL:
                 return switch (facing) {
                     case EAST ->
-                            powered ? new HexCollisionBox(0.0, 6.0, 5.0, 1.0, 10.0, 11.0) : new HexCollisionBox(0.0, 6.0, 5.0, 2.0, 10.0, 11.0);
+                            powered ? new HexCollisionBox(0.0, 6.0, 5.0, 1.0, 10.0, 11.0) :
+                                    new HexCollisionBox(0.0, 6.0, 5.0, 2.0, 10.0, 11.0);
                     case WEST ->
-                            powered ? new HexCollisionBox(15.0, 6.0, 5.0, 16.0, 10.0, 11.0) : new HexCollisionBox(14.0, 6.0, 5.0, 16.0, 10.0, 11.0);
+                            powered ? new HexCollisionBox(15.0, 6.0, 5.0, 16.0, 10.0, 11.0) :
+                                    new HexCollisionBox(14.0, 6.0, 5.0, 16.0, 10.0, 11.0);
                     case SOUTH ->
-                            powered ? new HexCollisionBox(5.0, 6.0, 0.0, 11.0, 10.0, 1.0) : new HexCollisionBox(5.0, 6.0, 0.0, 11.0, 10.0, 2.0);
+                            powered ? new HexCollisionBox(5.0, 6.0, 0.0, 11.0, 10.0, 1.0) :
+                                    new HexCollisionBox(5.0, 6.0, 0.0, 11.0, 10.0, 2.0);
                     case NORTH, UP, DOWN ->
-                            powered ? new HexCollisionBox(5.0, 6.0, 15.0, 11.0, 10.0, 16.0) : new HexCollisionBox(5.0, 6.0, 14.0, 11.0, 10.0, 16.0);
+                            powered ? new HexCollisionBox(5.0, 6.0, 15.0, 11.0, 10.0, 16.0) :
+                                    new HexCollisionBox(5.0, 6.0, 14.0, 11.0, 10.0, 16.0);
                     default -> NoCollisionBox.INSTANCE;
                 };
             case CEILING:
 
                 // x axis
                 if (facing == BlockFace.EAST || facing == BlockFace.WEST) {
-                    return powered ? new HexCollisionBox(6.0, 15.0, 5.0, 10.0, 16.0, 11.0) : new HexCollisionBox(6.0, 14.0, 5.0, 10.0, 16.0, 11.0);
+                    return powered ? new HexCollisionBox(6.0, 15.0, 5.0, 10.0, 16.0, 11.0) :
+                            new HexCollisionBox(6.0, 14.0, 5.0, 10.0, 16.0, 11.0);
                 } else {
-                    return powered ? new HexCollisionBox(5.0, 15.0, 6.0, 11.0, 16.0, 10.0) : new HexCollisionBox(5.0, 14.0, 6.0, 11.0, 16.0, 10.0);
+                    return powered ? new HexCollisionBox(5.0, 15.0, 6.0, 11.0, 16.0, 10.0) :
+                            new HexCollisionBox(5.0, 14.0, 6.0, 11.0, 16.0, 10.0);
                 }
             case FLOOR:
                 // x axis
                 if (facing == BlockFace.EAST || facing == BlockFace.WEST) {
-                    return powered ? new HexCollisionBox(6.0, 0.0, 5.0, 10.0, 1.0, 11.0) : new HexCollisionBox(6.0, 0.0, 5.0, 10.0, 2.0, 11.0);
+                    return powered ? new HexCollisionBox(6.0, 0.0, 5.0, 10.0, 1.0, 11.0) :
+                            new HexCollisionBox(6.0, 0.0, 5.0, 10.0, 2.0, 11.0);
                 }
 
-                return powered ? new HexCollisionBox(5.0, 0.0, 6.0, 11.0, 1.0, 10.0) : new HexCollisionBox(5.0, 0.0, 6.0, 11.0, 2.0, 10.0);
+                return powered ? new HexCollisionBox(5.0, 0.0, 6.0, 11.0, 1.0, 10.0) :
+                        new HexCollisionBox(5.0, 0.0, 6.0, 11.0, 2.0, 10.0);
             default:
                 throw new IllegalStateException();
         }
@@ -230,9 +238,8 @@ public enum HitboxData implements HitBoxFactory {
                 new SimpleCollisionBox(0.4375, 0.0, 0.4375, 0.5625, 0.875, 0.5625, false));
     }, StateTypes.BREWING_STAND),
 
-    SMALL_FLOWER((player, item, version, data, isTargetBlock, x, y, z) -> {
-        return new OffsetCollisionBox(data.getType(), 0.3125D, 0.0D, 0.3125D, 0.6875D, 0.625D, 0.6875D);
-    },
+    SMALL_FLOWER((player, item, version, data, isTargetBlock, x, y, z) ->
+            new OffsetCollisionBox(data.getType(), 0.3125D, 0.0D, 0.3125D, 0.6875D, 0.625D, 0.6875D),
             BlockTags.SMALL_FLOWERS.getStates().toArray(new StateType[0])),
 
     TALL_FLOWERS(new SimpleCollisionBox(0, 0, 0, 1, 1, 1, true), BlockTags.TALL_FLOWERS.getStates().toArray(new StateType[0])),
@@ -263,11 +270,11 @@ public enum HitboxData implements HitBoxFactory {
 
     SOUL_SAND(new SimpleCollisionBox(0, 0, 0, 1, 1, 1, true), StateTypes.SOUL_SAND),
 
-    CACTUS((player, item, version, data, isTargetBlock, x, y, z) -> {
-        return new HexCollisionBox(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0D);
-    }, StateTypes.CACTUS),
+    CACTUS((player, item, version, data, isTargetBlock, x, y, z) ->
+            new HexCollisionBox(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0D), StateTypes.CACTUS),
 
-    SNOW((player, item, version, data, isTargetBlock, x, y, z) -> new SimpleCollisionBox(0, 0, 0, 1, data.getLayers() * 0.125, 1), StateTypes.SNOW),
+    SNOW((player, item, version, data, isTargetBlock, x, y, z) ->
+            new SimpleCollisionBox(0, 0, 0, 1, data.getLayers() * 0.125, 1), StateTypes.SNOW),
 
     LECTERN_BLOCK((player, item, version, data, isTargetBlock, x, y, z) -> {
         ComplexCollisionBox common = new ComplexCollisionBox(5,
@@ -320,9 +327,8 @@ public enum HitboxData implements HitBoxFactory {
         return box;
     }, StateTypes.GLOW_LICHEN, StateTypes.SCULK_VEIN, StateTypes.RESIN_CLUMP),
 
-    SPORE_BLOSSOM((player, item, version, data, isTargetBlock, x, y, z) -> {
-        return new HexCollisionBox(2.0D, 13.0D, 2.0D, 14.0D, 16.0D, 14.0D);
-    }, StateTypes.SPORE_BLOSSOM),
+    SPORE_BLOSSOM((player, item, version, data, isTargetBlock, x, y, z) ->
+            new HexCollisionBox(2.0D, 13.0D, 2.0D, 14.0D, 16.0D, 14.0D), StateTypes.SPORE_BLOSSOM),
 
     PITCHER_CROP((player, item, version, data, isTargetBlock, x, y, z) -> {
         final SimpleCollisionBox FULL_UPPER_SHAPE = new HexCollisionBox(3.0D, 0.0D, 3.0D, 13.0D, 15.0D, 13.0D);
@@ -343,14 +349,11 @@ public enum HitboxData implements HitBoxFactory {
     NETHER_WART((player, item, version, data, isTargetBlock, x, y, z) ->
             new HexCollisionBox(0.0D, 0.0D, 0.0D, 16.0, 5 + (data.getAge() * 3), 16.0D), StateTypes.NETHER_WART),
 
-    ATTACHED_PUMPKIN_STEM((player, item, version, data, isTargetBlock, x, y, z) -> {
-
-        return switch (data.getFacing()) {
-            case SOUTH -> new HexCollisionBox(6.0D, 0.0D, 6.0D, 10.0D, 10.0D, 16.0D);
-            case WEST -> new HexCollisionBox(0.0D, 0.0D, 6.0D, 10.0D, 10.0D, 10.0D);
-            case NORTH -> new HexCollisionBox(6.0D, 0.0D, 0.0D, 10.0D, 10.0D, 10.0D);
-            default -> new HexCollisionBox(6.0D, 0.0D, 6.0D, 16.0D, 10.0D, 10.0D);
-        };
+    ATTACHED_PUMPKIN_STEM((player, item, version, data, isTargetBlock, x, y, z) -> switch (data.getFacing()) {
+        case SOUTH -> new HexCollisionBox(6.0D, 0.0D, 6.0D, 10.0D, 10.0D, 16.0D);
+        case WEST -> new HexCollisionBox(0.0D, 0.0D, 6.0D, 10.0D, 10.0D, 10.0D);
+        case NORTH -> new HexCollisionBox(6.0D, 0.0D, 0.0D, 10.0D, 10.0D, 10.0D);
+        default -> new HexCollisionBox(6.0D, 0.0D, 6.0D, 16.0D, 10.0D, 10.0D);
     }, StateTypes.ATTACHED_MELON_STEM, StateTypes.ATTACHED_PUMPKIN_STEM),
 
     PUMPKIN_STEM((player, item, version, data, isTargetBlock, x, y, z) ->
@@ -409,13 +412,11 @@ public enum HitboxData implements HitBoxFactory {
 
     HANGING_ROOTS(new HexCollisionBox(2.0D, 10.0D, 2.0D, 14.0D, 16.0D, 14.0D), StateTypes.HANGING_ROOTS),
 
-    HANGING_MOSS((player, item, version, data, isTargetBlock, x, y, z) -> {
-        return new HexCollisionBox(1, data.isTip() ? 2 : 0, 1, 15, 16, 15);
-    }, StateTypes.PALE_HANGING_MOSS),
+    HANGING_MOSS((player, item, version, data, isTargetBlock, x, y, z) ->
+            new HexCollisionBox(1, data.isTip() ? 2 : 0, 1, 15, 16, 15), StateTypes.PALE_HANGING_MOSS),
 
-    GRASS_FERN((player, item, version, data, isTargetBlock, x, y, z) -> {
-        return new HexCollisionBox(2.0D, 0.0D, 2.0D, 14.0D, 13.0D, 14.0D);
-    }, StateTypes.SHORT_GRASS, StateTypes.FERN),
+    GRASS_FERN((player, item, version, data, isTargetBlock, x, y, z) ->
+            new HexCollisionBox(2.0D, 0.0D, 2.0D, 14.0D, 13.0D, 14.0D), StateTypes.SHORT_GRASS, StateTypes.FERN),
 
     SEA_GRASS(new HexCollisionBox(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D),
             StateTypes.SEAGRASS),
@@ -501,9 +502,8 @@ public enum HitboxData implements HitBoxFactory {
 
     }, StateTypes.BIG_DRIPLEAF),
 
-    PINK_PETALS_BLOCK((player, item, version, data, isTargetBlock, x, y, z) -> {
-        return getSegmentedHitBox(data.getFlowerAmount(), data.getFacing(), 3);
-    }, StateTypes.PINK_PETALS),
+    PINK_PETALS_BLOCK((player, item, version, data, isTargetBlock, x, y, z) ->
+            getSegmentedHitBox(data.getFlowerAmount(), data.getFacing(), 3), StateTypes.PINK_PETALS),
 
     MANGROVE_PROPAGULE(((player, item, version, data, isTargetBlock, x, y, z) -> {
         if (data.isHanging()) {
@@ -513,9 +513,8 @@ public enum HitboxData implements HitBoxFactory {
         }
     }), StateTypes.MANGROVE_PROPAGULE),
 
-    FROGSPAWN((player, item, version, data, isTargetBlock, x, y, z) -> {
-        return new HexCollisionBox(0.0D, 0.0D, 0.0D, 16.0D, 1.5D, 16.0D);
-    }, StateTypes.FROGSPAWN),
+    FROGSPAWN((player, item, version, data, isTargetBlock, x, y, z) ->
+            new HexCollisionBox(0.0D, 0.0D, 0.0D, 16.0D, 1.5D, 16.0D), StateTypes.FROGSPAWN),
 
     BUSH((player, heldItem, version, block, isTargetBlock, x, y, z)
             -> new SimpleCollisionBox(0, 0, 0, 1, 0.8125, 1), StateTypes.BUSH),
