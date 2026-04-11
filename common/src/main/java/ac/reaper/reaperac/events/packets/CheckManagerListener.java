@@ -655,11 +655,6 @@ public class CheckManagerListener extends PacketListenerAbstract {
                 player.y = clampVector.getY();
                 player.z = clampVector.getZ();
 
-                // During Via/Fabric transition windows, dimension may be unset briefly.
-                // Skip this movement evaluation instead of crashing the packet pipeline.
-                if (player.dimensionType == null) {
-                    return;
-                }
                 player.checkManager.onPositionUpdate(update);
             } else if (update.isTeleport()) { // Mojang doesn't use their own exit vehicle field to leave vehicles, manually call the setback handler
                 player.getSetbackTeleportUtil().onPredictionComplete(new PredictionComplete(0, update, true));
