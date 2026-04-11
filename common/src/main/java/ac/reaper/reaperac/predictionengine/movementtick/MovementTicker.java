@@ -52,9 +52,6 @@ public class MovementTicker {
     }
 
     public static void handleEntityCollisions(GrimPlayer player) {
-        // Check that ViaVersion disables all collisions on a 1.8 server for 1.9+ clients
-        boolean hasEntityPushing = true;
-        if (!hasEntityPushing) return;
 
         int possibleCollidingEntities = 0;
         int possibleRiptideEntities = 0;
