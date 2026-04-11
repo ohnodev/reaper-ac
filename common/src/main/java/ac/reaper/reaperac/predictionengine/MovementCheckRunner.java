@@ -475,8 +475,6 @@ public class MovementCheckRunner extends Check implements PositionCheck {
                     player.actualMovement = new Vector3dm(player.x - player.lastX, player.y - player.lastY, player.z - player.lastZ);
 
                     player.couldSkipTick = true;
-
-                    Collisions.handleInsideBlocks(player);
                 }
             }
 
@@ -513,7 +511,6 @@ public class MovementCheckRunner extends Check implements PositionCheck {
                 PlayerBaseTick.doBaseTick(player);
                 new MovementTickerStrider(player).livingEntityAIStep();
                 MovementTickerStrider.floatStrider(player);
-                Collisions.handleInsideBlocks(player);
             } else {
                 wasChecked = false;
             }

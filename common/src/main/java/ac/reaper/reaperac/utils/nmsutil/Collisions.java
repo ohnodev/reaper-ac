@@ -414,13 +414,6 @@ public final class Collisions {
         return player.fallDistance < player.getMaxUpStep() && !isEmpty(player, player.boundingBox.copy().offset(0.0, player.fallDistance - player.getMaxUpStep(), 0.0));
     }
 
-    public static void handleInsideBlocks(GrimPlayer player) {
-        // Mojang rewrote this whole logic in 1.21.2 (see Collisions#applyEffectsFromBlocks)
-
-        return;
-        // Use the bounding box for after the player's movement is applied
-    }
-
     public static void onInsideBlock(GrimPlayer player, StateType blockType, WrappedBlockState block, int blockX, int blockY, int blockZ, boolean magic) {
         if (blockType == StateTypes.COBWEB) {
             if (player.compensatedEntities.hasPotionEffect(PotionTypes.WEAVING)) {

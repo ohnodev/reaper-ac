@@ -29,9 +29,4 @@ public class MovementTickerRideable extends MovementTickerLivingVehicle {
         throw new IllegalStateException("Not implemented");
     }
 
-    @Override
-    public void livingEntityTravel() {
-        super.livingEntityTravel();
-        Collisions.handleInsideBlocks(player);
-    }
 }

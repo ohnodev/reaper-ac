@@ -179,11 +179,6 @@ public class MovementTicker {
             player.vehicleData.lastYd = collide.getY();
         }
 
-        // Striders call the method for inside blocks AGAIN!
-        if (riding instanceof PacketEntityStrider) {
-            Collisions.handleInsideBlocks(player);
-        }
-
         player.mainSupportingBlockData = MainSupportingBlockPosFinder.findMainSupportingBlockPos(player, player.mainSupportingBlockData, new Vector3d(collide.getX(), collide.getY(), collide.getZ()), player.boundingBox, player.onGround);
         StateType onBlock = BlockProperties.getOnPos(player, player.mainSupportingBlockData, new Vector3d(player.x, player.y, player.z));
 

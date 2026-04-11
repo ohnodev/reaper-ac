@@ -28,12 +28,6 @@ public class MovementTickerHorse extends MovementTickerLivingVehicle {
         if (this.movementInput.lengthSquared() > 1) this.movementInput.normalize();
     }
 
-    @Override
-    public void livingEntityAIStep() {
-        super.livingEntityAIStep();
-        Collisions.handleInsideBlocks(player);
-    }
-
     public float getExtraSpeed() {
         return 0f;
     }

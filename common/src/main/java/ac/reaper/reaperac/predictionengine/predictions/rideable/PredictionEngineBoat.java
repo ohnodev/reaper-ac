@@ -185,7 +185,6 @@ public class PredictionEngineBoat extends PredictionEngine {
     @Override
     public void endOfTick(GrimPlayer player, double d) {
         super.endOfTick(player, d);
-        Collisions.handleInsideBlocks(player);
 
         // yes, this is how mojank does it
         Collisions.applyEffectsFromBlocks(player);
