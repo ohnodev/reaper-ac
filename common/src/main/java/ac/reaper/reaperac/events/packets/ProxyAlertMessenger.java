@@ -18,10 +18,17 @@ import java.io.*;
 
 // TODO (Cross-Platform) ensure this is correct, and modify to only check appropriate files for each platform
 public class ProxyAlertMessenger extends PacketListenerAbstract {
+    private static boolean usingProxy;
 
     public ProxyAlertMessenger() {
-        LogUtil.info("Registering an outgoing plugin channel...");
-        GrimAPI.INSTANCE.getPlatformServer().registerOutgoingPluginChannel("BungeeCord");
+        usingProxy = ProxyAlertMessenger.getBooleanFromFile("spigot.yml", "settings.bungeecord")
+                || ProxyAlertMessenger.getBooleanFromFile("paper.yml", "settings.velocity-support.enabled")
+                || ProxyAlertMessenger.getBooleanFromFile("config/paper-global.yml", "proxies.velocity.enabled");
+
+        if (usingProxy) {
+            LogUtil.info("Registering an outgoing plugin channel...");
+            GrimAPI.INSTANCE.getPlatformServer().registerOutgoingPluginChannel("BungeeCord");
+        }
     }
 
     public static void sendPluginMessage(String message) {
@@ -48,11 +55,11 @@ public class ProxyAlertMessenger extends PacketListenerAbstract {
     }
 
     public static boolean canSendAlerts() {
-        return GrimAPI.INSTANCE.getConfigManager().getConfig().getBooleanElse("alerts.proxy.send", false) && !GrimAPI.INSTANCE.getPlatformPlayerFactory().getOnlinePlayers().isEmpty();
+        return usingProxy && GrimAPI.INSTANCE.getConfigManager().getConfig().getBooleanElse("alerts.proxy.send", false) && !GrimAPI.INSTANCE.getPlatformPlayerFactory().getOnlinePlayers().isEmpty();
     }
 
     public static boolean canReceiveAlerts() {
-        return GrimAPI.INSTANCE.getConfigManager().getConfig().getBooleanElse("alerts.proxy.receive", false) && GrimAPI.INSTANCE.getAlertManager().hasAlertListeners();
+        return usingProxy && GrimAPI.INSTANCE.getConfigManager().getConfig().getBooleanElse("alerts.proxy.receive", false) && GrimAPI.INSTANCE.getAlertManager().hasAlertListeners();
     }
 
     // TODO (Cross-Platform) check if new getBooleanFromFile impl is correct
