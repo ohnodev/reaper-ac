@@ -60,7 +60,7 @@ public class FastBreak extends Check implements BlockBreakCheck {
             // TODO this lazy loads PacketEvents mappings for older versions for clients on versions older than the servers, increasing memory usage
             //  * its the only thing we use non-native mappings for behind ViaVersion
             //  * can we translate back "up" to server version and run check against server version to avoid loading older registries?
-            WrappedBlockState block = clientOlderThanServer ? WrappedBlockState.getByGlobalId(player.getClientVersion(), player.getViaTranslatedClientBlockID(blockBreak.block.getGlobalId())) : blockBreak.block;
+            WrappedBlockState block = clientOlderThanServer ? WrappedBlockState.getByGlobalId(player.getClientVersion(), blockBreak.block.getGlobalId()) : blockBreak.block;
 
             startBreak = System.currentTimeMillis() - (targetBlockPosition == null ? 50 : 0); // ???
             targetBlockPosition = blockBreak.position;
