@@ -197,10 +197,7 @@ public class Check extends GrimProcessor implements AbstractCheck {
 
     // prevent causing exploits with packet cancelling (ie noslow)
     public boolean canCancel(DiggingAction action) {
-        if (action == DiggingAction.RELEASE_USE_ITEM)
-            return false;// we check client version here because 1.8- doesn't predict dropping items, so we can cancel them. (see CompensatedInventory)
-        if (action != DiggingAction.DROP_ITEM && action != DiggingAction.DROP_ITEM_STACK)
-            return true;
-        return false;
+        if (action == DiggingAction.RELEASE_USE_ITEM) return false;
+        return action != DiggingAction.DROP_ITEM && action != DiggingAction.DROP_ITEM_STACK;
     }
 }

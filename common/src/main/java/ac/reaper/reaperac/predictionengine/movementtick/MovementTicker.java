@@ -7,7 +7,6 @@ import ac.reaper.reaperac.predictionengine.predictions.PredictionEngineElytra;
 import ac.reaper.reaperac.utils.collisions.datatypes.SimpleCollisionBox;
 import ac.reaper.reaperac.utils.data.VectorData;
 import ac.reaper.reaperac.utils.data.packetentity.PacketEntity;
-import ac.reaper.reaperac.utils.data.packetentity.PacketEntityStrider;
 import ac.reaper.reaperac.utils.enums.FluidTag;
 import ac.reaper.reaperac.utils.math.GrimMath;
 import ac.reaper.reaperac.utils.math.Vector3dm;

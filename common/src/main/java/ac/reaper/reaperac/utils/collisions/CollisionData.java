@@ -67,16 +67,8 @@ public enum CollisionData implements CollisionFactory {
     }, StateTypes.LAVA),
 
     BREWING_STAND((player, version, block, x, y, z) -> {
-        int base = 0;
-        // maxIndex is 3 instead of 2 for legacy clients because for 1.8 players there is a very rare bug
-        // That we handle later in the code requiring us to add a box https://bugs.mojang.com/browse/MC-85109 For 1.8 PLAYERS
-        // 1.8 Brewing Stand hitbox is a fullblock until it is hit sometimes, can be caused be restarting client and joining server
-        int maxIndex = 3;
-
-        // Yes I know we only need maxIndex = 3 for 1.8 specifically
-        // No I'm not adding a special clause for which would require another if check, I'll take compute > memory any day
-        maxIndex = 2;
-        base = 1;
+        int maxIndex = 2;
+        int base = 1;
 
         return new ComplexCollisionBox(maxIndex,
                 new HexCollisionBox(base, 0, base, 16 - base, 2, 16 - base),
@@ -85,7 +77,6 @@ public enum CollisionData implements CollisionFactory {
     }, StateTypes.BREWING_STAND),
 
     BAMBOO((player, version, block, x, y, z) -> {
-        // ViaVersion replacement, sugarcane
         return new HexOffsetCollisionBox(block.getType(), 6.5D, 0.0D, 6.5D, 9.5D, 16.0D, 9.5D);
     }, StateTypes.BAMBOO),
 
@@ -345,8 +336,6 @@ public enum CollisionData implements CollisionFactory {
     GRINDSTONE((player, version, data, x, y, z) -> {
         BlockFace facing = data.getFacing();
 
-        // ViaVersion replacement block - Anvil
-
         Face attachment = data.getFace();
         if (attachment == Face.FLOOR) {
             if (facing == BlockFace.NORTH || facing == BlockFace.SOUTH) {
@@ -497,17 +486,7 @@ public enum CollisionData implements CollisionFactory {
             StateTypes.DAYLIGHT_DETECTOR),
 
     FARMLAND((player, version, data, x, y, z) -> {
-        // Thanks Mojang for changing block collisions without changing protocol version!
-        // Anyways, let a 1.10/1.10.1/1.10.2 client decide what farmland collision box it uses
-        if (version == ClientVersion.V_1_10) {
-            if (Math.abs(player.y % 1.0) < 0.001) {
-                return new SimpleCollisionBox(0, 0, 0, 1, 1, 1, true);
-            }
-            return new HexCollisionBox(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
-        }
-
         return new HexCollisionBox(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
-
     }, StateTypes.FARMLAND),
 
     GRASS_PATH((player, version, data, x, y, z) -> {
@@ -516,12 +495,7 @@ public enum CollisionData implements CollisionFactory {
         // TODO, replace this hacky patch for 1.16.5 with versioned state types later. DIRT_PATH is new name for GRASS_PATH
     }, StateTypes.DIRT_PATH, StateTypes.GRASS_PATH),
 
-    LILYPAD((player, version, data, x, y, z) -> {
-        // Boats break lilypads client sided on 1.12- clients.
-        player.inVehicle();
-
-        return new HexCollisionBox(1.0D, 0.0D, 1.0D, 15.0D, 1.5D, 15.0D);
-    }, StateTypes.LILY_PAD),
+    LILYPAD(new HexCollisionBox(1.0D, 0.0D, 1.0D, 15.0D, 1.5D, 15.0D), StateTypes.LILY_PAD),
 
     BED((player, version, data, x, y, z) -> {
         // It's all the same box on 1.14 clients
@@ -599,8 +573,6 @@ public enum CollisionData implements CollisionFactory {
     PICKLE((player, version, data, x, y, z) -> getPicklesBox(version, data.getPickles()), StateTypes.SEA_PICKLE),
 
     TURTLEEGG((player, version, data, x, y, z) -> {
-        // ViaVersion replacement block (West facing cocoa beans)
-
         if (data.getEggs() == 1) {
             return new HexCollisionBox(3.0D, 0.0D, 3.0D, 12.0D, 7.0D, 12.0D);
         }
