@@ -1,4 +1,4 @@
-package ac.grim.grimac.platform.fabric.mc261.player;
+package ac.grim.grimac.platform.fabric.mc1216.player;
 
 import ac.grim.grimac.platform.api.sender.Sender;
 import ac.grim.grimac.platform.api.world.PlatformWorld;
@@ -13,8 +13,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Relative;
 
-public class Fabric261PlatformPlayer extends Fabric1202PlatformPlayer {
-    public Fabric261PlatformPlayer(ServerPlayer player) {
+public class Fabric1212PlatformPlayer extends Fabric1202PlatformPlayer {
+    public Fabric1212PlatformPlayer(ServerPlayer player) {
         super(player);
     }
 
@@ -31,7 +31,8 @@ public class Fabric261PlatformPlayer extends Fabric1202PlatformPlayer {
         }
         return FabricFutureUtil.supplySync(() -> {
             try {
-                // MC 1.21.2+: last boolean matches server teleport API; differs from older branches.
+                // MC 1.21.2+: last boolean is the overload that matches server teleport API; differs from
+                // Fabric1161PlatformPlayer (false) due to signature/behavior on older branches.
                 fabricPlayer.teleportTo(
                         targetLevel,
                         location.getX(),

@@ -1,4 +1,4 @@
-package ac.grim.grimac.platform.fabric.mc261.convert;
+package ac.grim.grimac.platform.fabric.mc1216.convert;
 
 import ac.grim.grimac.platform.fabric.GrimACFabricLoaderPlugin;
 import ac.grim.grimac.utils.anticheat.LogUtil;
@@ -7,7 +7,7 @@ import io.github.retrooper.packetevents.adventure.serializer.gson.GsonComponentS
 import net.kyori.adventure.text.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 
-public class Fabric261ConversionUtil extends ac.grim.grimac.platform.fabric.mc1205.convert.Fabric1205ConversionUtil {
+public class Fabric1216ConversionUtil extends ac.grim.grimac.platform.fabric.mc1205.convert.Fabric1205ConversionUtil {
 
     @Override
     public net.minecraft.network.chat.Component toNativeText(Component component) {
