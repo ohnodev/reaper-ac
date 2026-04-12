@@ -313,29 +313,44 @@ public class CompensatedEntities {
 
                 EntityData<?> pigSaddle = WatchableIndexUtil.getIndex(watchableObjects, 17 - offset);
                 if (pigSaddle != null) {
-                    rideable.hasSaddle = (boolean) pigSaddle.getValue();
+                    Boolean saddle = coerceBoolean(pigSaddle.getValue());
+                    if (saddle != null) {
+                        rideable.hasSaddle = saddle;
+                    }
                 }
 
                 EntityData<?> pigBoost = WatchableIndexUtil.getIndex(watchableObjects, 18 - offset);
                 if (pigBoost != null) { // What does 1.9-1.10 do here? Is this feature even here?
-                    rideable.boostTimeMax = (int) pigBoost.getValue();
-                    rideable.currentBoostTime = 0;
+                    Integer boost = coerceInteger(pigBoost.getValue());
+                    if (boost != null) {
+                        rideable.boostTimeMax = boost;
+                        rideable.currentBoostTime = 0;
+                    }
                 }
             } else if (entity instanceof PacketEntityStrider) {
                 EntityData<?> striderBoost = WatchableIndexUtil.getIndex(watchableObjects, 17 - offset);
                 if (striderBoost != null) {
-                    rideable.boostTimeMax = (int) striderBoost.getValue();
-                    rideable.currentBoostTime = 0;
+                    Integer boost = coerceInteger(striderBoost.getValue());
+                    if (boost != null) {
+                        rideable.boostTimeMax = boost;
+                        rideable.currentBoostTime = 0;
+                    }
                 }
 
                 EntityData<?> striderShaking = WatchableIndexUtil.getIndex(watchableObjects, 18 - offset);
                 if (striderShaking != null) {
-                    ((PacketEntityStrider) rideable).isShaking = (boolean) striderShaking.getValue();
+                    Boolean shaking = coerceBoolean(striderShaking.getValue());
+                    if (shaking != null) {
+                        ((PacketEntityStrider) rideable).isShaking = shaking;
+                    }
                 }
 
                 EntityData<?> striderSaddle = WatchableIndexUtil.getIndex(watchableObjects, 19 - offset);
                 if (striderSaddle != null) {
-                    rideable.hasSaddle = (boolean) striderSaddle.getValue();
+                    Boolean saddle = coerceBoolean(striderSaddle.getValue());
+                    if (saddle != null) {
+                        rideable.hasSaddle = saddle;
+                    }
                 }
             }
         }
@@ -344,11 +359,14 @@ public class CompensatedEntities {
             int offset = 0;
             EntityData<?> horseByte = WatchableIndexUtil.getIndex(watchableObjects, 17 - offset);
             if (horseByte != null) {
-                byte info = (byte) horseByte.getValue();
+                Byte infoVal = coerceByte(horseByte.getValue());
+                if (infoVal != null) {
+                    byte info = infoVal;
 
-                horse.isTame = (info & 0x02) != 0;
-                horse.hasSaddle = (info & 0x04) != 0;
-                horse.isRearing = (info & 0x20) != 0;
+                    horse.isTame = (info & 0x02) != 0;
+                    horse.hasSaddle = (info & 0x04) != 0;
+                    horse.isRearing = (info & 0x20) != 0;
+                }
             }
 
             // track camel dashing
@@ -356,11 +374,14 @@ public class CompensatedEntities {
             if (entity instanceof PacketEntityCamel camel) {
                 EntityData<?> entityData = WatchableIndexUtil.getIndex(watchableObjects, 18);
                 if (entityData != null) {
-                    camel.setDashing((boolean) entityData.getValue());
+                    Boolean dashing = coerceBoolean(entityData.getValue());
+                    if (dashing != null) {
+                        camel.setDashing(dashing);
 
-                    // TODO there is: if (!this.firstTick && DASH.equals(accessor)) {
-                    // !firstTick condition
-                    camel.setDashCooldown(camel.getDashCooldown() == 0 ? 55 : camel.getDashCooldown());
+                        // TODO there is: if (!this.firstTick && DASH.equals(accessor)) {
+                        // !firstTick condition
+                        camel.setDashCooldown(camel.getDashCooldown() == 0 ? 55 : camel.getDashCooldown());
+                    }
                 }
             }
         }
@@ -368,11 +389,14 @@ public class CompensatedEntities {
         if (entity instanceof PacketEntityNautilus nautilus) {
             EntityData<?> entityData = WatchableIndexUtil.getIndex(watchableObjects, 19);
             if (entityData != null) {
-                nautilus.setDashing((boolean) entityData.getValue());
+                Boolean dashing = coerceBoolean(entityData.getValue());
+                if (dashing != null) {
+                    nautilus.setDashing(dashing);
 
-                // TODO there is: if (!this.firstTick && DASH.equals(accessor)) {
-                // !firstTick condition
-                nautilus.setDashCooldown(nautilus.getDashCooldown() == 0 ? 40 : nautilus.getDashCooldown());
+                    // TODO there is: if (!this.firstTick && DASH.equals(accessor)) {
+                    // !firstTick condition
+                    nautilus.setDashCooldown(nautilus.getDashCooldown() == 0 ? 40 : nautilus.getDashCooldown());
+                }
             }
         }
 
@@ -394,15 +418,15 @@ public class CompensatedEntities {
             EntityData<?> fireworkWatchableObject = WatchableIndexUtil.getIndex(watchableObjects, 9 - offset);
             if (fireworkWatchableObject == null) return;
 
-            if (fireworkWatchableObject.getValue() instanceof Integer) { // Pre 1.14
-                int attachedEntityID = (Integer) fireworkWatchableObject.getValue();
+            Integer directAttachedEntityId = coerceInteger(fireworkWatchableObject.getValue());
+            if (directAttachedEntityId != null) { // Pre 1.14
+                int attachedEntityID = directAttachedEntityId;
                 if (attachedEntityID == player.entityID) {
                     player.fireworks.addNewFirework(entityID);
                 }
-            } else { // 1.14+
-                Optional<Integer> attachedEntityID = (Optional<Integer>) fireworkWatchableObject.getValue();
-
-                if (attachedEntityID.isPresent() && attachedEntityID.get().equals(player.entityID)) {
+            } else {
+                Integer optionalAttachedEntityId = coerceOptionalInteger(fireworkWatchableObject.getValue());
+                if (optionalAttachedEntityId != null && optionalAttachedEntityId == player.entityID) {
                     player.fireworks.addNewFirework(entityID);
                 }
             }
@@ -414,7 +438,10 @@ public class CompensatedEntities {
             EntityData<?> hookWatchableObject = WatchableIndexUtil.getIndex(watchableObjects, index);
             if (hookWatchableObject == null) return;
 
-            Integer attachedEntityID = (Integer) hookWatchableObject.getValue();
+            Integer attachedEntityID = coerceInteger(hookWatchableObject.getValue());
+            if (attachedEntityID == null) {
+                return;
+            }
             hook.attached = attachedEntityID - 1; // the server adds 1 to the ID
         }
 
@@ -423,12 +450,53 @@ public class CompensatedEntities {
 
             EntityData<?> armorStandByte = WatchableIndexUtil.getIndex(watchableObjects, index);
             if (armorStandByte != null) {
-                byte info = (Byte) armorStandByte.getValue();
+                Byte infoVal = coerceByte(armorStandByte.getValue());
+                if (infoVal != null) {
+                    byte info = infoVal;
 
-                entity.isBaby = (info & 0x01) != 0; // technically this is IsSmall which is a different tag, but it has the same effect for us
-                ((PacketEntityArmorStand) entity).isMarker = (info & 0x10) != 0;
+                    entity.isBaby = (info & 0x01) != 0; // technically this is IsSmall which is a different tag, but it has the same effect for us
+                    ((PacketEntityArmorStand) entity).isMarker = (info & 0x10) != 0;
+                }
             }
         }
+    }
+
+    private static Byte coerceByte(Object value) {
+        if (value instanceof Byte b) {
+            return b;
+        }
+        if (value instanceof Number n) {
+            return n.byteValue();
+        }
+        return null;
+    }
+
+    private static Integer coerceInteger(Object value) {
+        if (value instanceof Integer i) {
+            return i;
+        }
+        if (value instanceof Number n) {
+            return n.intValue();
+        }
+        return null;
+    }
+
+    private static Boolean coerceBoolean(Object value) {
+        if (value instanceof Boolean b) {
+            return b;
+        }
+        if (value instanceof Number n) {
+            return n.intValue() != 0;
+        }
+        return null;
+    }
+
+    private static Integer coerceOptionalInteger(Object value) {
+        if (!(value instanceof Optional<?> optional) || optional.isEmpty()) {
+            return null;
+        }
+        Object inner = optional.get();
+        return coerceInteger(inner);
     }
 
     public void updateEntityEquipment(int entityId, List<Equipment> equipment) {
