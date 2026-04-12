@@ -121,6 +121,12 @@ public abstract class GrimACFabricLoaderPlugin implements PlatformLoader {
     }
 
     public void registerPermissionDefaults() {
+        // Keep anti-cheat active for OPs unless permissions are explicitly granted by an admin plugin.
+        registerPermission("grim.exempt", PermissionDefaultValue.FALSE);
+        registerPermission("grim.bypass", PermissionDefaultValue.FALSE);
+        registerPermission("grim.disable", PermissionDefaultValue.FALSE);
+        registerPermission("grim.nocheck", PermissionDefaultValue.FALSE);
+
         registerPermission("grim.alerts.enable-on-join", PermissionDefaultValue.FALSE);
         registerPermission("grim.verbose.enable-on-join", PermissionDefaultValue.FALSE);
         registerPermission("grim.brand.enable-on-join", PermissionDefaultValue.FALSE);
