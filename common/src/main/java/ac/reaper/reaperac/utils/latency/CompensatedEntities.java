@@ -43,6 +43,7 @@ public class CompensatedEntities {
     private static final AtomicInteger PIG_SADDLE_COERCE_FAILURES = new AtomicInteger();
     private static final AtomicInteger PIG_BOOST_COERCE_FAILURES = new AtomicInteger();
     private static final AtomicInteger STRIDER_BOOST_COERCE_FAILURES = new AtomicInteger();
+    private static final AtomicInteger STRIDER_SHAKING_COERCE_FAILURES = new AtomicInteger();
     private static final AtomicInteger STRIDER_SADDLE_COERCE_FAILURES = new AtomicInteger();
 
     public final Int2ObjectOpenHashMap<PacketEntity> entityMap = new Int2ObjectOpenHashMap<>(40, 0.7f);
@@ -354,6 +355,8 @@ public class CompensatedEntities {
                     Boolean shaking = coerceBoolean(striderShaking.getValue());
                     if (shaking != null) {
                         ((PacketEntityStrider) rideable).isShaking = shaking;
+                    } else {
+                        recordCoercionFailure("strider.isShaking", striderShaking.getValue(), STRIDER_SHAKING_COERCE_FAILURES);
                     }
                 }
 
