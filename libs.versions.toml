@@ -13,7 +13,7 @@ cloud-processors-requirements = "1.0.0-rc.1"
 floodgate-api = "2.0-SNAPSHOT"
 geyser-base-api = "1.0.2"
 grim-api = "1.2.4.0"
-# Pin PE to snapshot built from PacketEvents PR branch (post-restructure / 126fd040a tip).
+# Pin PE to an exact snapshot (PacketEvents PR branch tip, 126fd040a).
 packetevents = "2.12.0+126fd040a-SNAPSHOT"
 placeholderapi = "2.11.6"
 viaversion = "5.7.1"
