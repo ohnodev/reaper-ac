@@ -64,4 +64,10 @@ if (gradle.startParameter.isBuildScan) {
 rootProject.name = "grimac"
 include("common")
 include("bukkit")
+include("grim-fabric-common")
+// grim-fabric-intermediary/mc* sources stay in-repo for the PE-style layout. They are not Gradle-included yet:
+// Loom 1.15 rejects official Mojang mappings on older MC lines, default mappings + fabric-api AWs conflict, and
+// namedElements cross-slices changed. Re-enable include("grim-fabric-intermediary:mc1161") etc. when that graph is updated.
+include("grim-fabric-official")
+include("grim-fabric-official:mc261")
 include("fabric")

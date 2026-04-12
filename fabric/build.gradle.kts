@@ -3,6 +3,7 @@ import versioning.BuildConfig
 val minecraft_version: String by project
 val fabric_version: String by project
 
+// PE-style aggregate: one published Fabric mod JAR; implementation lives in grim-fabric-* modules.
 plugins {
     `maven-publish`
     alias(libs.plugins.fabric.loom)
@@ -16,7 +17,6 @@ dependencies {
 
     compileOnly("me.lucko:fabric-permissions-api:0.7.0")
 
-    // cloud-fabric is catalog-managed and pinned for reproducible builds.
     implementation(libs.cloud.fabric) {
         exclude(group = "net.fabricmc.fabric-api")
         exclude(group = "net.fabricmc", module = "fabric-loader")
@@ -24,17 +24,18 @@ dependencies {
 
     implementation(libs.fabric.loader)
 
-    // Keep default builds reproducible and mapping-agnostic: compile against PE API.
     compileOnly(libs.packetevents.api)
 
     compileOnly("org.slf4j:slf4j-api:2.0.17")
     compileOnly("org.apache.logging.log4j:log4j-api:2.24.3")
 
     implementation(project(":common"))
+    implementation(project(":grim-fabric-common"))
+    implementation(project(":grim-fabric-official:mc261"))
+    include(project(":grim-fabric-common"))
+    include(project(":grim-fabric-official:mc261"))
 }
 
-// Remote-first resolution; mavenLocal last (or only when MAVEN_LOCAL_OVERRIDE) so CI/dev machines
-// don’t silently pick stale local artifacts. Snapshot pins: libs.versions.toml.
 repositories {
     exclusive("https://maven.fabricmc.net/") {
         includeGroup("net.fabricmc")
@@ -78,22 +79,22 @@ repositories {
 
     mavenCentral()
 
-    // Non-exclusive Sonatype snapshots repo for exact cloud-fabric snapshot coordinates.
+    exclusive("https://repo.codemc.io/repository/maven-releases/", { mavenContent { releasesOnly() } }) {
+        includeGroup("com.github.retrooper")
+    }
+
     maven("https://central.sonatype.com/repository/maven-snapshots/") {
         content {
             includeGroup("org.incendo")
         }
     }
 
-    // Optional local publish fallback when explicitly enabled via MAVEN_LOCAL_OVERRIDE.
     if (BuildConfig.mavenLocalOverride) {
         mavenLocal()
     }
 }
 
 java {
-    // Base conventions keep a lower default for cross-platform compatibility.
-    // Fabric 26.1 runs on Java 25, so this module explicitly targets 25.
     toolchain.languageVersion.set(JavaLanguageVersion.of(25))
 }
 
@@ -102,7 +103,6 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 loom {
-    accessWidenerPath = file("src/main/resources/grimac.accesswidener")
 }
 
 publishing.publications.create<MavenPublication>("maven") {

@@ -42,6 +42,10 @@ repositories {
 
     mavenCentral()
 
+    exclusive("https://repo.codemc.io/repository/maven-releases/", { mavenContent { releasesOnly() } }) {
+        includeGroup("com.github.retrooper")
+    }
+
     // Optional local fallback: only when explicitly enabled via MAVEN_LOCAL_OVERRIDE.
     if (BuildConfig.mavenLocalOverride) {
         mavenLocal()
