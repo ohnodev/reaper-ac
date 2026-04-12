@@ -22,4 +22,8 @@ public abstract class PacketListenerAbstract extends PacketListenerCommon {
     public PacketListenerAbstract(PacketListenerPriority priority) {
         super(priority);
     }
+
+    public PacketListenerAbstract() {
+        super();
+    }
 }

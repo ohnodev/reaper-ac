@@ -31,7 +31,7 @@ public abstract class SimplePacketListenerAbstract extends PacketListenerCommon 
     }
 
     @Override
-    void onPacketReceive(PacketReceiveEvent event) {
+    protected void onPacketReceive(PacketReceiveEvent event) {
         if (event instanceof PacketHandshakeReceiveEvent) {
             onPacketHandshakeReceive((PacketHandshakeReceiveEvent) event);
         } else if (event instanceof PacketStatusReceiveEvent) {
@@ -48,7 +48,7 @@ public abstract class SimplePacketListenerAbstract extends PacketListenerCommon 
     }
 
     @Override
-    void onPacketSend(PacketSendEvent event) {
+    protected void onPacketSend(PacketSendEvent event) {
         if (event instanceof PacketStatusSendEvent) {
             onPacketStatusSend((PacketStatusSendEvent) event);
         } else if (event instanceof PacketLoginSendEvent) {
