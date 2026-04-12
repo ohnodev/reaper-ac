@@ -34,7 +34,7 @@ dependencies {
 }
 
 // Remote-first resolution; mavenLocal last (or only when MAVEN_LOCAL_OVERRIDE) so CI/dev machines
-// don’t silently pick stale local artifacts. PacketEvents/cloud snapshot sources: README-26.1-dependencies.md
+// don’t silently pick stale local artifacts. Snapshot pins: libs.versions.toml.
 repositories {
     exclusive("https://maven.fabricmc.net/") {
         includeGroup("net.fabricmc")
