@@ -17,7 +17,7 @@
       "ac.grim.grimac.platform.fabric.GrimACFabricEntryPoint"
     ],
     "grimMainLoad": [
-      "ac.grim.grimac.platform.fabric.mc1216.GrimACFabric1212LoaderPlugin"
+      "ac.grim.grimac.platform.fabric.mc261.GrimACFabric261LoaderPlugin"
     ]
   },
   "mixins": [
