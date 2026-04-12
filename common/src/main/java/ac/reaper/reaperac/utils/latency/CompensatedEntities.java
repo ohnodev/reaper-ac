@@ -45,6 +45,8 @@ public class CompensatedEntities {
     private static final AtomicInteger STRIDER_BOOST_COERCE_FAILURES = new AtomicInteger();
     private static final AtomicInteger STRIDER_SHAKING_COERCE_FAILURES = new AtomicInteger();
     private static final AtomicInteger STRIDER_SADDLE_COERCE_FAILURES = new AtomicInteger();
+    private static final AtomicInteger HORSE_FLAGS_COERCE_FAILURES = new AtomicInteger();
+    private static final AtomicInteger FIREWORK_ATTACHMENT_COERCE_FAILURES = new AtomicInteger();
 
     public final Int2ObjectOpenHashMap<PacketEntity> entityMap = new Int2ObjectOpenHashMap<>(40, 0.7f);
     public final IntArraySet entitiesRemovedThisTick = new IntArraySet();
@@ -374,7 +376,8 @@ public class CompensatedEntities {
 
         if (entity instanceof PacketEntityHorse horse) {
             int offset = 0;
-            EntityData<?> horseByte = WatchableIndexUtil.getIndex(watchableObjects, 17 - offset);
+            int horseFlagsIndex = 17 - offset;
+            EntityData<?> horseByte = WatchableIndexUtil.getIndex(watchableObjects, horseFlagsIndex);
             if (horseByte != null) {
                 Byte infoVal = coerceByte(horseByte.getValue());
                 if (infoVal != null) {
@@ -383,7 +386,16 @@ public class CompensatedEntities {
                     horse.isTame = (info & 0x02) != 0;
                     horse.hasSaddle = (info & 0x04) != 0;
                     horse.isRearing = (info & 0x20) != 0;
+                } else {
+                    recordIndexedCoercionFailure(
+                            "horse.flags",
+                            horseFlagsIndex,
+                            horseByte.getValue(),
+                            HORSE_FLAGS_COERCE_FAILURES
+                    );
                 }
+            } else {
+                recordIndexedCoercionFailure("horse.flags", horseFlagsIndex, null, HORSE_FLAGS_COERCE_FAILURES);
             }
 
             // track camel dashing
@@ -449,6 +461,21 @@ public class CompensatedEntities {
                 Integer optionalAttachedEntityId = coerceOptionalInteger(fireworkWatchableObject.getValue());
                 if (optionalAttachedEntityId != null && optionalAttachedEntityId == player.entityID) {
                     player.fireworks.addNewFirework(entityID);
+                } else if (optionalAttachedEntityId == null) {
+                    int count = FIREWORK_ATTACHMENT_COERCE_FAILURES.incrementAndGet();
+                    if (count <= 3 || (count % 64) == 0) {
+                        Object rawValue = fireworkWatchableObject.getValue();
+                        String valueType = rawValue == null ? "null" : rawValue.getClass().getSimpleName();
+                        LogUtil.warn(
+                                "[legacy-metadata] failed firework attachment coercion entityID=" + entityID
+                                        + " playerEntityID=" + player.entityID
+                                        + " watchableIndex=" + (9 - offset)
+                                        + " valueType=" + valueType
+                                        + " rawValue=" + String.valueOf(rawValue)
+                                        + " count=" + count
+                        );
+                    }
+                    return;
                 }
             }
         }
@@ -526,6 +553,20 @@ public class CompensatedEntities {
         if (count <= 3 || (count % 64) == 0) {
             String valueType = value == null ? "null" : value.getClass().getSimpleName();
             LogUtil.warn("[legacy-metadata] failed coercion for " + field + " valueType=" + valueType + " count=" + count);
+        }
+    }
+
+    private static void recordIndexedCoercionFailure(String field, int index, Object value, AtomicInteger counter) {
+        int count = counter.incrementAndGet();
+        if (count <= 3 || (count % 64) == 0) {
+            String valueType = value == null ? "null" : value.getClass().getSimpleName();
+            LogUtil.warn(
+                    "[legacy-metadata] failed coercion for " + field
+                            + " watchableIndex=" + index
+                            + " valueType=" + valueType
+                            + " rawValue=" + String.valueOf(value)
+                            + " count=" + count
+            );
         }
     }
 
