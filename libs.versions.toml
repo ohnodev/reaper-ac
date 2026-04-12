@@ -13,7 +13,7 @@ cloud-processors-requirements = "1.0.0-rc.1"
 floodgate-api = "2.0-SNAPSHOT"
 geyser-base-api = "1.0.2"
 grim-api = "1.2.4.0"
-# Snapshot required: release 2.12.0 API lacks preViaInjection / PacketListenerAbstract.isPreVia (ViaFabric ordering).
+# Match prebuilt Fabric jars (PR #7 tip); install matching api/spigot modules to mavenLocal via PE publish.
 packetevents = "2.12.0+126fd040a-SNAPSHOT"
 placeholderapi = "2.11.6"
 viaversion = "5.7.1"
