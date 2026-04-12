@@ -5,11 +5,8 @@ import ac.reaper.reaperac.checks.CheckData;
 import ac.reaper.reaperac.checks.type.PacketCheck;
 import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.utils.data.HeadRotation;
-import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientUseItem;
 
 import java.util.ArrayList;
@@ -30,8 +27,7 @@ public class BadPacketsJ extends Check implements PacketCheck {
             return;
         }
 
-        if (event.getPacketType() == PacketType.Play.Client.USE_ITEM && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21)
-                && PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_21)) {
+        if (event.getPacketType() == PacketType.Play.Client.USE_ITEM) {
             WrapperPlayClientUseItem packet = new WrapperPlayClientUseItem(event);
             rotations.add(new HeadRotation(packet.getYaw(), packet.getPitch()));
         }

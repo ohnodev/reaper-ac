@@ -4,14 +4,12 @@ import ac.reaper.reaperac.checks.Check;
 import ac.reaper.reaperac.checks.type.PacketCheck;
 import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.utils.worldborder.BorderExtent;
-import ac.reaper.reaperac.utils.worldborder.RealTimeMovingBorderExtent;
 import ac.reaper.reaperac.utils.worldborder.StaticBorderExtent;
 import ac.reaper.reaperac.utils.worldborder.TickBasedMovingBorderExtent;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerInitializeWorldBorder;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerWorldBorder;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerWorldBorderCenter;
@@ -161,13 +159,8 @@ public class PacketWorldBorder extends Check implements PacketCheck {
     private static final boolean SERVER_TICK_BASED = PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_21_11);
 
     private BorderExtent createMovingExtent(double from, double to, long speed) {
-        if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21_11)) { // tick-based
-            long durationTicks = SERVER_TICK_BASED ? speed : (speed / 50);
-            return new TickBasedMovingBorderExtent(from, to, durationTicks);
-        } else { // real-time based
-            long durationMs = SERVER_TICK_BASED ? (speed * 50) : speed;
-            return new RealTimeMovingBorderExtent(from, to, durationMs);
-        }
+        long durationTicks = SERVER_TICK_BASED ? speed : (speed / 50);
+        return new TickBasedMovingBorderExtent(from, to, durationTicks);
     }
 
 }

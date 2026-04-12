@@ -6,7 +6,6 @@ import ac.reaper.reaperac.checks.type.PacketCheck;
 import ac.reaper.reaperac.player.GrimPlayer;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.player.DiggingAction;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerDigging;
 
@@ -28,11 +27,8 @@ public class BadPacketsL extends Check implements PacketCheck {
                 return;
 
             // 1.8 and above clients always send digging packets that aren't used for digging at 0, 0, 0, facing DOWN
-            // 1.7 and below clients do the same, except use SOUTH for RELEASE_USE_ITEM
-            final int expectedFace = player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_7_10) && packet.getAction() == DiggingAction.RELEASE_USE_ITEM
-                    ? 255 : 0;
 
-            if (packet.getBlockFaceId() != expectedFace
+            if (packet.getBlockFaceId() != 0
                     || packet.getBlockPosition().getX() != 0
                     || packet.getBlockPosition().getY() != 0
                     || packet.getBlockPosition().getZ() != 0

@@ -7,7 +7,6 @@ import ac.reaper.reaperac.utils.data.Pair;
 import ac.reaper.reaperac.utils.data.VectorData;
 import ac.reaper.reaperac.utils.data.packetentity.JumpableEntity;
 import ac.reaper.reaperac.utils.math.Vector3dm;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import lombok.experimental.UtilityClass;
 
 import java.util.ArrayList;
@@ -24,18 +23,7 @@ public final class PredictionEngineRideableUtils {
         // TODO: onGround can desync if it's first riding tick
         jumpable.executeJump(player, possibleVectors);
 
-        // More jumping stuff
-        boolean legacyJumpingMechanics = player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_19_3);
-        boolean onGround = legacyJumpingMechanics
-                ? player.clientControlledVerticalCollision
-                : player.lastOnGround;
-        if (onGround) {
-            if (legacyJumpingMechanics) {
-                jumpable.setJumpPower(0.0F);
-            }
-
-            jumpable.setJumping(false);
-        }
+        if (player.lastOnGround) jumpable.setJumping(false);
 
         return possibleVectors;
     }

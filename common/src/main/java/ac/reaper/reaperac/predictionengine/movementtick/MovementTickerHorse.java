@@ -3,9 +3,7 @@ package ac.reaper.reaperac.predictionengine.movementtick;
 import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.utils.data.packetentity.PacketEntityHorse;
 import ac.reaper.reaperac.utils.math.Vector3dm;
-import ac.reaper.reaperac.utils.nmsutil.Collisions;
 import com.github.retrooper.packetevents.protocol.attribute.Attributes;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 
 public class MovementTickerHorse extends MovementTickerLivingVehicle {
 
@@ -27,13 +25,6 @@ public class MovementTickerHorse extends MovementTickerLivingVehicle {
 
         this.movementInput = new Vector3dm(horizInput, 0, forwardsInput);
         if (this.movementInput.lengthSquared() > 1) this.movementInput.normalize();
-    }
-
-    @Override
-    public void livingEntityAIStep() {
-        super.livingEntityAIStep();
-        if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_17))
-            Collisions.handleInsideBlocks(player);
     }
 
     public float getExtraSpeed() {

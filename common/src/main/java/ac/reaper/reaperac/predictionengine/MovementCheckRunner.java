@@ -37,14 +37,11 @@ import ac.reaper.reaperac.utils.nmsutil.BoundingBoxSize;
 import ac.reaper.reaperac.utils.nmsutil.Collisions;
 import ac.reaper.reaperac.utils.nmsutil.GetBoundingBox;
 import ac.reaper.reaperac.utils.nmsutil.Riptide;
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.attribute.Attributes;
 import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
 import com.github.retrooper.packetevents.protocol.item.ItemStack;
 import com.github.retrooper.packetevents.protocol.item.type.ItemType;
 import com.github.retrooper.packetevents.protocol.item.type.ItemTypes;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.player.GameMode;
 import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
 import com.github.retrooper.packetevents.protocol.world.states.defaulttags.BlockTags;
@@ -67,12 +64,8 @@ public class MovementCheckRunner extends Check implements PositionCheck {
         // This teleport wasn't valid as the player STILL hasn't loaded this damn chunk.
         // Keep re-teleporting until they load the chunk!
         if (player.getSetbackTeleportUtil().insideUnloadedChunk()) {
-            // The player doesn't control this vehicle, we don't care
-            final boolean invalidVehicle = player.inVehicle() &&
-                    (PacketEvents.getAPI().getServerManager().getVersion().isOlderThan(ServerVersion.V_1_9) ||
-                            player.getClientVersion().isOlderThan(ClientVersion.V_1_9));
 
-            if (!invalidVehicle && !data.isTeleport()) {
+            if (!data.isTeleport()) {
                 // Teleport the player back to avoid players being able to simply ignore transactions
                 // We shouldn't simulate movement in unloaded chunks
                 player.getSetbackTeleportUtil().executeNonSimulatingForceResync();
@@ -377,24 +370,20 @@ public class MovementCheckRunner extends Check implements PositionCheck {
         SimpleCollisionBox steppingOnBB = GetBoundingBox.getCollisionBoxForPlayer(player, player.x, player.y, player.z).expand(player.getMovementThreshold()).offset(0, -1, 0);
         Collisions.hasMaterial(player, steppingOnBB, (pair) -> {
             WrappedBlockState data = pair.first();
-            if (data.getType() == StateTypes.SLIME_BLOCK && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_8)) {
+            if (data.getType() == StateTypes.SLIME_BLOCK) {
                 player.uncertaintyHandler.isSteppingOnSlime = true;
                 player.uncertaintyHandler.isSteppingOnBouncyBlock = true;
             }
             if (data.getType() == StateTypes.HONEY_BLOCK) {
-                if (player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_14)
-                        && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_8)) {
-                    player.uncertaintyHandler.isSteppingOnBouncyBlock = true;
-                }
                 player.uncertaintyHandler.isSteppingOnHoney = true;
             }
-            if (BlockTags.BEDS.contains(data.getType()) && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_12)) {
+            if (BlockTags.BEDS.contains(data.getType())) {
                 player.uncertaintyHandler.isSteppingOnBouncyBlock = true;
             }
             if (BlockTags.ICE.contains(data.getType())) {
                 player.uncertaintyHandler.isSteppingOnIce = true;
             }
-            if (data.getType() == StateTypes.BUBBLE_COLUMN && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_13)) {
+            if (data.getType() == StateTypes.BUBBLE_COLUMN) {
                 player.uncertaintyHandler.isSteppingNearBubbleColumn = true;
             }
             if (data.getType() == StateTypes.SCAFFOLDING) {
@@ -420,12 +409,9 @@ public class MovementCheckRunner extends Check implements PositionCheck {
         // give them a decent amount of uncertainty and don't ban them for mojang's stupid mistake
         boolean isGlitchy = player.uncertaintyHandler.isNearGlitchyBlock;
 
-        player.uncertaintyHandler.isNearGlitchyBlock = player.getClientVersion().isOlderThan(ClientVersion.V_1_9)
-                && Collisions.hasMaterial(player, expandedBB.copy().expand(0.2),
-                checkData -> BlockTags.ANVIL.contains(checkData.first().getType())
-                        || checkData.first().getType() == StateTypes.CHEST || checkData.first().getType() == StateTypes.TRAPPED_CHEST);
+        player.uncertaintyHandler.isNearGlitchyBlock = false;
 
-        player.uncertaintyHandler.isOrWasNearGlitchyBlock = isGlitchy || player.uncertaintyHandler.isNearGlitchyBlock;
+        player.uncertaintyHandler.isOrWasNearGlitchyBlock = isGlitchy;
         player.uncertaintyHandler.checkForHardCollision();
 
         if (player.isFlying != player.wasFlying)
@@ -433,10 +419,6 @@ public class MovementCheckRunner extends Check implements PositionCheck {
 
         if (!player.inVehicle() && (Math.abs(player.x) == 2.9999999E7D || Math.abs(player.z) == 2.9999999E7D)) {
             player.uncertaintyHandler.lastThirtyMillionHardBorder.reset();
-        }
-
-        if (player.isFlying && player.getClientVersion().isOlderThan(ClientVersion.V_1_13) && player.compensatedWorld.containsLiquid(player.boundingBox)) {
-            player.uncertaintyHandler.lastUnderwaterFlyingHack.reset();
         }
 
         boolean couldBeStuckSpeed = Collisions.checkStuckSpeed(player, player.getMovementThreshold());
@@ -456,7 +438,7 @@ public class MovementCheckRunner extends Check implements PositionCheck {
             // Dead players can't cheat, if you find a way how they could, open an issue
             player.predictedVelocity = new VectorData(new Vector3dm(), VectorData.VectorType.Dead);
             player.clientVelocity = new Vector3dm();
-        } else if (player.disableGrim || (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_8) && player.gamemode == GameMode.SPECTATOR) || player.isFlying || (player.isExemptElytra() && player.isGliding)) {
+        } else if (player.disableGrim || player.gamemode == GameMode.SPECTATOR || player.isFlying || player.isExemptElytra() && player.isGliding) {
             // We could technically check spectator but what's the point...
             // Added complexity to analyze a gamemode used mainly by moderators
             //
@@ -493,8 +475,6 @@ public class MovementCheckRunner extends Check implements PositionCheck {
                     player.actualMovement = new Vector3dm(player.x - player.lastX, player.y - player.lastY, player.z - player.lastZ);
 
                     player.couldSkipTick = true;
-
-                    Collisions.handleInsideBlocks(player);
                 }
             }
 
@@ -502,7 +482,8 @@ public class MovementCheckRunner extends Check implements PositionCheck {
             new MovementTickerPlayer(player).livingEntityAIStep();
             PlayerBaseTick.updatePowderSnow(player);
             PlayerBaseTick.updatePlayerPose(player);
-        } else if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_9) && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) {
+        } else {
+
             wasChecked = true;
             // The player and server are both on a version with client controlled entities
             // If either or both of the client server version has server controlled entities
@@ -530,11 +511,10 @@ public class MovementCheckRunner extends Check implements PositionCheck {
                 PlayerBaseTick.doBaseTick(player);
                 new MovementTickerStrider(player).livingEntityAIStep();
                 MovementTickerStrider.floatStrider(player);
-                Collisions.handleInsideBlocks(player);
             } else {
                 wasChecked = false;
             }
-        } // If it isn't any of these cases, the player is on a mob they can't control and therefore is exempt
+        }
 
         // No, don't comment about the sqrt call.  It doesn't matter unless you run sqrt thousands of times a second.
         double offset = player.predictedVelocity.vector.distance(player.actualMovement);

@@ -3,10 +3,8 @@ package ac.reaper.reaperac.events.packets;
 import ac.reaper.reaperac.GrimAPI;
 import ac.reaper.reaperac.utils.anticheat.LogUtil;
 import ac.reaper.reaperac.utils.anticheat.MessageUtil;
-import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketListenerAbstract;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPluginMessage;
 import com.google.common.collect.Iterables;
@@ -25,7 +23,7 @@ public class ProxyAlertMessenger extends PacketListenerAbstract {
     public ProxyAlertMessenger() {
         usingProxy = ProxyAlertMessenger.getBooleanFromFile("spigot.yml", "settings.bungeecord")
                 || ProxyAlertMessenger.getBooleanFromFile("paper.yml", "settings.velocity-support.enabled")
-                || (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_19) && ProxyAlertMessenger.getBooleanFromFile("config/paper-global.yml", "proxies.velocity.enabled"));
+                || ProxyAlertMessenger.getBooleanFromFile("config/paper-global.yml", "proxies.velocity.enabled");
 
         if (usingProxy) {
             LogUtil.info("Registering an outgoing plugin channel...");

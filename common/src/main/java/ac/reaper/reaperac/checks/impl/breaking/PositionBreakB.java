@@ -5,13 +5,12 @@ import ac.reaper.reaperac.checks.CheckData;
 import ac.reaper.reaperac.checks.type.BlockBreakCheck;
 import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.utils.anticheat.update.BlockBreak;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.player.DiggingAction;
 import com.github.retrooper.packetevents.protocol.world.BlockFace;
 
 @CheckData(name = "PositionBreakB")
 public class PositionBreakB extends Check implements BlockBreakCheck {
-    private final int releaseFace = player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_8) ? 0 : 255;
+
     private BlockFace lastFace;
 
     public PositionBreakB(GrimPlayer player) {
@@ -31,7 +30,7 @@ public class PositionBreakB extends Check implements BlockBreakCheck {
         }
 
         if (blockBreak.action == DiggingAction.CANCELLED_DIGGING) {
-            lastFace = blockBreak.faceId == releaseFace ? null : blockBreak.face;
+            lastFace = blockBreak.faceId == 0 ? null : blockBreak.face;
         }
     }
 }

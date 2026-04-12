@@ -74,9 +74,6 @@ public class PacketEntity extends TypedPacketEntity {
         initAttributes(player);
         this.trackedServerPosition = new TrackedPosition();
         this.trackedServerPosition.setPos(new Vector3d(x, y, z));
-        if (player.getClientVersion().isOlderThan(ClientVersion.V_1_9)) { // Thanks ViaVersion
-            trackedServerPosition.setPos(new Vector3d(((int) (x * 32)) / 32d, ((int) (y * 32)) / 32d, ((int) (z * 32)) / 32d));
-        }
         final Vector3d pos = trackedServerPosition.getPos();
         this.newPacketLocation = new ReachInterpolationData(player, new SimpleCollisionBox(pos.x, pos.y, pos.z, pos.x, pos.y, pos.z, false), trackedServerPosition, this);
     }
@@ -130,55 +127,18 @@ public class PacketEntity extends TypedPacketEntity {
                 // This only matters for 1.9+ clients, but it won't hurt 1.8 clients either... align for imprecision
                 final double scale = trackedServerPosition.getScale();
                 Vector3d vec3d;
-                if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_16)) {
-                    vec3d = trackedServerPosition.withDelta(TrackedPosition.pack(relX, scale), TrackedPosition.pack(relY, scale), TrackedPosition.pack(relZ, scale));
-                } else {
-                    vec3d = trackedServerPosition.withDeltaLegacy(TrackedPosition.packLegacy(relX, scale), TrackedPosition.packLegacy(relY, scale), TrackedPosition.packLegacy(relZ, scale));
-                }
+                vec3d = trackedServerPosition.withDelta(TrackedPosition.pack(relX, scale), TrackedPosition.pack(relY, scale), TrackedPosition.pack(relZ, scale));
                 trackedServerPosition.setPos(vec3d);
             } else {
                 trackedServerPosition.setPos(new Vector3d(relX, relY, relZ));
-                // ViaVersion desync's here for teleports
-                // It simply teleports the entity with its position divided by 32... ignoring the offset this causes.
-                // Thanks a lot ViaVersion!  Please don't fix this, or it will be a pain to support.
-                if (player.getClientVersion().isOlderThan(ClientVersion.V_1_9)) {
-                    trackedServerPosition.setPos(new Vector3d(((int) (relX * 32)) / 32d, ((int) (relY * 32)) / 32d, ((int) (relZ * 32)) / 32d));
-                }
             }
         }
         this.oldPacketLocation = newPacketLocation;
         // BUG FIX LOGIC for https://bugs.mojang.com/browse/MC-255263
         // 1. We MUST check !hasPos. If hasPos is true, we must let standard interpolation (4-arg) run.
         // 2. The 3-arg constructor is for versions where the client FREEZES (targets current pos) when rot only packets come in
-        if (!hasPos &&
-                // Logic for versions that FREEZE (Target = Current)
-                // 1.21.5 -> 1.21.8 (regression)
-                ((player.getClientVersion().isOlderThan(ClientVersion.V_1_21_9) && player.getClientVersion().isNewerThan(ClientVersion.V_1_21_4)) ||
-                        // 1.15 -> 1.20.1 (Old bug)
-                        (player.getClientVersion().isOlderThan(ClientVersion.V_1_20_2) && player.getClientVersion().isNewerThan(ClientVersion.V_1_14_4)))
-        ) {
-            // Apply Freeze Fix (Start = Box, Target = Box)
-            this.newPacketLocation = new ReachInterpolationData(
-                    player,
-                    oldPacketLocation.getPossibleLocationCombined(),
-                    this
-            );
-        } else {
-            // Standard Interpolation (Start = Box, Target = ServerPos)
-            // This naturally fixes the "Slowdown"/Interpolation Reset in 1.20.2-1.21.4 and 1.21.9+ resetting the lerp timer
-            this.newPacketLocation = new ReachInterpolationData(player, oldPacketLocation.getPossibleLocationCombined(), trackedServerPosition, this);
-        }
-
-        // In versions < 1.16.2 when the client receives non-relative teleport for an entity
-        // And they move less by the thresholds given, the entity does not move client side
-        if (hasPos && !relative && player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_16_1)) {
-            SimpleCollisionBox clientArea = newPacketLocation.getPossibleLocationCombined();
-            if (clientArea.distanceX(relX) < 0.03125D
-                    && clientArea.distanceY(relY) < 0.015625D
-                    && clientArea.distanceZ(relZ) < 0.03125D) {
-                newPacketLocation.expandNonRelative();
-            }
-        }
+        // This naturally fixes the "Slowdown"/Interpolation Reset in 1.20.2-1.21.4 and 1.21.9+ resetting the lerp timer
+        this.newPacketLocation = new ReachInterpolationData(player, oldPacketLocation.getPossibleLocationCombined(), trackedServerPosition, this);
     }
 
     // Remove the possibility of the old packet location

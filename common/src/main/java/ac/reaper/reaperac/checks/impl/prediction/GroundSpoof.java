@@ -5,8 +5,6 @@ import ac.reaper.reaperac.checks.CheckData;
 import ac.reaper.reaperac.checks.type.PostPredictionCheck;
 import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.utils.anticheat.update.PredictionComplete;
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.player.GameMode;
 
 @CheckData(name = "GroundSpoof", setback = 10, decay = 0.01)
@@ -19,9 +17,7 @@ public class GroundSpoof extends Check implements PostPredictionCheck {
     @Override
     public void onPredictionComplete(final PredictionComplete predictionComplete) {
         // Exemptions
-        // Don't check players in spectator
-        if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_8) && player.gamemode == GameMode.SPECTATOR)
-            return;
+        if (player.gamemode == GameMode.SPECTATOR) return; // Don't check players in spectator
         // And don't check this long list of ground exemptions
         if (player.exemptOnGround() || !predictionComplete.isChecked()) return;
         // Don't check if the player was on a ghost block

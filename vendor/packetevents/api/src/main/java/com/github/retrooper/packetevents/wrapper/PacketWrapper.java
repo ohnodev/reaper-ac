@@ -1326,9 +1326,7 @@ public class PacketWrapper<T extends PacketWrapper<T>> {
         int redirectNodeIndex = ((flags & 0x08) != 0) ? readVarInt() : 0;
         if (nodeType == 2) {
             String name = this.readString();
-            Parser parser = this.serverVersion.isNewerThanOrEquals(ServerVersion.V_1_19)
-                    ? this.readMappedEntity(Parsers::getById)
-                    : Parsers.getByName(this.readIdentifier().toString());
+            Parser parser = this.readMappedEntity(Parsers::getById);
             if (parser == null) {
                 throw new IllegalStateException("Unknown command parser while decoding node '" + name
                         + "' for version " + this.serverVersion.toClientVersion());

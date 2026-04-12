@@ -6,7 +6,6 @@ import ac.reaper.reaperac.checks.type.PacketCheck;
 import ac.reaper.reaperac.player.GrimPlayer;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,10 +23,6 @@ public class MultiActionsC extends Check implements PacketCheck {
         StringJoiner verbose = new StringJoiner(", ");
         if (player.isSprinting && (!player.isSwimming || !player.clientClaimsLastOnGround)) {
             verbose.add("sprinting");
-        }
-
-        if (player.isSneaking && player.getClientVersion().isOlderThan(ClientVersion.V_1_15)) {
-            verbose.add("sneaking");
         }
 
         if (player.supportsEndTick() && player.packetStateData.knownInput.moving()) {

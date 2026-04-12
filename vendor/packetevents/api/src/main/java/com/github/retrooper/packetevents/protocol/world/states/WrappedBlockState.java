@@ -1601,12 +1601,10 @@ public class WrappedBlockState {
         logger.info("Preloading block mappings...");
         long start = System.nanoTime();
 
-        {
-            Map<Map<StateValue, Object>, StateCacheValue> cache = new HashMap<>();
-            // Legacy mappings are intentionally disabled in this 26.2-only runtime.
-            for (ClientVersion version : MAPPING_VERSION_STEPS) {
-                loadModern(cache, version);
-            }
+        Map<Map<StateValue, Object>, StateCacheValue> cache = new HashMap<>();
+        // Legacy mappings are intentionally disabled in this 26.2-only runtime.
+        for (ClientVersion version : MAPPING_VERSION_STEPS) {
+            loadModern(cache, version);
         }
 
         double timeDiff = (System.nanoTime() - start) / 1_000_000d;

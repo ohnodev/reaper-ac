@@ -8,13 +8,10 @@ import ac.reaper.reaperac.utils.data.KnownInput;
 import ac.reaper.reaperac.utils.data.packetentity.JumpableEntity;
 import ac.reaper.reaperac.utils.data.packetentity.PacketEntity;
 import ac.reaper.reaperac.utils.math.Vec2;
-import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketListenerAbstract;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerInput;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientSteerVehicle;
 
@@ -70,22 +67,20 @@ public class PacketPlayerSteer extends PacketListenerAbstract {
                 sideways--;
             }
 
-            Vec2 inputVector = player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21_5)
-                    ? PredictionEngine.modifyInput(player, new Vec2(forward, sideways).normalized())
-                    : new Vec2(forward * 0.98f, sideways * 0.98f);
+            Vec2 inputVector = PredictionEngine.modifyInput(player, new Vec2(forward, sideways).normalized());
 
             player.vehicleData.nextVehicleForward = inputVector.x();
             player.vehicleData.nextVehicleHorizontal = inputVector.y();
 
             // that's how mojang is dealing with sneaking from now on...
-            if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21_6)) {
-                player.isSneaking = input.isShift();
-            }
+            player.isSneaking = input.isShift();
 
             player.packetStateData.knownInput = new KnownInput(input.isForward(), input.isBackward(), input.isLeft(), input.isRight(), input.isJump(), input.isShift(), input.isSprint());
         } else if (event.getPacketType() == PacketType.Play.Client.PLAYER_ROTATION) {
             GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
-            if (player == null || !player.inVehicle() || player.getClientVersion().isOlderThan(ClientVersion.V_1_21_2)) return;
+            if (player == null || !player.inVehicle()) {
+                return;
+            }
 
             // player_input is not sent every tick, so we need to stick to this packet
             this.tickPlayerWorld(player);
@@ -102,11 +97,7 @@ public class PacketPlayerSteer extends PacketListenerAbstract {
             // Horse and boat have first passenger in control
             // If the player is the first passenger, disregard this attempt to have the server control the entity
             if ((riding.isBoat || riding.isHappyGhast || (riding instanceof JumpableEntity jumpable && jumpable.hasSaddle())) &&
-                    riding.passengers.get(0) == player.compensatedEntities.self &&
-                    // Although if the player has server controlled entities
-                    player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9) &&
-                    // or the server controls the entities, then this is vanilla logic so allow it
-                    PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_9)) {
+                    riding.passengers.get(0) == player.compensatedEntities.self) {
                 return;
             }
 

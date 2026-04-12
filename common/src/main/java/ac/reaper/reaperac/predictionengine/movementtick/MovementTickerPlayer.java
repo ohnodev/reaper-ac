@@ -4,9 +4,7 @@ import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.predictionengine.predictions.PredictionEngineLava;
 import ac.reaper.reaperac.predictionengine.predictions.PredictionEngineNormal;
 import ac.reaper.reaperac.predictionengine.predictions.PredictionEngineWater;
-import ac.reaper.reaperac.predictionengine.predictions.PredictionEngineWaterLegacy;
 import ac.reaper.reaperac.utils.nmsutil.BlockProperties;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 
 public class MovementTickerPlayer extends MovementTicker {
     public MovementTickerPlayer(GrimPlayer player) {
@@ -15,11 +13,7 @@ public class MovementTickerPlayer extends MovementTicker {
 
     @Override
     public void doWaterMove(float swimSpeed, boolean isFalling, float swimFriction) {
-        if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_13)) {
-            new PredictionEngineWater().guessBestMovement(swimSpeed, player, isFalling, player.gravity, swimFriction);
-        } else {
-            new PredictionEngineWaterLegacy().guessBestMovement(swimSpeed, player, swimFriction);
-        }
+        new PredictionEngineWater().guessBestMovement(swimSpeed, player, isFalling, player.gravity, swimFriction);
     }
 
     @Override

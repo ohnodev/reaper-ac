@@ -9,7 +9,6 @@ import ac.reaper.reaperac.utils.anticheat.update.PredictionComplete;
 import ac.reaper.reaperac.utils.nmsutil.BlockBreakSpeed;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.player.GameMode;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientInteractEntity;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerDigging;
@@ -93,9 +92,7 @@ public class PacketOrderI extends Check implements PostPredictionCheck {
                         return;
                     }
                 case CANCELLED_DIGGING, FINISHED_DIGGING:
-                    if (exemptPlacingWhileDigging || player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_7_10)) {
-                        return;
-                    }
+                    if (exemptPlacingWhileDigging) return;
                     digging = true;
             }
         }

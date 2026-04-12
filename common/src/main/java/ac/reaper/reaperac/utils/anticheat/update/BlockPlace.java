@@ -17,11 +17,8 @@ import ac.reaper.reaperac.utils.nmsutil.BoundingBoxSize;
 import ac.reaper.reaperac.utils.nmsutil.GetBoundingBox;
 import ac.reaper.reaperac.utils.nmsutil.Materials;
 import ac.reaper.reaperac.utils.nmsutil.ReachUtils;
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.attribute.Attributes;
 import com.github.retrooper.packetevents.protocol.item.ItemStack;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.player.InteractionHand;
 import com.github.retrooper.packetevents.protocol.world.BlockFace;
 import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
@@ -145,7 +142,8 @@ public class BlockPlace {
             if (baseReplaceable) return true;
             if (heldItem != currentType) return false;
 
-            if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13) && !state.isUp()) {
+
+            if (!state.isUp()) {
                 return true;
             }
 
@@ -155,9 +153,6 @@ public class BlockPlace {
                     state.getWest() == West.FALSE;
         }
         else if (currentType == StateTypes.LADDER) {
-            if (player.getClientVersion().isOlderThan(ClientVersion.V_1_13)) {
-                return true;
-            }
             return currentType != heldItem && currentType.isReplaceable();
         }
         // Glow lichen can be replaced if it has an open face, or the player is placing something
@@ -434,7 +429,7 @@ public class BlockPlace {
 
     public void setFaceId(int face) {
         this.faceId = face;
-        this.face = PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_9) ? BlockFace.getBlockFaceByValue(faceId) : BlockFace.getLegacyBlockFaceByValue(faceId);
+        this.face = BlockFace.getBlockFaceByValue(faceId);
     }
 
     private List<BlockFace> getNearestLookingDirections() {
@@ -562,29 +557,27 @@ public class BlockPlace {
             // This sucks and desyncs constantly, but what can you do?
             //
             // 1.9+ introduced the mechanic where both the client and server must agree upon a block place
-            // 1.8 clients will simply not send the place when it fails, thanks mojang.
-            if (player.getClientVersion().isNewerThan(ClientVersion.V_1_8)) {
-                for (PacketEntity entity : player.compensatedEntities.entityMap.values()) {
-                    if (!entity.canHit()) continue;
-                    SimpleCollisionBox interpBox = entity.getPossibleCollisionBoxes();
 
-                    final double scale = entity.getAttributeValue(Attributes.SCALE);
-                    double width = BoundingBoxSize.getWidth(player, entity) * scale;
-                    double height = BoundingBoxSize.getHeight(player, entity) * scale;
-                    double interpWidth = Math.max(interpBox.maxX - interpBox.minX, interpBox.maxZ - interpBox.minZ);
-                    double interpHeight = interpBox.maxY - interpBox.minY;
+            for (PacketEntity entity : player.compensatedEntities.entityMap.values()) {
+                if (!entity.canHit()) continue;
+                SimpleCollisionBox interpBox = entity.getPossibleCollisionBoxes();
 
-                    // If not accurate, fall back to desync pos
-                    // This happens due to the lack of an idle packet on 1.9+ clients
-                    // On 1.8 clients this should practically never happen
-                    if (interpWidth - width > 0.05 || interpHeight - height > 0.05) {
-                        Vector3d entityPos = entity.trackedServerPosition.getPos();
-                        interpBox = GetBoundingBox.getPacketEntityBoundingBox(player, entityPos.getX(), entityPos.getY(), entityPos.getZ(), entity);
-                    }
+                final double scale = entity.getAttributeValue(Attributes.SCALE);
+                double width = BoundingBoxSize.getWidth(player, entity) * scale;
+                double height = BoundingBoxSize.getHeight(player, entity) * scale;
+                double interpWidth = Math.max(interpBox.maxX - interpBox.minX, interpBox.maxZ - interpBox.minZ);
+                double interpHeight = interpBox.maxY - interpBox.minY;
 
-                    if (box.isIntersected(interpBox)) {
-                        return; // Blocking the block placement
-                    }
+                // If not accurate, fall back to desync pos
+                // This happens due to the lack of an idle packet on 1.9+ clients
+                // On 1.8 clients this should practically never happen
+                if (interpWidth - width > 0.05 || interpHeight - height > 0.05) {
+                    Vector3d entityPos = entity.trackedServerPosition.getPos();
+                    interpBox = GetBoundingBox.getPacketEntityBoundingBox(player, entityPos.getX(), entityPos.getY(), entityPos.getZ(), entity);
+                }
+
+                if (box.isIntersected(interpBox)) {
+                    return; // Blocking the block placement
                 }
             }
         }
@@ -601,10 +594,8 @@ public class BlockPlace {
         }
 
         // Check for waterlogged
-        if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13)) {
-            if (state.hasProperty(StateValue.WATERLOGGED)) { // waterloggable
-                state.setWaterlogged(existingState.getType() == StateTypes.WATER && existingState.getLevel() == 0);
-            }
+        if (state.hasProperty(StateValue.WATERLOGGED)) { // waterloggable
+            state.setWaterlogged(existingState.getType() == StateTypes.WATER && existingState.getLevel() == 0);
         }
 
         player.inventory.onBlockPlace(this);
@@ -614,17 +605,6 @@ public class BlockPlace {
     public boolean isZAxis() {
         BlockFace face = getFace();
         return face == BlockFace.NORTH || face == BlockFace.SOUTH;
-    }
-
-    // We need to now run block
-    public void tryCascadeBlockUpdates(Vector3i pos) {
-        if (player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_12_2)) return;
-
-        cascadeBlockUpdates(pos);
-    }
-
-    private void cascadeBlockUpdates(Vector3i pos) {
-
     }
 
     public void set(WrappedBlockState state) {

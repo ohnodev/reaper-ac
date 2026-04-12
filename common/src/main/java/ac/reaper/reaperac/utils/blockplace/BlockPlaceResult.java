@@ -9,11 +9,8 @@ import ac.reaper.reaperac.utils.latency.CompensatedWorld;
 import ac.reaper.reaperac.utils.math.Vector3dm;
 import ac.reaper.reaperac.utils.nmsutil.Dripstone;
 import ac.reaper.reaperac.utils.nmsutil.Materials;
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.item.type.ItemType;
 import com.github.retrooper.packetevents.protocol.item.type.ItemTypes;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.world.BlockFace;
 import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
 import com.github.retrooper.packetevents.protocol.world.states.defaulttags.BlockTags;
@@ -38,7 +35,6 @@ public enum BlockPlaceResult {
     // The client only predicts one of the individual bed blocks, interestingly
     BED((player, place) -> {
         // 1.12- players don't predict bed places for some reason
-        if (player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_12_2)) return;
 
         BlockFace facing = place.getPlayerFacing();
         if (place.isBlockFaceOpen(facing)) {
@@ -542,9 +538,6 @@ public enum BlockPlaceResult {
         boolean isHead = place.material.getName().contains("head") || place.material.getName().contains("skull");
         boolean isWallSign = !isTorch && !isHead;
 
-        if (isHead && player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_12_2))
-            return; // 1.12- players don't predict head places
-
         if (isTorch) {
             dir = StateTypes.WALL_TORCH.createBlockState(CompensatedWorld.blockVersion);
         } else if (isHead) {
@@ -865,7 +858,8 @@ public enum BlockPlaceResult {
             boolean clickedTop = place.getClickedLocation().getY() > 0.5;
             Half half = clickedTop ? Half.TOP : Half.BOTTOM;
             door.setHalf(half);
-        } else if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) { // 1.9 logic only
+        } else {
+            // 1.9 logic only
             door.setFacing(place.getPlayerFacing().getOppositeFace());
             Half half = direction == BlockFace.UP ? Half.BOTTOM : Half.TOP;
             door.setHalf(half);
@@ -875,23 +869,6 @@ public enum BlockPlaceResult {
         if (place.isBlockPlacedPowered()) {
             door.setOpen(true);
         }
-
-        // 1.8 has special placing requirements
-        if (player.getClientVersion().isOlderThan(ClientVersion.V_1_9)) {
-            WrappedBlockState dirState = place.getDirectionalState(door.getFacing().getOppositeFace());
-            boolean fullFace = CollisionData.getData(dirState.getType()).getMovementCollisionBox(player, player.getClientVersion(), dirState).isFullBlock();
-            boolean blacklisted = BlockTags.ICE.contains(dirState.getType()) || BlockTags.GLASS_BLOCKS.contains(dirState.getType()) ||
-                    dirState.getType() == StateTypes.TNT || BlockTags.LEAVES.contains(dirState.getType()) ||
-                    dirState.getType() == StateTypes.SNOW || dirState.getType() == StateTypes.CACTUS;
-            boolean whitelisted = dirState.getType() == StateTypes.GLOWSTONE || BlockTags.SLABS.contains(dirState.getType()) ||
-                    BlockTags.STAIRS.contains(dirState.getType());
-
-            // Need a solid block to place a trapdoor on
-            if (!((dirState.getType().isBlocking() && !blacklisted && fullFace) || whitelisted)) {
-                return;
-            }
-        }
-
 
         place.set(door);
     }, ItemTags.TRAPDOORS),
@@ -951,23 +928,11 @@ public enum BlockPlaceResult {
                 door.setOpen(true);
             }
 
-            if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13)) { // Only works on 1.13+
-                door.setHinge(hinge);
-            }
-
+            door.setHinge(hinge);
             door.setHalf(Half.LOWER);
             place.set(door);
-
-            if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13)) { // Only works on 1.13+
-                door.setHalf(Half.UPPER);
-                place.setAbove(door);
-            } else {
-                // We have to create a new door just for upper... due to neither door having complete info
-                // Lol, I have to use strings as PacketEvents wasn't designed around one material having two sets of data
-                // This is 1.12 only, but the server is also 1.12
-                WrappedBlockState above = WrappedBlockState.getByString(CompensatedWorld.blockVersion, "minecraft:" + place.material.getName().toLowerCase(Locale.ROOT) + "[half=upper,hinge=" + hinge.toString().toLowerCase(Locale.ROOT) + "]");
-                place.setAbove(above);
-            }
+            door.setHalf(Half.UPPER);
+            place.setAbove(door);
         }
     }, ItemTags.DOORS),
 

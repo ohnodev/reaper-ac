@@ -5,8 +5,6 @@ import ac.reaper.reaperac.checks.type.PositionCheck;
 import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.utils.anticheat.update.PositionUpdate;
 import ac.reaper.reaperac.utils.data.CooldownData;
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.component.ComponentTypes;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemUseCooldown;
 import com.github.retrooper.packetevents.protocol.item.ItemStack;
@@ -48,15 +46,13 @@ public class CompensatedCooldown extends Check implements PositionCheck {
     // all the same to us... having a cooldown or not having one
     public boolean hasItem(ItemStack item) {
         // 1.21.2+ uses this stupid logic of cooldown groups
-        if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_21_2)) {
-            ItemUseCooldown cooldown = item.getComponentOr(ComponentTypes.USE_COOLDOWN, null);
-            if (cooldown != null) {
-                final Optional<ResourceLocation> cooldownGroup = cooldown.getCooldownGroup();
-                // If the cooldown group is present, it uses that.
-                // Otherwise, it uses the id of the item.
-                if (cooldownGroup.isPresent()) {
-                    return itemCooldownMap.containsKey(cooldownGroup.get());
-                }
+        ItemUseCooldown cooldown = item.getComponentOr(ComponentTypes.USE_COOLDOWN, null);
+        if (cooldown != null) {
+            final Optional<ResourceLocation> cooldownGroup = cooldown.getCooldownGroup();
+            // If the cooldown group is present, it uses that.
+            // Otherwise, it uses the id of the item.
+            if (cooldownGroup.isPresent()) {
+                return itemCooldownMap.containsKey(cooldownGroup.get());
             }
         }
 

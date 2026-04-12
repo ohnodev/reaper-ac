@@ -1,12 +1,9 @@
 package ac.reaper.reaperac.internal.platform.bukkit.resolver;
 
-import ac.reaper.reaperac.api.ReaperAPIProvider;
-import ac.reaper.reaperac.api.ReaperAbstractAPI;
 import ac.reaper.reaperac.api.plugin.BasicReaperPlugin;
 import ac.reaper.reaperac.api.plugin.ReaperPlugin;
 import ac.reaper.reaperac.internal.plugin.resolver.GrimExtensionManager;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;

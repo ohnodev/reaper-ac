@@ -1,15 +1,12 @@
 package ac.reaper.reaperac.predictionengine.predictions;
 
 import ac.reaper.reaperac.player.GrimPlayer;
-import ac.reaper.reaperac.utils.collisions.datatypes.SimpleCollisionBox;
 import ac.reaper.reaperac.utils.data.VectorData;
 import ac.reaper.reaperac.utils.enums.FluidTag;
 import ac.reaper.reaperac.utils.math.GrimMath;
 import ac.reaper.reaperac.utils.math.Vector3dm;
-import ac.reaper.reaperac.utils.nmsutil.Collisions;
 import ac.reaper.reaperac.utils.nmsutil.FluidFallingAdjustedMovement;
 import ac.reaper.reaperac.utils.nmsutil.ReachUtils;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -99,8 +96,7 @@ public class PredictionEngineWater extends PredictionEngine {
     @Override
     public Set<VectorData> fetchPossibleStartTickVectors(GrimPlayer player) {
         // "hacky" climbing where player enters ladder within 0.03 movement (WHY DOES 0.03 EXIST???)
-        if (player.lastWasClimbing == 0 && player.pointThreeEstimator.isNearClimbable() && (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_14) || !Collisions.isEmpty(player, player.boundingBox.copy().expand(
-                player.clientVelocity.getX(), 0, player.clientVelocity.getZ()).expand(0.5, -SimpleCollisionBox.COLLISION_EPSILON, 0.5)))) {
+        if (player.lastWasClimbing == 0 && player.pointThreeEstimator.isNearClimbable()) {
             player.lastWasClimbing = FluidFallingAdjustedMovement.getFluidFallingAdjustedMovement(player, playerGravity, isFalling, player.clientVelocity.clone().setY(0.2D * 0.8F)).getY();
         }
 

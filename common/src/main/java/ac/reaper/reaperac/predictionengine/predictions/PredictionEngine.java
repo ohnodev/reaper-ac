@@ -22,7 +22,6 @@ import com.github.retrooper.packetevents.protocol.attribute.Attributes;
 import com.github.retrooper.packetevents.protocol.component.ComponentTypes;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemUseEffects;
 import com.github.retrooper.packetevents.protocol.item.ItemStack;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,40 +37,9 @@ public class PredictionEngine {
     }
 
     public static Vector3dm transformInputsToVector(GrimPlayer player, Vector3dm theoreticalInput) {
-        if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21_5)) {
-            Vec2 moveVector = new Vec2((float) theoreticalInput.getX(), (float) theoreticalInput.getZ()).normalized();
-            Vec2 input = modifyInput(player, moveVector);
-            return new Vector3dm(input.x(), 0, input.y());
-        }
-        float bestPossibleX;
-        float bestPossibleZ;
-
-        // Slow movement was determined by the previous pose
-        if (player.isSlowMovement) {
-            bestPossibleX = (float) (theoreticalInput.getX() * player.sneakingSpeedMultiplier);
-            bestPossibleZ = (float) (theoreticalInput.getZ() * player.sneakingSpeedMultiplier);
-        } else {
-            bestPossibleX = Math.min(Math.max(-1f, Math.round(theoreticalInput.getX())), 1f);
-            bestPossibleZ = Math.min(Math.max(-1f, Math.round(theoreticalInput.getZ())), 1f);
-        }
-
-        if (player.packetStateData.isSlowedByUsingItem()) {
-            bestPossibleX *= 0.2F;
-            bestPossibleZ *= 0.2F;
-        }
-
-        Vector3dm inputVector = new Vector3dm(bestPossibleX, 0, bestPossibleZ);
-        inputVector.multiply(0.98F);
-
-        // Simulate float rounding imprecision
-        inputVector = new Vector3dm((float) inputVector.getX(), (float) inputVector.getY(), (float) inputVector.getZ());
-
-        if (inputVector.lengthSquared() > 1) {
-            double d0 = Math.sqrt(inputVector.getX() * inputVector.getX() + inputVector.getY() * inputVector.getY() + inputVector.getZ() * inputVector.getZ());
-            inputVector = new Vector3dm(inputVector.getX() / d0, inputVector.getY() / d0, inputVector.getZ() / d0);
-        }
-
-        return inputVector;
+        Vec2 moveVector = new Vec2((float) theoreticalInput.getX(), (float) theoreticalInput.getZ()).normalized();
+        Vec2 input = modifyInput(player, moveVector);
+        return new Vector3dm(input.x(), 0, input.y());
     }
 
     public static Vec2 modifyInput(GrimPlayer player, Vec2 moveVector) {
@@ -112,7 +80,7 @@ public class PredictionEngine {
 
     private static final boolean USE_EFFECTS_COMPONENT_EXISTS = PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_21_11);
     private static float getItemUseSpeedMultiplier(GrimPlayer player) {
-        if (player.getClientVersion().isOlderThan(ClientVersion.V_1_21_11) || !USE_EFFECTS_COMPONENT_EXISTS) return 0.2F;
+        if (!USE_EFFECTS_COMPONENT_EXISTS) return 0.2F;
 
         ItemStack itemInHand = player.inventory.getItemInHand(player.packetStateData.itemInUseHand);
         ItemUseEffects useEffects = itemInHand.getComponentOr(ComponentTypes.USE_EFFECTS, null);
@@ -174,9 +142,7 @@ public class PredictionEngine {
         SimpleCollisionBox originalBB = player.boundingBox;
         // 0.03 doesn't exist with vehicles, thank god
         // 1.13+ clients have stupid poses that desync because mojang brilliantly removed the idle packet in 1.9
-        SimpleCollisionBox pointThreeThanksMojang = player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_13)
-                ? GetBoundingBox.getBoundingBoxFromPosAndSize(player, player.lastX, player.lastY, player.lastZ, 0.6f, 0.6f)
-                : originalBB;
+        SimpleCollisionBox pointThreeThanksMojang = GetBoundingBox.getBoundingBoxFromPosAndSize(player, player.lastX, player.lastY, player.lastZ, 0.6f, 0.6f);
 
         player.skippedTickInActualMovement = false;
 
@@ -332,19 +298,14 @@ public class PredictionEngine {
         }
 
         // Swimming vertically can add more Y velocity than normal
-        if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_13) && player.isSwimming) {
+        if (player.isSwimming) {
             pointThreePossibilities = PredictionEngineWater.transformSwimmingVectors(player, pointThreePossibilities);
         }
 
         // This is WRONG! Vanilla has this system at the end
         // However, due to 1.9 reduced movement precision, we aren't informed that the player could have this velocity
         // We still do climbing at the end, as it uses a different client velocity
-        //
-        // Force 1.13.2 and below players to have something to collide with horizontally to climb
-        if (player.pointThreeEstimator.isNearClimbable() && (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_14) || !Collisions.isEmpty(player, player.boundingBox.copy().expand(
-                player.clientVelocity.getX(), 0, player.clientVelocity.getZ()).expand(0.5, -SimpleCollisionBox.COLLISION_EPSILON, 0.5)))) {
-
-            // Calculate the Y velocity after friction
+        if (player.pointThreeEstimator.isNearClimbable()) {
             Vector3dm hackyClimbVector = new Vector3dm(0, 0.2, 0);
             PredictionEngineNormal.staticVectorEndOfTick(player, hackyClimbVector);
 
@@ -377,16 +338,12 @@ public class PredictionEngine {
             }
             // Water pushing movement is affected by initial velocity due to 0.003 eating pushing in the past
             if (vectorData.isKnockback() && player.baseTickWaterPushing.lengthSquared() != 0) {
-                if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_13)) {
-                    Vector3dm vec3 = player.baseTickWaterPushing.clone();
-                    if (Math.abs(vectorData.vector.getX()) < 0.003 && Math.abs(vectorData.vector.getZ()) < 0.003 && player.baseTickWaterPushing.length() < 0.0045000000000000005D) {
-                        vec3 = vec3.normalize().multiply(0.0045000000000000005);
-                    }
-
-                    vectorData.vector = vectorData.vector.add(vec3);
-                } else {
-                    vectorData.vector = vectorData.vector.add(player.baseTickWaterPushing);
+                Vector3dm vec3 = player.baseTickWaterPushing.clone();
+                if (Math.abs(vectorData.vector.getX()) < 0.003 && Math.abs(vectorData.vector.getZ()) < 0.003 && player.baseTickWaterPushing.length() < 0.0045000000000000005D) {
+                    vec3 = vec3.normalize().multiply(0.0045000000000000005);
                 }
+
+                vectorData.vector = vectorData.vector.add(vec3);
             }
         }
     }
@@ -406,24 +363,12 @@ public class PredictionEngine {
         addFluidPushingToStartingVectors(player, velocities);
         // Inputs are done AFTER fluid pushing, https://github.com/MWHunter/Grim/issues/660
         addAttackSlowToPossibilities(player, velocities);
-        // Non-effective AI for vehicles is done AFTER fluid pushing but BEFORE 0.003
-        addNonEffectiveAI(player, velocities);
         // Attack slowing is done BEFORE 0.003! Moving this before 0.003 will cause falses!
         applyMovementThreshold(player, velocities);
         // Jumps are done after 0.003, for sure.
         addJumpsToPossibilities(player, velocities);
 
         return velocities;
-    }
-
-    private void addNonEffectiveAI(GrimPlayer player, Set<VectorData> data) {
-        // For some reason on 1.21.5+ this no longer applies
-        if (!player.inVehicle() || player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21_5))
-            return;
-
-        for (VectorData vectorData : data) {
-            vectorData.vector = vectorData.vector.clone().multiply(0.98);
-        }
     }
 
     private void addAttackSlowToPossibilities(GrimPlayer player, Set<VectorData> velocities) {
@@ -450,11 +395,8 @@ public class PredictionEngine {
     // Renamed from applyPointZeroZeroThree to avoid confusion with applyZeroPointZeroThree
     public void applyMovementThreshold(GrimPlayer player, Set<VectorData> velocities) {
         double minimumMovement = 0.003D;
-        if (player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_8)) {
-            minimumMovement = 0.005D;
-        }
 
-        boolean stupidVectors = player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21_5) && !player.inVehicle();
+        boolean stupidVectors = !player.inVehicle();
         boolean stuckOnEdge = player.uncertaintyHandler.stuckOnEdge.hasOccurredSince(2);
         Set<VectorData> vectors = stupidVectors && stuckOnEdge ? new HashSet<>(velocities) : velocities;
         for (VectorData vector : vectors) {
@@ -744,7 +686,7 @@ public class PredictionEngine {
         //
         // Or the player is switching in and out of controlling a vehicle, in which friction messes it up
         //
-        if (player.uncertaintyHandler.lastVehicleSwitch.hasOccurredSince(0) || player.uncertaintyHandler.lastHardCollidingLerpingEntity.hasOccurredSince(3) || (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_13) && vector.vector.getY() > 0 && vector.isZeroPointZeroThree() && !Collisions.isEmpty(player, GetBoundingBox.getBoundingBoxFromPosAndSize(player, player.lastX, vector.vector.getY() + player.lastY + 0.6, player.lastZ, 0.6f, 1.26f)))) {
+        if (player.uncertaintyHandler.lastVehicleSwitch.hasOccurredSince(0) || player.uncertaintyHandler.lastHardCollidingLerpingEntity.hasOccurredSince(3) || vector.vector.getY() > 0 && vector.isZeroPointZeroThree() && !Collisions.isEmpty(player, GetBoundingBox.getBoundingBoxFromPosAndSize(player, player.lastX, vector.vector.getY() + player.lastY + 0.6, player.lastZ, 0.6f, 1.26f))) {
             box.expandToAbsoluteCoordinates(0, 0, 0);
         }
 

@@ -4,7 +4,6 @@ import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.utils.math.GrimMath;
 import ac.reaper.reaperac.utils.math.Vector3dm;
 import com.github.retrooper.packetevents.protocol.attribute.Attributes;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.potion.PotionTypes;
 import com.github.retrooper.packetevents.util.Vector3d;
 import lombok.experimental.UtilityClass;
@@ -22,18 +21,14 @@ public class JumpPower {
             jumpPower += 0.1f * (jumpBoost.getAsInt() + 1);
         }
 
-        if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_20_5) && jumpPower <= 1.0E-5f)
+        if (jumpPower <= 1.0E-5f)
             return;
 
-        vector.setY(player.getClientVersion().isOlderThan(ClientVersion.V_1_21_2) ? jumpPower : Math.max(jumpPower, vector.getY()));
+        vector.setY(Math.max(jumpPower, vector.getY()));
 
         if (player.isSprinting) {
             float radRotation = GrimMath.radians(player.yaw);
-            if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_20_5)) {
-                vector.add(-player.trigHandler.sin(radRotation) * 0.2, 0.0, player.trigHandler.cos(radRotation) * 0.2);
-            } else {
-                vector.add(-player.trigHandler.sin(radRotation) * 0.2F, 0.0, player.trigHandler.cos(radRotation) * 0.2F);
-            }
+            vector.add(-player.trigHandler.sin(radRotation) * 0.2, 0.0, player.trigHandler.cos(radRotation) * 0.2);
         }
     }
 

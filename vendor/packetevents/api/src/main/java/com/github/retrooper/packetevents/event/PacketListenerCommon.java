@@ -18,10 +18,6 @@
 
 package com.github.retrooper.packetevents.event;
 
-import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Map;
-
 /**
  * Abstract packet listener.
  *
@@ -52,10 +48,10 @@ public abstract class PacketListenerCommon {
     public void onUserDisconnect(UserDisconnectEvent event) {
     }
 
-    void onPacketReceive(PacketReceiveEvent event) {
+    protected void onPacketReceive(PacketReceiveEvent event) {
     }
 
-    void onPacketSend(PacketSendEvent event) {
+    protected void onPacketSend(PacketSendEvent event) {
     }
 
     public void onPacketEventExternal(PacketEvent event) {

@@ -7,10 +7,6 @@ import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.utils.anticheat.update.PredictionComplete;
 import ac.reaper.reaperac.utils.collisions.datatypes.SimpleCollisionBox;
 import ac.reaper.reaperac.utils.nmsutil.Collisions;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
-import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
-import com.github.retrooper.packetevents.protocol.world.states.defaulttags.BlockTags;
-import com.github.retrooper.packetevents.protocol.world.states.type.StateTypes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,13 +30,6 @@ public class Phase extends Check implements PostPredictionCheck {
 
             for (SimpleCollisionBox box : boxes) {
                 if (newBB.isIntersected(box) && !oldBB.isIntersected(box)) {
-                    if (player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_8)) {
-                        // A bit of a hacky way to get the block state, but this is much faster to use the tuinity method for grabbing collision boxes
-                        WrappedBlockState state = player.compensatedWorld.getBlock((box.minX + box.maxX) / 2, (box.minY + box.maxY) / 2, (box.minZ + box.maxZ) / 2);
-                        if (BlockTags.ANVIL.contains(state.getType()) || state.getType() == StateTypes.CHEST || state.getType() == StateTypes.TRAPPED_CHEST) {
-                            continue; // 1.8 glitchy block, ignore
-                        }
-                    }
                     flagAndAlertWithSetback();
                     return;
                 }

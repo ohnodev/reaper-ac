@@ -14,7 +14,6 @@ import ac.reaper.reaperac.utils.nmsutil.FluidTypeFlowing;
 import ac.reaper.reaperac.utils.nmsutil.GetBoundingBox;
 import ac.reaper.reaperac.utils.nmsutil.Materials;
 import com.github.retrooper.packetevents.protocol.item.type.ItemTypes;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.potion.PotionType;
 import com.github.retrooper.packetevents.protocol.potion.PotionTypes;
 import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
@@ -142,7 +141,7 @@ public class PointThreeEstimator {
         if ((Materials.isWater(player.getClientVersion(), state) || stateType == StateTypes.LAVA) &&
                 pointThreeBox.isIntersected(new SimpleCollisionBox(x, y, z))) {
 
-            if (stateType == StateTypes.BUBBLE_COLUMN && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_13)) {
+            if (stateType == StateTypes.BUBBLE_COLUMN) {
                 isNearBubbleColumn = true;
             }
 
@@ -281,7 +280,7 @@ public class PointThreeEstimator {
                 isNearClimbable = isNearClimbable || Collisions.trapdoorUsableAsLadder(player, pos.getX(), pos.getY(), pos.getZ(), state);
             }
 
-            if (stateType == StateTypes.BUBBLE_COLUMN && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_13)) {
+            if (stateType == StateTypes.BUBBLE_COLUMN) {
                 isNearBubbleColumn = true;
             }
 
@@ -433,7 +432,7 @@ public class PointThreeEstimator {
         // The player couldn't have skipped their Y tick here... no point to simulate (and stop a bypass)
         if (!vector.isZeroPointZeroThree()) return 0;
 
-        double minMovement = player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9) ? 0.003 : 0.005;
+        double minMovement = 0.003;
 
         // This should likely be refactored, but it works well.
         double yVel = vector.vector.getY();

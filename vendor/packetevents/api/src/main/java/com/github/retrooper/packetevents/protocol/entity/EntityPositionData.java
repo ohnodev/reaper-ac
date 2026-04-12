@@ -21,7 +21,6 @@ package com.github.retrooper.packetevents.protocol.entity;
 
 import com.github.retrooper.packetevents.util.Vector3d;
 import com.github.retrooper.packetevents.wrapper.PacketWrapper;
-import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityPositionSync;
 
 import java.util.Objects;
 

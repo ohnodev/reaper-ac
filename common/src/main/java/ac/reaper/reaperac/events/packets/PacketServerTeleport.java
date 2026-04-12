@@ -12,7 +12,6 @@ import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.teleport.RelativeFlag;
 import com.github.retrooper.packetevents.util.Vector3d;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPlayerPositionAndLook;
@@ -61,7 +60,7 @@ public class PacketServerTeleport extends PacketListenerAbstract {
             // The added complexity isn't worth a feature that I have never seen used
             //
             // If you do actually need this make an issue on GitHub with an explanation for why
-            if (player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_8) || player.inVehicle()) {
+            if (player.inVehicle()) {
                 boolean relativeX = teleport.isRelativeFlag(RelativeFlag.X),
                         relativeY = teleport.isRelativeFlag(RelativeFlag.Y),
                         relativeZ = teleport.isRelativeFlag(RelativeFlag.Z);
@@ -114,7 +113,7 @@ public class PacketServerTeleport extends PacketListenerAbstract {
             }
 
             // 1.21.2+ client ignore teleports if player is inside vehicle, ABSOLUTE CINEMA MOJANG
-            if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21_2) && player.compensatedEntities.serverPlayerVehicle != null) {
+            if (player.compensatedEntities.serverPlayerVehicle != null) {
                 pos = player.getSetbackTeleportUtil().lastKnownGoodPosition.getPos();
             }
 
@@ -126,10 +125,6 @@ public class PacketServerTeleport extends PacketListenerAbstract {
                 // Remove player from vehicle
                 event.getTasksAfterSend().add(() -> player.compensatedEntities.self.eject());
             }
-
-            // For some reason teleports on 1.7 servers are offset by 1.62?
-            if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThan(ServerVersion.V_1_8))
-                pos = pos.withY(pos.getY() - 1.62);
 
             Location target = new Location(null, pos.getX(), pos.getY(), pos.getZ());
             player.getSetbackTeleportUtil().addSentTeleport(target, teleport.getDeltaMovement(), lastTransactionSent, teleport.getRelativeFlags(), true, teleport.getTeleportId());

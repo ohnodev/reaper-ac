@@ -21,10 +21,7 @@ import ac.reaper.reaperac.utils.collisions.datatypes.NoCollisionBox;
 import ac.reaper.reaperac.utils.collisions.datatypes.SimpleCollisionBox;
 import ac.reaper.reaperac.utils.data.packetentity.PacketEntity;
 import ac.reaper.reaperac.utils.nmsutil.GetBoundingBox;
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.util.Vector3d;
 
 // You may not copy the check unless you are licensed under GPL
@@ -46,12 +43,6 @@ public class ReachInterpolationData {
         this.targetLocation = new SimpleCollisionBox(pos.x, pos.y, pos.z, pos.x, pos.y, pos.z, false);
         this.player = player;
         this.entity = entity;
-
-        // 1.9 -> 1.8 precision loss in packets
-        // (ViaVersion is doing some stuff that makes this code difficult)
-        if (player.getClientVersion().isOlderThan(ClientVersion.V_1_9) && PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_9)) {
-            targetLocation.expand(0.03125);
-        }
 
         if (entity.isBoat) {
             interpolationSteps = 10;

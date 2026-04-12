@@ -26,14 +26,4 @@ public abstract class PacketListenerAbstract extends PacketListenerCommon {
     public PacketListenerAbstract() {
         super();
     }
-
-    @Override
-    public void onPacketReceive(PacketReceiveEvent event) {
-
-    }
-
-    @Override
-    public void onPacketSend(PacketSendEvent event) {
-
-    }
 }

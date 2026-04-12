@@ -19,7 +19,6 @@
 package io.github.retrooper.packetevents.impl.netty.buffer;
 
 import com.github.retrooper.packetevents.netty.buffer.ByteBufAllocationOperator;
-import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.Unpooled;
 
 public class ByteBufAllocationOperatorImpl implements ByteBufAllocationOperator {

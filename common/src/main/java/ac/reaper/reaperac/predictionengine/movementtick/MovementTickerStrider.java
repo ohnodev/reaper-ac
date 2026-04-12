@@ -57,25 +57,23 @@ public class MovementTickerStrider extends MovementTickerRideable {
         PacketEntityStrider strider = (PacketEntityStrider) player.compensatedEntities.self.getRiding();
         // Unsure which version the speed changed in
         final boolean newSpeed = player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_20);
-        final float coldSpeed = newSpeed ? 0.35F : 0.23F;
+        final float coldSpeed = 0.35F;
 
         // Client desyncs the attribute
         // Again I don't know when this was changed, or whether it always existed, so I will just put it behind 1.20+
         final ValuedAttribute movementSpeedAttr = strider.getAttribute(Attributes.MOVEMENT_SPEED).orElseThrow();
         float updatedMovementSpeed = (float) movementSpeedAttr.get();
-        if (newSpeed) {
-            final WrapperPlayServerUpdateAttributes.Property lastProperty = movementSpeedAttr.property().orElse(null);
-            if (lastProperty != null && (!strider.isShaking || lastProperty.getModifiers().stream().noneMatch(mod -> mod.getName().getKey().equals("suffocating")))) {
-                WrapperPlayServerUpdateAttributes.Property newProperty = new WrapperPlayServerUpdateAttributes.Property(lastProperty.getAttribute(), lastProperty.getValue(), new ArrayList<>(lastProperty.getModifiers()));
-                if (!strider.isShaking) {
-                    newProperty.getModifiers().removeIf(modifier -> modifier.getName().getKey().equals("suffocating"));
-                } else {
-                    newProperty.getModifiers().add(SUFFOCATING_MODIFIER);
-                }
-                movementSpeedAttr.with(newProperty);
-                updatedMovementSpeed = (float) movementSpeedAttr.get();
-                movementSpeedAttr.with(lastProperty);
+        final WrapperPlayServerUpdateAttributes.Property lastProperty = movementSpeedAttr.property().orElse(null);
+        if (lastProperty != null && (!strider.isShaking || lastProperty.getModifiers().stream().noneMatch(mod -> mod.getName().getKey().equals("suffocating")))) {
+            WrapperPlayServerUpdateAttributes.Property newProperty = new WrapperPlayServerUpdateAttributes.Property(lastProperty.getAttribute(), lastProperty.getValue(), new ArrayList<>(lastProperty.getModifiers()));
+            if (!strider.isShaking) {
+                newProperty.getModifiers().removeIf(modifier -> modifier.getName().getKey().equals("suffocating"));
+            } else {
+                newProperty.getModifiers().add(SUFFOCATING_MODIFIER);
             }
+            movementSpeedAttr.with(newProperty);
+            updatedMovementSpeed = (float) movementSpeedAttr.get();
+            movementSpeedAttr.with(lastProperty);
         }
 
         return updatedMovementSpeed * (strider.isShaking ? coldSpeed : 0.55F);

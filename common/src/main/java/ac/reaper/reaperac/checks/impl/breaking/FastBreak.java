@@ -7,17 +7,14 @@ import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.utils.anticheat.update.BlockBreak;
 import ac.reaper.reaperac.utils.math.GrimMath;
 import ac.reaper.reaperac.utils.nmsutil.BlockBreakSpeed;
-import ac.reaper.reaperac.utils.viaversion.ViaVersionUtil;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.player.DiggingAction;
 import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
 import com.github.retrooper.packetevents.protocol.world.states.type.StateType;
 import com.github.retrooper.packetevents.protocol.world.states.type.StateTypes;
 import com.github.retrooper.packetevents.util.Vector3i;
-import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerFlying;
 
 import java.util.Set;
 
@@ -53,19 +50,17 @@ public class FastBreak extends Check implements BlockBreakCheck {
     @Override
     public void onBlockBreak(BlockBreak blockBreak) {
         if (blockBreak.action == DiggingAction.START_DIGGING) {
-            if (!ViaVersionUtil.isAvailable) {
-                // Exempt all blocks that do not exist in the player version
-                final WrappedBlockState defaultState = WrappedBlockState.getDefaultState(player.getClientVersion(), blockBreak.block.getType());
-                if (defaultState.getType() == StateTypes.AIR || EXEMPT_STATES.contains(defaultState.getType())) {
-                    return;
-                }
+            // Exempt all blocks that do not exist in the player version
+            final WrappedBlockState defaultState = WrappedBlockState.getDefaultState(player.getClientVersion(), blockBreak.block.getType());
+            if (defaultState.getType() == StateTypes.AIR || EXEMPT_STATES.contains(defaultState.getType())) {
+                return;
             }
             // If client is older than the server, fetch block client actually sees from via
             // otherwise just return the server-side block (since if client is >= server version the block is guaranteed to exist in client version)
             // TODO this lazy loads PacketEvents mappings for older versions for clients on versions older than the servers, increasing memory usage
             //  * its the only thing we use non-native mappings for behind ViaVersion
             //  * can we translate back "up" to server version and run check against server version to avoid loading older registries?
-            WrappedBlockState block = clientOlderThanServer ? WrappedBlockState.getByGlobalId(player.getClientVersion(), player.getViaTranslatedClientBlockID(blockBreak.block.getGlobalId())) : blockBreak.block;
+            WrappedBlockState block = clientOlderThanServer ? WrappedBlockState.getByGlobalId(player.getClientVersion(), blockBreak.block.getGlobalId()) : blockBreak.block;
 
             startBreak = System.currentTimeMillis() - (targetBlockPosition == null ? 50 : 0); // ???
             targetBlockPosition = blockBreak.position;
@@ -133,8 +128,7 @@ public class FastBreak extends Check implements BlockBreakCheck {
     @Override
     public void onPacketReceive(PacketReceiveEvent event) {
         // Find the most optimal block damage using the animation packet, which is sent at least once a tick when breaking blocks
-        // On 1.8 clients, via screws with this packet meaning we must fall back to the 1.8 idle flying packet
-        if ((player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9) ? event.getPacketType() == PacketType.Play.Client.ANIMATION : WrapperPlayClientPlayerFlying.isFlying(event.getPacketType())) && targetBlockPosition != null) {
+        if (event.getPacketType() == PacketType.Play.Client.ANIMATION && targetBlockPosition != null) {
             maximumBlockDamage = Math.max(maximumBlockDamage, BlockBreakSpeed.getBlockDamage(player, player.compensatedWorld.getBlock(targetBlockPosition)));
         }
     }

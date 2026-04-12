@@ -6,8 +6,6 @@ import ac.reaper.reaperac.utils.collisions.datatypes.CollisionBox;
 import ac.reaper.reaperac.utils.collisions.datatypes.ComplexCollisionBox;
 import ac.reaper.reaperac.utils.collisions.datatypes.HitBoxFactory;
 import ac.reaper.reaperac.utils.collisions.datatypes.SimpleCollisionBox;
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.world.BlockFace;
 import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
@@ -51,22 +49,13 @@ public class DynamicHitboxFence extends DynamicConnecting implements HitBoxFacto
         boolean west;
 
         // 1.13+ servers on 1.13+ clients send the full fence data
-        if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13)
-                && version.isNewerThanOrEquals(ClientVersion.V_1_13)) {
-            east = block.getEast() != East.FALSE;
-            north = block.getNorth() != North.FALSE;
-            south = block.getSouth() != South.FALSE;
-            west = block.getWest() != West.FALSE;
-        } else {
-            east = connectsTo(player, version, x, y, z, BlockFace.EAST);
-            north = connectsTo(player, version, x, y, z, BlockFace.NORTH);
-            south = connectsTo(player, version, x, y, z, BlockFace.SOUTH);
-            west = connectsTo(player, version, x, y, z, BlockFace.WEST);
-        }
 
-        return version.isNewerThanOrEquals(ClientVersion.V_1_12_2)
-                ? getModernCollisionBox(north, east, south, west)
-                : getLegacyCollisionBox(north, east, south, west);
+        east = block.getEast() != East.FALSE;
+        north = block.getNorth() != North.FALSE;
+        south = block.getSouth() != South.FALSE;
+        west = block.getWest() != West.FALSE;
+
+        return getModernCollisionBox(north, east, south, west);
 
 
     }

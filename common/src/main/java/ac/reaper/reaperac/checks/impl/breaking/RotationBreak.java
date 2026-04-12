@@ -11,7 +11,6 @@ import ac.reaper.reaperac.utils.math.Vector3dm;
 import ac.reaper.reaperac.utils.nmsutil.Ray;
 import ac.reaper.reaperac.utils.nmsutil.ReachUtils;
 import com.github.retrooper.packetevents.protocol.attribute.Attributes;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.player.DiggingAction;
 import com.github.retrooper.packetevents.protocol.world.BlockFace;
 import com.github.retrooper.packetevents.util.Vector3d;
@@ -19,7 +18,6 @@ import com.github.retrooper.packetevents.util.Vector3f;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @CheckData(name = "RotationBreak", experimental = true)
@@ -96,14 +94,7 @@ public class RotationBreak extends Check implements BlockBreakCheck {
         ));
 
         // 1.9+ players could be a tick behind because we don't get skipped ticks
-        if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) {
-            possibleLookDirs.add(new Vector3f(player.lastYaw, player.lastPitch, 0));
-        }
-
-        // 1.7 players do not have any of these issues! They are always on the latest look vector
-        if (player.getClientVersion().isOlderThan(ClientVersion.V_1_8)) {
-            possibleLookDirs = Collections.singletonList(new Vector3f(player.yaw, player.pitch, 0));
-        }
+        possibleLookDirs.add(new Vector3f(player.lastYaw, player.lastPitch, 0));
 
         final double distance = player.compensatedEntities.self.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE);
         for (double d : possibleEyeHeights) {

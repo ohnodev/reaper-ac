@@ -4,9 +4,6 @@ import ac.reaper.reaperac.checks.Check;
 import ac.reaper.reaperac.checks.type.PostPredictionCheck;
 import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.utils.anticheat.update.PredictionComplete;
-import ac.reaper.reaperac.utils.collisions.datatypes.SimpleCollisionBox;
-import ac.reaper.reaperac.utils.data.packetentity.PacketEntity;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 
 public class GhostBlockDetector extends Check implements PostPredictionCheck {
 
@@ -16,27 +13,7 @@ public class GhostBlockDetector extends Check implements PostPredictionCheck {
 
     public static boolean isGhostBlock(GrimPlayer player) {
         // Player is on glitchy block (1.8 client on anvil/wooden chest)
-        if (player.uncertaintyHandler.isOrWasNearGlitchyBlock) {
-            return true;
-        }
-
-        // Boats are moved client sided by 1.7/1.8 players, and have a mind of their own
-        // Simply setback, don't ban, if a player gets a violation by a boat.
-        // Note that we allow setting back to the ground for this one, to try and mitigate
-        // the effect that this buggy behavior has on players
-        if (player.getClientVersion().isOlderThan(ClientVersion.V_1_9)) {
-            SimpleCollisionBox largeExpandedBB = player.boundingBox.copy().expand(12, 0.5, 12);
-
-            for (PacketEntity entity : player.compensatedEntities.entityMap.values()) {
-                if (entity.isBoat) {
-                    if (entity.getPossibleCollisionBoxes().isIntersected(largeExpandedBB)) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
+        return player.uncertaintyHandler.isOrWasNearGlitchyBlock;
     }
 
     // Must process data first to get rid of false positives from ghost blocks

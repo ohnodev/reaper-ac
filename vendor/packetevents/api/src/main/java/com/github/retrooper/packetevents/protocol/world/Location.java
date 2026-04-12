@@ -20,7 +20,6 @@ package com.github.retrooper.packetevents.protocol.world;
 
 import com.github.retrooper.packetevents.util.Vector3d;
 import com.github.retrooper.packetevents.util.Vector3f;
-import org.jetbrains.annotations.NotNull;
 
 public class Location {
     private Vector3d position;
@@ -82,7 +81,7 @@ public class Location {
         float z = (float) (xz * Math.cos(Math.toRadians(rotX)));
         return new Vector3f(x, y, z);
     }
-    
+
     public void setDirection(Vector3f vector) {
         double _2PI = 6.283185307179586D;
         double x = vector.getX();

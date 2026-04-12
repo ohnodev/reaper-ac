@@ -7,7 +7,6 @@ import ac.reaper.reaperac.player.GrimPlayer;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.player.Combat;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientClientStatus;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerChangeGameState;
@@ -43,18 +42,19 @@ public class BadPacketsM extends Check implements PacketCheck {
 
     @Override
     public void onPacketSend(PacketSendEvent event) {
-        if (event.getPacketType() == PacketType.Play.Server.CHANGE_GAME_STATE && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)
-                && new WrapperPlayServerChangeGameState(event).getReason() == WrapperPlayServerChangeGameState.Reason.WIN_GAME) {
-            player.addRealTimeTaskNow(() -> exempt++);
+        if (event.getPacketType() == PacketType.Play.Server.CHANGE_GAME_STATE) {
+            if (new WrapperPlayServerChangeGameState(event).getReason() == WrapperPlayServerChangeGameState.Reason.WIN_GAME) {
+                player.addRealTimeTaskNow(() -> exempt++);
+            }
         }
 
-        if (event.getPacketType() == PacketType.Play.Server.DEATH_COMBAT_EVENT && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) {
+        if (event.getPacketType() == PacketType.Play.Server.DEATH_COMBAT_EVENT) {
             if (new WrapperPlayServerDeathCombatEvent(event).getPlayerId() == player.entityID) {
                 player.addRealTimeTaskNow(() -> exempt++);
             }
         }
 
-        if (event.getPacketType() == PacketType.Play.Server.COMBAT_EVENT && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) {
+        if (event.getPacketType() == PacketType.Play.Server.COMBAT_EVENT) {
             try {
                 WrapperPlayServerCombatEvent packet = new WrapperPlayServerCombatEvent(event);
                 if (packet.getCombat() == Combat.ENTITY_DEAD && packet.getPlayerId() == player.entityID) {
