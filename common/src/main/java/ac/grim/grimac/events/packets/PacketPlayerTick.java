@@ -16,6 +16,11 @@ public class PacketPlayerTick extends PacketListenerAbstract {
     }
 
     @Override
+    public boolean isPreVia() {
+        return true;
+    }
+
+    @Override
     public void onPacketReceive(PacketReceiveEvent event) {
         if (event.getPacketType() == PacketType.Play.Client.CLIENT_TICK_END) {
             GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
