@@ -1,6 +1,7 @@
 package ac.reaper.reaperac.utils.latency;
 
 import ac.reaper.reaperac.player.GrimPlayer;
+import ac.reaper.reaperac.utils.anticheat.LogUtil;
 import ac.reaper.reaperac.utils.collisions.datatypes.SimpleCollisionBox;
 import ac.reaper.reaperac.utils.data.ShulkerData;
 import ac.reaper.reaperac.utils.data.TrackerData;
@@ -33,11 +34,16 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class CompensatedEntities {
 
     public static final UUID SPRINTING_MODIFIER_UUID = UUID.fromString("662A6B8D-DA3E-4C1C-8813-96EA6097278D");
     public static final UUID SNOW_MODIFIER_UUID = UUID.fromString("1eaf83ff-7207-4596-b37a-d7a07b3ec4ce");
+    private static final AtomicInteger PIG_SADDLE_COERCE_FAILURES = new AtomicInteger();
+    private static final AtomicInteger PIG_BOOST_COERCE_FAILURES = new AtomicInteger();
+    private static final AtomicInteger STRIDER_BOOST_COERCE_FAILURES = new AtomicInteger();
+    private static final AtomicInteger STRIDER_SADDLE_COERCE_FAILURES = new AtomicInteger();
 
     public final Int2ObjectOpenHashMap<PacketEntity> entityMap = new Int2ObjectOpenHashMap<>(40, 0.7f);
     public final IntArraySet entitiesRemovedThisTick = new IntArraySet();
@@ -316,6 +322,8 @@ public class CompensatedEntities {
                     Boolean saddle = coerceBoolean(pigSaddle.getValue());
                     if (saddle != null) {
                         rideable.hasSaddle = saddle;
+                    } else {
+                        recordCoercionFailure("pig.hasSaddle", pigSaddle.getValue(), PIG_SADDLE_COERCE_FAILURES);
                     }
                 }
 
@@ -325,6 +333,8 @@ public class CompensatedEntities {
                     if (boost != null) {
                         rideable.boostTimeMax = boost;
                         rideable.currentBoostTime = 0;
+                    } else {
+                        recordCoercionFailure("pig.boostTimeMax", pigBoost.getValue(), PIG_BOOST_COERCE_FAILURES);
                     }
                 }
             } else if (entity instanceof PacketEntityStrider) {
@@ -334,6 +344,8 @@ public class CompensatedEntities {
                     if (boost != null) {
                         rideable.boostTimeMax = boost;
                         rideable.currentBoostTime = 0;
+                    } else {
+                        recordCoercionFailure("strider.boostTimeMax", striderBoost.getValue(), STRIDER_BOOST_COERCE_FAILURES);
                     }
                 }
 
@@ -350,6 +362,8 @@ public class CompensatedEntities {
                     Boolean saddle = coerceBoolean(striderSaddle.getValue());
                     if (saddle != null) {
                         rideable.hasSaddle = saddle;
+                    } else {
+                        recordCoercionFailure("strider.hasSaddle", striderSaddle.getValue(), STRIDER_SADDLE_COERCE_FAILURES);
                     }
                 }
             }
@@ -380,7 +394,9 @@ public class CompensatedEntities {
 
                         // TODO there is: if (!this.firstTick && DASH.equals(accessor)) {
                         // !firstTick condition
-                        camel.setDashCooldown(camel.getDashCooldown() == 0 ? 55 : camel.getDashCooldown());
+                        if (dashing) {
+                            camel.setDashCooldown(camel.getDashCooldown() == 0 ? 55 : camel.getDashCooldown());
+                        }
                     }
                 }
             }
@@ -395,7 +411,9 @@ public class CompensatedEntities {
 
                     // TODO there is: if (!this.firstTick && DASH.equals(accessor)) {
                     // !firstTick condition
-                    nautilus.setDashCooldown(nautilus.getDashCooldown() == 0 ? 40 : nautilus.getDashCooldown());
+                    if (dashing) {
+                        nautilus.setDashCooldown(nautilus.getDashCooldown() == 0 ? 40 : nautilus.getDashCooldown());
+                    }
                 }
             }
         }
@@ -497,6 +515,15 @@ public class CompensatedEntities {
         }
         Object inner = optional.get();
         return coerceInteger(inner);
+    }
+
+    private static void recordCoercionFailure(String field, Object value, AtomicInteger counter) {
+        int count = counter.incrementAndGet();
+        // Log first few failures immediately, then only every 64 to avoid log spam.
+        if (count <= 3 || (count % 64) == 0) {
+            String valueType = value == null ? "null" : value.getClass().getSimpleName();
+            LogUtil.warn("[legacy-metadata] failed coercion for " + field + " valueType=" + valueType + " count=" + count);
+        }
     }
 
     public void updateEntityEquipment(int entityId, List<Equipment> equipment) {
