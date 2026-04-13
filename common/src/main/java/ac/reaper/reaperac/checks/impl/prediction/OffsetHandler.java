@@ -69,8 +69,12 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
 
                 String verbose = humanFormattedOffset + " /gl " + flagId;
                 if (flag(verbose)) {
-                    shouldLogSimulationTrace = true;
-                    traceSnapshot = captureSimulationTraceSnapshot(offset, flagId);
+                    long traceNow = System.currentTimeMillis();
+                    shouldLogSimulationTrace = SIM_PACKET_TRACE
+                            && traceNow - lastSimPacketTraceAt >= SIM_PACKET_TRACE_COOLDOWN_MS;
+                    if (shouldLogSimulationTrace) {
+                        traceSnapshot = captureSimulationTraceSnapshot(offset, flagId, traceNow);
+                    }
                     if (alert(verbose)) {
                         flags.incrementAndGet(); // This debug was sent somewhere
                         predictionComplete.setIdentifier(flagId);
@@ -175,18 +179,17 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
         ));
     }
 
-    private SimulationTraceSnapshot captureSimulationTraceSnapshot(double offset, int flagId) {
-        long now = System.currentTimeMillis();
+    private SimulationTraceSnapshot captureSimulationTraceSnapshot(double offset, int flagId, long capturedAtMs) {
         boolean sensitive = SIM_PACKET_TRACE_SENSITIVE;
         return new SimulationTraceSnapshot(
-                now,
+                capturedAtMs,
                 buildSubjectLabel(player.getName(), String.valueOf(player.user.getUUID()), sensitive),
                 player.getClientVersion().getReleaseName(),
                 player.getClientVersion().getProtocolVersion(),
                 offset,
                 flagId,
                 player.packetStateData.lastMovementPacketType,
-                Math.max(0L, now - player.packetStateData.lastMovementPacketAtMs),
+                Math.max(0L, capturedAtMs - player.packetStateData.lastMovementPacketAtMs),
                 player.packetStateData.lastMovementHadPosition,
                 player.packetStateData.lastMovementHadRotation,
                 player.packetStateData.lastMovementOnGround,
