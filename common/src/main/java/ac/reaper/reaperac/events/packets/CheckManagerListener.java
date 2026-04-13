@@ -436,7 +436,20 @@ public class CheckManagerListener extends PacketListenerAbstract {
         if (WrapperPlayClientPlayerFlying.isFlying(event.getPacketType())) {
             WrapperPlayClientPlayerFlying flying = new WrapperPlayClientPlayerFlying(event);
             Location pos = flying.getLocation();
-            handleFlying(player, pos.getX(), pos.getY(), pos.getZ(), pos.getYaw(), pos.getPitch(), flying.hasPositionChanged(), flying.hasRotationChanged(), flying.isOnGround(), teleportData);
+            handleFlying(
+                    player,
+                    pos.getX(),
+                    pos.getY(),
+                    pos.getZ(),
+                    pos.getYaw(),
+                    pos.getPitch(),
+                    flying.hasPositionChanged(),
+                    flying.hasRotationChanged(),
+                    flying.isOnGround(),
+                    flying.isHorizontalCollision(),
+                    String.valueOf(event.getPacketType()),
+                    teleportData
+            );
         }
 
         if (event.getPacketType() == PacketType.Play.Client.VEHICLE_MOVE && player.inVehicle()) {
@@ -576,8 +589,33 @@ public class CheckManagerListener extends PacketListenerAbstract {
             PacketDecodeUtils.logSuppressedDecode("CheckManagerListener(send)", event.getPacketType(), ex);
         }
     }
-    private static void handleFlying(GrimPlayer player, double x, double y, double z, float yaw, float pitch, boolean hasPosition, boolean hasLook, boolean onGround, TeleportAcceptData teleportData) {
+    private static void handleFlying(
+            GrimPlayer player,
+            double x,
+            double y,
+            double z,
+            float yaw,
+            float pitch,
+            boolean hasPosition,
+            boolean hasLook,
+            boolean onGround,
+            boolean horizontalCollision,
+            String packetTypeName,
+            TeleportAcceptData teleportData
+    ) {
         long now = System.currentTimeMillis();
+        player.packetStateData.lastMovementPacketAtMs = now;
+        player.packetStateData.lastMovementPacketType = packetTypeName;
+        player.packetStateData.lastMovementHadPosition = hasPosition;
+        player.packetStateData.lastMovementHadRotation = hasLook;
+        player.packetStateData.lastMovementOnGround = onGround;
+        player.packetStateData.lastMovementHorizontalCollision = horizontalCollision;
+        player.packetStateData.lastMovementWasTeleportAccept = teleportData != null && teleportData.isTeleport();
+        player.packetStateData.lastMovementX = x;
+        player.packetStateData.lastMovementY = y;
+        player.packetStateData.lastMovementZ = z;
+        player.packetStateData.lastMovementYaw = yaw;
+        player.packetStateData.lastMovementPitch = pitch;
 
         if (!hasPosition) {
             // This may need to be secured later, although nothing that is very important relies on this

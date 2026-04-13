@@ -40,7 +40,8 @@ public class PredictionEngineNormal extends PredictionEngine {
 
     @Override
     public void addJumpsToPossibilities(GrimPlayer player, Set<VectorData> existingVelocities) {
-        if (player.supportsEndTick() && !player.packetStateData.knownInput.jump()) {
+        if (player.supportsEndTick()
+                && !player.packetStateData.knownInput.jump()) {
             return;
         }
 
@@ -54,8 +55,10 @@ public class PredictionEngineNormal extends PredictionEngine {
                 // And 0.03 didn't affect onGround status
                 // The player cannot jump
                 final OptionalInt jumpBoost = player.compensatedEntities.getPotionLevelForPlayer(PotionTypes.JUMP_BOOST);
-                if (((jumpBoost.isEmpty() || jumpBoost.getAsInt() >= 0) && player.onGround) || !player.lastOnGround)
+                boolean blockedByGroundState = ((jumpBoost.isEmpty() || jumpBoost.getAsInt() >= 0) && player.onGround) || !player.lastOnGround;
+                if (blockedByGroundState) {
                     return;
+                }
 
                 JumpPower.jumpFromGround(player, jump);
             } else {

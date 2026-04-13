@@ -15,6 +15,6 @@ public class PacketWorldReaderEight extends BasePacketWorldReader {
     }
 
     private UnsupportedOperationException unsupported() {
-        return new UnsupportedOperationException("1.8 chunk packet reader is not supported in this 26.1-only fork");
+        return new UnsupportedOperationException("1.8 chunk packet reader is not supported in this 26.2-only runtime");
     }
 }
