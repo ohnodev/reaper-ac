@@ -6,6 +6,7 @@ import ac.reaper.reaperac.predictionengine.predictions.PredictionEngine;
 import ac.reaper.reaperac.predictionengine.predictions.PredictionEngineElytra;
 import ac.reaper.reaperac.utils.collisions.datatypes.SimpleCollisionBox;
 import ac.reaper.reaperac.utils.data.VectorData;
+import ac.reaper.reaperac.utils.data.MainSupportingBlockData;
 import ac.reaper.reaperac.utils.data.packetentity.PacketEntity;
 import ac.reaper.reaperac.utils.enums.FluidTag;
 import ac.reaper.reaperac.utils.math.GrimMath;
@@ -189,6 +190,13 @@ public class MovementTicker {
         }
 
         player.mainSupportingBlockData = MainSupportingBlockPosFinder.findMainSupportingBlockPos(player, player.mainSupportingBlockData, new Vector3d(collide.getX(), collide.getY(), collide.getZ()), player.boundingBox, player.onGround);
+        // Legacy 26.1 jump/airborne ticks can otherwise retain a stale support "onGround=true"
+        // state with no supporting block, which feeds false grounded simulation branches.
+        if (player.getClientVersion().getProtocolVersion() == 775
+                && !player.packetStateData.packetPlayerOnGround
+                && player.mainSupportingBlockData.blockPos() == null) {
+            player.mainSupportingBlockData = new MainSupportingBlockData(null, false);
+        }
         StateType onBlock = BlockProperties.getOnPos(player, player.mainSupportingBlockData, new Vector3d(player.x, player.y, player.z));
 
         // Hack with 1.14+ poses issue
