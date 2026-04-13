@@ -149,6 +149,19 @@ public class MovementTicker {
             calculatedOnGround = true;
         }
 
+        // Legacy 26.1 clients can send airborne packets while vanilla collision keeps us in a
+        // temporary "grounded" branch (notably around jump liftoff). For protocol 775, trust the
+        // explicit airborne claim in this narrow mismatch to avoid false simulation setbacks.
+        if (!player.inVehicle()
+                && player.getClientVersion().getProtocolVersion() == 775
+                && calculatedOnGround
+                && !player.packetStateData.packetPlayerOnGround
+                && !player.uncertaintyHandler.isStepMovement
+                && !player.wasTouchingWater
+                && !player.wasTouchingLava) {
+            calculatedOnGround = false;
+        }
+
         // We can't tell the difference between stepping and swim hopping, so just let the player's onGround status be the truth
         // Pistons/shulkers are a bit glitchy so just trust the client when they are affected by them
         // The player's onGround status isn't given when riding a vehicle, so we don't have a choice in whether we calculate or not
