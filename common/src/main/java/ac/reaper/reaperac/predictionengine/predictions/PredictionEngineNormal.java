@@ -56,8 +56,9 @@ public class PredictionEngineNormal extends PredictionEngine {
                 // The player cannot jump
                 final OptionalInt jumpBoost = player.compensatedEntities.getPotionLevelForPlayer(PotionTypes.JUMP_BOOST);
                 boolean blockedByGroundState = ((jumpBoost.isEmpty() || jumpBoost.getAsInt() >= 0) && player.onGround) || !player.lastOnGround;
-                if (blockedByGroundState)
+                if (blockedByGroundState) {
                     return;
+                }
 
                 JumpPower.jumpFromGround(player, jump);
             } else {

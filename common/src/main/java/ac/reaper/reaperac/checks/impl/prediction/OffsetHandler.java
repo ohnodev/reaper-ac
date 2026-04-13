@@ -47,6 +47,8 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
         if ((offset >= threshold || offset >= immediateSetbackThreshold)) {
             advantageGained += offset;
             giveOffsetLenienceNextTick(offset);
+            boolean shouldLogSimulationTrace = false;
+            int traceFlagId = -1;
 
             synchronized (flags) {
                 int flagId = (flags.get() & 255) + 1; // 1-256 as possible values
@@ -65,7 +67,8 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
 
                 String verbose = humanFormattedOffset + " /gl " + flagId;
                 if (flag(verbose)) {
-                    maybeLogSimulationPacketTrace(offset, flagId);
+                    shouldLogSimulationTrace = true;
+                    traceFlagId = flagId;
                     if (alert(verbose)) {
                         flags.incrementAndGet(); // This debug was sent somewhere
                         predictionComplete.setIdentifier(flagId);
@@ -76,6 +79,9 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
                         player.getSetbackTeleportUtil().executeViolationSetback();
                     }
                 }
+            }
+            if (shouldLogSimulationTrace) {
+                maybeLogSimulationPacketTrace(offset, traceFlagId);
             }
 
             advantageGained = Math.min(advantageGained, maxCeiling);
