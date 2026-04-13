@@ -7,6 +7,7 @@ import ac.reaper.reaperac.checks.Check;
 import ac.reaper.reaperac.checks.CheckData;
 import ac.reaper.reaperac.checks.type.PostPredictionCheck;
 import ac.reaper.reaperac.player.GrimPlayer;
+import ac.reaper.reaperac.utils.anticheat.LogUtil;
 import ac.reaper.reaperac.utils.anticheat.update.PredictionComplete;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -14,6 +15,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @CheckData(name = "Simulation", decay = 0.02)
 public class OffsetHandler extends Check implements PostPredictionCheck {
     private static final AtomicInteger flags = new AtomicInteger(0);
+    private static final boolean SIM_PACKET_TRACE = Boolean.getBoolean("grim.simulationPacketTrace");
+    private static final long SIM_PACKET_TRACE_COOLDOWN_MS = 2000L;
     // Config
     private double setbackDecayMultiplier;
     private double threshold;
@@ -23,6 +26,7 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
     private double setbackViolationThreshold;
     // Current advantage gained
     private double advantageGained = 0;
+    private long lastSimPacketTraceAt;
 
     public OffsetHandler(GrimPlayer player) {
         super(player);
@@ -59,6 +63,7 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
 
                 String verbose = humanFormattedOffset + " /gl " + flagId;
                 if (flag(verbose)) {
+                    maybeLogSimulationPacketTrace(offset, flagId);
                     if (alert(verbose)) {
                         flags.incrementAndGet(); // This debug was sent somewhere
                         predictionComplete.setIdentifier(flagId);
@@ -110,5 +115,49 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
 
     public boolean doesOffsetFlag(double offset) {
         return offset >= threshold;
+    }
+
+    private void maybeLogSimulationPacketTrace(double offset, int flagId) {
+        if (!SIM_PACKET_TRACE) {
+            return;
+        }
+        long now = System.currentTimeMillis();
+        if (now - lastSimPacketTraceAt < SIM_PACKET_TRACE_COOLDOWN_MS) {
+            return;
+        }
+        lastSimPacketTraceAt = now;
+
+        LogUtil.warn(String.format(
+                "[SimulationTrace] player=%s uuid=%s version=%s protocol=%d offset=%.6f gl=%d " +
+                        "pkt=%s ageMs=%d hasPos=%s hasRot=%s onGround=%s hCollision=%s teleportAccept=%s " +
+                        "move=(%.3f,%.3f,%.3f yaw=%.2f pitch=%.2f) " +
+                        "statePos=(%.3f,%.3f,%.3f) claimedPos=(%.3f,%.3f,%.3f) stateOnGround=%s claimedOnGround=%s",
+                player.getName(),
+                player.user.getUUID(),
+                player.getClientVersion().getReleaseName(),
+                player.getClientVersion().getProtocolVersion(),
+                offset,
+                flagId,
+                player.packetStateData.lastMovementPacketType,
+                Math.max(0L, now - player.packetStateData.lastMovementPacketAtMs),
+                player.packetStateData.lastMovementHadPosition,
+                player.packetStateData.lastMovementHadRotation,
+                player.packetStateData.lastMovementOnGround,
+                player.packetStateData.lastMovementHorizontalCollision,
+                player.packetStateData.lastMovementWasTeleportAccept,
+                player.packetStateData.lastMovementX,
+                player.packetStateData.lastMovementY,
+                player.packetStateData.lastMovementZ,
+                player.packetStateData.lastMovementYaw,
+                player.packetStateData.lastMovementPitch,
+                player.x,
+                player.y,
+                player.z,
+                player.packetStateData.lastClaimedPosition.getX(),
+                player.packetStateData.lastClaimedPosition.getY(),
+                player.packetStateData.lastClaimedPosition.getZ(),
+                player.onGround,
+                player.packetStateData.packetPlayerOnGround
+        ));
     }
 }

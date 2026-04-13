@@ -30,6 +30,18 @@ public class PacketStateData {
     @Getter
     private int slowedByUsingItemSlot = Integer.MIN_VALUE;
     public boolean sendingBundlePacket;
+    public String lastMovementPacketType = "unknown";
+    public long lastMovementPacketAtMs = 0L;
+    public boolean lastMovementHadPosition = false;
+    public boolean lastMovementHadRotation = false;
+    public boolean lastMovementOnGround = false;
+    public boolean lastMovementHorizontalCollision = false;
+    public boolean lastMovementWasTeleportAccept = false;
+    public double lastMovementX = 0.0D;
+    public double lastMovementY = 0.0D;
+    public double lastMovementZ = 0.0D;
+    public float lastMovementYaw = 0.0F;
+    public float lastMovementPitch = 0.0F;
 
     // If true, the player's rotation was forced to the horse's rotation only on 1.13-
     public boolean horseInteractCausedForcedRotation = false;
