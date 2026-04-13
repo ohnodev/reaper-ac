@@ -30,7 +30,7 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
     private double setbackViolationThreshold;
     // Current advantage gained
     private double advantageGained = 0;
-    private long lastSimPacketTraceAt;
+    private volatile long lastSimPacketTraceAt;
 
     public OffsetHandler(GrimPlayer player) {
         super(player);
@@ -208,7 +208,7 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
                 formatSupportPos(player.mainSupportingBlockData.blockPos(), sensitive),
                 player.mainSupportingBlockData.onGround(),
                 describeBlockAt(player, player.x, player.y - 0.01, player.z, sensitive),
-                describeBlockAt(player, player.x, player.y + 1.62, player.z, sensitive),
+                describeBlockAt(player, player.x, player.y + player.getEyeHeight(), player.z, sensitive),
                 player.softHorizontalCollision,
                 player.horizontalCollision,
                 player.verticalCollision,
