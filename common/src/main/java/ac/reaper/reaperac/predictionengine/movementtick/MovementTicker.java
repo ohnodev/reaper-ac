@@ -2,6 +2,7 @@ package ac.reaper.reaperac.predictionengine.movementtick;
 
 import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.predictionengine.PlayerBaseTick;
+import ac.reaper.reaperac.predictionengine.MovementPhysicsProfile;
 import ac.reaper.reaperac.predictionengine.predictions.PredictionEngine;
 import ac.reaper.reaperac.predictionengine.predictions.PredictionEngineElytra;
 import ac.reaper.reaperac.utils.collisions.datatypes.SimpleCollisionBox;
@@ -43,11 +44,17 @@ public class MovementTicker {
     }
 
     public static float getAirDrag(GrimPlayer player) {
+        if (player.getMovementPhysicsProfile() == MovementPhysicsProfile.LEGACY_26_1_PHYSICS) {
+            return 0.91f;
+        }
         double airDragMod = player.compensatedEntities.self.getAttributeValue(Attributes.AIR_DRAG_MODIFIER);
         return computeModifiedFriction(0.91f, airDragMod);
     }
 
     public static float getBlockFrictionModified(GrimPlayer player, float blockFriction) {
+        if (player.getMovementPhysicsProfile() == MovementPhysicsProfile.LEGACY_26_1_PHYSICS) {
+            return blockFriction;
+        }
         double frictionMod = player.compensatedEntities.self.getAttributeValue(Attributes.FRICTION_MODIFIER);
         return computeModifiedFriction(blockFriction, frictionMod);
     }

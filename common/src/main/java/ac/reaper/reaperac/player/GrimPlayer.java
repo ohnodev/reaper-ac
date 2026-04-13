@@ -18,6 +18,7 @@ import ac.reaper.reaperac.manager.player.handlers.DefaultResyncHandler;
 import ac.reaper.reaperac.manager.player.handlers.NoOpResyncHandler;
 import ac.reaper.reaperac.platform.api.player.PlatformPlayer;
 import ac.reaper.reaperac.predictionengine.EntityFluidInteraction;
+import ac.reaper.reaperac.predictionengine.MovementPhysicsProfile;
 import ac.reaper.reaperac.predictionengine.MovementCheckRunner;
 import ac.reaper.reaperac.predictionengine.PointThreeEstimator;
 import ac.reaper.reaperac.predictionengine.UncertaintyHandler;
@@ -794,6 +795,13 @@ public class GrimPlayer implements ReaperUser {
     public boolean canSkipTicks() {
         getClientVersion();
         return !supportsEndTick();
+    }
+
+    @Contract(pure = true)
+    public MovementPhysicsProfile getMovementPhysicsProfile() {
+        return getClientVersion().getProtocolVersion() == 775
+                ? MovementPhysicsProfile.LEGACY_26_1_PHYSICS
+                : MovementPhysicsProfile.NATIVE_26_2_PHYSICS;
     }
 
     @Override
