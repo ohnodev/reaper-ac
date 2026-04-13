@@ -164,7 +164,6 @@ public class MovementTicker {
                 && player.getClientVersion().getProtocolVersion() == 775
                 && calculatedOnGround
                 && !player.packetStateData.packetPlayerOnGround
-                && !player.uncertaintyHandler.isStepMovement
                 && !player.wasTouchingWater
                 && !player.wasTouchingLava) {
             calculatedOnGround = false;
