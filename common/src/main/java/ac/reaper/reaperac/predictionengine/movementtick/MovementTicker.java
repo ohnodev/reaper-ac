@@ -2,12 +2,10 @@ package ac.reaper.reaperac.predictionengine.movementtick;
 
 import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.predictionengine.PlayerBaseTick;
-import ac.reaper.reaperac.predictionengine.MovementPhysicsProfile;
 import ac.reaper.reaperac.predictionengine.predictions.PredictionEngine;
 import ac.reaper.reaperac.predictionengine.predictions.PredictionEngineElytra;
 import ac.reaper.reaperac.utils.collisions.datatypes.SimpleCollisionBox;
 import ac.reaper.reaperac.utils.data.VectorData;
-import ac.reaper.reaperac.utils.data.MainSupportingBlockData;
 import ac.reaper.reaperac.utils.data.packetentity.PacketEntity;
 import ac.reaper.reaperac.utils.enums.FluidTag;
 import ac.reaper.reaperac.utils.math.GrimMath;
@@ -44,17 +42,11 @@ public class MovementTicker {
     }
 
     public static float getAirDrag(GrimPlayer player) {
-        if (player.getMovementPhysicsProfile() == MovementPhysicsProfile.LEGACY_26_1_PHYSICS) {
-            return 0.91f;
-        }
         double airDragMod = player.compensatedEntities.self.getAttributeValue(Attributes.AIR_DRAG_MODIFIER);
         return computeModifiedFriction(0.91f, airDragMod);
     }
 
     public static float getBlockFrictionModified(GrimPlayer player, float blockFriction) {
-        if (player.getMovementPhysicsProfile() == MovementPhysicsProfile.LEGACY_26_1_PHYSICS) {
-            return blockFriction;
-        }
         double frictionMod = player.compensatedEntities.self.getAttributeValue(Attributes.FRICTION_MODIFIER);
         return computeModifiedFriction(blockFriction, frictionMod);
     }
@@ -157,18 +149,6 @@ public class MovementTicker {
             calculatedOnGround = true;
         }
 
-        // Legacy 26.1 clients can send airborne packets while vanilla collision keeps us in a
-        // temporary "grounded" branch (notably around jump liftoff). For protocol 775, trust the
-        // explicit airborne claim in this narrow mismatch to avoid false simulation setbacks.
-        if (!player.inVehicle()
-                && player.getClientVersion().getProtocolVersion() == 775
-                && calculatedOnGround
-                && !player.packetStateData.packetPlayerOnGround
-                && !player.wasTouchingWater
-                && !player.wasTouchingLava) {
-            calculatedOnGround = false;
-        }
-
         // We can't tell the difference between stepping and swim hopping, so just let the player's onGround status be the truth
         // Pistons/shulkers are a bit glitchy so just trust the client when they are affected by them
         // The player's onGround status isn't given when riding a vehicle, so we don't have a choice in whether we calculate or not
@@ -196,13 +176,6 @@ public class MovementTicker {
         }
 
         player.mainSupportingBlockData = MainSupportingBlockPosFinder.findMainSupportingBlockPos(player, player.mainSupportingBlockData, new Vector3d(collide.getX(), collide.getY(), collide.getZ()), player.boundingBox, player.onGround);
-        // Legacy 26.1 jump/airborne ticks can otherwise retain a stale support "onGround=true"
-        // state with no supporting block, which feeds false grounded simulation branches.
-        if (player.getClientVersion().getProtocolVersion() == 775
-                && !player.packetStateData.packetPlayerOnGround
-                && player.mainSupportingBlockData.blockPos() == null) {
-            player.mainSupportingBlockData = new MainSupportingBlockData(null, false);
-        }
         StateType onBlock = BlockProperties.getOnPos(player, player.mainSupportingBlockData, new Vector3d(player.x, player.y, player.z));
 
         // Hack with 1.14+ poses issue

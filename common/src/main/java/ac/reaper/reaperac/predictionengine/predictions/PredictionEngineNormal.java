@@ -1,7 +1,6 @@
 package ac.reaper.reaperac.predictionengine.predictions;
 
 import ac.reaper.reaperac.player.GrimPlayer;
-import ac.reaper.reaperac.predictionengine.MovementPhysicsProfile;
 import ac.reaper.reaperac.predictionengine.movementtick.MovementTicker;
 import ac.reaper.reaperac.utils.data.VectorData;
 import ac.reaper.reaperac.utils.math.GrimMath;
@@ -31,13 +30,8 @@ public class PredictionEngineNormal extends PredictionEngine {
             adjustedY -= player.gravity;
         }
 
-        float verticalDrag;
-        if (player.getMovementPhysicsProfile() == MovementPhysicsProfile.LEGACY_26_1_PHYSICS) {
-            verticalDrag = 0.98F;
-        } else {
-            double airDragMod = player.compensatedEntities.self.getAttributeValue(Attributes.AIR_DRAG_MODIFIER);
-            verticalDrag = MovementTicker.computeModifiedFriction(0.98F, airDragMod);
-        }
+        double airDragMod = player.compensatedEntities.self.getAttributeValue(Attributes.AIR_DRAG_MODIFIER);
+        float verticalDrag = MovementTicker.computeModifiedFriction(0.98F, airDragMod);
 
         vector.setX(vector.getX() * player.friction);
         vector.setY(adjustedY * verticalDrag);
@@ -46,12 +40,7 @@ public class PredictionEngineNormal extends PredictionEngine {
 
     @Override
     public void addJumpsToPossibilities(GrimPlayer player, Set<VectorData> existingVelocities) {
-        boolean legacy261 = player.getMovementPhysicsProfile() == MovementPhysicsProfile.LEGACY_26_1_PHYSICS;
-        // Legacy 26.1 (protocol 775) behind translation can intermittently miss PLAYER_INPUT
-        // jump state; keep jump candidates enabled so a real 0.42 jump impulse is still
-        // predicted instead of turning into a simulation spike/setback.
         if (player.supportsEndTick()
-                && !legacy261
                 && !player.packetStateData.knownInput.jump()) {
             return;
         }
@@ -67,12 +56,7 @@ public class PredictionEngineNormal extends PredictionEngine {
                 // The player cannot jump
                 final OptionalInt jumpBoost = player.compensatedEntities.getPotionLevelForPlayer(PotionTypes.JUMP_BOOST);
                 boolean blockedByGroundState = ((jumpBoost.isEmpty() || jumpBoost.getAsInt() >= 0) && player.onGround) || !player.lastOnGround;
-                boolean allowLegacyLiftoffMismatch = legacy261
-                        && player.lastOnGround
-                        && player.onGround
-                        && !player.packetStateData.packetPlayerOnGround
-                        && !player.packetStateData.lastPacketWasTeleport;
-                if (blockedByGroundState && !allowLegacyLiftoffMismatch)
+                if (blockedByGroundState)
                     return;
 
                 JumpPower.jumpFromGround(player, jump);

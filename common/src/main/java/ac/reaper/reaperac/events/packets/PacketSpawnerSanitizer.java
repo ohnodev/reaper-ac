@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PacketSpawnerSanitizer extends PacketListenerAbstract {
-    // 26.1-only fork: use the server's latest mapping id path by design.
+    // 26.2-only runtime: use the server's latest mapping id path by design.
     // We intentionally do not support legacy/multi-version client id remapping here.
     private static final ClientVersion SERVER_CLIENT_VERSION =
             PacketEvents.getAPI().getServerManager().getVersion().toClientVersion();
