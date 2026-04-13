@@ -9,6 +9,8 @@ import ac.reaper.reaperac.checks.type.PostPredictionCheck;
 import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.utils.anticheat.LogUtil;
 import ac.reaper.reaperac.utils.anticheat.update.PredictionComplete;
+import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
+import com.github.retrooper.packetevents.util.Vector3i;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -131,7 +133,9 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
                 "[SimulationTrace] player=%s uuid=%s version=%s protocol=%d offset=%.6f gl=%d " +
                         "pkt=%s ageMs=%d hasPos=%s hasRot=%s onGround=%s hCollision=%s teleportAccept=%s " +
                         "move=(%.3f,%.3f,%.3f yaw=%.2f pitch=%.2f) " +
-                        "statePos=(%.3f,%.3f,%.3f) claimedPos=(%.3f,%.3f,%.3f) stateOnGround=%s claimedOnGround=%s",
+                        "statePos=(%.3f,%.3f,%.3f) claimedPos=(%.3f,%.3f,%.3f) stateOnGround=%s claimedOnGround=%s " +
+                        "supportPos=%s supportOnGround=%s feetBlock=%s headBlock=%s " +
+                        "softH=%s hardH=%s vertCol=%s step=%s slimeStep=%s nearFluid=%s nearGlitch=%s ogUncertain=%s",
                 player.getName(),
                 player.user.getUUID(),
                 player.getClientVersion().getReleaseName(),
@@ -157,7 +161,34 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
                 player.packetStateData.lastClaimedPosition.getY(),
                 player.packetStateData.lastClaimedPosition.getZ(),
                 player.onGround,
-                player.packetStateData.packetPlayerOnGround
+                player.packetStateData.packetPlayerOnGround,
+                formatSupportPos(player.mainSupportingBlockData.blockPos()),
+                player.mainSupportingBlockData.onGround(),
+                describeBlockAt(player, player.x, player.y - 0.01, player.z),
+                describeBlockAt(player, player.x, player.y + 1.62, player.z),
+                player.softHorizontalCollision,
+                player.horizontalCollision,
+                player.verticalCollision,
+                player.uncertaintyHandler.isStepMovement,
+                player.uncertaintyHandler.isSteppingOnSlime,
+                player.pointThreeEstimator.isNearFluid,
+                player.uncertaintyHandler.isNearGlitchyBlock,
+                player.uncertaintyHandler.onGroundUncertain
         ));
+    }
+
+    private static String formatSupportPos(Vector3i pos) {
+        if (pos == null) {
+            return "null";
+        }
+        return pos.getX() + "," + pos.getY() + "," + pos.getZ();
+    }
+
+    private static String describeBlockAt(GrimPlayer player, double x, double y, double z) {
+        WrappedBlockState state = player.compensatedWorld.getBlock(x, y, z);
+        if (state == null) {
+            return "null";
+        }
+        return state.getType() + "#" + state.getGlobalId();
     }
 }
