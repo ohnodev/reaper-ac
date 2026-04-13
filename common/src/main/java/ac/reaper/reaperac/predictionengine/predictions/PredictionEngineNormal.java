@@ -40,7 +40,12 @@ public class PredictionEngineNormal extends PredictionEngine {
 
     @Override
     public void addJumpsToPossibilities(GrimPlayer player, Set<VectorData> existingVelocities) {
-        if (player.supportsEndTick() && !player.packetStateData.knownInput.jump()) {
+        // Legacy 26.1 (protocol 775) behind translation can intermittently miss PLAYER_INPUT
+        // jump state; keep jump candidates enabled so a real 0.42 jump impulse is still
+        // predicted instead of turning into a simulation spike/setback.
+        if (player.supportsEndTick()
+                && player.getClientVersion().getProtocolVersion() != 775
+                && !player.packetStateData.knownInput.jump()) {
             return;
         }
 
