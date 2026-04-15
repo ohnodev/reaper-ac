@@ -17,10 +17,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public final class LegacyLinkCompat {
     private static final AtomicBoolean loggedFailure = new AtomicBoolean(false);
+    private static final AtomicBoolean loggedRemapFailure = new AtomicBoolean(false);
     private static final AtomicBoolean loggedChannelFailure = new AtomicBoolean(false);
     private static final AtomicInteger traceBudget = new AtomicInteger(64);
     private static final boolean TRACE_LEGACY_RESYNC =
-            Boolean.parseBoolean(System.getProperty("reaper.traceLegacyResync", "true"));
+            Boolean.parseBoolean(System.getProperty("reaper.traceLegacyResync", "false"));
 
     private static final Method LEGACY_TRACKER_IS_LEGACY;
     private static final Method REGISTRY_REMAPPER_REMAP_BLOCK_STATE;
@@ -143,7 +144,7 @@ public final class LegacyLinkCompat {
             }
             return remapped;
         } catch (ReflectiveOperationException | RuntimeException ex) {
-            if (loggedFailure.compareAndSet(false, true)) {
+            if (loggedRemapFailure.compareAndSet(false, true)) {
                 LogUtil.error("Failed to apply LegacyLink block-state remap bridge in Reaper resync path.", ex);
             }
             return translatedBlockStateId;

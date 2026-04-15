@@ -228,12 +228,22 @@ public class MovementTicker {
     }
 
     private boolean shouldSkipWaterCurrentPushing() {
-        int blockX = GrimMath.floor(player.x);
         int blockY = GrimMath.floor(player.y);
-        int blockZ = GrimMath.floor(player.z);
-        return isWaterloggedOrDripleaf(player.compensatedWorld.getBlock(blockX, blockY, blockZ))
-                || isWaterloggedOrDripleaf(player.compensatedWorld.getBlock(blockX, blockY - 1, blockZ))
-                || isWaterloggedOrDripleaf(player.compensatedWorld.getBlock(blockX, blockY + 1, blockZ));
+        int minBlockX = GrimMath.floor(player.boundingBox.minX);
+        int maxBlockX = GrimMath.floor(player.boundingBox.maxX);
+        int minBlockZ = GrimMath.floor(player.boundingBox.minZ);
+        int maxBlockZ = GrimMath.floor(player.boundingBox.maxZ);
+
+        for (int blockX = minBlockX; blockX <= maxBlockX; blockX++) {
+            for (int blockZ = minBlockZ; blockZ <= maxBlockZ; blockZ++) {
+                if (isWaterloggedOrDripleaf(player.compensatedWorld.getBlock(blockX, blockY, blockZ))
+                        || isWaterloggedOrDripleaf(player.compensatedWorld.getBlock(blockX, blockY - 1, blockZ))
+                        || isWaterloggedOrDripleaf(player.compensatedWorld.getBlock(blockX, blockY + 1, blockZ))) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private static boolean isWaterloggedOrDripleaf(WrappedBlockState state) {

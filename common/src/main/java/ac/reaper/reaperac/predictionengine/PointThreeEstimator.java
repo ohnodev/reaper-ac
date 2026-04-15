@@ -255,6 +255,7 @@ public class PointThreeEstimator {
 
         player.boundingBox = oldBB;
 
+        resetPerTickNearbyState();
         checkNearbyBlocks(pointThreeBox);
 
         maxPositiveLevitation = Integer.MIN_VALUE;
@@ -266,15 +267,16 @@ public class PointThreeEstimator {
         isPushing = false;
     }
 
-    private void checkNearbyBlocks(SimpleCollisionBox pointThreeBox) {
-        // Reset variables
+    private void resetPerTickNearbyState() {
         isNearHorizontalFlowingLiquid = false;
         isNearVerticalFlowingLiquid = false;
         isNearClimbable = false;
         isNearBubbleColumn = false;
         isNearFluid = false;
         nearFluidSource = "none";
+    }
 
+    private void checkNearbyBlocks(SimpleCollisionBox pointThreeBox) {
         // Check for flowing water
         Collisions.hasMaterial(player, pointThreeBox, (pair) -> {
             final WrappedBlockState state = pair.first();
