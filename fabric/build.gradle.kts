@@ -10,6 +10,16 @@ plugins {
     grim.`jij-conventions`
 }
 
+val vendoredPacketEventsPublishTasks = listOf(
+    ":api:publishToMavenLocal",
+    ":netty-common:publishToMavenLocal",
+    ":fabric-common:publishToMavenLocal",
+    ":fabric-official:publishToMavenLocal",
+    ":fabric:publishToMavenLocal"
+).map { taskPath ->
+    gradle.includedBuild("packetevents").task(taskPath)
+}
+
 dependencies {
     minecraft("com.mojang:minecraft:$minecraft_version")
     implementation("net.fabricmc.fabric-api:fabric-api:$fabric_version")
@@ -82,6 +92,11 @@ publishing.publications.create<MavenPublication>("maven") {
 }
 
 tasks {
+    // Loom's JIJ resolution is repository-based; publish vendored PE first so edits are always packaged.
+    named("processIncludeJars") {
+        dependsOn(vendoredPacketEventsPublishTasks)
+    }
+
     jar {
         archiveBaseName.set("reaperac-fabric")
         archiveVersion.set(rootProject.version as String)

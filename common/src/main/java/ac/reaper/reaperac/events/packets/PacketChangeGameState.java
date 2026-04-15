@@ -2,6 +2,7 @@ package ac.reaper.reaperac.events.packets;
 
 import ac.reaper.reaperac.GrimAPI;
 import ac.reaper.reaperac.checks.Check;
+import ac.reaper.reaperac.checks.impl.prediction.OffsetHandler;
 import ac.reaper.reaperac.checks.type.PacketCheck;
 import ac.reaper.reaperac.player.GrimPlayer;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
@@ -36,6 +37,10 @@ public class PacketChangeGameState extends Check implements PacketCheck {
 
                     if (previous == GameMode.SPECTATOR && player.gamemode != GameMode.SPECTATOR) {
                         GrimAPI.INSTANCE.getSpectateManager().handlePlayerStopSpectating(player.uuid);
+                    }
+
+                    if (previous != player.gamemode) {
+                        player.checkManager.getPostPredictionCheck(OffsetHandler.class).resetSimulationState();
                     }
                 });
             }

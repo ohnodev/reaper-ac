@@ -34,7 +34,6 @@ import com.github.retrooper.packetevents.protocol.world.states.enums.Face;
 import com.github.retrooper.packetevents.protocol.world.states.enums.Half;
 import com.github.retrooper.packetevents.protocol.world.states.enums.Part;
 import com.github.retrooper.packetevents.protocol.world.states.enums.Thickness;
-import com.github.retrooper.packetevents.protocol.world.states.enums.Tilt;
 import com.github.retrooper.packetevents.protocol.world.states.enums.Type;
 import com.github.retrooper.packetevents.protocol.world.states.enums.VerticalDirection;
 import com.github.retrooper.packetevents.protocol.world.states.type.StateType;
@@ -216,6 +215,7 @@ public enum CollisionData implements CollisionFactory {
             StateTypes.DEAD_BUSH, StateTypes.SUGAR_CANE, StateTypes.SWEET_BERRY_BUSH, StateTypes.WARPED_ROOTS,
             StateTypes.CRIMSON_ROOTS, StateTypes.TORCHFLOWER_CROP, StateTypes.PINK_PETALS, StateTypes.TALL_GRASS,
             StateTypes.LARGE_FERN, StateTypes.BAMBOO_SAPLING, StateTypes.HANGING_ROOTS, StateTypes.VINE,
+            StateTypes.LEAF_LITTER, StateTypes.WILDFLOWERS,
             StateTypes.SMALL_DRIPLEAF, StateTypes.END_PORTAL, StateTypes.LEVER, StateTypes.PUMPKIN_STEM, StateTypes.MELON_STEM,
             StateTypes.ATTACHED_MELON_STEM, StateTypes.ATTACHED_PUMPKIN_STEM, StateTypes.BEETROOTS, StateTypes.POTATOES,
             StateTypes.WHEAT, StateTypes.CARROTS, StateTypes.NETHER_WART, StateTypes.MOVING_PISTON, StateTypes.AIR, StateTypes.CAVE_AIR,
@@ -657,16 +657,7 @@ public enum CollisionData implements CollisionFactory {
 
     DECORATED_POT((player, version, data, x, y, z) -> new HexCollisionBox(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0), StateTypes.DECORATED_POT),
 
-    BIG_DRIPLEAF((player, version, data, x, y, z) -> {
-        Tilt tilt = data.getTilt();
-        if (tilt == Tilt.NONE || tilt == Tilt.UNSTABLE) {
-            return new HexCollisionBox(0.0, 11.0, 0.0, 16.0, 15.0, 16.0);
-        } else if (tilt == Tilt.PARTIAL) {
-            return new HexCollisionBox(0.0, 11.0, 0.0, 16.0, 13.0, 16.0);
-        } else {
-            return NoCollisionBox.INSTANCE;
-        }
-    }, StateTypes.BIG_DRIPLEAF),
+    BIG_DRIPLEAF((player, version, data, x, y, z) -> NoCollisionBox.INSTANCE, StateTypes.BIG_DRIPLEAF),
 
     POINTED_DRIPSTONE((player, version, data, x, y, z) -> {
 

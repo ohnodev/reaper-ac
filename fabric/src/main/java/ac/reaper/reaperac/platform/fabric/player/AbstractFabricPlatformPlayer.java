@@ -6,6 +6,8 @@ import ac.reaper.reaperac.platform.api.player.PlatformInventory;
 import ac.reaper.reaperac.platform.api.player.PlatformPlayer;
 import ac.reaper.reaperac.platform.fabric.GrimACFabricLoaderPlugin;
 import ac.reaper.reaperac.platform.fabric.entity.AbstractFabricGrimEntity;
+import ac.reaper.reaperac.platform.fabric.utils.LegacyLinkCompat;
+import ac.reaper.reaperac.platform.fabric.utils.LegacyLinkVanillaResync;
 import ac.reaper.reaperac.platform.fabric.utils.PolymerHook;
 import ac.reaper.reaperac.platform.fabric.utils.convert.FabricConversionUtil;
 import ac.reaper.reaperac.utils.common.arguments.CommonGrimArguments;
@@ -44,6 +46,15 @@ public abstract class AbstractFabricPlatformPlayer extends AbstractFabricGrimEnt
 
     @Override
     public void kickPlayer(String textReason) {
+        /*
+         * GrimPlayer.disconnect() already calls user.closeConnection(); the next tick runs Connection.handleDisconnection().
+         * Scheduling kickPlayer() 1 tick later would call ServerCommonPacketListenerImpl.disconnect(), which always
+         * executeBlocking(connection::handleDisconnection) — a second handleDisconnection() and
+         * "handleDisconnection() called twice" from vanilla Connection.
+         */
+        if (fabricPlayer.hasDisconnected() || !fabricPlayer.connection.isAcceptingMessages()) {
+            return;
+        }
         fabricPlayer.connection.disconnect(GrimACFabricLoaderPlugin.LOADER.getFabricMessageUtils().textLiteral(textReason));
     }
 
@@ -108,6 +119,43 @@ public abstract class AbstractFabricPlatformPlayer extends AbstractFabricGrimEnt
     @Override
     public PlatformInventory getInventory() {
         return inventory;
+    }
+
+    @Override
+    public int mapBlockStateIdForClient(int serverBlockStateId) {
+        int translated = this.blockTranslator.translate(serverBlockStateId);
+        return LegacyLinkCompat.mapBlockStateIdForClient(this.fabricPlayer, translated);
+    }
+
+    @Override
+    public boolean sendSectionMultiBlockResyncViaVanillaConnection(
+            int chunkX,
+            int sectionY,
+            int chunkZ,
+            int minLocalX,
+            int maxLocalX,
+            int minLocalY,
+            int maxLocalY,
+            int minLocalZ,
+            int maxLocalZ
+    ) {
+        return LegacyLinkVanillaResync.trySendSectionBlocksUpdate(
+                fabricPlayer,
+                chunkX,
+                sectionY,
+                chunkZ,
+                minLocalX,
+                maxLocalX,
+                minLocalY,
+                maxLocalY,
+                minLocalZ,
+                maxLocalZ
+        );
+    }
+
+    @Override
+    public boolean sendSingleBlockResyncViaVanillaConnection(int x, int y, int z, int sequence) {
+        return LegacyLinkVanillaResync.trySendSingleBlockUpdate(fabricPlayer, x, y, z, sequence);
     }
 
     @Override

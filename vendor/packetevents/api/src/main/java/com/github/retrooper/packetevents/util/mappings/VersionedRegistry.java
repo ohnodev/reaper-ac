@@ -236,6 +236,11 @@ public final class VersionedRegistry<T extends MappedEntity> implements IRegistr
     }
 
     private void logLookupMappingGap(@Nullable ClientVersion version, String detail) {
+        if (this.registryKey.equals(new ResourceLocation("minecraft:item"))
+                && detail.contains("packetevents:default")) {
+            // Internal PE defaults pseudo-key from item base components, not a real item registry entry.
+            return;
+        }
         logMappingGap(version, detail, STRICT_LOOKUP_MISS_LOGGING);
     }
 

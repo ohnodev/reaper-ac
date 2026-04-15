@@ -11625,124 +11625,124 @@
     "def": 2,
     "entries": [
       {
-        "type": "normal",
         "facing": "north",
-        "short": true
+        "short": true,
+        "type": "normal"
       },
       {
-        "type": "sticky",
         "facing": "north",
-        "short": true
+        "short": true,
+        "type": "sticky"
       },
       {
-        "type": "normal",
         "facing": "north",
-        "short": false
+        "short": false,
+        "type": "normal"
       },
       {
-        "type": "sticky",
         "facing": "north",
-        "short": false
+        "short": false,
+        "type": "sticky"
       },
       {
-        "type": "normal",
         "facing": "east",
-        "short": true
+        "short": true,
+        "type": "normal"
       },
       {
-        "type": "sticky",
         "facing": "east",
-        "short": true
+        "short": true,
+        "type": "sticky"
       },
       {
-        "type": "normal",
         "facing": "east",
-        "short": false
+        "short": false,
+        "type": "normal"
       },
       {
-        "type": "sticky",
         "facing": "east",
-        "short": false
+        "short": false,
+        "type": "sticky"
       },
       {
-        "type": "normal",
         "facing": "south",
-        "short": true
+        "short": true,
+        "type": "normal"
       },
       {
-        "type": "sticky",
         "facing": "south",
-        "short": true
+        "short": true,
+        "type": "sticky"
       },
       {
-        "type": "normal",
         "facing": "south",
-        "short": false
+        "short": false,
+        "type": "normal"
       },
       {
-        "type": "sticky",
         "facing": "south",
-        "short": false
+        "short": false,
+        "type": "sticky"
       },
       {
-        "type": "normal",
         "facing": "west",
-        "short": true
+        "short": true,
+        "type": "normal"
       },
       {
-        "type": "sticky",
         "facing": "west",
-        "short": true
+        "short": true,
+        "type": "sticky"
       },
       {
-        "type": "normal",
         "facing": "west",
-        "short": false
+        "short": false,
+        "type": "normal"
       },
       {
-        "type": "sticky",
         "facing": "west",
-        "short": false
+        "short": false,
+        "type": "sticky"
       },
       {
-        "type": "normal",
         "facing": "up",
-        "short": true
+        "short": true,
+        "type": "normal"
       },
       {
-        "type": "sticky",
         "facing": "up",
-        "short": true
+        "short": true,
+        "type": "sticky"
       },
       {
-        "type": "normal",
         "facing": "up",
-        "short": false
+        "short": false,
+        "type": "normal"
       },
       {
-        "type": "sticky",
         "facing": "up",
-        "short": false
+        "short": false,
+        "type": "sticky"
       },
       {
-        "type": "normal",
         "facing": "down",
-        "short": true
+        "short": true,
+        "type": "normal"
       },
       {
-        "type": "sticky",
         "facing": "down",
-        "short": true
+        "short": true,
+        "type": "sticky"
       },
       {
-        "type": "normal",
         "facing": "down",
-        "short": false
+        "short": false,
+        "type": "normal"
       },
       {
-        "type": "sticky",
         "facing": "down",
-        "short": false
+        "short": false,
+        "type": "sticky"
       }
     ]
   },
@@ -11863,52 +11863,52 @@
     "def": 0,
     "entries": [
       {
-        "type": "normal",
-        "facing": "north"
+        "facing": "north",
+        "type": "normal"
       },
       {
-        "type": "sticky",
-        "facing": "north"
+        "facing": "north",
+        "type": "sticky"
       },
       {
-        "type": "normal",
-        "facing": "east"
+        "facing": "east",
+        "type": "normal"
       },
       {
-        "type": "sticky",
-        "facing": "east"
+        "facing": "east",
+        "type": "sticky"
       },
       {
-        "type": "normal",
-        "facing": "south"
+        "facing": "south",
+        "type": "normal"
       },
       {
-        "type": "sticky",
-        "facing": "south"
+        "facing": "south",
+        "type": "sticky"
       },
       {
-        "type": "normal",
-        "facing": "west"
+        "facing": "west",
+        "type": "normal"
       },
       {
-        "type": "sticky",
-        "facing": "west"
+        "facing": "west",
+        "type": "sticky"
       },
       {
-        "type": "normal",
-        "facing": "up"
+        "facing": "up",
+        "type": "normal"
       },
       {
-        "type": "sticky",
-        "facing": "up"
+        "facing": "up",
+        "type": "sticky"
       },
       {
-        "type": "normal",
-        "facing": "down"
+        "facing": "down",
+        "type": "normal"
       },
       {
-        "type": "sticky",
-        "facing": "down"
+        "facing": "down",
+        "type": "sticky"
       }
     ]
   },
@@ -23803,123 +23803,123 @@
     "def": 1,
     "entries": [
       {
-        "type": "single",
         "facing": "north",
+        "type": "single",
         "waterlogged": true
       },
       {
-        "type": "single",
         "facing": "north",
+        "type": "single",
         "waterlogged": false
       },
       {
-        "type": "left",
         "facing": "north",
+        "type": "left",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "north",
+        "type": "left",
         "waterlogged": false
       },
       {
-        "type": "right",
         "facing": "north",
+        "type": "right",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "north",
-        "waterlogged": false
-      },
-      {
-        "type": "single",
-        "facing": "south",
-        "waterlogged": true
-      },
-      {
-        "type": "single",
-        "facing": "south",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "south",
-        "waterlogged": true
-      },
-      {
-        "type": "left",
-        "facing": "south",
-        "waterlogged": false
-      },
-      {
         "type": "right",
+        "waterlogged": false
+      },
+      {
         "facing": "south",
+        "type": "single",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "south",
-        "waterlogged": false
-      },
-      {
         "type": "single",
-        "facing": "west",
+        "waterlogged": false
+      },
+      {
+        "facing": "south",
+        "type": "left",
         "waterlogged": true
       },
       {
+        "facing": "south",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "south",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "south",
+        "type": "right",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
         "type": "single",
-        "facing": "west",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "west",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "west",
-        "waterlogged": false
-      },
-      {
-        "type": "right",
-        "facing": "west",
-        "waterlogged": true
-      },
-      {
-        "type": "right",
-        "facing": "west",
-        "waterlogged": false
-      },
-      {
         "type": "single",
-        "facing": "east",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
+        "type": "left",
         "waterlogged": true
       },
       {
+        "facing": "west",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "west",
+        "type": "right",
+        "waterlogged": false
+      },
+      {
+        "facing": "east",
         "type": "single",
-        "facing": "east",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "east",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "east",
+        "type": "single",
         "waterlogged": false
       },
       {
-        "type": "right",
         "facing": "east",
+        "type": "left",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "east",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "east",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "east",
+        "type": "right",
         "waterlogged": false
       }
     ]
@@ -70759,123 +70759,123 @@
     "def": 1,
     "entries": [
       {
-        "type": "single",
         "facing": "north",
+        "type": "single",
         "waterlogged": true
       },
       {
-        "type": "single",
         "facing": "north",
+        "type": "single",
         "waterlogged": false
       },
       {
-        "type": "left",
         "facing": "north",
+        "type": "left",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "north",
+        "type": "left",
         "waterlogged": false
       },
       {
-        "type": "right",
         "facing": "north",
+        "type": "right",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "north",
-        "waterlogged": false
-      },
-      {
-        "type": "single",
-        "facing": "south",
-        "waterlogged": true
-      },
-      {
-        "type": "single",
-        "facing": "south",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "south",
-        "waterlogged": true
-      },
-      {
-        "type": "left",
-        "facing": "south",
-        "waterlogged": false
-      },
-      {
         "type": "right",
+        "waterlogged": false
+      },
+      {
         "facing": "south",
+        "type": "single",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "south",
-        "waterlogged": false
-      },
-      {
         "type": "single",
-        "facing": "west",
+        "waterlogged": false
+      },
+      {
+        "facing": "south",
+        "type": "left",
         "waterlogged": true
       },
       {
+        "facing": "south",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "south",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "south",
+        "type": "right",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
         "type": "single",
-        "facing": "west",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "west",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "west",
-        "waterlogged": false
-      },
-      {
-        "type": "right",
-        "facing": "west",
-        "waterlogged": true
-      },
-      {
-        "type": "right",
-        "facing": "west",
-        "waterlogged": false
-      },
-      {
         "type": "single",
-        "facing": "east",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
+        "type": "left",
         "waterlogged": true
       },
       {
+        "facing": "west",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "west",
+        "type": "right",
+        "waterlogged": false
+      },
+      {
+        "facing": "east",
         "type": "single",
-        "facing": "east",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "east",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "east",
+        "type": "single",
         "waterlogged": false
       },
       {
-        "type": "right",
         "facing": "east",
+        "type": "left",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "east",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "east",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "east",
+        "type": "right",
         "waterlogged": false
       }
     ]
@@ -198332,123 +198332,123 @@
     "def": 1,
     "entries": [
       {
-        "type": "single",
         "facing": "north",
+        "type": "single",
         "waterlogged": true
       },
       {
-        "type": "single",
         "facing": "north",
+        "type": "single",
         "waterlogged": false
       },
       {
-        "type": "left",
         "facing": "north",
+        "type": "left",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "north",
+        "type": "left",
         "waterlogged": false
       },
       {
-        "type": "right",
         "facing": "north",
+        "type": "right",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "north",
-        "waterlogged": false
-      },
-      {
-        "type": "single",
-        "facing": "south",
-        "waterlogged": true
-      },
-      {
-        "type": "single",
-        "facing": "south",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "south",
-        "waterlogged": true
-      },
-      {
-        "type": "left",
-        "facing": "south",
-        "waterlogged": false
-      },
-      {
         "type": "right",
+        "waterlogged": false
+      },
+      {
         "facing": "south",
+        "type": "single",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "south",
-        "waterlogged": false
-      },
-      {
         "type": "single",
-        "facing": "west",
+        "waterlogged": false
+      },
+      {
+        "facing": "south",
+        "type": "left",
         "waterlogged": true
       },
       {
+        "facing": "south",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "south",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "south",
+        "type": "right",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
         "type": "single",
-        "facing": "west",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "west",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "west",
-        "waterlogged": false
-      },
-      {
-        "type": "right",
-        "facing": "west",
-        "waterlogged": true
-      },
-      {
-        "type": "right",
-        "facing": "west",
-        "waterlogged": false
-      },
-      {
         "type": "single",
-        "facing": "east",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
+        "type": "left",
         "waterlogged": true
       },
       {
+        "facing": "west",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "west",
+        "type": "right",
+        "waterlogged": false
+      },
+      {
+        "facing": "east",
         "type": "single",
-        "facing": "east",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "east",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "east",
+        "type": "single",
         "waterlogged": false
       },
       {
-        "type": "right",
         "facing": "east",
+        "type": "left",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "east",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "east",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "east",
+        "type": "right",
         "waterlogged": false
       }
     ]
@@ -198458,123 +198458,123 @@
     "def": 1,
     "entries": [
       {
-        "type": "single",
         "facing": "north",
+        "type": "single",
         "waterlogged": true
       },
       {
-        "type": "single",
         "facing": "north",
+        "type": "single",
         "waterlogged": false
       },
       {
-        "type": "left",
         "facing": "north",
+        "type": "left",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "north",
+        "type": "left",
         "waterlogged": false
       },
       {
-        "type": "right",
         "facing": "north",
+        "type": "right",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "north",
-        "waterlogged": false
-      },
-      {
-        "type": "single",
-        "facing": "south",
-        "waterlogged": true
-      },
-      {
-        "type": "single",
-        "facing": "south",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "south",
-        "waterlogged": true
-      },
-      {
-        "type": "left",
-        "facing": "south",
-        "waterlogged": false
-      },
-      {
         "type": "right",
+        "waterlogged": false
+      },
+      {
         "facing": "south",
+        "type": "single",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "south",
-        "waterlogged": false
-      },
-      {
         "type": "single",
-        "facing": "west",
+        "waterlogged": false
+      },
+      {
+        "facing": "south",
+        "type": "left",
         "waterlogged": true
       },
       {
+        "facing": "south",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "south",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "south",
+        "type": "right",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
         "type": "single",
-        "facing": "west",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "west",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "west",
-        "waterlogged": false
-      },
-      {
-        "type": "right",
-        "facing": "west",
-        "waterlogged": true
-      },
-      {
-        "type": "right",
-        "facing": "west",
-        "waterlogged": false
-      },
-      {
         "type": "single",
-        "facing": "east",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
+        "type": "left",
         "waterlogged": true
       },
       {
+        "facing": "west",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "west",
+        "type": "right",
+        "waterlogged": false
+      },
+      {
+        "facing": "east",
         "type": "single",
-        "facing": "east",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "east",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "east",
+        "type": "single",
         "waterlogged": false
       },
       {
-        "type": "right",
         "facing": "east",
+        "type": "left",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "east",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "east",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "east",
+        "type": "right",
         "waterlogged": false
       }
     ]
@@ -198584,123 +198584,123 @@
     "def": 1,
     "entries": [
       {
-        "type": "single",
         "facing": "north",
+        "type": "single",
         "waterlogged": true
       },
       {
-        "type": "single",
         "facing": "north",
+        "type": "single",
         "waterlogged": false
       },
       {
-        "type": "left",
         "facing": "north",
+        "type": "left",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "north",
+        "type": "left",
         "waterlogged": false
       },
       {
-        "type": "right",
         "facing": "north",
+        "type": "right",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "north",
-        "waterlogged": false
-      },
-      {
-        "type": "single",
-        "facing": "south",
-        "waterlogged": true
-      },
-      {
-        "type": "single",
-        "facing": "south",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "south",
-        "waterlogged": true
-      },
-      {
-        "type": "left",
-        "facing": "south",
-        "waterlogged": false
-      },
-      {
         "type": "right",
+        "waterlogged": false
+      },
+      {
         "facing": "south",
+        "type": "single",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "south",
-        "waterlogged": false
-      },
-      {
         "type": "single",
-        "facing": "west",
+        "waterlogged": false
+      },
+      {
+        "facing": "south",
+        "type": "left",
         "waterlogged": true
       },
       {
+        "facing": "south",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "south",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "south",
+        "type": "right",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
         "type": "single",
-        "facing": "west",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "west",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "west",
-        "waterlogged": false
-      },
-      {
-        "type": "right",
-        "facing": "west",
-        "waterlogged": true
-      },
-      {
-        "type": "right",
-        "facing": "west",
-        "waterlogged": false
-      },
-      {
         "type": "single",
-        "facing": "east",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
+        "type": "left",
         "waterlogged": true
       },
       {
+        "facing": "west",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "west",
+        "type": "right",
+        "waterlogged": false
+      },
+      {
+        "facing": "east",
         "type": "single",
-        "facing": "east",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "east",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "east",
+        "type": "single",
         "waterlogged": false
       },
       {
-        "type": "right",
         "facing": "east",
+        "type": "left",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "east",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "east",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "east",
+        "type": "right",
         "waterlogged": false
       }
     ]
@@ -198710,123 +198710,123 @@
     "def": 1,
     "entries": [
       {
-        "type": "single",
         "facing": "north",
+        "type": "single",
         "waterlogged": true
       },
       {
-        "type": "single",
         "facing": "north",
+        "type": "single",
         "waterlogged": false
       },
       {
-        "type": "left",
         "facing": "north",
+        "type": "left",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "north",
+        "type": "left",
         "waterlogged": false
       },
       {
-        "type": "right",
         "facing": "north",
+        "type": "right",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "north",
-        "waterlogged": false
-      },
-      {
-        "type": "single",
-        "facing": "south",
-        "waterlogged": true
-      },
-      {
-        "type": "single",
-        "facing": "south",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "south",
-        "waterlogged": true
-      },
-      {
-        "type": "left",
-        "facing": "south",
-        "waterlogged": false
-      },
-      {
         "type": "right",
+        "waterlogged": false
+      },
+      {
         "facing": "south",
+        "type": "single",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "south",
-        "waterlogged": false
-      },
-      {
         "type": "single",
-        "facing": "west",
+        "waterlogged": false
+      },
+      {
+        "facing": "south",
+        "type": "left",
         "waterlogged": true
       },
       {
+        "facing": "south",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "south",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "south",
+        "type": "right",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
         "type": "single",
-        "facing": "west",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "west",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "west",
-        "waterlogged": false
-      },
-      {
-        "type": "right",
-        "facing": "west",
-        "waterlogged": true
-      },
-      {
-        "type": "right",
-        "facing": "west",
-        "waterlogged": false
-      },
-      {
         "type": "single",
-        "facing": "east",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
+        "type": "left",
         "waterlogged": true
       },
       {
+        "facing": "west",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "west",
+        "type": "right",
+        "waterlogged": false
+      },
+      {
+        "facing": "east",
         "type": "single",
-        "facing": "east",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "east",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "east",
+        "type": "single",
         "waterlogged": false
       },
       {
-        "type": "right",
         "facing": "east",
+        "type": "left",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "east",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "east",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "east",
+        "type": "right",
         "waterlogged": false
       }
     ]
@@ -198836,123 +198836,123 @@
     "def": 1,
     "entries": [
       {
-        "type": "single",
         "facing": "north",
+        "type": "single",
         "waterlogged": true
       },
       {
-        "type": "single",
         "facing": "north",
+        "type": "single",
         "waterlogged": false
       },
       {
-        "type": "left",
         "facing": "north",
+        "type": "left",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "north",
+        "type": "left",
         "waterlogged": false
       },
       {
-        "type": "right",
         "facing": "north",
+        "type": "right",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "north",
-        "waterlogged": false
-      },
-      {
-        "type": "single",
-        "facing": "south",
-        "waterlogged": true
-      },
-      {
-        "type": "single",
-        "facing": "south",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "south",
-        "waterlogged": true
-      },
-      {
-        "type": "left",
-        "facing": "south",
-        "waterlogged": false
-      },
-      {
         "type": "right",
+        "waterlogged": false
+      },
+      {
         "facing": "south",
+        "type": "single",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "south",
-        "waterlogged": false
-      },
-      {
         "type": "single",
-        "facing": "west",
+        "waterlogged": false
+      },
+      {
+        "facing": "south",
+        "type": "left",
         "waterlogged": true
       },
       {
+        "facing": "south",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "south",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "south",
+        "type": "right",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
         "type": "single",
-        "facing": "west",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "west",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "west",
-        "waterlogged": false
-      },
-      {
-        "type": "right",
-        "facing": "west",
-        "waterlogged": true
-      },
-      {
-        "type": "right",
-        "facing": "west",
-        "waterlogged": false
-      },
-      {
         "type": "single",
-        "facing": "east",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
+        "type": "left",
         "waterlogged": true
       },
       {
+        "facing": "west",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "west",
+        "type": "right",
+        "waterlogged": false
+      },
+      {
+        "facing": "east",
         "type": "single",
-        "facing": "east",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "east",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "east",
+        "type": "single",
         "waterlogged": false
       },
       {
-        "type": "right",
         "facing": "east",
+        "type": "left",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "east",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "east",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "east",
+        "type": "right",
         "waterlogged": false
       }
     ]
@@ -198962,123 +198962,123 @@
     "def": 1,
     "entries": [
       {
-        "type": "single",
         "facing": "north",
+        "type": "single",
         "waterlogged": true
       },
       {
-        "type": "single",
         "facing": "north",
+        "type": "single",
         "waterlogged": false
       },
       {
-        "type": "left",
         "facing": "north",
+        "type": "left",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "north",
+        "type": "left",
         "waterlogged": false
       },
       {
-        "type": "right",
         "facing": "north",
+        "type": "right",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "north",
-        "waterlogged": false
-      },
-      {
-        "type": "single",
-        "facing": "south",
-        "waterlogged": true
-      },
-      {
-        "type": "single",
-        "facing": "south",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "south",
-        "waterlogged": true
-      },
-      {
-        "type": "left",
-        "facing": "south",
-        "waterlogged": false
-      },
-      {
         "type": "right",
+        "waterlogged": false
+      },
+      {
         "facing": "south",
+        "type": "single",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "south",
-        "waterlogged": false
-      },
-      {
         "type": "single",
-        "facing": "west",
+        "waterlogged": false
+      },
+      {
+        "facing": "south",
+        "type": "left",
         "waterlogged": true
       },
       {
+        "facing": "south",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "south",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "south",
+        "type": "right",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
         "type": "single",
-        "facing": "west",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "west",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "west",
-        "waterlogged": false
-      },
-      {
-        "type": "right",
-        "facing": "west",
-        "waterlogged": true
-      },
-      {
-        "type": "right",
-        "facing": "west",
-        "waterlogged": false
-      },
-      {
         "type": "single",
-        "facing": "east",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
+        "type": "left",
         "waterlogged": true
       },
       {
+        "facing": "west",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "west",
+        "type": "right",
+        "waterlogged": false
+      },
+      {
+        "facing": "east",
         "type": "single",
-        "facing": "east",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "east",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "east",
+        "type": "single",
         "waterlogged": false
       },
       {
-        "type": "right",
         "facing": "east",
+        "type": "left",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "east",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "east",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "east",
+        "type": "right",
         "waterlogged": false
       }
     ]
@@ -199088,123 +199088,123 @@
     "def": 1,
     "entries": [
       {
-        "type": "single",
         "facing": "north",
+        "type": "single",
         "waterlogged": true
       },
       {
-        "type": "single",
         "facing": "north",
+        "type": "single",
         "waterlogged": false
       },
       {
-        "type": "left",
         "facing": "north",
+        "type": "left",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "north",
+        "type": "left",
         "waterlogged": false
       },
       {
-        "type": "right",
         "facing": "north",
+        "type": "right",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "north",
-        "waterlogged": false
-      },
-      {
-        "type": "single",
-        "facing": "south",
-        "waterlogged": true
-      },
-      {
-        "type": "single",
-        "facing": "south",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "south",
-        "waterlogged": true
-      },
-      {
-        "type": "left",
-        "facing": "south",
-        "waterlogged": false
-      },
-      {
         "type": "right",
+        "waterlogged": false
+      },
+      {
         "facing": "south",
+        "type": "single",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "south",
-        "waterlogged": false
-      },
-      {
         "type": "single",
-        "facing": "west",
+        "waterlogged": false
+      },
+      {
+        "facing": "south",
+        "type": "left",
         "waterlogged": true
       },
       {
+        "facing": "south",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "south",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "south",
+        "type": "right",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
         "type": "single",
-        "facing": "west",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "west",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "west",
-        "waterlogged": false
-      },
-      {
-        "type": "right",
-        "facing": "west",
-        "waterlogged": true
-      },
-      {
-        "type": "right",
-        "facing": "west",
-        "waterlogged": false
-      },
-      {
         "type": "single",
-        "facing": "east",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
+        "type": "left",
         "waterlogged": true
       },
       {
+        "facing": "west",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "west",
+        "type": "right",
+        "waterlogged": false
+      },
+      {
+        "facing": "east",
         "type": "single",
-        "facing": "east",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "east",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "east",
+        "type": "single",
         "waterlogged": false
       },
       {
-        "type": "right",
         "facing": "east",
+        "type": "left",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "east",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "east",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "east",
+        "type": "right",
         "waterlogged": false
       }
     ]
@@ -199214,123 +199214,123 @@
     "def": 1,
     "entries": [
       {
-        "type": "single",
         "facing": "north",
+        "type": "single",
         "waterlogged": true
       },
       {
-        "type": "single",
         "facing": "north",
+        "type": "single",
         "waterlogged": false
       },
       {
-        "type": "left",
         "facing": "north",
+        "type": "left",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "north",
+        "type": "left",
         "waterlogged": false
       },
       {
-        "type": "right",
         "facing": "north",
+        "type": "right",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "north",
-        "waterlogged": false
-      },
-      {
-        "type": "single",
-        "facing": "south",
-        "waterlogged": true
-      },
-      {
-        "type": "single",
-        "facing": "south",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "south",
-        "waterlogged": true
-      },
-      {
-        "type": "left",
-        "facing": "south",
-        "waterlogged": false
-      },
-      {
         "type": "right",
+        "waterlogged": false
+      },
+      {
         "facing": "south",
+        "type": "single",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "south",
-        "waterlogged": false
-      },
-      {
         "type": "single",
-        "facing": "west",
+        "waterlogged": false
+      },
+      {
+        "facing": "south",
+        "type": "left",
         "waterlogged": true
       },
       {
+        "facing": "south",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "south",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "south",
+        "type": "right",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
         "type": "single",
-        "facing": "west",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "west",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "west",
-        "waterlogged": false
-      },
-      {
-        "type": "right",
-        "facing": "west",
-        "waterlogged": true
-      },
-      {
-        "type": "right",
-        "facing": "west",
-        "waterlogged": false
-      },
-      {
         "type": "single",
-        "facing": "east",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
+        "type": "left",
         "waterlogged": true
       },
       {
+        "facing": "west",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "west",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "west",
+        "type": "right",
+        "waterlogged": false
+      },
+      {
+        "facing": "east",
         "type": "single",
-        "facing": "east",
-        "waterlogged": false
-      },
-      {
-        "type": "left",
-        "facing": "east",
         "waterlogged": true
       },
       {
-        "type": "left",
         "facing": "east",
+        "type": "single",
         "waterlogged": false
       },
       {
-        "type": "right",
         "facing": "east",
+        "type": "left",
         "waterlogged": true
       },
       {
-        "type": "right",
         "facing": "east",
+        "type": "left",
+        "waterlogged": false
+      },
+      {
+        "facing": "east",
+        "type": "right",
+        "waterlogged": true
+      },
+      {
+        "facing": "east",
+        "type": "right",
         "waterlogged": false
       }
     ]
@@ -201672,6 +201672,13 @@
     ]
   },
   {
+    "type": "dripstone_block",
+    "def": 0,
+    "entries": [
+      {}
+    ]
+  },
+  {
     "type": "pointed_dripstone",
     "def": 5,
     "entries": [
@@ -201778,10 +201785,109 @@
     ]
   },
   {
-    "type": "dripstone_block",
+    "type": "sulfur_spike",
     "def": 0,
     "entries": [
-      {}
+      {
+        "thickness": "tip_merge",
+        "vertical_direction": "up",
+        "waterlogged": true
+      },
+      {
+        "thickness": "tip_merge",
+        "vertical_direction": "up",
+        "waterlogged": false
+      },
+      {
+        "thickness": "tip_merge",
+        "vertical_direction": "down",
+        "waterlogged": true
+      },
+      {
+        "thickness": "tip_merge",
+        "vertical_direction": "down",
+        "waterlogged": false
+      },
+      {
+        "thickness": "tip",
+        "vertical_direction": "up",
+        "waterlogged": true
+      },
+      {
+        "thickness": "tip",
+        "vertical_direction": "up",
+        "waterlogged": false
+      },
+      {
+        "thickness": "tip",
+        "vertical_direction": "down",
+        "waterlogged": true
+      },
+      {
+        "thickness": "tip",
+        "vertical_direction": "down",
+        "waterlogged": false
+      },
+      {
+        "thickness": "frustum",
+        "vertical_direction": "up",
+        "waterlogged": true
+      },
+      {
+        "thickness": "frustum",
+        "vertical_direction": "up",
+        "waterlogged": false
+      },
+      {
+        "thickness": "frustum",
+        "vertical_direction": "down",
+        "waterlogged": true
+      },
+      {
+        "thickness": "frustum",
+        "vertical_direction": "down",
+        "waterlogged": false
+      },
+      {
+        "thickness": "middle",
+        "vertical_direction": "up",
+        "waterlogged": true
+      },
+      {
+        "thickness": "middle",
+        "vertical_direction": "up",
+        "waterlogged": false
+      },
+      {
+        "thickness": "middle",
+        "vertical_direction": "down",
+        "waterlogged": true
+      },
+      {
+        "thickness": "middle",
+        "vertical_direction": "down",
+        "waterlogged": false
+      },
+      {
+        "thickness": "base",
+        "vertical_direction": "up",
+        "waterlogged": true
+      },
+      {
+        "thickness": "base",
+        "vertical_direction": "up",
+        "waterlogged": false
+      },
+      {
+        "thickness": "base",
+        "vertical_direction": "down",
+        "waterlogged": true
+      },
+      {
+        "thickness": "base",
+        "vertical_direction": "down",
+        "waterlogged": false
+      }
     ]
   },
   {

@@ -2,11 +2,7 @@ package ac.reaper.reaperac.utils.nmsutil;
 
 import ac.reaper.reaperac.events.packets.PacketWorldBorder;
 import ac.reaper.reaperac.player.GrimPlayer;
-import ac.reaper.reaperac.predictionengine.blockeffects.BlockEffectsResolver;
-import ac.reaper.reaperac.predictionengine.blockeffects.impl.BlockEffectsResolverV1_21_10;
-import ac.reaper.reaperac.predictionengine.blockeffects.impl.BlockEffectsResolverV1_21_2;
-import ac.reaper.reaperac.predictionengine.blockeffects.impl.BlockEffectsResolverV1_21_4;
-import ac.reaper.reaperac.predictionengine.blockeffects.impl.BlockEffectsResolverV1_21_5;
+import ac.reaper.reaperac.predictionengine.blockeffects.impl.BlockEffectsResolverV26_2;
 import ac.reaper.reaperac.utils.chunks.Column;
 import ac.reaper.reaperac.utils.collisions.CollisionData;
 import ac.reaper.reaperac.utils.collisions.datatypes.CollisionBox;
@@ -527,20 +523,7 @@ public final class Collisions {
     }
 
     public static void resolveBlockEffects(GrimPlayer player, List<GrimPlayer.Movement> movements) {
-        ClientVersion version = player.getClientVersion();
-        BlockEffectsResolver resolver;
-
-        if (version == ClientVersion.V_1_21_2) {
-            resolver = BlockEffectsResolverV1_21_2.INSTANCE; // 1.21.2-1.21.3
-        } else if (version == ClientVersion.V_1_21_4) {
-            resolver = BlockEffectsResolverV1_21_4.INSTANCE; // 1.21.4
-        } else if (version == ClientVersion.V_1_21_5) {
-            resolver = BlockEffectsResolverV1_21_5.INSTANCE; // 1.21.5
-        } else {
-            resolver = BlockEffectsResolverV1_21_10.INSTANCE; // 1.21.10
-        }
-
-        resolver.applyEffectsFromBlocks(player, movements);
+        BlockEffectsResolverV26_2.INSTANCE.applyEffectsFromBlocks(player, movements);
     }
 
     private static double getOldDeltaY(GrimPlayer player, double value) {

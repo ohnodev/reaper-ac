@@ -6,6 +6,7 @@ import ac.reaper.reaperac.checks.impl.badpackets.BadPacketsF;
 import ac.reaper.reaperac.checks.impl.badpackets.BadPacketsG;
 import ac.reaper.reaperac.checks.impl.badpackets.BadPacketsH;
 import ac.reaper.reaperac.checks.impl.elytra.ElytraC;
+import ac.reaper.reaperac.checks.impl.prediction.OffsetHandler;
 import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.utils.data.KnownInput;
 import ac.reaper.reaperac.utils.data.TrackerData;
@@ -98,6 +99,7 @@ public class PacketPlayerRespawn extends PacketListenerAbstract {
             player.worldName = joinGame.getWorldName();
 
             player.compensatedWorld.setDimension(joinGame.getDimensionType(), event.getUser());
+            player.checkManager.getPostPredictionCheck(OffsetHandler.class).resetSimulationState();
         }
 
         if (event.getPacketType() == PacketType.Play.Server.RESPAWN) {
@@ -147,6 +149,7 @@ public class PacketPlayerRespawn extends PacketListenerAbstract {
                 player.checkManager.getPacketCheck(BadPacketsE.class).handleRespawn(); // Reminder ticks reset
                 player.checkManager.getPacketCheck(BadPacketsG.class).handleRespawn();
                 player.checkManager.getPacketCheck(BadPacketsF.class).exemptNext = true;
+                player.checkManager.getPostPredictionCheck(OffsetHandler.class).resetSimulationState();
 
                 // EVERYTHING gets reset on a cross dimensional teleport, clear chunks and entities!
                 if (isWorldChange(player, respawn)) {

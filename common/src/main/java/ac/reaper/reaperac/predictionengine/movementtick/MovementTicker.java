@@ -1,7 +1,6 @@
 package ac.reaper.reaperac.predictionengine.movementtick;
 
 import ac.reaper.reaperac.player.GrimPlayer;
-import ac.reaper.reaperac.predictionengine.PlayerBaseTick;
 import ac.reaper.reaperac.predictionengine.predictions.PredictionEngine;
 import ac.reaper.reaperac.predictionengine.predictions.PredictionEngineElytra;
 import ac.reaper.reaperac.utils.collisions.datatypes.SimpleCollisionBox;
@@ -33,10 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class MovementTicker {
     public final GrimPlayer player;
 
-    /**
-     * Vanilla 26.2+: clamp(1.0 - (1.0 - friction) * modifier, 0.0, 1.0)
-     * For pre-26.2 clients the modifier is always 1.0 so this is identity.
-     */
+    /** Vanilla 26.2+: clamp(1.0 - (1.0 - friction) * modifier, 0.0, 1.0). */
     public static float computeModifiedFriction(float friction, double modifier) {
         return (float) GrimMath.clamp(1.0 - (1.0 - friction) * modifier, 0.0, 1.0);
     }
@@ -160,13 +156,10 @@ public class MovementTicker {
 
         // This is around the place where the new bounding box gets set
         player.boundingBox = GetBoundingBox.getCollisionBoxForPlayer(player, player.x, player.y, player.z);
-        // This is how the player checks for fall damage
-        // By running fluid pushing for the player
+        // Fluid interaction is already updated in PlayerBaseTick for this runtime.
+        // Re-running water current pushing here can over-apply fluid behavior around
+        // waterlogged blocks (notably dripleaf), causing prediction drift.
         final PacketEntity riding = player.compensatedEntities.self.getRiding();
-        // Re-run fluid interaction when needed for fall-distance and movement consistency.
-        if (!player.wasTouchingWater && (riding == null || (!riding.isBoat && !riding.isHappyGhast))) {
-            PlayerBaseTick.updateInWaterStateAndDoWaterCurrentPushing(player);
-        }
 
         if (player.onGround) {
             player.fallDistance = 0;
@@ -192,22 +185,21 @@ public class MovementTicker {
                                 (riding != null && !riding.isLivingEntity ? 0.8 : 1.0));
                     }
                 }
-            } else {
-                if (BlockTags.BEDS.contains(onBlock)) {
-                    if (player.clientVelocity.getY() < 0.0) {
-                        player.clientVelocity.setY(-player.clientVelocity.getY() * 0.6600000262260437 *
-                                (riding != null && !riding.isLivingEntity ? 0.8 : 1.0));
-                    }
+            } else if (BlockTags.BEDS.contains(onBlock)) {
+                if (player.clientVelocity.getY() < 0.0) {
+                    player.clientVelocity.setY(-player.clientVelocity.getY() * 0.6600000262260437 *
+                            (riding != null && !riding.isLivingEntity ? 0.8 : 1.0));
                 } else {
                     player.clientVelocity.setY(0);
                 }
+            } else {
+                player.clientVelocity.setY(0);
             }
         }
 
         collide = PredictionEngine.clampMovementToHardBorder(player, collide);
 
         // The game disregards movements smaller than 1e-7 (such as in boats)
-        // New condition added in 1.21.2
         if (collide.lengthSquared() <= 1e-7 && inputVel.lengthSquared() - collide.lengthSquared() >= 1e-7) {
             collide = new Vector3dm();
         } else {
