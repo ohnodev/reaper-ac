@@ -1,9 +1,9 @@
 package ac.reaper.reaperac.predictionengine.movementtick;
 
 import ac.reaper.reaperac.player.GrimPlayer;
-import ac.reaper.reaperac.predictionengine.PlayerBaseTick;
 import ac.reaper.reaperac.predictionengine.predictions.PredictionEngine;
 import ac.reaper.reaperac.predictionengine.predictions.PredictionEngineElytra;
+import ac.reaper.reaperac.predictionengine.PlayerBaseTick;
 import ac.reaper.reaperac.utils.collisions.datatypes.SimpleCollisionBox;
 import ac.reaper.reaperac.utils.data.VectorData;
 import ac.reaper.reaperac.utils.data.packetentity.PacketEntity;
@@ -24,7 +24,9 @@ import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
 import com.github.retrooper.packetevents.protocol.player.GameMode;
 import com.github.retrooper.packetevents.protocol.potion.PotionTypes;
 import com.github.retrooper.packetevents.protocol.world.states.defaulttags.BlockTags;
+import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
 import com.github.retrooper.packetevents.protocol.world.states.type.StateType;
+import com.github.retrooper.packetevents.protocol.world.states.type.StateValue;
 import com.github.retrooper.packetevents.protocol.world.states.type.StateTypes;
 import com.github.retrooper.packetevents.util.Vector3d;
 import lombok.RequiredArgsConstructor;
@@ -33,10 +35,7 @@ import lombok.RequiredArgsConstructor;
 public class MovementTicker {
     public final GrimPlayer player;
 
-    /**
-     * Vanilla 26.2+: clamp(1.0 - (1.0 - friction) * modifier, 0.0, 1.0)
-     * For pre-26.2 clients the modifier is always 1.0 so this is identity.
-     */
+    /** Vanilla 26.2+: clamp(1.0 - (1.0 - friction) * modifier, 0.0, 1.0). */
     public static float computeModifiedFriction(float friction, double modifier) {
         return (float) GrimMath.clamp(1.0 - (1.0 - friction) * modifier, 0.0, 1.0);
     }
@@ -160,13 +159,8 @@ public class MovementTicker {
 
         // This is around the place where the new bounding box gets set
         player.boundingBox = GetBoundingBox.getCollisionBoxForPlayer(player, player.x, player.y, player.z);
-        // This is how the player checks for fall damage
-        // By running fluid pushing for the player
+        refreshFluidStatePostMove();
         final PacketEntity riding = player.compensatedEntities.self.getRiding();
-        // Re-run fluid interaction when needed for fall-distance and movement consistency.
-        if (!player.wasTouchingWater && (riding == null || (!riding.isBoat && !riding.isHappyGhast))) {
-            PlayerBaseTick.updateInWaterStateAndDoWaterCurrentPushing(player);
-        }
 
         if (player.onGround) {
             player.fallDistance = 0;
@@ -192,22 +186,21 @@ public class MovementTicker {
                                 (riding != null && !riding.isLivingEntity ? 0.8 : 1.0));
                     }
                 }
-            } else {
-                if (BlockTags.BEDS.contains(onBlock)) {
-                    if (player.clientVelocity.getY() < 0.0) {
-                        player.clientVelocity.setY(-player.clientVelocity.getY() * 0.6600000262260437 *
-                                (riding != null && !riding.isLivingEntity ? 0.8 : 1.0));
-                    }
+            } else if (BlockTags.BEDS.contains(onBlock)) {
+                if (player.clientVelocity.getY() < 0.0) {
+                    player.clientVelocity.setY(-player.clientVelocity.getY() * 0.6600000262260437 *
+                            (riding != null && !riding.isLivingEntity ? 0.8 : 1.0));
                 } else {
                     player.clientVelocity.setY(0);
                 }
+            } else {
+                player.clientVelocity.setY(0);
             }
         }
 
         collide = PredictionEngine.clampMovementToHardBorder(player, collide);
 
         // The game disregards movements smaller than 1e-7 (such as in boats)
-        // New condition added in 1.21.2
         if (collide.lengthSquared() <= 1e-7 && inputVel.lengthSquared() - collide.lengthSquared() >= 1e-7) {
             collide = new Vector3dm();
         } else {
@@ -222,6 +215,47 @@ public class MovementTicker {
 
         float f = BlockProperties.getBlockSpeedFactor(player, player.mainSupportingBlockData, new Vector3d(player.x, player.y, player.z));
         player.clientVelocity.multiply(f, 1, f);
+    }
+
+    private void refreshFluidStatePostMove() {
+        Vector3dm previousVelocity = player.clientVelocity.clone();
+        Vector3dm previousWaterPush = player.baseTickWaterPushing.clone();
+        PlayerBaseTick.updateInWaterStateAndDoWaterCurrentPushing(player);
+        if (shouldSkipWaterCurrentPushing()) {
+            player.clientVelocity = previousVelocity;
+            player.baseTickWaterPushing = previousWaterPush;
+        }
+    }
+
+    private boolean shouldSkipWaterCurrentPushing() {
+        int blockY = GrimMath.floor(player.y);
+        int minBlockX = GrimMath.floor(player.boundingBox.minX);
+        int maxBlockX = GrimMath.floor(player.boundingBox.maxX);
+        int minBlockZ = GrimMath.floor(player.boundingBox.minZ);
+        int maxBlockZ = GrimMath.floor(player.boundingBox.maxZ);
+
+        for (int blockX = minBlockX; blockX <= maxBlockX; blockX++) {
+            for (int blockZ = minBlockZ; blockZ <= maxBlockZ; blockZ++) {
+                if (isWaterloggedOrDripleaf(player.compensatedWorld.getBlock(blockX, blockY, blockZ))
+                        || isWaterloggedOrDripleaf(player.compensatedWorld.getBlock(blockX, blockY - 1, blockZ))
+                        || isWaterloggedOrDripleaf(player.compensatedWorld.getBlock(blockX, blockY + 1, blockZ))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static boolean isWaterloggedOrDripleaf(WrappedBlockState state) {
+        if (state == null) {
+            return false;
+        }
+        StateType type = state.getType();
+        boolean dripleafSurface = type == StateTypes.BIG_DRIPLEAF
+                || type == StateTypes.BIG_DRIPLEAF_STEM
+                || type == StateTypes.SMALL_DRIPLEAF;
+        boolean waterlogged = state.hasProperty(StateValue.WATERLOGGED) && state.isWaterlogged();
+        return dripleafSurface || waterlogged;
     }
 
     public void livingEntityAIStep() {

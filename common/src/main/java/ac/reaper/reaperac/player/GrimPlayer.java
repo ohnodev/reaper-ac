@@ -22,6 +22,7 @@ import ac.reaper.reaperac.predictionengine.MovementCheckRunner;
 import ac.reaper.reaperac.predictionengine.PointThreeEstimator;
 import ac.reaper.reaperac.predictionengine.UncertaintyHandler;
 import ac.reaper.reaperac.utils.anticheat.LogUtil;
+import ac.reaper.reaperac.utils.legacylink.LegacyLinkGrimTransactionDebug;
 import ac.reaper.reaperac.utils.anticheat.MessageUtil;
 import ac.reaper.reaperac.utils.anticheat.update.BlockBreak;
 import ac.reaper.reaperac.utils.change.PlayerBlockHistory;
@@ -243,6 +244,8 @@ public class GrimPlayer implements ReaperUser {
     private boolean debugPacketCancel = false;
     private int spamThreshold = 100;
     private int maxTransactionTime = 60;
+    /** Throttle for {@link LegacyLinkGrimTransactionDebug} stall warnings */
+    private long lastTransactionClockStallLogMs = 0L;
     @Getter private boolean ignoreDuplicatePacketRotation = false;
     @Getter @Setter private boolean experimentalChecks = false;
     @Getter private boolean cancelDuplicatePacket = true;
@@ -478,6 +481,25 @@ public class GrimPlayer implements ReaperUser {
         didWeSendThatTrans.add(id);
     }
 
+    /**
+     * LegacyLink sends Grim transaction pings as vanilla {@code ClientboundPingPacket} on the real connection; the
+     * encoded buffer may not be classified as {@code PacketType.Play.Server.PING}, so {@code PacketPingListener}
+     * never moves the id into {@link #transactionsSent}. Call this right after enqueueing that packet on the server
+     * thread (same timing as PE's send listener before {@code ctx.write}), not on flush — otherwise a fast pong can
+     * arrive before the id is queued for {@link #addTransactionResponse}.
+     */
+    /** @return true if {@code id} was pending in {@link #didWeSendThatTrans} and was moved to {@link #transactionsSent} */
+    public boolean acknowledgeVanillaPingDispatched(short id) {
+        packetStateData.lastServerTransWasValid = false;
+        if (didWeSendThatTrans.remove(id)) {
+            packetStateData.lastServerTransWasValid = true;
+            transactionsSent.add(new Pair<>(id, System.nanoTime()));
+            lastTransactionSent.getAndIncrement();
+            return true;
+        }
+        return false;
+    }
+
     public double getEyeHeight() {
         getClientVersion();
         return pose.eyeHeight;
@@ -522,7 +544,18 @@ public class GrimPlayer implements ReaperUser {
         if (lastTransSent != 0 && lastTransSent + 80 < System.currentTimeMillis()) {
             sendTransaction(true); // send on netty thread
         }
-        if ((System.nanoTime() - getPlayerClockAtLeast()) > maxTransactionTime * 1e9) {
+        long stallNs = System.nanoTime() - getPlayerClockAtLeast();
+        if (LegacyLinkGrimTransactionDebug.isEnabled() && stallNs > 15_000_000_000L) {
+            long nowMs = System.currentTimeMillis();
+            if (nowMs - lastTransactionClockStallLogMs > 5000L) {
+                lastTransactionClockStallLogMs = nowMs;
+                LogUtil.warn("[GrimTxDebug][stall] player=" + user.getProfile().getName() + " clockStaleSec="
+                        + String.format("%.1f", stallNs / 1_000_000_000.0) + " kickAtSec=" + maxTransactionTime
+                        + " lastTransSentAgeMs=" + (lastTransSent == 0 ? -1 : (nowMs - lastTransSent))
+                        + " lastTransRecvAgeMs=" + (lastTransReceived == 0 ? -1 : (nowMs - lastTransReceived)));
+            }
+        }
+        if (stallNs > maxTransactionTime * 1e9) {
             timedOut();
         }
 

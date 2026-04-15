@@ -70,33 +70,30 @@ Gradle composite build under `vendor/packetevents/`.
 The vendored PacketEvents is declared as a Gradle composite build via
 `includeBuild("vendor/packetevents")` in `settings.gradle.kts`, so Gradle
 automatically substitutes PE dependencies with the local source during
-compilation — no manual publish step is needed for most workflows.
+compilation.
 
-However, Fabric Loom's jar-in-jar (JIJ) packaging resolves PE from Maven
-Local (not the composite build), so the PE artifacts must be published there
-before assembling the final Fabric jar.
+For Fabric packaging, this repo now hooks `:fabric:processIncludeJars` to run
+`vendor/packetevents:publishToMavenLocal` automatically, so PacketEvents source
+edits are always included in the final Reaper jar with a normal build command.
 
 ```bash
 git clone https://github.com/ohnodev/reaper-ac.git
 cd reaper-ac
 
-# Publish PE to Maven Local (required for Fabric Loom JIJ packaging)
-./gradlew -p vendor/packetevents clean publishToMavenLocal
-
-# Build the Reaper-AC Fabric jar
+# Build the Reaper-AC Fabric jar (also publishes vendored PE automatically)
 ./gradlew :fabric:build -x test
 ```
 
 If you only change code under `common/` or `fabric/` (not PE), you can skip
-the first command and just run `./gradlew :fabric:build -x test`.
+any extra PE-specific steps and just run `./gradlew :fabric:build -x test`.
 
-CI workflows (`build.yml`, `build-and-publish.yml`, `codeql-analysis.yml`)
-automatically run the PE publish step before the main build.
+CI workflows (`build.yml`, `build-and-publish.yml`, `codeql-analysis.yml`) can
+still run the explicit PE publish step, but local developer builds no longer
+require it.
 
 ### Windows (PowerShell)
 
 ```powershell
-.\gradlew.bat -p vendor\packetevents clean publishToMavenLocal
 .\gradlew.bat :fabric:build -x test
 ```
 
@@ -127,3 +124,83 @@ To inspect locally produced files after a build:
 ```bash
 ls -lah fabric/build/libs/
 ```
+
+## Snapshot Mapping Remap Runbook (Critical)
+
+Use this runbook on every Minecraft snapshot bump where blockstate IDs may drift.
+The goal is to regenerate PacketEvents blockstate mapping from native server IDs so
+Reaper predictions/collisions do not decode to wrong blocks.
+
+### What must be remapped
+
+- **Primary file:** `vendor/packetevents/mappings/data/block_state/V_26_2.json`
+- This file controls PacketEvents global blockstate ID -> state decoding order.
+- If this order drifts from native runtime IDs, simulation will decode wrong blocks
+  (example failure: `leaf_litter` decoding as `big_dripleaf`).
+
+### Source of truth
+
+- Native runtime mapping from the server:
+  - `Block.getId(state)` -> `state.toString()`
+- We dump this from a live Fabric server with the debug command:
+  - `/dumpblockstates`
+
+### Step-by-step procedure
+
+1. **Dump native blockstates from server runtime**
+
+   - Ensure `cabal-mobs` has the debug command `dumpblockstates` registered.
+   - Run via console/RCON:
+
+   ```bash
+   dumpblockstates
+   ```
+
+   - Output is written under server `debug/`, for example:
+   - `minecraft-cabal/server/debug/blockstate-id-map-YYYYMMDD-HHMMSS.txt`
+
+2. **Generate helper artifacts (optional but recommended)**
+
+   - Keep copies under:
+   - `mapping-artifacts/26.2-snapshot-3/`
+   - Recommended files:
+     - `id-to-state-26.2-snapshot-3.json`
+     - `state-to-id-26.2-snapshot-3.json`
+     - `blockstate-id-map-26.2-snapshot-3.csv`
+
+3. **Rebuild `V_26_2.json` from native dump**
+
+   - Convert the native dump into PacketEvents `block_state` format:
+     - ordered by increasing native state ID
+     - grouped by `type`
+     - preserve existing `def` index per type when still in range
+   - Write output to:
+   - `vendor/packetevents/mappings/data/block_state/V_26_2.json`
+
+4. **Sanity-check key IDs**
+
+   - Verify known problematic IDs decode correctly after remap.
+   - Example checks used for 26.2-snapshot-3:
+     - `30350 -> Block{minecraft:leaf_litter}[facing=east,segment_amount=4]`
+     - `30352 -> Block{minecraft:big_dripleaf}[facing=north,tilt=none,waterlogged=true]`
+
+5. **Validate build + mappings**
+
+   ```bash
+   ./gradlew compileJava
+   ./gradlew :packetevents:api:test --tests com.github.retrooper.packetevents.test.MappingIntegrityTest
+   ./gradlew :fabric:build
+   ```
+
+6. **Deploy**
+
+   - Copy built jar:
+   - `fabric/build/libs/reaperac-fabric-26.2.0.jar`
+   - Into server mods:
+   - `minecraft-cabal/server/mods/reaperac-fabric-26.2.0.jar`
+   - Restart server and verify with trace logs on previously failing blocks.
+
+### Upstream format reference
+
+- Grim PacketEvents repository (mapping structure reference):
+  - [GrimAnticheat/packetevents](https://github.com/GrimAnticheat/packetevents)

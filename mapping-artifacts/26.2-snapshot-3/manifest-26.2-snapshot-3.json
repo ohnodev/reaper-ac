@@ -1,0 +1,10 @@
+{
+  "source_dump": "Dedicated-server blockstate dump export (local path omitted).",
+  "total_states": 32362,
+  "artifacts": [
+    "blockstate-id-map-26.2-snapshot-3.csv",
+    "id-to-state-26.2-snapshot-3.json",
+    "state-to-id-26.2-snapshot-3.json",
+    "block-to-states-index-26.2-snapshot-3.json"
+  ]
+}

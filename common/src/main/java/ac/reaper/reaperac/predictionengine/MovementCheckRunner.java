@@ -2,6 +2,7 @@ package ac.reaper.reaperac.predictionengine;
 
 import ac.reaper.reaperac.api.config.ConfigManager;
 import ac.reaper.reaperac.checks.Check;
+import ac.reaper.reaperac.checks.impl.prediction.OffsetHandler;
 import ac.reaper.reaperac.checks.impl.prediction.Phase;
 import ac.reaper.reaperac.checks.impl.vehicle.VehicleC;
 import ac.reaper.reaperac.checks.type.PositionCheck;
@@ -121,6 +122,7 @@ public class MovementCheckRunner extends Check implements PositionCheck {
         // Teleports OVERRIDE explosions and knockback
         player.checkManager.getExplosionHandler().forceExempt();
         player.checkManager.getKnockbackHandler().forceExempt();
+        player.checkManager.getPostPredictionCheck(OffsetHandler.class).resetSimulationState();
 
         player.boundingBox = GetBoundingBox.getCollisionBoxForPlayer(player, player.x, player.y, player.z);
 

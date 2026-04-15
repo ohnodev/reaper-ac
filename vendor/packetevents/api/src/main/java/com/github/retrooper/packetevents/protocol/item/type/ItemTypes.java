@@ -2171,7 +2171,12 @@ public final class ItemTypes {
                     version, null, (SequentialNBTReader.Compound) items.next().getValue()).build();
 
             for (Map.Entry<String, NBT> item : items) {
-                ItemType itemType = REGISTRY.getByName(new ResourceLocation(item.getKey()));
+                String itemKey = item.getKey();
+                if ("default".equals(itemKey) || itemKey.endsWith(":default")) {
+                    ((SequentialNBTReader.Compound) item.getValue()).skip();
+                    continue;
+                }
+                ItemType itemType = REGISTRY.getByName(new ResourceLocation(itemKey));
                 if (!(itemType instanceof StaticItemType)) {
                     ((SequentialNBTReader.Compound) item.getValue()).skip();
                     continue; // somehow unknown item

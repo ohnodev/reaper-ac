@@ -4,6 +4,10 @@
     "package": "ac.reaper.reaperac.platform.fabric.mixins",
     "compatibilityLevel": "JAVA_21",
     "mixins": [
+        "PeDecoderLegacyInboundMixin",
+        "PeUserLegacyOutboundMixin",
+        "ConnectionChannelAccessor",
+        "ServerCommonPacketListenerPongGrimMixin",
         "LevelChunkMixin",
         "LevelMixin",
         "ServerPlayerMixin"

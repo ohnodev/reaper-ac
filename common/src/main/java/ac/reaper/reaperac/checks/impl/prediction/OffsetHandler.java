@@ -6,10 +6,15 @@ import ac.reaper.reaperac.api.event.events.CompletePredictionEvent;
 import ac.reaper.reaperac.checks.Check;
 import ac.reaper.reaperac.checks.CheckData;
 import ac.reaper.reaperac.checks.type.PostPredictionCheck;
+import ac.reaper.reaperac.platform.api.world.PlatformChunk;
+import ac.reaper.reaperac.platform.api.world.PlatformWorld;
 import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.utils.anticheat.LogUtil;
 import ac.reaper.reaperac.utils.anticheat.update.PredictionComplete;
+import ac.reaper.reaperac.utils.math.Vector3dm;
 import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
+import com.github.retrooper.packetevents.protocol.world.states.type.StateTypes;
+import com.github.retrooper.packetevents.protocol.world.states.type.StateValue;
 import com.github.retrooper.packetevents.util.Vector3i;
 
 import java.util.Locale;
@@ -19,7 +24,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class OffsetHandler extends Check implements PostPredictionCheck {
     private static final AtomicInteger flags = new AtomicInteger(0);
     private static final boolean SIM_PACKET_TRACE = Boolean.getBoolean("grim.simulationPacketTrace");
+    /** Reaper: enable without {@code GRIM_SIM_TRACE}; logs {@code [SimulationTrace]} on Simulation flags. */
+    private static final boolean REAPER_SIM_TRACE =
+            Boolean.parseBoolean(System.getProperty("reaper.simulationTrace", "false"));
     private static final boolean SIM_PACKET_TRACE_SENSITIVE = Boolean.getBoolean("grim.simulationPacketTraceSensitive");
+    private static final boolean REAPER_SIM_TRACE_SENSITIVE =
+            Boolean.parseBoolean(System.getProperty("reaper.simulationTraceSensitive", "false"));
     private static final long SIM_PACKET_TRACE_COOLDOWN_MS = 2000L;
     // Config
     private double setbackDecayMultiplier;
@@ -34,6 +44,17 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
 
     public OffsetHandler(GrimPlayer player) {
         super(player);
+    }
+
+    /**
+     * Hard movement-state transitions (respawn/teleport/gamemode swap) invalidate prior
+     * simulation debt. Resetting here prevents stale violations from repeatedly setbacking
+     * otherwise-valid movement after a resync boundary.
+     */
+    public void resetSimulationState() {
+        advantageGained = 0;
+        violations = 0;
+        removeOffsetLenience();
     }
 
     public void onPredictionComplete(final PredictionComplete predictionComplete) {
@@ -70,7 +91,7 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
                 String verbose = humanFormattedOffset + " /gl " + flagId;
                 if (flag(verbose)) {
                     long traceNow = System.currentTimeMillis();
-                    shouldLogSimulationTrace = SIM_PACKET_TRACE
+                    shouldLogSimulationTrace = (SIM_PACKET_TRACE || REAPER_SIM_TRACE)
                             && traceNow - lastSimPacketTraceAt >= SIM_PACKET_TRACE_COOLDOWN_MS;
                     if (shouldLogSimulationTrace) {
                         traceSnapshot = captureSimulationTraceSnapshot(offset, flagId, traceNow);
@@ -132,7 +153,7 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
     }
 
     private void maybeLogSimulationPacketTrace(SimulationTraceSnapshot snapshot) {
-        if (!SIM_PACKET_TRACE) {
+        if (!SIM_PACKET_TRACE && !REAPER_SIM_TRACE) {
             return;
         }
         if (snapshot.capturedAtMs() - lastSimPacketTraceAt < SIM_PACKET_TRACE_COOLDOWN_MS) {
@@ -145,8 +166,9 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
                         "pkt=%s ageMs=%d hasPos=%s hasRot=%s onGround=%s hCollision=%s teleportAccept=%s " +
                         "move=%s " +
                         "statePos=%s claimedPos=%s stateOnGround=%s claimedOnGround=%s " +
-                        "supportPos=%s supportOnGround=%s feetBlock=%s headBlock=%s " +
-                        "softH=%s hardH=%s vertCol=%s step=%s slimeStep=%s nearFluid=%s nearGlitch=%s ogUncertain=%s",
+                        "supportPos=%s supportOnGround=%s supportBlock=%s feetBlock=%s headBlock=%s " +
+                        "softH=%s hardH=%s vertCol=%s step=%s slimeStep=%s nearFluid=%s nearFluidSrc=%s nearGlitch=%s ogUncertain=%s " +
+                        "stuck=%s friction=%s cVel=%s predIn=%s",
                 snapshot.subject(),
                 snapshot.version(),
                 snapshot.protocol(),
@@ -166,6 +188,7 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
                 snapshot.claimedOnGround(),
                 snapshot.supportPosition(),
                 snapshot.supportOnGround(),
+                snapshot.supportBlock(),
                 snapshot.feetBlock(),
                 snapshot.headBlock(),
                 snapshot.softHorizontalCollision(),
@@ -174,13 +197,18 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
                 snapshot.stepMovement(),
                 snapshot.steppingOnSlime(),
                 snapshot.nearFluid(),
+                snapshot.nearFluidSource(),
                 snapshot.nearGlitchyBlock(),
-                snapshot.onGroundUncertain()
+                snapshot.onGroundUncertain(),
+                snapshot.stuckSpeedMultiplier(),
+                snapshot.friction(),
+                snapshot.clientVelocity(),
+                snapshot.predictedInput()
         ));
     }
 
     private SimulationTraceSnapshot captureSimulationTraceSnapshot(double offset, int flagId, long capturedAtMs) {
-        boolean sensitive = SIM_PACKET_TRACE_SENSITIVE;
+        boolean sensitive = SIM_PACKET_TRACE_SENSITIVE || REAPER_SIM_TRACE_SENSITIVE;
         return new SimulationTraceSnapshot(
                 capturedAtMs,
                 buildSubjectLabel(player.getName(), String.valueOf(player.user.getUUID()), sensitive),
@@ -207,6 +235,7 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
                 player.packetStateData.packetPlayerOnGround,
                 formatSupportPos(player.mainSupportingBlockData.blockPos(), sensitive),
                 player.mainSupportingBlockData.onGround(),
+                describeBlockAt(player, player.mainSupportingBlockData.blockPos(), sensitive),
                 describeBlockAt(player, player.x, player.y - 0.01, player.z, sensitive),
                 describeBlockAt(player, player.x, player.y + player.getEyeHeight(), player.z, sensitive),
                 player.softHorizontalCollision,
@@ -215,8 +244,13 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
                 player.uncertaintyHandler.isStepMovement,
                 player.uncertaintyHandler.isSteppingOnSlime,
                 player.pointThreeEstimator.isNearFluid,
+                player.pointThreeEstimator.nearFluidSource,
                 player.uncertaintyHandler.isNearGlitchyBlock,
-                player.uncertaintyHandler.onGroundUncertain
+                player.uncertaintyHandler.onGroundUncertain,
+                formatVector(player.stuckSpeedMultiplier, sensitive),
+                String.format(Locale.ROOT, "%.5f", player.friction),
+                formatVector(player.clientVelocity, sensitive),
+                formatVector(player.predictedVelocity == null ? null : player.predictedVelocity.input, sensitive)
         );
     }
 
@@ -231,14 +265,62 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
     }
 
     private static String describeBlockAt(GrimPlayer player, double x, double y, double z, boolean sensitive) {
+        int bx = (int) Math.floor(x);
+        int by = (int) Math.floor(y);
+        int bz = (int) Math.floor(z);
         WrappedBlockState state = player.compensatedWorld.getBlock(x, y, z);
+        return describeState(state, sensitive) + describeNativeState(player, bx, by, bz, sensitive);
+    }
+
+    private static String describeBlockAt(GrimPlayer player, Vector3i pos, boolean sensitive) {
+        if (pos == null) {
+            return "null";
+        }
+        WrappedBlockState state = player.compensatedWorld.getBlock(pos.getX(), pos.getY(), pos.getZ());
+        return describeState(state, sensitive) + describeNativeState(player, pos.getX(), pos.getY(), pos.getZ(), sensitive);
+    }
+
+    private static String describeNativeState(GrimPlayer player, int x, int y, int z, boolean sensitive) {
+        if (!sensitive || player.platformPlayer == null) {
+            return "";
+        }
+        try {
+            PlatformWorld world = player.platformPlayer.getWorld();
+            if (world == null || !world.isLoaded()) {
+                return "{native=unloaded}";
+            }
+            int chunkX = x >> 4;
+            int chunkZ = z >> 4;
+            if (!world.isChunkLoaded(chunkX, chunkZ)) {
+                return "{native=chunk_unloaded}";
+            }
+            PlatformChunk chunk = world.getChunkAt(chunkX, chunkZ);
+            if (chunk == null) {
+                return "{native=chunk_null}";
+            }
+            int nativeId = chunk.getBlockID(x & 15, y, z & 15);
+            String nativeState = chunk.getBlockStateString(x & 15, y, z & 15);
+            return "{native=" + nativeState + "#" + nativeId + "}";
+        } catch (Throwable throwable) {
+            return "{native=error:" + throwable.getClass().getSimpleName() + "}";
+        }
+    }
+
+    private static String describeState(WrappedBlockState state, boolean sensitive) {
         if (state == null) {
             return "null";
         }
-        if (!sensitive) {
-            return String.valueOf(state.getType());
+        boolean waterlogged = state.hasProperty(StateValue.WATERLOGGED) && state.isWaterlogged();
+        String amountSuffix = "";
+        if (state.getType() == StateTypes.LEAF_LITTER) {
+            amountSuffix = "[seg=" + state.getSegmentAmount() + "]";
+        } else if (state.getType() == StateTypes.WILDFLOWERS) {
+            amountSuffix = "[flowers=" + state.getFlowerAmount() + "]";
         }
-        return state.getType() + "#" + state.getGlobalId();
+        if (!sensitive) {
+            return state.getType() + amountSuffix + (waterlogged ? "[wl]" : "");
+        }
+        return state.getType() + "#" + state.getGlobalId() + amountSuffix + (waterlogged ? "[wl]" : "");
     }
 
     private static String formatCoords(double x, double y, double z, boolean sensitive) {
@@ -256,6 +338,16 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
         int pitchBucket = Math.max(-2, Math.min(2, (int) Math.floor(pitch / 45.0F)));
         return String.format(Locale.ROOT, "chunk=(%d,%d,%d) yawOctant=%d pitchBand=%d",
                 floorDiv16(x), floorDiv16(y), floorDiv16(z), yawBucket, pitchBucket);
+    }
+
+    private static String formatVector(Vector3dm vector, boolean sensitive) {
+        if (vector == null) {
+            return "null";
+        }
+        if (sensitive) {
+            return String.format(Locale.ROOT, "(%.5f,%.5f,%.5f)", vector.getX(), vector.getY(), vector.getZ());
+        }
+        return String.format(Locale.ROOT, "(%.3f,%.3f,%.3f)", vector.getX(), vector.getY(), vector.getZ());
     }
 
     private static int floorDiv16(double value) {
@@ -290,6 +382,7 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
             boolean claimedOnGround,
             String supportPosition,
             boolean supportOnGround,
+            String supportBlock,
             String feetBlock,
             String headBlock,
             boolean softHorizontalCollision,
@@ -298,7 +391,12 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
             boolean stepMovement,
             boolean steppingOnSlime,
             boolean nearFluid,
+            String nearFluidSource,
             boolean nearGlitchyBlock,
-            boolean onGroundUncertain
+            boolean onGroundUncertain,
+            String stuckSpeedMultiplier,
+            String friction,
+            String clientVelocity,
+            String predictedInput
     ) {}
 }

@@ -3,15 +3,18 @@ package ac.reaper.reaperac.events.packets;
 import ac.reaper.reaperac.GrimAPI;
 import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.utils.data.Pair;
+import ac.reaper.reaperac.utils.legacylink.LegacyLinkGrimTransactionDebug;
 import com.github.retrooper.packetevents.event.PacketListenerAbstract;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
+import com.github.retrooper.packetevents.wrapper.configuration.client.WrapperConfigClientPong;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPong;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientWindowConfirmation;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPing;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerWindowConfirmation;
+import java.util.UUID;
 
 public class PacketPingListener extends PacketListenerAbstract {
 
@@ -42,23 +45,49 @@ public class PacketPingListener extends PacketListenerAbstract {
         }
 
         if (event.getPacketType() == PacketType.Play.Client.PONG) {
-            WrapperPlayClientPong pong = new WrapperPlayClientPong(event);
-            GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
-            if (player == null) return;
-            player.packetStateData.lastTransactionPacketWasValid = false;
+            handlePlayOrConfigPong(event, new WrapperPlayClientPong(event).getId());
+        } else if (event.getPacketType() == PacketType.Configuration.Client.PONG) {
+            // Same payload as play pong (int id); configuration phase can still carry common pong before PLAY.
+            handlePlayOrConfigPong(event, new WrapperConfigClientPong(event).getId());
+        }
+    }
 
-            int id = pong.getId();
-            // If it wasn't below 0, it wasn't us
-            // If it wasn't in short range, it wasn't us either
-            if (id == (short) id) {
-                short shortID = ((short) id);
-                if (player.addTransactionResponse(shortID)) {
-                    player.packetStateData.lastTransactionPacketWasValid = true;
-                    // Not needed for vanilla as vanilla ignores this packet, needed for packet limiters
-                    event.setCancelled(!GrimAPI.INSTANCE.getConfigManager().isDisablePongCancelling());
-                }
+    /**
+     * Vanilla {@code ServerboundPongPacket} is a common type registered in both configuration and play protocol
+     * bundles. PE surfaces it as play or config depending on decoder state.
+     */
+    private static void handlePlayOrConfigPong(PacketReceiveEvent event, int id) {
+        GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
+        if (player == null) {
+            return;
+        }
+        player.packetStateData.lastTransactionPacketWasValid = false;
+        if (id != (short) id) {
+            return;
+        }
+        short shortID = (short) id;
+        boolean matched = player.addTransactionResponse(shortID);
+        if (shortID <= 0) {
+            LegacyLinkGrimTransactionDebug.logPong(resolveSafeName(event), shortID, matched);
+        }
+        if (matched) {
+            player.packetStateData.lastTransactionPacketWasValid = true;
+            event.setCancelled(!GrimAPI.INSTANCE.getConfigManager().isDisablePongCancelling());
+        }
+    }
+
+    private static String resolveSafeName(PacketReceiveEvent event) {
+        if (event == null || event.getUser() == null) {
+            return "unknown";
+        }
+        if (event.getUser().getProfile() != null) {
+            String profileName = event.getUser().getProfile().getName();
+            if (profileName != null && !profileName.isBlank()) {
+                return profileName;
             }
         }
+        UUID uuid = event.getUser().getUUID();
+        return uuid != null ? uuid.toString() : "unknown";
     }
 
     @Override

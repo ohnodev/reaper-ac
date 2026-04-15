@@ -1,0 +1,19 @@
+{
+  "mc_version": "26.1.2",
+  "generated_at_utc": "2026-04-15T09:51:33Z",
+  "sources": {
+    "runtime_blockstate_dump": "Dedicated-server blockstate dump export (local path omitted).",
+    "vanilla_reports_registries": "Vanilla generated registries report (local path omitted)."
+  },
+  "outputs": [
+    "blockstate-id-map-26.1.2-stable.csv",
+    "id-to-state-26.1.2-stable.json",
+    "state-to-id-26.1.2-stable.json",
+    "item-protocol-map-26.1.2-stable.json",
+    "item-protocol-map-26.1.2-stable.csv"
+  ],
+  "counts": {
+    "block_states": 29873,
+    "items": 1506
+  }
+}

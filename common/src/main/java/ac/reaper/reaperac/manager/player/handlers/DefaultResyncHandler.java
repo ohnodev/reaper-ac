@@ -2,16 +2,19 @@ package ac.reaper.reaperac.manager.player.handlers;
 
 import ac.reaper.reaperac.GrimAPI;
 import ac.reaper.reaperac.api.handler.ResyncHandler;
-import ac.reaper.reaperac.platform.api.player.BlockTranslator;
 import ac.reaper.reaperac.platform.api.world.PlatformChunk;
 import ac.reaper.reaperac.platform.api.world.PlatformWorld;
 import ac.reaper.reaperac.player.GrimPlayer;
+import ac.reaper.reaperac.utils.anticheat.LogUtil;
 import com.github.retrooper.packetevents.util.Vector3i;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerAcknowledgeBlockChanges;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerBlockChange;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerMultiBlockChange;
 
 public record DefaultResyncHandler(GrimPlayer player) implements ResyncHandler {
+    private static final boolean TRACE_LEGACY_RESYNC =
+            Boolean.parseBoolean(System.getProperty("reaper.traceLegacyResync", "false"));
+    private static final int TRACE_SAMPLE_LIMIT = 8;
 
     private static void resyncPositions(GrimPlayer player, int minBlockX, int mY, int minBlockZ, int maxBlockX, int mxY, int maxBlockZ) {
         // Check the 4 corners of the player world for loaded chunks before calling event
@@ -53,8 +56,6 @@ public record DefaultResyncHandler(GrimPlayer player) implements ResyncHandler {
                     int minChunkZ = minBlockZ >> 4;
                     int maxChunkZ = maxBlockZ >> 4;
 
-                    BlockTranslator translator = player.platformPlayer.getBlockTranslator();
-
                     for (int currChunkZ = minChunkZ; currChunkZ <= maxChunkZ; ++currChunkZ) {
                         int minZ = currChunkZ == minChunkZ ? minBlockZ & 15 : 0; // coordinate in chunk
                         int maxZ = currChunkZ == maxChunkZ ? maxBlockZ & 15 : 15; // coordinate in chunk
@@ -70,7 +71,34 @@ public record DefaultResyncHandler(GrimPlayer player) implements ResyncHandler {
                                 int maxY = currChunkY == maxChunkY ? maxBlockY & 15 : 15; // coordinate in chunk
 
                                 int totalBlocks = (maxX - minX + 1) * (maxZ - minZ + 1) * (maxY - minY + 1);
+                                if (player.platformPlayer.sendSectionMultiBlockResyncViaVanillaConnection(
+                                        currChunkX,
+                                        currChunkY,
+                                        currChunkZ,
+                                        minX,
+                                        maxX,
+                                        minY,
+                                        maxY,
+                                        minZ,
+                                        maxZ)) {
+                                    if (TRACE_LEGACY_RESYNC) {
+                                        LogUtil.info(
+                                                "[ReaperResyncTrace] type=multi-vanilla player="
+                                                        + player.getName()
+                                                        + " client="
+                                                        + player.getClientVersion().getReleaseName()
+                                                        + " chunk=("
+                                                        + currChunkX + "," + currChunkY + "," + currChunkZ
+                                                        + ") blocks=" + totalBlocks
+                                        );
+                                    }
+                                    continue;
+                                }
+
                                 WrapperPlayServerMultiBlockChange.EncodedBlock[] encodedBlocks = new WrapperPlayServerMultiBlockChange.EncodedBlock[totalBlocks];
+                                int changedIds = 0;
+                                StringBuilder sample = TRACE_LEGACY_RESYNC ? new StringBuilder() : null;
+                                int sampleCount = 0;
 
                                 int blockIndex = 0;
                                 // Alright, we are now in a chunk section
@@ -79,10 +107,33 @@ public record DefaultResyncHandler(GrimPlayer player) implements ResyncHandler {
                                     for (int currX = minX; currX <= maxX; ++currX) {
                                         for (int currY = minY; currY <= maxY; ++currY) {
                                             int rawId = chunk.getBlockID(currX, currY | (currChunkY << 4), currZ);
-                                            int networkId = translator.translate(rawId);
+                                            int networkId = player.platformPlayer.mapBlockStateIdForClient(rawId);
+                                            if (networkId != rawId) {
+                                                changedIds++;
+                                            }
+                                            if (sample != null && sampleCount < TRACE_SAMPLE_LIMIT) {
+                                                if (sampleCount > 0) {
+                                                    sample.append(',');
+                                                }
+                                                sample.append(rawId).append("->").append(networkId);
+                                                sampleCount++;
+                                            }
                                             encodedBlocks[blockIndex++] = new WrapperPlayServerMultiBlockChange.EncodedBlock(networkId, currX, currY | (currChunkY << 4), currZ);
                                         }
                                     }
+                                }
+                                if (TRACE_LEGACY_RESYNC) {
+                                    LogUtil.info(
+                                            "[ReaperResyncTrace] type=multi-packetevents player="
+                                                    + player.getName()
+                                                    + " client="
+                                                    + player.getClientVersion().getReleaseName()
+                                                    + " chunk=("
+                                                    + currChunkX + "," + currChunkY + "," + currChunkZ
+                                                    + ") blocks=" + totalBlocks
+                                                    + " remapped=" + changedIds
+                                                    + " sample=[" + sample + "]"
+                                    );
                                 }
 
                                 WrapperPlayServerMultiBlockChange packet = new WrapperPlayServerMultiBlockChange(new Vector3i(currChunkX, currChunkY, currChunkZ), true, encodedBlocks);
@@ -118,9 +169,34 @@ public record DefaultResyncHandler(GrimPlayer player) implements ResyncHandler {
             if (!world.isChunkLoaded(chunkX, chunkZ)) return; // Don't load chunks sync
 
             final int blockId = world.getChunkAt(chunkX, chunkZ).getBlockID(x & 15, y, z & 15);
+            final int clientWireBlockId = player.platformPlayer.mapBlockStateIdForClient(blockId);
+            if (player.platformPlayer.sendSingleBlockResyncViaVanillaConnection(x, y, z, sequence)) {
+                if (TRACE_LEGACY_RESYNC) {
+                    LogUtil.info(
+                            "[ReaperResyncTrace] type=single-vanilla player="
+                                    + player.getName()
+                                    + " client="
+                                    + player.getClientVersion().getReleaseName()
+                                    + " pos=(" + x + "," + y + "," + z + ")"
+                                    + " state=" + blockId + "->" + clientWireBlockId
+                    );
+                }
+                return;
+            }
+            if (TRACE_LEGACY_RESYNC) {
+                LogUtil.info(
+                        "[ReaperResyncTrace] type=single-packetevents player="
+                                + player.getName()
+                                + " client="
+                                + player.getClientVersion().getReleaseName()
+                                + " pos=(" + x + "," + y + "," + z + ")"
+                                + " state=" + blockId + "->" + clientWireBlockId
+                                + " changed=" + (blockId != clientWireBlockId)
+                );
+            }
 
             player.runSafely(() -> {
-                player.user.sendPacket(new WrapperPlayServerBlockChange(new Vector3i(x, y, z), blockId));
+                player.user.sendPacket(new WrapperPlayServerBlockChange(new Vector3i(x, y, z), clientWireBlockId));
                 // Via will handle this for us pre-1.19
                 player.user.sendPacket(new WrapperPlayServerAcknowledgeBlockChanges(sequence)); // Make 1.19 clients apply the changes
             });

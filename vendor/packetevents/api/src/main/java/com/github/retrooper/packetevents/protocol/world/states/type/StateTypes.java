@@ -1481,6 +1481,10 @@ public final class StateTypes {
     /**
      * @versions 26.2+
      */
+    public static StateType SULFUR_SPIKE = StateTypes.builder().name("SULFUR_SPIKE").blastResistance(3.0f).hardness(1.5f).isBlocking(true).requiresCorrectTool(false).isSolid(true).isShapeExceedsCube(true).setMaterial(MaterialType.STONE).build();
+    /**
+     * @versions 26.2+
+     */
     public static StateType SULFUR = StateTypes.builder().name("SULFUR").blastResistance(6.0f).hardness(1.5f).isBlocking(true).requiresCorrectTool(true).isSolid(true).setMaterial(MaterialType.STONE).build();
     /**
      * @versions 26.2+

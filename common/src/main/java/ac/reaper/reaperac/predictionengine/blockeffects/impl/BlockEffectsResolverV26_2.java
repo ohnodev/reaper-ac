@@ -19,10 +19,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
-// 1.21.10 ONLY - 1.21.9 is impossible to implement due to Mojang awesomeness
-public class BlockEffectsResolverV1_21_10 implements BlockEffectsResolver {
+// Single block-effects resolver for 26.2-snapshot-3 runtime.
+public class BlockEffectsResolverV26_2 implements BlockEffectsResolver {
 
-    public static final BlockEffectsResolver INSTANCE = new BlockEffectsResolverV1_21_10();
+    public static final BlockEffectsResolver INSTANCE = new BlockEffectsResolverV26_2();
 
     @Override
     public void applyEffectsFromBlocks(GrimPlayer player, List<GrimPlayer.Movement> movements) {
@@ -188,5 +188,4 @@ public class BlockEffectsResolverV1_21_10 implements BlockEffectsResolver {
 
         return iterationCount;
     }
-
 }

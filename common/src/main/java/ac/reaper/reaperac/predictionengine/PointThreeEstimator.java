@@ -89,6 +89,8 @@ public class PointThreeEstimator {
     private final GrimPlayer player;
     // If the player was within 0.03 of water between now and the last movement
     public boolean isNearFluid = false;
+    // Debug-only: first nearby fluid-like source seen this tick.
+    public String nearFluidSource = "none";
     // The one thing we don't need to store is if the player 0.03'd to the ground, as this sends a packet
     // seriously, why mojang.  You send the player touched the ground but not their pos.
     // Is the position not important to you?  Why do you throw this data out??? God-damn it Mojang!
@@ -138,7 +140,8 @@ public class PointThreeEstimator {
 
         final float collisionBoxThreshold = (float) (movementThreshold * 2.f);
         SimpleCollisionBox pointThreeBox = GetBoundingBox.getBoundingBoxFromPosAndSize(player, player.x, player.y - movementThreshold, player.z, 0.6f + collisionBoxThreshold, 1.8f + collisionBoxThreshold);
-        if ((Materials.isWater(player.getClientVersion(), state) || stateType == StateTypes.LAVA) &&
+        boolean isPointThreeFluid = getFluidLevelFromState(state) > 0.0D;
+        if (isPointThreeFluid &&
                 pointThreeBox.isIntersected(new SimpleCollisionBox(x, y, z))) {
 
             if (stateType == StateTypes.BUBBLE_COLUMN) {
@@ -154,6 +157,10 @@ public class PointThreeEstimator {
             }
 
             isNearFluid = true;
+            if ("none".equals(nearFluidSource)) {
+                boolean waterlogged = state.hasProperty(com.github.retrooper.packetevents.protocol.world.states.type.StateValue.WATERLOGGED) && state.isWaterlogged();
+                nearFluidSource = "change@" + x + "," + y + "," + z + ":" + stateType + (waterlogged ? "[wl]" : "");
+            }
         }
 
         if (pointThreeBox.isIntersected(new SimpleCollisionBox(x, y, z))) {
@@ -248,6 +255,7 @@ public class PointThreeEstimator {
 
         player.boundingBox = oldBB;
 
+        resetPerTickNearbyState();
         checkNearbyBlocks(pointThreeBox);
 
         maxPositiveLevitation = Integer.MIN_VALUE;
@@ -257,16 +265,18 @@ public class PointThreeEstimator {
         gravityChanged = false;
         wasAlwaysCertain = true;
         isPushing = false;
+        nearFluidSource = "none";
     }
 
-    private void checkNearbyBlocks(SimpleCollisionBox pointThreeBox) {
-        // Reset variables
+    private void resetPerTickNearbyState() {
         isNearHorizontalFlowingLiquid = false;
         isNearVerticalFlowingLiquid = false;
         isNearClimbable = false;
         isNearBubbleColumn = false;
         isNearFluid = false;
+    }
 
+    private void checkNearbyBlocks(SimpleCollisionBox pointThreeBox) {
         // Check for flowing water
         Collisions.hasMaterial(player, pointThreeBox, (pair) -> {
             final WrappedBlockState state = pair.first();
@@ -284,8 +294,22 @@ public class PointThreeEstimator {
                 isNearBubbleColumn = true;
             }
 
-            if (Materials.isWater(player.getClientVersion(), pair.first()) || pair.first().getType() == StateTypes.LAVA) {
+            boolean isPointThreeFluid = stateType == StateTypes.LAVA
+                    || (Materials.isWater(player.getClientVersion(), state)
+                    && player.compensatedWorld.getFluidLevelAt(pos.getX(), pos.getY(), pos.getZ()) > 0.0D);
+            if (isPointThreeFluid) {
                 isNearFluid = true;
+                if ("none".equals(nearFluidSource)) {
+                    boolean waterlogged = state.hasProperty(com.github.retrooper.packetevents.protocol.world.states.type.StateValue.WATERLOGGED) && state.isWaterlogged();
+                    double fluidLevel = player.compensatedWorld.getFluidLevelAt(pos.getX(), pos.getY(), pos.getZ());
+                    nearFluidSource = String.format(
+                            "scan@%d,%d,%d:%s%s fl=%.3f",
+                            pos.getX(), pos.getY(), pos.getZ(),
+                            stateType,
+                            waterlogged ? "[wl]" : "",
+                            fluidLevel
+                    );
+                }
             }
 
             Vector3dm fluidVector = FluidTypeFlowing.getFlow(player, pos.getX(), pos.getY(), pos.getZ());
@@ -299,6 +323,21 @@ public class PointThreeEstimator {
 
             return false;
         });
+    }
+
+    private double getFluidLevelFromState(WrappedBlockState state) {
+        StateType type = state.getType();
+        if (type == StateTypes.WATER || type == StateTypes.LAVA) {
+            int level = state.getLevel();
+            if ((level & 0x8) == 0x8) {
+                return 8 / 9.0D;
+            }
+            return (8 - (level & 0x7)) / 9.0D;
+        }
+        if (Materials.isWater(player.getClientVersion(), state)) {
+            return 8 / 9.0D;
+        }
+        return 0.0D;
     }
 
     public boolean closeEnoughToGroundToStepWithPointThree(VectorData data, double originalY) {

@@ -47,4 +47,34 @@ public interface PlatformPlayer extends GrimEntity, OfflinePlatformPlayer {
     default void replaceNativePlayer(Object nativePlayerObject) {}
 
     BlockTranslator getBlockTranslator();
+
+    /**
+     * Translate a server block-state id to the exact wire id for this player.
+     * <p>
+     * Default behavior is platform translator only; platform impls may add protocol bridge remaps.
+     */
+    default int mapBlockStateIdForClient(int serverBlockStateId) {
+        return getBlockTranslator().translate(serverBlockStateId);
+    }
+
+    /**
+     * When true, block resync for this player was sent via the vanilla connection; do not duplicate via PacketEvents.
+     */
+    default boolean sendSectionMultiBlockResyncViaVanillaConnection(
+            int chunkX,
+            int sectionY,
+            int chunkZ,
+            int minLocalX,
+            int maxLocalX,
+            int minLocalY,
+            int maxLocalY,
+            int minLocalZ,
+            int maxLocalZ
+    ) {
+        return false;
+    }
+
+    default boolean sendSingleBlockResyncViaVanillaConnection(int x, int y, int z, int sequence) {
+        return false;
+    }
 }
