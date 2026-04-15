@@ -109,7 +109,7 @@ This fork includes prebuilt Fabric runtime jars in `prebuilt/` for direct deploy
 Current prebuilt file (latest):
 
 - `prebuilt/reaperac-fabric-26.2.0.jar`
-- SHA-256: `06b56fbc0856f15704b785196b71fd17c48828cd6f05c5728bd92a3032a372b6`
+- SHA-256: `209c997a2ffa20eb4525404e6577e52649d40cc050968101d5c18d1084abe918`
 
 Verify integrity:
 
