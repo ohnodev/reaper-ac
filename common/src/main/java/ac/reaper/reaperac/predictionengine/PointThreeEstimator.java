@@ -265,6 +265,7 @@ public class PointThreeEstimator {
         gravityChanged = false;
         wasAlwaysCertain = true;
         isPushing = false;
+        nearFluidSource = "none";
     }
 
     private void resetPerTickNearbyState() {
@@ -273,7 +274,6 @@ public class PointThreeEstimator {
         isNearClimbable = false;
         isNearBubbleColumn = false;
         isNearFluid = false;
-        nearFluidSource = "none";
     }
 
     private void checkNearbyBlocks(SimpleCollisionBox pointThreeBox) {
