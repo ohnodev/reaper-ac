@@ -3,6 +3,7 @@ package ac.reaper.reaperac.predictionengine.movementtick;
 import ac.reaper.reaperac.player.GrimPlayer;
 import ac.reaper.reaperac.predictionengine.predictions.PredictionEngine;
 import ac.reaper.reaperac.predictionengine.predictions.PredictionEngineElytra;
+import ac.reaper.reaperac.predictionengine.PlayerBaseTick;
 import ac.reaper.reaperac.utils.collisions.datatypes.SimpleCollisionBox;
 import ac.reaper.reaperac.utils.data.VectorData;
 import ac.reaper.reaperac.utils.data.packetentity.PacketEntity;
@@ -23,7 +24,9 @@ import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
 import com.github.retrooper.packetevents.protocol.player.GameMode;
 import com.github.retrooper.packetevents.protocol.potion.PotionTypes;
 import com.github.retrooper.packetevents.protocol.world.states.defaulttags.BlockTags;
+import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
 import com.github.retrooper.packetevents.protocol.world.states.type.StateType;
+import com.github.retrooper.packetevents.protocol.world.states.type.StateValue;
 import com.github.retrooper.packetevents.protocol.world.states.type.StateTypes;
 import com.github.retrooper.packetevents.util.Vector3d;
 import lombok.RequiredArgsConstructor;
@@ -156,9 +159,7 @@ public class MovementTicker {
 
         // This is around the place where the new bounding box gets set
         player.boundingBox = GetBoundingBox.getCollisionBoxForPlayer(player, player.x, player.y, player.z);
-        // Fluid interaction is already updated in PlayerBaseTick for this runtime.
-        // Re-running water current pushing here can over-apply fluid behavior around
-        // waterlogged blocks (notably dripleaf), causing prediction drift.
+        refreshFluidStatePostMove();
         final PacketEntity riding = player.compensatedEntities.self.getRiding();
 
         if (player.onGround) {
@@ -214,6 +215,37 @@ public class MovementTicker {
 
         float f = BlockProperties.getBlockSpeedFactor(player, player.mainSupportingBlockData, new Vector3d(player.x, player.y, player.z));
         player.clientVelocity.multiply(f, 1, f);
+    }
+
+    private void refreshFluidStatePostMove() {
+        Vector3dm previousVelocity = player.clientVelocity.clone();
+        Vector3dm previousWaterPush = player.baseTickWaterPushing.clone();
+        PlayerBaseTick.updateInWaterStateAndDoWaterCurrentPushing(player);
+        if (shouldSkipWaterCurrentPushing()) {
+            player.clientVelocity = previousVelocity;
+            player.baseTickWaterPushing = previousWaterPush;
+        }
+    }
+
+    private boolean shouldSkipWaterCurrentPushing() {
+        int blockX = GrimMath.floor(player.x);
+        int blockY = GrimMath.floor(player.y);
+        int blockZ = GrimMath.floor(player.z);
+        return isWaterloggedOrDripleaf(player.compensatedWorld.getBlock(blockX, blockY, blockZ))
+                || isWaterloggedOrDripleaf(player.compensatedWorld.getBlock(blockX, blockY - 1, blockZ))
+                || isWaterloggedOrDripleaf(player.compensatedWorld.getBlock(blockX, blockY + 1, blockZ));
+    }
+
+    private static boolean isWaterloggedOrDripleaf(WrappedBlockState state) {
+        if (state == null) {
+            return false;
+        }
+        StateType type = state.getType();
+        boolean dripleafSurface = type == StateTypes.BIG_DRIPLEAF
+                || type == StateTypes.BIG_DRIPLEAF_STEM
+                || type == StateTypes.SMALL_DRIPLEAF;
+        boolean waterlogged = state.hasProperty(StateValue.WATERLOGGED) && state.isWaterlogged();
+        return dripleafSurface || waterlogged;
     }
 
     public void livingEntityAIStep() {

@@ -33,6 +33,7 @@ import com.github.retrooper.packetevents.protocol.world.states.enums.Axis;
 import com.github.retrooper.packetevents.protocol.world.states.enums.Face;
 import com.github.retrooper.packetevents.protocol.world.states.enums.Half;
 import com.github.retrooper.packetevents.protocol.world.states.enums.Part;
+import com.github.retrooper.packetevents.protocol.world.states.enums.Tilt;
 import com.github.retrooper.packetevents.protocol.world.states.enums.Thickness;
 import com.github.retrooper.packetevents.protocol.world.states.enums.Type;
 import com.github.retrooper.packetevents.protocol.world.states.enums.VerticalDirection;
@@ -657,7 +658,12 @@ public enum CollisionData implements CollisionFactory {
 
     DECORATED_POT((player, version, data, x, y, z) -> new HexCollisionBox(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0), StateTypes.DECORATED_POT),
 
-    BIG_DRIPLEAF((player, version, data, x, y, z) -> NoCollisionBox.INSTANCE, StateTypes.BIG_DRIPLEAF),
+    BIG_DRIPLEAF((player, version, data, x, y, z) -> {
+        if (data.getTilt() == Tilt.FULL) {
+            return NoCollisionBox.INSTANCE;
+        }
+        return new HexCollisionBox(0.0D, 11.0D, 0.0D, 16.0D, 15.0D, 16.0D);
+    }, StateTypes.BIG_DRIPLEAF),
 
     POINTED_DRIPSTONE((player, version, data, x, y, z) -> {
 

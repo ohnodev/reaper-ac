@@ -126,6 +126,9 @@ public final class LegacyLinkCompat {
 
         try {
             int remapped = (int) REGISTRY_REMAPPER_REMAP_BLOCK_STATE.invoke(null, translatedBlockStateId);
+            // TRACE_LEGACY_RESYNC behavior:
+            // - Always log true remaps (remapped != translatedBlockStateId) without consuming traceBudget.
+            // - Also log the first N non-remap calls while traceBudget > 0 to sample baseline traffic.
             if (TRACE_LEGACY_RESYNC && (remapped != translatedBlockStateId || traceBudget.getAndDecrement() > 0)) {
                 LogUtil.info(
                         "[ReaperLegacyBridge] player="

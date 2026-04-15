@@ -29,6 +29,10 @@ fi
 ./gradlew :fabric:build -x test
 
 VERSION="$(./gradlew -q printVersion | sed -n 's/^VERSION=//p')"
+if [[ -z "${VERSION}" ]]; then
+  echo "[build-fabric] ERROR: printVersion returned empty VERSION" >&2
+  exit 1
+fi
 JAR="${ROOT}/fabric/build/libs/reaperac-fabric-${VERSION}.jar"
 if [[ ! -f "$JAR" ]]; then
   echo "[build-fabric] ERROR: expected jar missing: $JAR" >&2

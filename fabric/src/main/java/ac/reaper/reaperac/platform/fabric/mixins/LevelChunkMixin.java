@@ -25,7 +25,8 @@ abstract class LevelChunkMixin {
 
     public String grimac$getBlockStateString(int x, int y, int z) {
         LevelChunk chunk = (LevelChunk) (Object) this;
-        grimac$sharedPos.set(chunk.getPos().getMinBlockX() + x, y, chunk.getPos().getMinBlockZ() + z);
-        return chunk.getBlockState(grimac$sharedPos).toString();
+        BlockPos.MutableBlockPos localPos = new BlockPos.MutableBlockPos();
+        localPos.set(chunk.getPos().getMinBlockX() + x, y, chunk.getPos().getMinBlockZ() + z);
+        return chunk.getBlockState(localPos).toString();
     }
 }

@@ -13,7 +13,7 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerMu
 
 public record DefaultResyncHandler(GrimPlayer player) implements ResyncHandler {
     private static final boolean TRACE_LEGACY_RESYNC =
-            Boolean.parseBoolean(System.getProperty("reaper.traceLegacyResync", "true"));
+            Boolean.parseBoolean(System.getProperty("reaper.traceLegacyResync", "false"));
     private static final int TRACE_SAMPLE_LIMIT = 8;
 
     private static void resyncPositions(GrimPlayer player, int minBlockX, int mY, int minBlockZ, int maxBlockX, int mxY, int maxBlockZ) {

@@ -38,6 +38,7 @@ public abstract class PeDecoderLegacyInboundMixin {
         boolean auto = autoProtocolTranslation;
         if (auto
                 && LegacyLinkCompat.isLegacyNettyChannel(channel)
+                && user != null
                 && user.getDecoderState() == ConnectionState.PLAY) {
             auto = false;
         }

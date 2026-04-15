@@ -14,6 +14,7 @@ import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPo
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientWindowConfirmation;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPing;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerWindowConfirmation;
+import java.util.UUID;
 
 public class PacketPingListener extends PacketListenerAbstract {
 
@@ -67,12 +68,26 @@ public class PacketPingListener extends PacketListenerAbstract {
         short shortID = (short) id;
         boolean matched = player.addTransactionResponse(shortID);
         if (shortID <= 0) {
-            LegacyLinkGrimTransactionDebug.logPong(event.getUser().getProfile().getName(), shortID, matched);
+            LegacyLinkGrimTransactionDebug.logPong(resolveSafeName(event), shortID, matched);
         }
         if (matched) {
             player.packetStateData.lastTransactionPacketWasValid = true;
             event.setCancelled(!GrimAPI.INSTANCE.getConfigManager().isDisablePongCancelling());
         }
+    }
+
+    private static String resolveSafeName(PacketReceiveEvent event) {
+        if (event == null || event.getUser() == null) {
+            return "unknown";
+        }
+        if (event.getUser().getProfile() != null) {
+            String profileName = event.getUser().getProfile().getName();
+            if (profileName != null && !profileName.isBlank()) {
+                return profileName;
+            }
+        }
+        UUID uuid = event.getUser().getUUID();
+        return uuid != null ? uuid.toString() : "unknown";
     }
 
     @Override

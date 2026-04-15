@@ -140,9 +140,7 @@ public class PointThreeEstimator {
 
         final float collisionBoxThreshold = (float) (movementThreshold * 2.f);
         SimpleCollisionBox pointThreeBox = GetBoundingBox.getBoundingBoxFromPosAndSize(player, player.x, player.y - movementThreshold, player.z, 0.6f + collisionBoxThreshold, 1.8f + collisionBoxThreshold);
-        boolean isPointThreeFluid = stateType == StateTypes.LAVA
-                || (Materials.isWater(player.getClientVersion(), state)
-                && player.compensatedWorld.getFluidLevelAt(x, y, z) > 0.0D);
+        boolean isPointThreeFluid = getFluidLevelFromState(state) > 0.0D;
         if (isPointThreeFluid &&
                 pointThreeBox.isIntersected(new SimpleCollisionBox(x, y, z))) {
 
@@ -323,6 +321,21 @@ public class PointThreeEstimator {
 
             return false;
         });
+    }
+
+    private double getFluidLevelFromState(WrappedBlockState state) {
+        StateType type = state.getType();
+        if (type == StateTypes.WATER || type == StateTypes.LAVA) {
+            int level = state.getLevel();
+            if ((level & 0x8) == 0x8) {
+                return 8 / 9.0D;
+            }
+            return (8 - (level & 0x7)) / 9.0D;
+        }
+        if (Materials.isWater(player.getClientVersion(), state)) {
+            return 8 / 9.0D;
+        }
+        return 0.0D;
     }
 
     public boolean closeEnoughToGroundToStepWithPointThree(VectorData data, double originalY) {

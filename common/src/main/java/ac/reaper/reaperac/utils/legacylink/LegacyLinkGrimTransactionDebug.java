@@ -18,6 +18,8 @@ public final class LegacyLinkGrimTransactionDebug {
 
     private static final ConcurrentHashMap<String, Long> LAST_PING_LOG_MS = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, Long> LAST_PONG_OK_LOG_MS = new ConcurrentHashMap<>();
+    private static final int MAX_TRACKED_PLAYERS = 4096;
+    private static final long ENTRY_TTL_MS = 10 * 60 * 1000L;
 
     private LegacyLinkGrimTransactionDebug() {
     }
@@ -48,6 +50,7 @@ public final class LegacyLinkGrimTransactionDebug {
             // then moves the id from didWeSendThatTrans into transactionsSent before acknowledgeVanillaPingDispatched runs.
             if (isEnabled() && transactionIdPresentInSentQueue(grim, id)) {
                 long now = System.currentTimeMillis();
+                cleanupIfNeeded(now);
                 Long prev = LAST_PING_LOG_MS.put(playerName, now);
                 if (prev != null && now - prev < 2000L) {
                     return;
@@ -64,6 +67,7 @@ public final class LegacyLinkGrimTransactionDebug {
             return;
         }
         long now = System.currentTimeMillis();
+        cleanupIfNeeded(now);
         Long prev = LAST_PING_LOG_MS.put(playerName, now);
         if (prev != null && now - prev < 2000L) {
             return;
@@ -86,10 +90,20 @@ public final class LegacyLinkGrimTransactionDebug {
             return;
         }
         long now = System.currentTimeMillis();
+        cleanupIfNeeded(now);
         Long prev = LAST_PONG_OK_LOG_MS.put(playerName, now);
         if (prev != null && now - prev < 2000L) {
             return;
         }
         LogUtil.info("[GrimTxDebug][pong] player=" + playerName + " id=" + id + " matchedTransaction=true");
+    }
+
+    private static void cleanupIfNeeded(long now) {
+        if (LAST_PING_LOG_MS.size() <= MAX_TRACKED_PLAYERS && LAST_PONG_OK_LOG_MS.size() <= MAX_TRACKED_PLAYERS) {
+            return;
+        }
+        long cutoff = now - ENTRY_TTL_MS;
+        LAST_PING_LOG_MS.entrySet().removeIf(entry -> entry.getValue() < cutoff);
+        LAST_PONG_OK_LOG_MS.entrySet().removeIf(entry -> entry.getValue() < cutoff);
     }
 }
